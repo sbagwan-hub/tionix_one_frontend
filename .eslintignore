@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+build
+dist
+*.log
+.husky
+**/__tests__/**
+**/__mocks__/**
+**/*.test.{js,jsx,ts,tsx}
+**/*.spec.{js,jsx,ts,tsx}
+**/*.{test,spec}.{js,jsx,ts,tsx}
