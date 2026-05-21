@@ -1,16 +1,14 @@
-"use client";
+'use client';
 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
   const { t } = useTranslation();
 
   return (
     <main className="">
-      <h1 className="text-foreground text-xl font-semibold">
-        {t("dashboard")}
-      </h1>
-      <p className="text-muted-foreground mt-2 text-sm">{t("welcome")}</p>
+      <h1 className="text-foreground text-xl font-semibold">{t('dashboard')}</h1>
+      <p className="text-muted-foreground mt-2 text-sm">{t('welcome')}</p>
     </main>
   );
 }

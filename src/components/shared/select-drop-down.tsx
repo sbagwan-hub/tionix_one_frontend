@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 type SelectDropDownProps = {
   label: string;
@@ -54,27 +54,21 @@ export function SelectDropDown({
     <div
       ref={wrapperRef}
       className={cn(
-        "bg-accent border-border flex items-center gap-1 rounded-md border px-2 py-0.5",
+        'bg-accent border-border flex items-center gap-1 rounded-md border px-2 py-0.5',
         className,
       )}
     >
-      <span className="text-muted-foreground text-[11px] font-medium">
-        {label}:
-      </span>
+      <span className="text-muted-foreground text-[11px] font-medium">{label}:</span>
 
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           className={cn(
-            "text-foreground h-5 border-0 bg-transparent p-0 text-xs shadow-none focus:ring-0",
-            width ?? "min-w-24",
+            'text-foreground h-5 border-0 bg-transparent p-0 text-xs shadow-none focus:ring-0',
+            width ?? 'min-w-24',
           )}
         >
           <SelectValue
-            placeholder={
-              placeholder ??
-              options.find((o) => o.value === value)?.label ??
-              "Select"
-            }
+            placeholder={placeholder ?? options.find((o) => o.value === value)?.label ?? 'Select'}
           />
         </SelectTrigger>
 
@@ -88,7 +82,7 @@ export function SelectDropDown({
             minWidth: wrapperWidth,
           }}
           className={cn(
-            "border-border bg-popover animate-in fade-in-50 rounded-sm border p-2 shadow-md",
+            'border-border bg-popover animate-in fade-in-50 rounded-sm border p-2 shadow-md',
             selectContentClassName,
           )}
         >

@@ -38,7 +38,7 @@
   "hindi": "Hindi",
   "select": "Select",
   "dashboard": "Dashboard",
-"welcome": "Welcome to Tionix",
+  "welcome": "Welcome to Tionix",
 
   "securityMatrixTitle": "Security ACL Configuration Matrix",
   "securityMatrixDescription": "Assign custom module authorization permissions, functional limits, and execution visibility protocols.",

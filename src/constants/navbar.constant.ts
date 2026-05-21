@@ -11,77 +11,51 @@ interface NavMenu {
 
 export const NAV_MENUS: NavMenu[] = [
   {
-    key: "administrator",
+    key: 'administrator',
     items: [
-      { key: "users" },
-      { key: "userRights", shortcut: "⌘ R" },
-      { key: "financialYearMenu", shortcut: "⌘ F" },
+      { key: 'users' },
+      { key: 'userRights', shortcut: '⌘ R' },
+      { key: 'financialYearMenu', shortcut: '⌘ F' },
       { separator: true },
-      { key: "changeServer" },
-      { key: "backup" },
+      { key: 'changeServer' },
+      { key: 'backup' },
       { separator: true },
-      { key: "exit", shortcut: "⌥ F4" },
+      { key: 'exit', shortcut: '⌥ F4' },
     ],
   },
 
   {
-    key: "master",
-    items: [
-      { key: "company" },
-      { key: "customer" },
-      { key: "supplier" },
-      { key: "items" },
-    ],
+    key: 'master',
+    items: [{ key: 'company' }, { key: 'customer' }, { key: 'supplier' }, { key: 'items' }],
   },
 
   {
-    key: "transaction",
-    items: [
-      { key: "sales" },
-      { key: "purchase" },
-      { key: "payment" },
-      { key: "receipt" },
-    ],
+    key: 'transaction',
+    items: [{ key: 'sales' }, { key: 'purchase' }, { key: 'payment' }, { key: 'receipt' }],
   },
 
   {
-    key: "report",
-    items: [
-      { key: "salesReport" },
-      { key: "stockReport" },
-      { key: "profitLoss" },
-    ],
+    key: 'report',
+    items: [{ key: 'salesReport' }, { key: 'stockReport' }, { key: 'profitLoss' }],
   },
 
   {
-    key: "settings",
-    items: [
-      { key: "preferences" },
-      { key: "theme" },
-    ],
+    key: 'settings',
+    items: [{ key: 'preferences' }, { key: 'theme' }],
   },
 
   {
-    key: "utilities",
-    items: [
-      { key: "calculator" },
-      { key: "importExport" },
-    ],
+    key: 'utilities',
+    items: [{ key: 'calculator' }, { key: 'importExport' }],
   },
 
   {
-    key: "window",
-    items: [
-      { key: "minimize" },
-      { key: "maximize" },
-    ],
+    key: 'window',
+    items: [{ key: 'minimize' }, { key: 'maximize' }],
   },
 
   {
-    key: "help",
-    items: [
-      { key: "documentation" },
-      { key: "about" },
-    ],
+    key: 'help',
+    items: [{ key: 'documentation' }, { key: 'about' }],
   },
 ];

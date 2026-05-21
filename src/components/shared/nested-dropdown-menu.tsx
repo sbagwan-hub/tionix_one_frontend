@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +10,10 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
-import { ChevronDown } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface MenuItem {
   key?: string;
@@ -31,13 +31,13 @@ interface NestedDropdownMenuProps {
 }
 
 const triggerClass =
-  "text-muted-foreground hover:text-foreground hover:bg-accent data-[state=open]:bg-accent inline-flex items-center gap-1 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors outline-none";
+  'text-muted-foreground hover:text-foreground hover:bg-accent data-[state=open]:bg-accent inline-flex items-center gap-1 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors outline-none';
 
 const contentClass =
-  "border-border bg-popover animate-in fade-in-50 slide-in-from-top-1 w-80 rounded-sm border p-2";
+  'border-border bg-popover animate-in fade-in-50 slide-in-from-top-1 w-80 rounded-sm border p-2';
 
 const itemClass =
-  "hover:text-foreground focus:bg-brand/60 flex cursor-pointer items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors text-black dark:text-white";
+  'hover:text-foreground focus:bg-brand/60 flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs transition-colors text-black dark:text-white';
 
 function RecursiveMenu({
   items,
@@ -99,10 +99,7 @@ export function NestedDropdownMenu({
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
-        <button
-          onMouseEnter={() => onOpenChange(true)}
-          className={cn(triggerClass)}
-        >
+        <button onMouseEnter={() => onOpenChange(true)} className={cn(triggerClass)}>
           {label}
           <ChevronDown className="h-3 w-3 opacity-50" />
         </button>

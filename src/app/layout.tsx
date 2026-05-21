@@ -1,26 +1,26 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
-import QueryProviders from "@/providers/QueryProviders";
-import Navbar from "@/components/shared/navbar";
-import Footer from "@/components/shared/footer";
-import { LocaleUpdater } from "@/components/shared/locale-updater";
-import { ThemeProvider } from "next-themes";
+import QueryProviders from '@/providers/QueryProviders';
+import Navbar from '@/components/shared/navbar';
+import Footer from '@/components/shared/footer';
+import { LocaleUpdater } from '@/components/shared/locale-updater';
+import { ThemeProvider } from 'next-themes';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "ERP Power Pro",
-  description: "ERP System",
+  title: 'ERP Power Pro',
+  description: 'ERP System',
 };
 
 export default function RootLayout({
@@ -47,9 +47,7 @@ export default function RootLayout({
               <Navbar />
             </div>
 
-            <main className="mx-4 my-2 h-full overflow-y-auto pt-20 pb-8">
-              {children}
-            </main>
+            <main className="mx-4 my-2 h-full overflow-y-auto pt-20 pb-8">{children}</main>
 
             <div className="fixed right-0 bottom-0 left-0 z-50">
               <Footer />

@@ -1,9 +1,9 @@
-"use client";
-import "@/lib/i18n";
+'use client';
+import '@/lib/i18n';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode, useState } from "react";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactNode, useState } from 'react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 type Props = {
   children: ReactNode;
