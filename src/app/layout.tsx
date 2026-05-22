@@ -47,7 +47,7 @@ export default function RootLayout({
               <Navbar />
             </div>
 
-            <main className="mx-4 my-2 h-full overflow-y-auto pt-20 pb-8">{children}</main>
+            <main className="mx-4 my-2 h-full overflow-hidden pt-20 pb-8">{children}</main>
 
             <div className="fixed right-0 bottom-0 left-0 z-50">
               <Footer />

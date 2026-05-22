@@ -1,4 +1,4 @@
-import { MenuItem } from "@/components/shared/nested-dropdown-menu";
+import { MenuItem } from '@/components/shared/nested-dropdown-menu';
 
 interface NavMenu {
   key: string;

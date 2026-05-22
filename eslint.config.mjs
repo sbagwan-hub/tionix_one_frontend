@@ -3,10 +3,12 @@ import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import prettierConfig from 'eslint-config-prettier';
 
+const prettierConfigs = Array.isArray(prettierConfig) ? prettierConfig : [prettierConfig];
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  ...prettierConfig,
+  ...prettierConfigs,
   // Override default ignores of eslint-config-next.
   {
     rules: {
@@ -16,6 +18,7 @@ const eslintConfig = defineConfig([
   },
   globalIgnores([
     // Default ignores of eslint-config-next:
+    'node_modules/**',
     '.next/**',
     'out/**',
     'build/**',

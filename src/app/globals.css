@@ -83,7 +83,7 @@
   --accent: oklch(0.96 0 0);
   --accent-foreground: oklch(0.205 0 0);
 
-  --brand: oklch(0.546 0.245 262.88); /* blue-600 */
+  --brand: oklch(0.5461 0.2152 262.88); /* blue-600 */
   --brand-muted: oklch(0.946 0.033 262.88); /* very light muted variant */
 
   --destructive: oklch(0.577 0.245 27.325);

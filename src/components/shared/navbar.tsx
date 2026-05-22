@@ -41,7 +41,7 @@ function Navbar() {
             className="text-foreground flex cursor-pointer items-center gap-1.5 font-semibold"
             onClick={() => router.push('/dashboard')}
           >
-            <Image src={LOCAL_IMAGE.APP_LOGO} alt="Tionix_Logo" className="w-16" />
+            <Image src={LOCAL_IMAGE.APP_LOGO_TRANSPARENT} alt="Tionix_Logo" className="w-16" />
             <span>Tionix ERP</span>
             <span className="bg-muted text-muted-foreground text-xxs cursor-default rounded px-1.5 py-0.5 font-medium">
               v2026.01
