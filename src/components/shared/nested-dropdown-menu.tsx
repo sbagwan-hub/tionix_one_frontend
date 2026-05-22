@@ -14,12 +14,16 @@ import {
 
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
 
 export interface MenuItem {
   key?: string;
   shortcut?: string;
   separator?: boolean;
   children?: MenuItem[];
+
+  href?: string;
+  action?: () => void;
 }
 
 interface NestedDropdownMenuProps {
@@ -27,11 +31,10 @@ interface NestedDropdownMenuProps {
   items: MenuItem[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAction?: (key: string) => void;
 }
 
 const triggerClass =
-  'text-muted-foreground hover:text-foreground hover:bg-accent data-[state=open]:bg-accent inline-flex items-center gap-1 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors outline-none';
+  'text-muted-foreground hover:text-foreground hover:bg-accent data-[state=open]:bg-accent inline-flex items-center gap-1 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors outline-none cursor-pointer';
 
 const contentClass =
   'border-border bg-popover animate-in fade-in-50 slide-in-from-top-1 w-80 rounded-sm border p-2';
@@ -39,20 +42,24 @@ const contentClass =
 const itemClass =
   'hover:text-foreground focus:bg-brand/60 flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs transition-colors text-black dark:text-white';
 
-function RecursiveMenu({
-  items,
-  onAction,
-}: {
-  items: MenuItem[];
-  onAction?: (key: string) => void;
-}) {
+function RecursiveMenu({ items }: { items: MenuItem[] }) {
   const { t } = useTranslation();
+  const router = useRouter();
+
+  const handleClick = (item: MenuItem) => {
+    if (item.href) {
+      router.push(item.href);
+      return;
+    }
+
+    item.action?.();
+  };
 
   return (
     <>
       {items.map((item, idx) => {
         if (item.separator) {
-          return <DropdownMenuSeparator key={idx} className="bg-border my-1" />;
+          return <DropdownMenuSeparator key={`separator-${idx}`} className="bg-border my-1" />;
         }
 
         if (item.children?.length) {
@@ -63,7 +70,7 @@ function RecursiveMenu({
               </DropdownMenuSubTrigger>
 
               <DropdownMenuSubContent className={cn(contentClass)}>
-                <RecursiveMenu items={item.children} onAction={onAction} />
+                <RecursiveMenu items={item.children} />
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           );
@@ -72,7 +79,7 @@ function RecursiveMenu({
         return (
           <DropdownMenuItem
             key={item.key}
-            onClick={() => item.key && onAction?.(item.key)}
+            onClick={() => handleClick(item)}
             className={cn(itemClass)}
           >
             <span>{t(item.key!)}</span>
@@ -89,29 +96,24 @@ function RecursiveMenu({
   );
 }
 
-export function NestedDropdownMenu({
-  label,
-  items,
-  open,
-  onOpenChange,
-  onAction,
-}: NestedDropdownMenuProps) {
+export function NestedDropdownMenu({ label, items, open, onOpenChange }: NestedDropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
-        <button onMouseEnter={() => onOpenChange(true)} className={cn(triggerClass)}>
+        <button className={cn(triggerClass)} onMouseEnter={() => onOpenChange(true)}>
           {label}
+
           <ChevronDown className="h-3 w-3 opacity-50" />
         </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align="start"
+        className={cn(contentClass)}
         onMouseEnter={() => onOpenChange(true)}
         onMouseLeave={() => onOpenChange(false)}
-        className={cn(contentClass)}
       >
-        <RecursiveMenu items={items} onAction={onAction} />
+        <RecursiveMenu items={items} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

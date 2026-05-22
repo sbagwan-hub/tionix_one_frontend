@@ -54,7 +54,7 @@ export function SelectDropDown({
     <div
       ref={wrapperRef}
       className={cn(
-        'bg-accent border-border flex items-center gap-1 rounded-md border px-2 py-0.5',
+        'bg-accent border-border flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5',
         className,
       )}
     >
@@ -63,12 +63,13 @@ export function SelectDropDown({
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           className={cn(
-            'text-foreground h-5 border-0 bg-transparent p-0 text-xs shadow-none focus:ring-0',
+            'text-foreground h-5 cursor-pointer border-0 bg-transparent p-0 text-xs shadow-none focus:ring-0',
             width ?? 'min-w-24',
           )}
         >
           <SelectValue
             placeholder={placeholder ?? options.find((o) => o.value === value)?.label ?? 'Select'}
+            className="cursor-pointer"
           />
         </SelectTrigger>
 

@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ERP Power Pro',
+  title: 'Tionix',
   description: 'ERP System',
 };
 

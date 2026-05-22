@@ -38,12 +38,12 @@ function Navbar() {
       <header className="border-border bg-card flex h-9 items-center justify-between border-b px-4 shadow-2xs">
         <div className="flex items-center gap-3">
           <div
-            className="text-foreground flex items-center gap-1.5 font-semibold"
+            className="text-foreground flex cursor-pointer items-center gap-1.5 font-semibold"
             onClick={() => router.push('/dashboard')}
           >
             <Image src={LOCAL_IMAGE.APP_LOGO} alt="Tionix_Logo" className="w-16" />
             <span>Tionix ERP</span>
-            <span className="bg-muted text-muted-foreground text-xxs rounded px-1.5 py-0.5 font-medium">
+            <span className="bg-muted text-muted-foreground text-xxs cursor-default rounded px-1.5 py-0.5 font-medium">
               v2026.01
             </span>
           </div>
@@ -62,7 +62,7 @@ function Navbar() {
           {mounted && (
             <button
               onClick={handleThemeChange}
-              className="border-border bg-accent hover:bg-muted flex h-6 w-6 items-center justify-center rounded-md border transition"
+              className="border-border bg-accent hover:bg-muted flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border transition"
             >
               {theme === 'light' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
