@@ -2,13 +2,17 @@ import React from 'react';
 import ModuleRow, { ModuleRowData } from './module-row';
 import PermissionTabs from './permission-tabs';
 import { cn } from '@/lib/utils';
-import { moduleGroups } from '@/constants/permission.constants';
+
+export interface ModuleGroup {
+  group: string;
+  rows: ModuleRowData[];
+}
 
 interface PermissionTableProps {
   tabs: string[];
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  modules?: ModuleRowData[];
+  modules?: ModuleGroup[];
   className?: string;
 }
 
@@ -16,7 +20,7 @@ export default function PermissionTable({
   tabs,
   activeTab,
   setActiveTab,
-  modules,
+  modules = [],
   className,
 }: PermissionTableProps) {
   return (
@@ -63,8 +67,9 @@ export default function PermissionTable({
           </thead>
 
           <tbody className="divide-border divide-y">
-            {moduleGroups.map((group) => (
+            {modules.map((group) => (
               <React.Fragment key={group.group}>
+                {/* Group Header */}
                 <tr className="bg-brand-muted/20 dark:bg-brand-muted/30">
                   <td
                     colSpan={7}
@@ -74,7 +79,7 @@ export default function PermissionTable({
                   </td>
                 </tr>
 
-                {/* Group rows */}
+                {/* Rows */}
                 {group.rows.map((row) => (
                   <ModuleRow key={row.id} row={row} />
                 ))}

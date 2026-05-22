@@ -3,7 +3,13 @@
 import Toolbar from '@/components/shared/toolbar';
 import PermissionTable from '@/components/user-rights/permissions-table';
 import UserSelection from '@/components/user-rights/user-selection';
-import { moduleGroups } from '@/constants/permission.constants';
+import {
+  actionToolbar,
+  moduleGroups,
+  navigationToolbar,
+  utilityToolbar,
+} from '@/constants/permission.constants';
+
 import { useState } from 'react';
 
 export default function UserRights() {
@@ -15,7 +21,13 @@ export default function UserRights() {
     <div className="bg-background text-foreground h-full font-sans">
       <div className="flex h-full flex-col py-2">
         <div className="">
-          <Toolbar />
+          <div className="">
+            <Toolbar
+              navigation={navigationToolbar}
+              actions={actionToolbar}
+              utilities={utilityToolbar}
+            />
+          </div>
           <UserSelection accessScope={accessScope} setAccessScope={setAccessScope} />
         </div>
 

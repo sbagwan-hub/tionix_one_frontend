@@ -1,4 +1,19 @@
 import { PermissionKey, PermissionRow } from '@/types/permission.types';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Edit3,
+  FileOutput,
+  HelpCircle,
+  LogOut,
+  Plus,
+  Printer,
+  RefreshCw,
+  Save,
+  Trash2,
+} from 'lucide-react';
 
 export const PERMISSION_COLUMNS: {
   key: PermissionKey;
@@ -139,5 +154,94 @@ export const moduleGroups = [
         export: true,
       },
     ],
+  },
+];
+
+export const navigationToolbar = [
+  {
+    icon: ChevronsLeft,
+    title: 'First',
+    onClick: () => console.log('First'),
+  },
+
+  {
+    icon: ChevronLeft,
+    title: 'Previous',
+    onClick: () => console.log('Previous'),
+  },
+
+  {
+    icon: ChevronRight,
+    title: 'Next',
+    onClick: () => console.log('Next'),
+  },
+
+  {
+    icon: ChevronsRight,
+    title: 'Last',
+    onClick: () => console.log('Last'),
+  },
+];
+
+export const actionToolbar = [
+  {
+    label: 'Add New',
+    icon: Plus,
+    variant: 'primary',
+    onClick: () => console.log('Add New'),
+  },
+
+  {
+    label: 'Edit',
+    icon: Edit3,
+    variant: 'secondary',
+    onClick: () => console.log('Edit'),
+  },
+
+  {
+    label: 'Delete',
+    icon: Trash2,
+    variant: 'danger',
+    onClick: () => console.log('Delete'),
+  },
+
+  {
+    label: 'Save',
+    icon: Save,
+    variant: 'success',
+    onClick: () => console.log('Save'),
+  },
+
+  {
+    label: 'Refresh',
+    icon: RefreshCw,
+    variant: 'secondary',
+    onClick: () => window.location.reload(),
+  },
+] as const;
+
+export const utilityToolbar = [
+  {
+    icon: Printer,
+    title: 'Print',
+    onClick: () => window.print(),
+  },
+
+  {
+    icon: FileOutput,
+    title: 'Export',
+    onClick: () => console.log('Export'),
+  },
+
+  {
+    icon: HelpCircle,
+    title: 'Help',
+    onClick: () => alert('Help clicked'),
+  },
+
+  {
+    icon: LogOut,
+    title: 'Exit',
+    onClick: () => console.log('Exit'),
   },
 ];

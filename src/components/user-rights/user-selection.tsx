@@ -9,7 +9,7 @@ interface UserSelectionProps {
 
 export default function UserSelection({ accessScope, setAccessScope }: UserSelectionProps) {
   return (
-    <div className="border-border bg-card ring-border/50 dark:border-input/60 dark:bg-card mb-2 overflow-hidden rounded-sm border p-4 shadow-sm ring-1 ring-inset">
+    <div className="border-border bg-card ring-border/50 dark:border-input/60 dark:bg-card mb-2 overflow-hidden rounded-sm border p-4 ring-1 ring-inset">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         <div>
           <label className="text-muted-foreground mb-1.5 block text-[11px] font-semibold tracking-[0.18em] uppercase">
