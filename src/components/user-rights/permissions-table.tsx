@@ -2,6 +2,14 @@ import React from 'react';
 import ModuleRow, { ModuleRowData } from './module-row';
 import PermissionTabs from './permission-tabs';
 import { cn } from '@/lib/utils';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from '@/components/ui/table';
 
 export interface ModuleGroup {
   group: string;
@@ -33,51 +41,51 @@ export default function PermissionTable({
       <PermissionTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className="min-h-0 flex-1 overflow-x-auto overflow-y-auto">
-        <table className="min-w-full border-separate border-spacing-0 text-left">
-          <thead>
-            <tr className="border-border bg-muted/50 dark:bg-muted/20 border-b">
-              <th className="text-muted-foreground w-2/5 p-4 text-left text-xs font-semibold tracking-[0.14em] uppercase">
+        <Table className="min-w-full border-separate border-spacing-0 text-left">
+          <TableHeader>
+            <TableRow className="border-border bg-muted/50 dark:bg-muted/20 border-b">
+              <TableHead className="text-muted-foreground w-2/5 p-4 text-left text-xs font-semibold tracking-[0.14em] uppercase">
                 Form Title / Functional Module
-              </th>
+              </TableHead>
 
-              <th className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Add
-              </th>
+              </TableHead>
 
-              <th className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Edit
-              </th>
+              </TableHead>
 
-              <th className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Delete
-              </th>
+              </TableHead>
 
-              <th className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 View
-              </th>
+              </TableHead>
 
-              <th className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Print
-              </th>
+              </TableHead>
 
-              <th className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="text-muted-foreground p-4 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Export
-              </th>
-            </tr>
-          </thead>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
 
-          <tbody className="divide-border divide-y">
+          <TableBody className="divide-border divide-y">
             {modules.map((group) => (
               <React.Fragment key={group.group}>
                 {/* Group Header */}
-                <tr className="bg-brand-muted/20 dark:bg-brand-muted/30">
-                  <td
+                <TableRow className="bg-brand-muted/20 dark:bg-brand-muted/30">
+                  <TableCell
                     colSpan={7}
                     className="text-brand px-4 py-2.5 text-xs font-semibold tracking-wide uppercase"
                   >
                     {group.group}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
 
                 {/* Rows */}
                 {group.rows.map((row) => (
@@ -85,8 +93,8 @@ export default function PermissionTable({
                 ))}
               </React.Fragment>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

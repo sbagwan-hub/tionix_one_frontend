@@ -11,6 +11,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -100,11 +101,16 @@ export function NestedDropdownMenu({ label, items, open, onOpenChange }: NestedD
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
-        <button className={cn(triggerClass)} onMouseEnter={() => onOpenChange(true)}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(triggerClass)}
+          onMouseEnter={() => onOpenChange(true)}
+        >
           {label}
 
           <ChevronDown className="h-3 w-3 opacity-50" />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

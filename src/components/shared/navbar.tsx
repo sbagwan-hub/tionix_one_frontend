@@ -1,35 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import { Monitor, Sun, Moon } from 'lucide-react';
 
 import { SelectDropDown } from './select-drop-down';
 import { useTranslation } from 'react-i18next';
 import { NAV_MENUS } from '@/constants/navbar.constant';
 import { NestedDropdownMenu } from './nested-dropdown-menu';
 import { useMounted } from '@/hooks/use-mounted';
-import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { findPath } from '@/lib/utils';
 import { LOCAL_IMAGE } from '@/constants/images.constant';
-
-export enum THEMES {
-  LIGHT = 'light',
-  DARK = 'dark',
-}
+import { ThemeSwitcher } from './theme-switcher';
 
 function Navbar() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const { t, i18n } = useTranslation();
-  const { theme, setTheme } = useTheme();
   const mounted = useMounted();
-
-  const handleThemeChange = () => {
-    const newTheme = theme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK;
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
 
   const router = useRouter();
 
@@ -42,7 +29,7 @@ function Navbar() {
             onClick={() => router.push('/dashboard')}
           >
             <Image src={LOCAL_IMAGE.APP_LOGO_TRANSPARENT} alt="Tionix_Logo" className="w-16" />
-            <span>Tionix ERP</span>
+            <span>Tionix One</span>
             <span className="bg-muted text-muted-foreground text-xxs cursor-default rounded px-1.5 py-0.5 font-medium">
               v2026.01
             </span>
@@ -59,14 +46,7 @@ function Navbar() {
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {t('systemLive')}
           </span>
-          {mounted && (
-            <button
-              onClick={handleThemeChange}
-              className="border-border bg-accent hover:bg-muted flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border transition"
-            >
-              {theme === 'light' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
-          )}
+          {mounted && <ThemeSwitcher />}
         </div>
       </header>
 

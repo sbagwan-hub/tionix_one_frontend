@@ -63,13 +63,13 @@ export function SelectDropDown({
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           className={cn(
-            'text-foreground h-5 cursor-pointer border-0 bg-transparent p-0 text-xs shadow-none focus:ring-0',
+            'text-foreground h-5 cursor-pointer border-0 bg-transparent p-0 text-xs shadow-none hover:ring-0 focus:ring-0',
             width ?? 'min-w-24',
           )}
         >
           <SelectValue
             placeholder={placeholder ?? options.find((o) => o.value === value)?.label ?? 'Select'}
-            className="cursor-pointer"
+            className="cursor-pointer ring-0"
           />
         </SelectTrigger>
 
@@ -83,7 +83,7 @@ export function SelectDropDown({
             minWidth: wrapperWidth,
           }}
           className={cn(
-            'border-border bg-popover animate-in fade-in-50 rounded-sm border p-2 shadow-md',
+            'border-border bg-popover rounded-sm border p-0 shadow-md ring-0',
             selectContentClassName,
           )}
         >
@@ -91,7 +91,7 @@ export function SelectDropDown({
             <SelectItem
               key={option.value}
               value={option.value}
-              className="hover:bg-accent focus:bg-brand/50 cursor-pointer rounded-md px-2.5 py-1.5 text-xs transition-colors hover:text-white focus:text-white"
+              className="hover:bg-accent focus:bg-brand/50 cursor-pointer px-2.5 py-2.5 text-xs transition-colors hover:text-white focus:text-white"
             >
               {option.label}
             </SelectItem>

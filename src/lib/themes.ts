@@ -1,0 +1,136 @@
+export type ThemeName = 'light' | 'dark' | 'nord' | 'cyberpunk' | 'minimalist';
+
+export const themes: Record<ThemeName, { name: string; colors: Record<string, string> }> = {
+  light: {
+    name: 'Light',
+    colors: {
+      background: 'oklch(1 0 0)',
+      foreground: 'oklch(0.145 0 0)',
+      card: 'oklch(0.98 0 0)',
+      'card-foreground': 'oklch(0.145 0 0)',
+      popover: 'oklch(1 0 0)',
+      'popover-foreground': 'oklch(0.145 0 0)',
+      primary: 'oklch(0.205 0 0)',
+      'primary-foreground': 'oklch(0.985 0 0)',
+      secondary: 'oklch(0.97 0 0)',
+      'secondary-foreground': 'oklch(0.205 0 0)',
+      muted: 'oklch(0.94 0 0)',
+      'muted-foreground': 'oklch(0.556 0 0)',
+      accent: 'oklch(0.96 0 0)',
+      'accent-foreground': 'oklch(0.205 0 0)',
+      destructive: 'oklch(0.577 0.245 27.325)',
+      'destructive-foreground': 'oklch(0.985 0 0)',
+      border: 'oklch(0.922 0 0)',
+      input: 'oklch(0.945 0 0)',
+      ring: 'oklch(0.708 0 0)',
+      brand: 'oklch(0.5461 0.2152 262.88)',
+      'brand-muted': 'oklch(0.946 0.033 262.88)',
+    },
+  },
+  dark: {
+    name: 'Dark',
+    colors: {
+      background: 'oklch(0.105 0 0)',
+      foreground: 'oklch(0.97 0 0)',
+      card: 'oklch(0.14 0 0)',
+      'card-foreground': 'oklch(0.97 0 0)',
+      popover: 'oklch(0.105 0 0)',
+      'popover-foreground': 'oklch(0.97 0 0)',
+      primary: 'oklch(0.95 0 0)',
+      'primary-foreground': 'oklch(0.14 0 0)',
+      secondary: 'oklch(0.17 0 0)',
+      'secondary-foreground': 'oklch(0.95 0 0)',
+      muted: 'oklch(0.25 0 0)',
+      'muted-foreground': 'oklch(0.72 0 0)',
+      accent: 'oklch(0.82 0 0)',
+      'accent-foreground': 'oklch(0.14 0 0)',
+      destructive: 'oklch(0.65 0.245 27.325)',
+      'destructive-foreground': 'oklch(0.985 0 0)',
+      border: 'oklch(0.23 0 0)',
+      input: 'oklch(0.18 0 0)',
+      ring: 'oklch(0.72 0 0)',
+      brand: 'oklch(0.65 0.2 262.88)',
+      'brand-muted': 'oklch(0.25 0.03 262.88)',
+    },
+  },
+  nord: {
+    name: 'Nord',
+    colors: {
+      background: 'oklch(0.968 0.005 265)',
+      foreground: 'oklch(0.235 0.017 257)',
+      card: 'oklch(0.92 0.01 265)',
+      'card-foreground': 'oklch(0.235 0.017 257)',
+      popover: 'oklch(0.968 0.005 265)',
+      'popover-foreground': 'oklch(0.235 0.017 257)',
+      primary: 'oklch(0.59 0.1 210)', // Nord frost blue
+      'primary-foreground': 'oklch(0.98 0 0)',
+      secondary: 'oklch(0.88 0.02 260)', // Nord snow
+      'secondary-foreground': 'oklch(0.235 0.017 257)',
+      muted: 'oklch(0.90 0.015 265)',
+      'muted-foreground': 'oklch(0.55 0.02 260)',
+      accent: 'oklch(0.68 0.14 215)', // Nord frost lighter
+      'accent-foreground': 'oklch(0.235 0.017 257)',
+      destructive: 'oklch(0.55 0.2 15)', // Nord aurora red
+      'destructive-foreground': 'oklch(0.98 0 0)',
+      border: 'oklch(0.92 0.01 265)',
+      input: 'oklch(0.95 0.008 265)',
+      ring: 'oklch(0.59 0.1 210)',
+      brand: 'oklch(0.59 0.1 210)',
+      'brand-muted': 'oklch(0.88 0.02 260)',
+    },
+  },
+  cyberpunk: {
+    name: 'Cyberpunk',
+    colors: {
+      background: 'oklch(0.08 0 0)',
+      foreground: 'oklch(0.95 0.02 50)', // Neon yellow tint
+      card: 'oklch(0.12 0.01 270)',
+      'card-foreground': 'oklch(0.95 0.02 50)',
+      popover: 'oklch(0.08 0 0)',
+      'popover-foreground': 'oklch(0.95 0.02 50)',
+      primary: 'oklch(0.7 0.3 290)', // Neon purple
+      'primary-foreground': 'oklch(0.08 0 0)',
+      secondary: 'oklch(0.75 0.25 180)', // Neon cyan
+      'secondary-foreground': 'oklch(0.08 0 0)',
+      muted: 'oklch(0.22 0.02 270)',
+      'muted-foreground': 'oklch(0.6 0.05 50)',
+      accent: 'oklch(0.8 0.28 40)', // Neon yellow
+      'accent-foreground': 'oklch(0.08 0 0)',
+      destructive: 'oklch(0.65 0.3 20)', // Neon red
+      'destructive-foreground': 'oklch(0.08 0 0)',
+      border: 'oklch(0.25 0.05 290)',
+      input: 'oklch(0.15 0.02 270)',
+      ring: 'oklch(0.7 0.3 290)',
+      brand: 'oklch(0.7 0.3 290)',
+      'brand-muted': 'oklch(0.22 0.02 270)',
+    },
+  },
+  minimalist: {
+    name: 'Minimalist',
+    colors: {
+      background: 'oklch(0.98 0 0)',
+      foreground: 'oklch(0.18 0 0)',
+      card: 'oklch(1 0 0)',
+      'card-foreground': 'oklch(0.18 0 0)',
+      popover: 'oklch(0.98 0 0)',
+      'popover-foreground': 'oklch(0.18 0 0)',
+      primary: 'oklch(0.15 0 0)',
+      'primary-foreground': 'oklch(0.98 0 0)',
+      secondary: 'oklch(0.92 0 0)',
+      'secondary-foreground': 'oklch(0.18 0 0)',
+      muted: 'oklch(0.88 0 0)',
+      'muted-foreground': 'oklch(0.55 0 0)',
+      accent: 'oklch(0.28 0 0)',
+      'accent-foreground': 'oklch(0.98 0 0)',
+      destructive: 'oklch(0.45 0.1 15)', // Subtle red
+      'destructive-foreground': 'oklch(0.98 0 0)',
+      border: 'oklch(0.92 0 0)',
+      input: 'oklch(0.95 0 0)',
+      ring: 'oklch(0.35 0 0)',
+      brand: 'oklch(0.2 0 0)',
+      'brand-muted': 'oklch(0.88 0 0)',
+    },
+  },
+};
+
+export const themeList: ThemeName[] = ['light', 'dark', 'nord', 'cyberpunk', 'minimalist'];
