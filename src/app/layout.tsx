@@ -6,7 +6,7 @@ import QueryProviders from '@/providers/QueryProviders';
 import Navbar from '@/components/shared/navbar';
 import Footer from '@/components/shared/footer';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,25 +35,19 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground min-h-screen overflow-hidden">
-        <QueryProviders>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem={false}
-            storageKey="theme"
-          >
+        <ThemeProvider>
+          <QueryProviders>
             <LocaleUpdater />
             <div className="fixed top-0 right-0 left-0 z-50">
               <Navbar />
             </div>
 
             <main className="mx-4 my-2 h-full overflow-hidden pt-20 pb-8">{children}</main>
-
             <div className="fixed right-0 bottom-0 left-0 z-50">
               <Footer />
             </div>
-          </ThemeProvider>
-        </QueryProviders>
+          </QueryProviders>
+        </ThemeProvider>
       </body>
     </html>
   );

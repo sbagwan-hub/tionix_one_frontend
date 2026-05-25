@@ -98,12 +98,12 @@ export default function UserSelection({ accessScope, setAccessScope }: UserSelec
         </div>
 
         <div className="self-start md:self-end">
-          <div className="border-border bg-muted/50 hover:border-ring dark:border-input/60 dark:bg-muted/20 flex items-center gap-3 rounded-sm border px-3 py-2 transition">
+          <div className="border-border hover:border-ring dark:border-input/60 dark:bg-muted/20 flex cursor-pointer items-center gap-3 rounded-sm border bg-white px-3 py-2 transition">
             <Checkbox
               id="modify-other-users"
               checked={modifyOtherUsers}
               onCheckedChange={(checked) => setModifyOtherUsers(Boolean(checked))}
-              className="h-4 w-4 rounded"
+              className="h-4 w-4 rounded-xs border border-gray-400"
             />
 
             <div className="flex flex-col">

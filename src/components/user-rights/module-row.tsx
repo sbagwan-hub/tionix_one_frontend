@@ -26,7 +26,7 @@ export default function ModuleRow({ row }: ModuleRowProps) {
           <div className="flex items-center justify-center">
             <Checkbox
               defaultChecked={row[action]}
-              className="border-input text-primary focus:ring-primary/50 dark:bg-input/80 h-4 w-4 cursor-pointer rounded transition"
+              className="text-primary focus:ring-primary/50 dark:bg-input/80 h-4 w-4 cursor-pointer rounded-xs border border-gray-400 transition"
             />
           </div>
         </td>

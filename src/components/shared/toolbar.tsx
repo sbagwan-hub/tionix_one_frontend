@@ -50,7 +50,7 @@ function ToolbarButton({ action }: { action: Action }) {
 
 export default function Toolbar({ navigation = [], actions = [], utilities = [] }: ToolbarProps) {
   return (
-    <div className="ring-border/50 dark:border-input/60 dark:bg-card mb-2 flex flex-wrap items-center justify-between gap-4 rounded-sm border border-slate-200/80 bg-white p-3">
+    <div className="ring-border/50 dark:border-input/60 dark:bg-card bg-background border-foreground/10 mb-2 flex flex-wrap items-center justify-between gap-4 rounded-sm border p-3">
       <div className="dark:border-input/60 flex items-center gap-1 border-r border-slate-200 pr-4">
         {navigation.map((item, idx) => (
           <ToolbarButton
