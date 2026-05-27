@@ -14,10 +14,8 @@ import {
   UserRightsOut,
 } from '@/lib/api';
 
-// ── Logged-in operator (replace with real session) ────────────────────────────
-const OPERATOR_ID = 2;
+const OPERATOR_ID = 1; // replace with real session user id
 
-// ── Tab types ─────────────────────────────────────────────────────────────────
 type Tab =
   | 'masters'
   | 'transactions'
@@ -39,7 +37,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'processes', label: 'Processes' },
 ];
 
-// ── Checkbox cell ─────────────────────────────────────────────────────────────
+// ── Reusable checkbox cell ────────────────────────────────────────────────────
 function Chk({
   value,
   editable,
@@ -53,44 +51,48 @@ function Chk({
     <button
       type="button"
       disabled={!editable}
-      onClick={() => onChange?.(!value)}
-      className={`flex h-5 w-5 items-center justify-center rounded border text-xs font-bold transition-all ${!editable ? 'cursor-default opacity-60' : 'cursor-pointer hover:scale-110'} ${value ? 'border-emerald-400 bg-emerald-500 text-white' : 'border-slate-500 bg-slate-700 text-slate-400'} `}
+      onClick={() => editable && onChange?.(!value)}
+      className={[
+        'flex h-5 w-5 items-center justify-center rounded border text-xs font-bold transition-all',
+        editable ? 'cursor-pointer hover:scale-110' : 'cursor-default opacity-60',
+        value
+          ? 'border-emerald-400 bg-emerald-500 text-white'
+          : 'border-slate-500 bg-slate-700 text-slate-400',
+      ].join(' ')}
     >
       {value ? '✓' : '–'}
     </button>
   );
 }
 
-// ── Right rows grid (Masters / Transactions) ──────────────────────────────────
-const RIGHT_COLS = ['RAdd', 'REdit', 'RDelete', 'RView', 'RPrint', 'RExport'] as const;
-const TRAN_COLS = [...RIGHT_COLS, 'RAuthorize'] as const;
+// ── Rights grid (Masters / Transactions) ─────────────────────────────────────
+const MASTER_COLS = ['RAdd', 'REdit', 'RDelete', 'RView', 'RPrint', 'RExport'] as const;
+const TRAN_COLS = [...MASTER_COLS, 'RAuthorize'] as const;
 
 function RightsGrid({
   rows,
   editable,
-  showAuthorize,
+  isTran,
   onChange,
 }: {
   rows: FormRightRow[];
   editable: boolean;
-  showAuthorize: boolean;
-  onChange: (rows: FormRightRow[]) => void;
+  isTran: boolean;
+  onChange: (r: FormRightRow[]) => void;
 }) {
-  const cols = showAuthorize ? TRAN_COLS : RIGHT_COLS;
-  const update = (idx: number, col: string, val: boolean) => {
+  const cols = isTran ? TRAN_COLS : MASTER_COLS;
+  const upd = (idx: number, col: string, val: boolean) =>
     onChange(rows.map((r, i) => (i === idx ? { ...r, [col]: val } : r)));
-  };
 
-  // group by module_caption
-  const groups: { caption: string; items: { row: FormRightRow; idx: number }[] }[] = [];
-  rows.forEach((row, idx) => {
-    const cap = row.module_caption || row.module_name || 'General';
-    let g = groups.find((g) => g.caption === cap);
+  const groups: { cap: string; items: { r: FormRightRow; i: number }[] }[] = [];
+  rows.forEach((r, i) => {
+    const cap = r.module_caption || r.module_name || 'General';
+    let g = groups.find((g) => g.cap === cap);
     if (!g) {
-      g = { caption: cap, items: [] };
+      g = { cap, items: [] };
       groups.push(g);
     }
-    g.items.push({ row, idx });
+    g.items.push({ r, i });
   });
 
   return (
@@ -114,25 +116,25 @@ function RightsGrid({
         <tbody>
           {groups.map((g) => (
             <>
-              <tr key={`h-${g.caption}`}>
+              <tr key={`grp-${g.cap}`}>
                 <td
-                  colSpan={cols.length + 1}
+                  colSpan={cols?.length + 1}
                   className="border-b border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-semibold tracking-widest text-amber-400 uppercase"
                 >
-                  {g.caption}
+                  {g.cap}
                 </td>
               </tr>
-              {g.items.map(({ row, idx }) => (
-                <tr key={idx} className="group border-b border-slate-700/40 hover:bg-slate-700/40">
-                  <td className="truncate px-3 py-1.5 text-slate-200 group-hover:text-white">
-                    {row.form_name}
+              {g.items.map(({ r, i }) => (
+                <tr key={i} className="group border-b border-slate-700/40 hover:bg-slate-700/30">
+                  <td className="max-w-xs truncate px-3 py-1.5 text-slate-200 group-hover:text-white">
+                    {r.form_name}
                   </td>
                   {cols.map((c) => (
                     <td key={c} className="px-2 py-1.5 text-center">
                       <Chk
-                        value={(row as any)[c]}
+                        value={(r as any)[c]}
                         editable={editable}
-                        onChange={(v) => update(idx, c, v)}
+                        onChange={(v) => upd(i, c, v)}
                       />
                     </td>
                   ))}
@@ -142,7 +144,9 @@ function RightsGrid({
           ))}
         </tbody>
       </table>
-      {rows.length === 0 && <p className="py-10 text-center text-slate-500 italic">No forms.</p>}
+      {rows?.length === 0 && (
+        <p className="py-12 text-center text-slate-500 italic">No forms found.</p>
+      )}
     </div>
   );
 }
@@ -157,7 +161,7 @@ function ReportsGrid({
   editable: boolean;
   onChange: (r: FormReportRow[]) => void;
 }) {
-  const update = (idx: number, col: string, val: boolean) =>
+  const upd = (idx: number, col: keyof FormReportRow, val: boolean) =>
     onChange(rows.map((r, i) => (i === idx ? { ...r, [col]: val } : r)));
   return (
     <div className="overflow-auto">
@@ -167,7 +171,7 @@ function ReportsGrid({
             <th className="w-72 border-b border-slate-600 bg-slate-800 px-3 py-2 text-left font-medium text-slate-300">
               Form
             </th>
-            {['RView', 'RPrint', 'RExport'].map((c) => (
+            {(['RView', 'RPrint', 'RExport'] as const).map((c) => (
               <th
                 key={c}
                 className="w-16 border-b border-slate-600 bg-slate-800 px-2 py-2 text-center font-medium text-slate-300"
@@ -178,19 +182,19 @@ function ReportsGrid({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, idx) => (
-            <tr key={idx} className="border-b border-slate-700/40 hover:bg-slate-700/40">
-              <td className="px-3 py-1.5 text-slate-200">{row.form_name}</td>
+          {rows.map((r, i) => (
+            <tr key={i} className="border-b border-slate-700/40 hover:bg-slate-700/30">
+              <td className="px-3 py-1.5 text-slate-200">{r.form_name}</td>
               {(['RView', 'RPrint', 'RExport'] as const).map((c) => (
                 <td key={c} className="px-2 py-1.5 text-center">
-                  <Chk value={row[c]} editable={editable} onChange={(v) => update(idx, c, v)} />
+                  <Chk value={r[c]} editable={editable} onChange={(v) => upd(i, c, v)} />
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      {rows.length === 0 && <p className="py-10 text-center text-slate-500 italic">No reports.</p>}
+      {rows?.length === 0 && <p className="py-12 text-center text-slate-500 italic">No reports.</p>}
     </div>
   );
 }
@@ -205,7 +209,7 @@ function OthersGrid({
   editable: boolean;
   onChange: (r: FormOtherRow[]) => void;
 }) {
-  const update = (idx: number, val: boolean) =>
+  const upd = (idx: number, val: boolean) =>
     onChange(rows.map((r, i) => (i === idx ? { ...r, RRights: val } : r)));
   return (
     <div className="overflow-auto">
@@ -221,24 +225,24 @@ function OthersGrid({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, idx) => (
-            <tr key={idx} className="border-b border-slate-700/40 hover:bg-slate-700/40">
-              <td className="px-3 py-1.5 text-slate-200">{row.form_name}</td>
+          {rows.map((r, i) => (
+            <tr key={i} className="border-b border-slate-700/40 hover:bg-slate-700/30">
+              <td className="px-3 py-1.5 text-slate-200">{r.form_name}</td>
               <td className="px-2 py-1.5 text-center">
-                <Chk value={row.RRights} editable={editable} onChange={(v) => update(idx, v)} />
+                <Chk value={r.RRights} editable={editable} onChange={(v) => upd(i, v)} />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {rows.length === 0 && (
-        <p className="py-10 text-center text-slate-500 italic">No other forms.</p>
+      {rows?.length === 0 && (
+        <p className="py-12 text-center text-slate-500 italic">No other forms.</p>
       )}
     </div>
   );
 }
 
-// ── Specials grid (Form + Rights bit) ────────────────────────────────────────
+// ── Specials: checkbox cards, Form (string) + Rights (bit) ───────────────────
 function SpecialsGrid({
   rows,
   editable,
@@ -251,34 +255,42 @@ function SpecialsGrid({
   const toggle = (idx: number) =>
     onChange(rows.map((r, i) => (i === idx ? { ...r, Rights: !r.Rights } : r)));
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-      {rows.map((row, idx) => (
-        <label
-          key={idx}
-          className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 transition-all ${row.Rights ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-slate-700 bg-slate-800'} ${!editable ? 'cursor-default opacity-70' : 'hover:border-slate-500'} `}
-        >
-          <input
-            type="checkbox"
-            checked={row.Rights}
-            disabled={!editable}
-            onChange={() => toggle(idx)}
-            className="accent-emerald-500"
-          />
-          <span
-            className={`truncate text-sm ${row.Rights ? 'text-emerald-300' : 'text-slate-300'}`}
+    <>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        {rows.map((r, idx) => (
+          <label
+            key={idx}
+            className={[
+              'flex items-center gap-2 rounded-lg border px-3 py-2 transition-all',
+              r.Rights
+                ? 'border-emerald-500/40 bg-emerald-500/10'
+                : 'border-slate-700 bg-slate-800',
+              editable ? 'cursor-pointer hover:border-slate-500' : 'cursor-default opacity-70',
+            ].join(' ')}
           >
-            {row.Form}
-          </span>
-        </label>
-      ))}
-      {rows.length === 0 && (
-        <p className="col-span-full py-10 text-center text-slate-500 italic">No special flags.</p>
+            <input
+              type="checkbox"
+              checked={r.Rights}
+              disabled={!editable}
+              onChange={() => toggle(idx)}
+              className="accent-emerald-500"
+            />
+            <span
+              className={`truncate text-sm ${r.Rights ? 'text-emerald-300' : 'text-slate-300'}`}
+            >
+              {r.Form}
+            </span>
+          </label>
+        ))}
+      </div>
+      {rows?.length === 0 && (
+        <p className="py-12 text-center text-slate-500 italic">No special flags.</p>
       )}
-    </div>
+    </>
   );
 }
 
-// ── Branches panel (fkSetId) ──────────────────────────────────────────────────
+// ── Branches: fkSetId char(5) ─────────────────────────────────────────────────
 function BranchesPanel({
   rows,
   editable,
@@ -288,24 +300,24 @@ function BranchesPanel({
   editable: boolean;
   onChange: (r: BranchRow[]) => void;
 }) {
-  const [newId, setNewId] = useState('');
+  const [val, setVal] = useState('');
   const add = () => {
-    const id = parseInt(newId);
-    if (!isNaN(id)) {
-      onChange([...rows, { fkSetId: id }]);
-      setNewId('');
+    const v = val.trim().slice(0, 5);
+    if (v) {
+      // onChange([...rows, { fkSetId: v }]);
+      setVal('');
     }
   };
   const remove = (idx: number) => onChange(rows.filter((_, i) => i !== idx));
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {editable && (
         <div className="flex gap-2">
           <input
-            type="number"
-            placeholder="Branch Set ID"
-            value={newId}
-            onChange={(e) => setNewId(e.target.value)}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            maxLength={5}
+            placeholder="Set ID (max 5 chars)"
             className="w-48 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 focus:border-amber-500 focus:outline-none"
           />
           <button
@@ -318,25 +330,25 @@ function BranchesPanel({
       )}
       <div className="flex flex-wrap gap-2">
         {rows.map((r, idx) => (
-          <div
+          <span
             key={idx}
             className="flex items-center gap-1 rounded-full border border-slate-600 bg-slate-800 px-3 py-1 text-sm text-slate-200"
           >
-            Set #{r.fkSetId ?? '—'}
+            Set: <strong>{r.fkSetId}</strong>
             {editable && (
               <button onClick={() => remove(idx)} className="ml-1 text-red-400 hover:text-red-300">
                 ✕
               </button>
             )}
-          </div>
+          </span>
         ))}
-        {rows.length === 0 && <p className="text-slate-500 italic">No branches assigned.</p>}
+        {rows?.length === 0 && <p className="text-slate-500 italic">No branches assigned.</p>}
       </div>
     </div>
   );
 }
 
-// ── Dashboards panel (Id) ─────────────────────────────────────────────────────
+// ── Dashboards: Id numeric(18,0) ──────────────────────────────────────────────
 function DashboardsPanel({
   rows,
   editable,
@@ -346,24 +358,24 @@ function DashboardsPanel({
   editable: boolean;
   onChange: (r: DashboardRow[]) => void;
 }) {
-  const [newId, setNewId] = useState('');
+  const [val, setVal] = useState('');
   const add = () => {
-    const id = parseInt(newId);
-    if (!isNaN(id)) {
-      onChange([...rows, { Id: id }]);
-      setNewId('');
+    const n = parseInt(val);
+    if (!isNaN(n)) {
+      onChange([...rows, { Id: n }]);
+      setVal('');
     }
   };
   const remove = (idx: number) => onChange(rows.filter((_, i) => i !== idx));
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {editable && (
         <div className="flex gap-2">
           <input
             type="number"
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
             placeholder="Dashboard ID"
-            value={newId}
-            onChange={(e) => setNewId(e.target.value)}
             className="w-48 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 focus:border-amber-500 focus:outline-none"
           />
           <button
@@ -376,7 +388,7 @@ function DashboardsPanel({
       )}
       <div className="flex flex-wrap gap-2">
         {rows.map((r, idx) => (
-          <div
+          <span
             key={idx}
             className="flex items-center gap-1 rounded-full border border-slate-600 bg-slate-800 px-3 py-1 text-sm text-slate-200"
           >
@@ -386,15 +398,15 @@ function DashboardsPanel({
                 ✕
               </button>
             )}
-          </div>
+          </span>
         ))}
-        {rows.length === 0 && <p className="text-slate-500 italic">No dashboards assigned.</p>}
+        {rows?.length === 0 && <p className="text-slate-500 italic">No dashboards assigned.</p>}
       </div>
     </div>
   );
 }
 
-// ── Processes panel (fkProdId) ────────────────────────────────────────────────
+// ── Processes: fkProdId char(10) ──────────────────────────────────────────────
 function ProcessesPanel({
   rows,
   editable,
@@ -404,25 +416,25 @@ function ProcessesPanel({
   editable: boolean;
   onChange: (r: ProcessRow[]) => void;
 }) {
-  const [newId, setNewId] = useState('');
+  const [val, setVal] = useState('');
   const add = () => {
-    const id = parseInt(newId);
-    if (!isNaN(id)) {
-      onChange([...rows, { fkProdId: id }]);
-      setNewId('');
+    const v = val.trim().slice(0, 10);
+    if (v) {
+      onChange([...rows, { fkProdId: v }]);
+      setVal('');
     }
   };
   const remove = (idx: number) => onChange(rows.filter((_, i) => i !== idx));
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {editable && (
         <div className="flex gap-2">
           <input
-            type="number"
-            placeholder="Process/Product ID"
-            value={newId}
-            onChange={(e) => setNewId(e.target.value)}
-            className="w-48 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 focus:border-amber-500 focus:outline-none"
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            maxLength={10}
+            placeholder="Product ID (max 10 chars)"
+            className="w-52 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 focus:border-amber-500 focus:outline-none"
           />
           <button
             onClick={add}
@@ -434,19 +446,19 @@ function ProcessesPanel({
       )}
       <div className="flex flex-wrap gap-2">
         {rows.map((r, idx) => (
-          <div
+          <span
             key={idx}
             className="flex items-center gap-1 rounded-full border border-slate-600 bg-slate-800 px-3 py-1 text-sm text-slate-200"
           >
-            Product #{r.fkProdId ?? '—'}
+            Prod: <strong>{r.fkProdId}</strong>
             {editable && (
               <button onClick={() => remove(idx)} className="ml-1 text-red-400 hover:text-red-300">
                 ✕
               </button>
             )}
-          </div>
+          </span>
         ))}
-        {rows.length === 0 && <p className="text-slate-500 italic">No processes assigned.</p>}
+        {rows?.length === 0 && <p className="text-slate-500 italic">No processes assigned.</p>}
       </div>
     </div>
   );
@@ -465,7 +477,6 @@ export default function UserRightsPage() {
   const [search, setSearch] = useState('');
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
-  // editable local state
   const [masters, setMasters] = useState<FormRightRow[]>([]);
   const [transactions, setTransactions] = useState<FormRightRow[]>([]);
   const [reports, setReports] = useState<FormReportRow[]>([]);
@@ -481,6 +492,8 @@ export default function UserRightsPage() {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3500);
   };
+
+  const mark = () => setDirty(true);
 
   useEffect(() => {
     api.listUsers().then(setUsers).catch(console.error);
@@ -551,11 +564,7 @@ export default function UserRightsPage() {
     if (selectedUser) loadRights(selectedUser);
   };
 
-  const filteredUsers = users.filter((u) =>
-    u.UserName.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  const mark = () => setDirty(true);
+  const filtered = users.filter((u) => u.UserName.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="flex min-h-screen bg-slate-950 font-mono text-slate-100">
@@ -575,15 +584,16 @@ export default function UserRightsPage() {
           />
         </div>
         <div className="flex-1 overflow-y-auto py-2">
-          {filteredUsers.map((u) => (
+          {filtered.map((u) => (
             <button
               key={u.pkUserId}
               onClick={() => loadRights(u)}
-              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors ${
+              className={[
+                'flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition-colors',
                 selectedUser?.pkUserId === u.pkUserId
                   ? 'border-r-2 border-amber-400 bg-amber-500/20 text-amber-300'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white',
+              ].join(' ')}
             >
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-700 text-xs font-bold">
                 {u.UserName[0]?.toUpperCase()}
@@ -596,7 +606,7 @@ export default function UserRightsPage() {
               )}
             </button>
           ))}
-          {filteredUsers.length === 0 && (
+          {filtered?.length === 0 && (
             <p className="py-6 text-center text-xs text-slate-600">No users found</p>
           )}
         </div>
@@ -632,41 +642,46 @@ export default function UserRightsPage() {
             </>
           )}
 
-          {selectedUser && (
-            <div className="ml-auto flex items-center gap-2">
-              {rights && (
-                <div className="mr-3 flex gap-4 text-xs text-slate-400">
-                  <label className="flex cursor-pointer items-center gap-1.5">
-                    <input
-                      type="checkbox"
-                      checked={ownRecords}
-                      disabled={!editable}
-                      onChange={(e) => {
-                        setOwnRecords(e.target.checked);
-                        mark();
-                      }}
-                      className="accent-amber-500"
-                    />
-                    Own Records
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-1.5">
-                    <input
-                      type="checkbox"
-                      checked={otherRecords}
-                      disabled={!editable}
-                      onChange={(e) => {
-                        setOtherRecords(e.target.checked);
-                        mark();
-                      }}
-                      className="accent-amber-500"
-                    />
-                    Edit Others
-                  </label>
-                </div>
-              )}
+          {selectedUser && rights && (
+            <div className="ml-auto flex items-center gap-4">
+              {/* OwnRecords + OtherRecords flags */}
+              <label
+                className={`flex items-center gap-1.5 text-xs text-slate-400 ${editable ? 'cursor-pointer' : 'opacity-60'}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={ownRecords}
+                  disabled={!editable}
+                  onChange={(e) => {
+                    setOwnRecords(e.target.checked);
+                    mark();
+                  }}
+                  className="accent-amber-500"
+                />
+                Own Records
+              </label>
+              <label
+                className={`flex items-center gap-1.5 text-xs text-slate-400 ${editable ? 'cursor-pointer' : 'opacity-60'}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={otherRecords}
+                  disabled={!editable}
+                  onChange={(e) => {
+                    setOtherRecords(e.target.checked);
+                    mark();
+                  }}
+                  className="accent-amber-500"
+                />
+                Edit Others
+              </label>
               <span className="text-sm font-semibold text-amber-300">{selectedUser.UserName}</span>
               <span
-                className={`rounded-full border px-2 py-0.5 text-xs ${editable ? 'border-blue-500/30 bg-blue-500/20 text-blue-300' : 'border-slate-600 bg-slate-700 text-slate-400'}`}
+                className={`rounded-full border px-2 py-0.5 text-xs ${
+                  editable
+                    ? 'border-blue-500/30 bg-blue-500/20 text-blue-300'
+                    : 'border-slate-600 bg-slate-700 text-slate-400'
+                }`}
               >
                 {editable ? 'EDIT' : 'VIEW'}
               </span>
@@ -674,14 +689,12 @@ export default function UserRightsPage() {
           )}
         </div>
 
-        {/* Loading */}
         {loading && (
           <div className="flex flex-1 items-center justify-center">
             <div className="animate-pulse text-sm text-amber-400">Loading rights…</div>
           </div>
         )}
 
-        {/* Empty state */}
         {!loading && !selectedUser && (
           <div className="flex flex-1 items-center justify-center">
             <div className="text-center">
@@ -691,7 +704,6 @@ export default function UserRightsPage() {
           </div>
         )}
 
-        {/* Content */}
         {!loading && selectedUser && rights && (
           <div className="flex min-h-0 flex-1 flex-col">
             {/* Tabs */}
@@ -700,24 +712,25 @@ export default function UserRightsPage() {
                 <button
                   key={t.id}
                   onClick={() => setTab(t.id)}
-                  className={`shrink-0 rounded-md px-3 py-1.5 text-xs transition-colors ${
+                  className={[
+                    'shrink-0 rounded-md px-3 py-1.5 text-xs transition-colors',
                     tab === t.id
                       ? 'border border-amber-500/40 bg-amber-500/20 text-amber-300'
-                      : 'border border-transparent text-slate-400 hover:bg-slate-800 hover:text-slate-200'
-                  }`}
+                      : 'border border-transparent text-slate-400 hover:bg-slate-800 hover:text-slate-200',
+                  ].join(' ')}
                 >
                   {t.label}
                 </button>
               ))}
             </div>
 
-            {/* Tab content */}
+            {/* Content */}
             <div className="flex-1 overflow-auto p-6">
               {tab === 'masters' && (
                 <RightsGrid
                   rows={masters}
                   editable={editable}
-                  showAuthorize={false}
+                  isTran={false}
                   onChange={(r) => {
                     setMasters(r);
                     mark();
@@ -728,7 +741,7 @@ export default function UserRightsPage() {
                 <RightsGrid
                   rows={transactions}
                   editable={editable}
-                  showAuthorize={true}
+                  isTran={true}
                   onChange={(r) => {
                     setTransactions(r);
                     mark();
@@ -803,11 +816,12 @@ export default function UserRightsPage() {
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed right-6 bottom-6 z-50 rounded-xl border px-4 py-3 text-sm font-medium shadow-2xl ${
+          className={[
+            'fixed right-6 bottom-6 z-50 rounded-xl border px-4 py-3 text-sm font-medium shadow-2xl',
             toast.type === 'success'
               ? 'border-emerald-500/40 bg-emerald-900/90 text-emerald-200'
-              : 'border-red-500/40 bg-red-900/90 text-red-200'
-          }`}
+              : 'border-red-500/40 bg-red-900/90 text-red-200',
+          ].join(' ')}
         >
           {toast.msg}
         </div>
@@ -815,3 +829,4 @@ export default function UserRightsPage() {
     </div>
   );
 }
+// (see full file above)

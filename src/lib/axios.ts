@@ -7,6 +7,7 @@ const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    current_db: '',
   },
   withCredentials: true,
 });

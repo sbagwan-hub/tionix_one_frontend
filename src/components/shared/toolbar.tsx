@@ -9,6 +9,7 @@ export type Action = {
   title?: string;
   onClick?: () => void | Promise<void>;
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'icon';
+  disabled?: boolean;
 };
 
 type ToolbarProps = {
@@ -40,6 +41,7 @@ function ToolbarButton({ action }: { action: Action }) {
       onClick={action.onClick}
       variant={variant}
       size={size}
+      disabled={action.disabled}
       className={action.variant === 'icon' ? 'dark:text-muted-foreground text-slate-500' : ''}
     >
       <Icon size={16} />

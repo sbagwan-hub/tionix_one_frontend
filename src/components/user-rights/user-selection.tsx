@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -10,27 +9,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '../ui/input';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { UserListItem } from '@/lib/api';
 
 interface UserSelectionProps {
-  accessScope: string;
-  setAccessScope: (value: string) => void;
+  users: UserListItem[];
+  selectedUser: UserListItem | null;
+  onSelectUser: (user: UserListItem | null) => void;
+  ownRecords: boolean;
+  setOwnRecords: (val: boolean) => void;
+  otherRecords: boolean;
+  setOtherRecords: (val: boolean) => void;
+  editable: boolean;
 }
 
-const userOptions = [
-  { label: 'John Doe (Administrator)', value: '1' },
-  { label: 'Jane Smith (Manager)', value: '2' },
-  { label: 'Alex Rivera (Fin Operations)', value: '3' },
-];
+export default function UserSelection({
+  users,
+  selectedUser,
+  onSelectUser,
+  ownRecords,
+  setOwnRecords,
+  otherRecords,
+  setOtherRecords,
+  editable,
+}: UserSelectionProps) {
+  // Map ownRecords (boolean) to accessScope ("self" or "all")
+  const accessScope = ownRecords ? 'self' : 'all';
 
-export default function UserSelection({ accessScope, setAccessScope }: UserSelectionProps) {
-  const [selectedUser, setSelectedUser] = useState('');
-  const [modifyOtherUsers, setModifyOtherUsers] = useState(false);
+  const handleScopeChange = (value: string) => {
+    setOwnRecords(value === 'self');
+  };
+
+  const handleUserChange = (valStr: string) => {
+    const userId = parseInt(valStr);
+    const user = users.find((u) => u.pkUserId === userId) || null;
+    onSelectUser(user);
+  };
 
   return (
     <div className="border-border bg-card ring-border/50 dark:border-input/60 dark:bg-card mb-2 overflow-hidden rounded-sm border p-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {/* User Dropdown Selection */}
         <div>
           <Label
             htmlFor="user-profile"
@@ -39,32 +58,40 @@ export default function UserSelection({ accessScope, setAccessScope }: UserSelec
             Select User <span className="text-destructive">*</span>
           </Label>
 
-          <Select value={selectedUser} onValueChange={setSelectedUser}>
+          <Select
+            value={selectedUser?.pkUserId?.toString() ?? ''}
+            onValueChange={handleUserChange}
+            disabled={editable}
+          >
             <SelectTrigger
               id="user-profile"
-              className="border-input bg-input text-foreground focus:border-ring focus:ring-ring/50 dark:bg-input/40 dark:text-foreground w-full cursor-alias rounded-sm border px-3 py-1.5 text-sm font-medium transition outline-none"
+              className="border-input bg-input text-foreground focus:border-ring focus:ring-ring/50 dark:bg-input/40 dark:text-foreground w-full rounded-sm border px-3 py-1.5 text-sm font-medium transition outline-none disabled:cursor-not-allowed disabled:opacity-50"
             >
               <SelectValue placeholder="Choose a user profile..." />
             </SelectTrigger>
 
             <SelectContent
-              className="border-border bg-popover border p-0"
+              className="border-border bg-popover max-h-60 overflow-y-auto border p-0"
               position="popper"
               side="bottom"
             >
-              {userOptions.map((option) => (
+              {users?.map((user) => (
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
+                  key={user.pkUserId}
+                  value={user.pkUserId.toString()}
                   className="hover:bg-accent focus:bg-brand/50 cursor-pointer px-2.5 py-2.5 text-xs transition-colors hover:text-white focus:text-white"
                 >
-                  {option.label}
+                  {user.UserName} {user.SysDefined ? '(System)' : ''}
                 </SelectItem>
               ))}
+              {users?.length === 0 && (
+                <div className="text-muted-foreground p-2 text-center text-xs">No users found</div>
+              )}
             </SelectContent>
           </Select>
         </div>
 
+        {/* Data Access Scope */}
         <div className="flex flex-col">
           <span className="text-muted-foreground mb-1.5 text-[11px] font-semibold tracking-[0.18em] uppercase">
             Data Access Scope
@@ -72,24 +99,29 @@ export default function UserSelection({ accessScope, setAccessScope }: UserSelec
 
           <RadioGroup
             value={accessScope}
-            onValueChange={(value) => setAccessScope(value)}
-            className="flex flex-wrap items-center gap-3"
+            onValueChange={handleScopeChange}
+            disabled={!editable || !selectedUser}
+            className="mt-2 flex flex-wrap items-center gap-3"
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="all" id="all-records" />
+              <RadioGroupItem value="all" id="all-records" disabled={!editable || !selectedUser} />
               <Label
                 htmlFor="all-records"
-                className="text-foreground cursor-pointer text-sm font-medium"
+                className={`text-sm font-medium ${editable && selectedUser ? 'text-foreground cursor-pointer' : 'text-muted-foreground cursor-not-allowed'}`}
               >
                 All Records
               </Label>
             </div>
 
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="self" id="self-records" />
+              <RadioGroupItem
+                value="self"
+                id="self-records"
+                disabled={!editable || !selectedUser}
+              />
               <Label
                 htmlFor="self-records"
-                className="text-foreground cursor-pointer text-sm font-medium"
+                className={`text-sm font-medium ${editable && selectedUser ? 'text-foreground cursor-pointer' : 'text-muted-foreground cursor-not-allowed'}`}
               >
                 Self Records Only
               </Label>
@@ -97,17 +129,30 @@ export default function UserSelection({ accessScope, setAccessScope }: UserSelec
           </RadioGroup>
         </div>
 
+        {/* Modify Other User Records Option */}
         <div className="self-start md:self-end">
-          <div className="border-border hover:border-ring dark:border-input/60 dark:bg-muted/20 flex cursor-pointer items-center gap-3 rounded-sm border bg-white px-3 py-2 transition">
+          <div
+            className={`border-border dark:bg-muted/20 flex items-center gap-3 rounded-sm border bg-white px-3 py-2 transition ${
+              editable && selectedUser
+                ? 'hover:border-ring cursor-pointer'
+                : 'cursor-not-allowed opacity-50'
+            }`}
+          >
             <Checkbox
               id="modify-other-users"
-              checked={modifyOtherUsers}
-              onCheckedChange={(checked) => setModifyOtherUsers(Boolean(checked))}
-              className="h-4 w-4 rounded-xs border border-gray-400"
+              checked={otherRecords}
+              onCheckedChange={(checked) =>
+                editable && selectedUser && setOtherRecords(Boolean(checked))
+              }
+              disabled={!editable || !selectedUser}
+              className="h-4 w-4 rounded-xs border border-gray-400 disabled:cursor-not-allowed"
             />
 
             <div className="flex flex-col">
-              <Label htmlFor="modify-other-users" className="text-foreground text-sm font-semibold">
+              <Label
+                htmlFor="modify-other-users"
+                className={`text-sm font-semibold ${editable && selectedUser ? 'text-foreground cursor-pointer' : 'text-muted-foreground cursor-not-allowed'}`}
+              >
                 Modify Other User Records
               </Label>
 

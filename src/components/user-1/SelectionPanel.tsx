@@ -22,7 +22,7 @@ export default function SelectionPanel({ rows, editable, onChange, label }: Prop
 
   return (
     <div>
-      {editable && rows.length > 0 && (
+      {editable && rows?.length > 0 && (
         <div className="mb-3 flex gap-2">
           <button
             onClick={selectAll}
@@ -38,7 +38,7 @@ export default function SelectionPanel({ rows, editable, onChange, label }: Prop
           </button>
         </div>
       )}
-      {rows.length === 0 ? (
+      {rows?.length === 0 ? (
         <p className="py-8 text-center text-sm text-slate-500 italic">No {label} configured.</p>
       ) : (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">

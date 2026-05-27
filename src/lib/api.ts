@@ -1,4 +1,5 @@
-// lib/api.ts – typed API client matching the exact FastAPI backend
+// lib/api.ts — typed API client, PostgreSQL backend
+// All user IDs: number (BigInteger). fkSetId: number. fkProdId: string (char 10).
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
 
@@ -17,14 +18,22 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
   return json as T;
 }
 
-// ── User list ─────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
+
 export interface UserListItem {
   pkUserId: number;
   UserName: string;
   SysDefined: boolean;
 }
 
-// ── Form rows ─────────────────────────────────────────────────────────────────
+export interface UserOut {
+  pkUserId: number;
+  UserName: string;
+  SysDefined: boolean;
+  OwnRecords: boolean;
+  OtherRecords: boolean;
+}
+
 export interface FormRightRow {
   form_name: string;
   module_name: string;
@@ -60,34 +69,20 @@ export interface FormOtherRow {
   RRights: boolean;
 }
 
-// ── Special / Branch / Dashboard / Process ────────────────────────────────────
 export interface SpecialRow {
   Form: string;
   Rights: boolean;
 }
-
 export interface BranchRow {
-  fkSetId: number | null;
+  fkSetId: number;
 }
-
 export interface DashboardRow {
   Id: number;
 }
-
 export interface ProcessRow {
-  fkProdId: number | null;
+  fkProdId: string;
 }
 
-// ── User detail ───────────────────────────────────────────────────────────────
-export interface UserOut {
-  pkUserId: number;
-  UserName: string;
-  SysDefined: boolean;
-  OwnRecords: boolean;
-  OtherRecords: boolean;
-}
-
-// ── Full rights payload ───────────────────────────────────────────────────────
 export interface UserRightsOut {
   user: UserOut;
   masters: FormRightRow[];
@@ -100,7 +95,6 @@ export interface UserRightsOut {
   processes: ProcessRow[];
 }
 
-// ── Save payload ──────────────────────────────────────────────────────────────
 export interface SaveUserRightsIn {
   user_id: number;
   operator_id: number;
@@ -115,6 +109,63 @@ export interface SaveUserRightsIn {
   dashboards: DashboardRow[];
   processes: ProcessRow[];
 }
+
+// ── Default / empty row factories ─────────────────────────────────────────────
+
+export const emptyRightRow = (overrides?: Partial<FormRightRow>): FormRightRow => ({
+  form_name: '',
+  module_name: '',
+  module_caption: '',
+  module_id: 0,
+  form_id: 0,
+  RAdd: false,
+  REdit: false,
+  RDelete: false,
+  RView: false,
+  RPrint: false,
+  RExport: false,
+  RAuthorize: false,
+  ...overrides,
+});
+
+export const emptyReportRow = (overrides?: Partial<FormReportRow>): FormReportRow => ({
+  form_name: '',
+  module_name: '',
+  module_caption: '',
+  module_id: 0,
+  form_id: 0,
+  RView: false,
+  RPrint: false,
+  RExport: false,
+  ...overrides,
+});
+
+export const emptyOtherRow = (overrides?: Partial<FormOtherRow>): FormOtherRow => ({
+  form_name: '',
+  module_name: '',
+  module_caption: '',
+  module_id: 0,
+  form_id: 0,
+  RRights: false,
+  ...overrides,
+});
+
+export const emptySavePayload = (userId: number, operatorId: number): SaveUserRightsIn => ({
+  user_id: userId,
+  operator_id: operatorId,
+  own_records: false,
+  other_records: false,
+  masters: [],
+  transactions: [],
+  reports: [],
+  others: [],
+  specials: [],
+  branches: [],
+  dashboards: [],
+  processes: [],
+});
+
+// ── Endpoints ─────────────────────────────────────────────────────────────────
 
 export const api = {
   listUsers: () => req<UserListItem[]>('/user-rights/users'),

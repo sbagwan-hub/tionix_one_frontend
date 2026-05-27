@@ -90,7 +90,7 @@ export default function PermissionGrid({ rows, type, editable, onChange }: Props
             <>
               <tr key={`hdr-${g.caption}`}>
                 <td
-                  colSpan={cols.length + 1}
+                  colSpan={cols?.length + 1}
                   className="border-b border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-semibold tracking-widest text-amber-400 uppercase"
                 >
                   {g.caption}
@@ -124,7 +124,7 @@ export default function PermissionGrid({ rows, type, editable, onChange }: Props
           ))}
         </tbody>
       </table>
-      {rows.length === 0 && (
+      {rows?.length === 0 && (
         <p className="py-10 text-center text-slate-500 italic">No forms in this category.</p>
       )}
     </div>
