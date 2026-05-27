@@ -8,5 +8,5 @@
   "useTabs": false,
   "endOfLine": "lf",
   "arrowParens": "always",
-  "jsxSingleQuote": false
+  "jsxSingleQuote": false 
 }
