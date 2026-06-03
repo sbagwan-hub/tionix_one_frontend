@@ -222,7 +222,7 @@ export default function PermissionTable({
                     <TableRow className="bg-muted/40 dark:bg-muted/30">
                       <TableCell
                         colSpan={activeTab === 'transactions' ? 8 : 7}
-                        className="text-brand px-4 py-2 text-xs font-bold tracking-wide text-amber-500/90 uppercase"
+                        className="text-brand px-4 py-2 text-xs font-bold tracking-wide text-blue-500/90 uppercase"
                       >
                         {group.cap}
                       </TableCell>
@@ -319,7 +319,7 @@ export default function PermissionTable({
                     <TableRow className="bg-muted/40 dark:bg-muted/30">
                       <TableCell
                         colSpan={4}
-                        className="text-brand px-4 py-2 text-xs font-bold tracking-wide text-amber-500/90 uppercase"
+                        className="text-brand px-4 py-2 text-xs font-bold tracking-wide text-blue-500/90 uppercase"
                       >
                         {group.cap}
                       </TableCell>
@@ -386,7 +386,7 @@ export default function PermissionTable({
                     <TableRow className="bg-muted/40 dark:bg-muted/30">
                       <TableCell
                         colSpan={2}
-                        className="text-brand px-4 py-2 text-xs font-bold tracking-wide text-amber-500/90 uppercase"
+                        className="text-brand px-4 py-2 text-xs font-bold tracking-wide text-blue-500/90 uppercase"
                       >
                         {group.cap}
                       </TableCell>

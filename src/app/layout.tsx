@@ -39,7 +39,7 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProviders>
             <LocaleUpdater />
-            <Toaster />
+            <Toaster position="top-right" />
             <div className="fixed top-0 right-0 left-0 z-50">
               <Navbar />
             </div>
