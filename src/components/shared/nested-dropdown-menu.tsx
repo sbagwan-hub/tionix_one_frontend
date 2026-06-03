@@ -3,13 +3,16 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
@@ -28,7 +31,7 @@ interface NavbarMenuProps {
   items: MenuItem[];
 }
 
-function RecursiveSubMenu({ items }: { items: MenuItem[] }) {
+function RenderMenuItems({ items }: { items: MenuItem[] }) {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -41,62 +44,89 @@ function RecursiveSubMenu({ items }: { items: MenuItem[] }) {
   };
 
   return (
-    <ul className="flex min-w-70 flex-col gap-0.5 p-1.5">
+    <>
       {items.map((item, idx) => {
+        // --- Separator ---
         if (item.separator) {
-          return <hr key={`sep-${idx}`} className="border-border my-1" />;
+          return <DropdownMenuSeparator key={`sep-${idx}`} className="bg-border/60" />;
         }
 
         const hasChildren = !!item.children?.length;
+        const displayLabel = item.key ? t(item.key) : '';
 
+        // --- Cascading Submenu Layer ---
         if (hasChildren) {
           return (
-            <li key={item.key} className="group/sub relative">
-              <div className="text-muted-foreground hover:text-foreground hover:bg-accent flex w-full cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors">
-                <span>{t(item.key!)}</span>
-                <ChevronRight className="h-3 w-3 opacity-60" />
-              </div>
-              {/* Nested flyout panel */}
-              <div className="border-border bg-popover animate-in fade-in-50 absolute top-0 left-full ml-1 hidden min-w-50 rounded-md border p-1 shadow-md duration-150 group-hover/sub:block">
-                <RecursiveSubMenu items={item.children!} />
-              </div>
-            </li>
+            <DropdownMenuSub key={item.key ?? idx}>
+              <DropdownMenuSubTrigger
+                className={cn(
+                  'text-muted-foreground flex cursor-default items-center rounded-sm px-2.5 py-1.5 text-xs font-medium outline-none select-none',
+                  'focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+                )}
+              >
+                <span>{displayLabel}</span>
+                <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent
+                  className={cn(
+                    'border-border/80 bg-popover text-popover-foreground min-w-[14rem] rounded-md border p-1',
+                    'animate-in fade-in-50 slide-in-from-left-1 duration-100',
+                  )}
+                >
+                  <RenderMenuItems items={item.children || []} />
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
           );
         }
 
+        // --- Action Item ---
         return (
-          <li key={item.key}>
-            <button
-              onClick={() => handleClick(item)}
-              className="text-muted-foreground hover:text-foreground hover:bg-accent flex w-full cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-left text-xs font-medium transition-colors"
-            >
-              <span>{t(item.key!)}</span>
-              {item.shortcut && (
-                <span className="text-xxs ml-4 font-mono tracking-widest opacity-50">
-                  {item.shortcut}
-                </span>
-              )}
-            </button>
-          </li>
+          <DropdownMenuItem
+            key={item.key ?? idx}
+            onClick={() => handleClick(item)}
+            className={cn(
+              'text-muted-foreground flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none select-none',
+              'focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+            )}
+          >
+            <span>{displayLabel}</span>
+            {item.shortcut && (
+              <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium tracking-wider opacity-80 select-none">
+                {item.shortcut}
+              </kbd>
+            )}
+          </DropdownMenuItem>
         );
       })}
-    </ul>
+    </>
   );
 }
 
 export function NavbarMenu({ label, items }: NavbarMenuProps) {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger className="text-muted-foreground hover:text-foreground data-[state=open]:text-foreground hover:bg-accent/50 h-8 bg-transparent px-3 text-xs font-medium transition-colors data-active:bg-transparent data-[state=open]:bg-transparent">
-            {label}
-          </NavigationMenuTrigger>
-          <NavigationMenuContent className="border-border bg-popover rounded-md border shadow-md">
-            <RecursiveSubMenu items={items} />
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className={cn(
+          'text-muted-foreground/90 inline-flex h-9 items-center justify-center rounded-md bg-transparent px-4 py-2 text-xs font-medium text-black transition-colors outline-none',
+          'hover:bg-accent/50 hover:text-foreground',
+          'data-[state=open]:bg-accent/60 data-[state=open]:text-foreground',
+          'focus:bg-accent/50 focus:text-foreground text-black',
+        )}
+      >
+        {label}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        sideOffset={4}
+        className={cn(
+          'border-border/80 bg-popover text-popover-foreground min-w-[16rem] rounded-md border p-1',
+          'animate-in fade-in-50 slide-in-from-top-1 duration-150',
+        )}
+      >
+        <RenderMenuItems items={items} />
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

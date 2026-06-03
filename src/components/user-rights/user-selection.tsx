@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -10,76 +11,115 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '../ui/input';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { UserListItem } from '@/lib/api';
 
 interface UserSelectionProps {
-  accessScope: string;
-  setAccessScope: (value: string) => void;
+  users: UserListItem[];
+  selectedUser: UserListItem | null;
+  onSelectUser: (user: UserListItem | null) => void;
+  ownRecords: boolean;
+  setOwnRecords: (val: boolean) => void;
+  otherRecords: boolean;
+  setOtherRecords: (val: boolean) => void;
+  editable: boolean; // true if form fields can be changed
 }
 
-const userOptions = [
-  { label: 'John Doe (Administrator)', value: '1' },
-  { label: 'Jane Smith (Manager)', value: '2' },
-  { label: 'Alex Rivera (Fin Operations)', value: '3' },
-];
+export default function UserSelection({
+  users = [],
+  selectedUser,
+  onSelectUser,
+  ownRecords,
+  setOwnRecords,
+  otherRecords,
+  setOtherRecords,
+  editable,
+}: UserSelectionProps) {
+  const accessScope = ownRecords ? 'self' : 'all';
 
-export default function UserSelection({ accessScope, setAccessScope }: UserSelectionProps) {
-  const [selectedUser, setSelectedUser] = useState('');
-  const [modifyOtherUsers, setModifyOtherUsers] = useState(false);
+  const isInteractionDisabled = !editable || !selectedUser;
+
+  const handleScopeChange = (value: string) => {
+    setOwnRecords(value === 'self');
+  };
+
+  const handleUserChange = (valStr: string) => {
+    const userId = parseInt(valStr, 10);
+    const user = users.find((u) => u.pk_user_id === userId) || null;
+    onSelectUser(user);
+  };
 
   return (
-    <div className="border-border bg-card ring-border/50 dark:border-input/60 dark:bg-card mb-2 overflow-hidden rounded-sm border p-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <div>
+    <div className="border-border bg-card mb-2 rounded-md border p-4">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {/* User Dropdown Selection */}
+        <div className="space-y-2">
           <Label
             htmlFor="user-profile"
-            className="text-muted-foreground mb-1.5 block text-[11px] font-semibold tracking-[0.18em] uppercase"
+            className="text-muted-foreground block text-[11px] font-bold tracking-widest uppercase"
           >
             Select User <span className="text-destructive">*</span>
           </Label>
 
-          <Select value={selectedUser} onValueChange={setSelectedUser}>
+          <Select
+            value={selectedUser?.pk_user_id?.toString() ?? ''}
+            onValueChange={handleUserChange}
+            disabled={editable}
+          >
             <SelectTrigger
               id="user-profile"
-              className="border-input bg-input text-foreground focus:border-ring focus:ring-ring/50 dark:bg-input/40 dark:text-foreground w-full cursor-alias rounded-sm border px-3 py-1.5 text-sm font-medium transition outline-none"
+              className={cn(
+                'border-input bg-background text-foreground w-full rounded-md border px-3 py-1.5 text-sm font-medium transition-all outline-none',
+                'focus:border-ring focus:ring-ring focus:ring-1',
+              )}
             >
               <SelectValue placeholder="Choose a user profile..." />
             </SelectTrigger>
 
             <SelectContent
-              className="border-border bg-popover border p-0"
               position="popper"
               side="bottom"
+              sideOffset={4}
+              className="border-border bg-popover text-popover-foreground max-h-60 min-w-[var(--radix-select-trigger-width)] rounded-md border p-1"
             >
-              {userOptions.map((option) => (
+              {users.map((user) => (
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="hover:bg-accent focus:bg-brand/50 cursor-pointer px-2.5 py-2.5 text-xs transition-colors hover:text-white focus:text-white"
+                  key={user.pk_user_id}
+                  value={user.pk_user_id.toString()}
+                  className="cursor-pointer rounded-sm px-2.5 py-2 text-xs font-medium"
                 >
-                  {option.label}
+                  {user.username} {user.sys_defined ? '(System)' : ''}
                 </SelectItem>
               ))}
+              {users.length === 0 && (
+                <div className="text-muted-foreground py-6 text-center text-xs">No users found</div>
+              )}
             </SelectContent>
           </Select>
         </div>
 
-        <div className="flex flex-col">
-          <span className="text-muted-foreground mb-1.5 text-[11px] font-semibold tracking-[0.18em] uppercase">
+        {/* Data Access Scope */}
+        <div className="flex flex-col space-y-2">
+          <span className="text-muted-foreground text-[11px] font-bold tracking-widest uppercase">
             Data Access Scope
           </span>
 
           <RadioGroup
             value={accessScope}
-            onValueChange={(value) => setAccessScope(value)}
-            className="flex flex-wrap items-center gap-3"
+            onValueChange={handleScopeChange}
+            disabled={isInteractionDisabled}
+            className="flex flex-wrap items-center gap-4 py-1.5"
           >
             <div className="flex items-center gap-2">
               <RadioGroupItem value="all" id="all-records" />
               <Label
                 htmlFor="all-records"
-                className="text-foreground cursor-pointer text-sm font-medium"
+                className={cn(
+                  'text-sm font-medium',
+                  isInteractionDisabled
+                    ? 'text-muted-foreground cursor-not-allowed'
+                    : 'text-foreground cursor-pointer',
+                )}
               >
                 All Records
               </Label>
@@ -89,7 +129,12 @@ export default function UserSelection({ accessScope, setAccessScope }: UserSelec
               <RadioGroupItem value="self" id="self-records" />
               <Label
                 htmlFor="self-records"
-                className="text-foreground cursor-pointer text-sm font-medium"
+                className={cn(
+                  'text-sm font-medium',
+                  isInteractionDisabled
+                    ? 'text-muted-foreground cursor-not-allowed'
+                    : 'text-foreground cursor-pointer',
+                )}
               >
                 Self Records Only
               </Label>
@@ -97,25 +142,41 @@ export default function UserSelection({ accessScope, setAccessScope }: UserSelec
           </RadioGroup>
         </div>
 
+        {/* Modify Other User Records Option */}
         <div className="self-start md:self-end">
-          <div className="border-border hover:border-ring dark:border-input/60 dark:bg-muted/20 flex cursor-pointer items-center gap-3 rounded-sm border bg-white px-3 py-2 transition">
+          <label
+            htmlFor="modify-other-users"
+            className={cn(
+              'border-border bg-background flex items-start gap-3 rounded-md border px-3 py-2.5 transition-all',
+              isInteractionDisabled
+                ? 'cursor-not-allowed opacity-50'
+                : 'hover:border-input cursor-pointer',
+            )}
+          >
             <Checkbox
               id="modify-other-users"
-              checked={modifyOtherUsers}
-              onCheckedChange={(checked) => setModifyOtherUsers(Boolean(checked))}
-              className="h-4 w-4 rounded-xs border border-gray-400"
+              checked={otherRecords}
+              onCheckedChange={(checked) =>
+                !isInteractionDisabled && setOtherRecords(Boolean(checked))
+              }
+              disabled={isInteractionDisabled}
+              className="mt-0.5"
             />
 
-            <div className="flex flex-col">
-              <Label htmlFor="modify-other-users" className="text-foreground text-sm font-semibold">
+            <div className="flex flex-col space-y-0.5 select-none">
+              <span
+                className={cn(
+                  'text-sm leading-none font-semibold',
+                  isInteractionDisabled ? 'text-muted-foreground' : 'text-foreground',
+                )}
+              >
                 Modify Other User Records
-              </Label>
-
-              <span className="text-muted-foreground text-[11px]">
+              </span>
+              <span className="text-muted-foreground text-[11px] leading-normal">
                 Allows global management rights
               </span>
             </div>
-          </div>
+          </label>
         </div>
       </div>
     </div>

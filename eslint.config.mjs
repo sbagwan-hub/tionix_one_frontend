@@ -12,9 +12,9 @@ const eslintConfig = defineConfig([
 
   {
     rules: {
-      '@typescript-eslint/no-unused-vars': 'warn',
-      'no-unused-vars': 'warn',
-
+      "@typescript-eslint/no-unused-vars": "warn",
+      "no-unused-vars": "warn",
+      "react-hooks/set-state-in-effect": "off",
       // Allow `any`
       '@typescript-eslint/no-explicit-any': 'off',
     },

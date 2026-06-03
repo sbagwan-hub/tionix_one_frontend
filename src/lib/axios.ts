@@ -1,12 +1,13 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import axiosRetry from 'axios-retry';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4100/api';
 
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    current_db: '',
   },
   withCredentials: true,
 });
