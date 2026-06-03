@@ -91,7 +91,7 @@ export function SelectDropDown({
             <SelectItem
               key={option.value}
               value={option.value}
-              className="hover:bg-accent focus:bg-brand/50 cursor-pointer px-2.5 py-2.5 text-xs transition-colors hover:text-white focus:text-white"
+              className="cursor-pointer px-2.5 py-2.5 text-xs"
             >
               {option.label}
             </SelectItem>

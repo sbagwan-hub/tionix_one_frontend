@@ -7,6 +7,7 @@ import Navbar from '@/components/shared/navbar';
 import Footer from '@/components/shared/footer';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +39,7 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProviders>
             <LocaleUpdater />
+            <Toaster />
             <div className="fixed top-0 right-0 left-0 z-50">
               <Navbar />
             </div>

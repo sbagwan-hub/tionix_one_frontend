@@ -90,6 +90,18 @@ export interface SaveUserRightsIn {
   processes: ProcessRow[];
 }
 
+export interface CreateNewFormIn {
+  form_name: string;
+  category: 'master' | 'transaction' | 'report' | 'other';
+  prefix?: string | null | undefined;
+  last_id?: string | null | undefined;
+  start_with?: string | null | undefined;
+  len?: string | null | undefined;
+  module_name: string;
+  module_caption?: string | null | undefined;
+  news?: boolean | null | undefined;
+}
+
 // ── Default / empty row factories ─────────────────────────────────────────────
 
 export const emptyRightRow = (overrides?: Partial<FormRightRow>): FormRightRow => ({
@@ -162,5 +174,9 @@ export const api = {
 
   saveUserRights: async (payload: SaveUserRightsIn): Promise<void> => {
     await axiosClient.post('/user-rights/users/rights', payload);
+  },
+
+  createNewForm: async (payload: CreateNewFormIn): Promise<void> => {
+    await axiosClient.post('/user-rights/forms', payload);
   },
 };

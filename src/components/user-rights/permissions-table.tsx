@@ -243,6 +243,7 @@ export default function PermissionTable({
                                 <Checkbox
                                   checked={r[col]}
                                   disabled={!editable}
+                                  className="border-muted-foreground data-[state=checked]:border-primary"
                                   onCheckedChange={(checked) => {
                                     const rows = activeTab === 'masters' ? masters : transactions;
                                     const setRows =
@@ -265,6 +266,7 @@ export default function PermissionTable({
                               <Checkbox
                                 checked={r.authorize}
                                 disabled={!editable}
+                                className="border-muted-foreground data-[state=checked]:border-primary"
                                 onCheckedChange={(checked) => {
                                   setTransactions(
                                     transactions.map((row, i) =>
@@ -337,6 +339,7 @@ export default function PermissionTable({
                               <Checkbox
                                 checked={r[col]}
                                 disabled={!editable}
+                                className="border-muted-foreground data-[state=checked]:border-primary"
                                 onCheckedChange={(checked) => {
                                   setReports(
                                     reports.map((row, i) =>
@@ -402,6 +405,7 @@ export default function PermissionTable({
                             <Checkbox
                               checked={r.rights}
                               disabled={!editable}
+                              className="border-muted-foreground data-[state=checked]:border-primary"
                               onCheckedChange={(checked) => {
                                 setOthers(
                                   others.map((row, i) =>
@@ -447,6 +451,7 @@ export default function PermissionTable({
                   <Checkbox
                     checked={s.Rights}
                     disabled={!editable}
+                    className="border-muted-foreground data-[state=checked]:border-primary"
                     onCheckedChange={(val) => {
                       setSpecials(
                         specials.map((row, i) =>

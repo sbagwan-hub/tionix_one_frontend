@@ -4,6 +4,18 @@ import { TabItem } from '@/components/shared/dynamic-tabs';
 import Toolbar, { Action } from '@/components/shared/toolbar';
 import PermissionTable from '@/components/user-rights/permissions-table';
 import UserSelection from '@/components/user-rights/user-selection';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   api,
   BranchRow,
@@ -15,6 +27,7 @@ import {
   SpecialRow,
   UserListItem,
   UserRightsOut,
+  CreateNewFormIn,
 } from '@/lib/api';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -33,7 +46,9 @@ import {
   FileOutput,
   HelpCircle,
   LogOut,
+  Plus,
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function UserRightsPage() {
   const queryClient = useQueryClient();
@@ -43,7 +58,6 @@ export default function UserRightsPage() {
   const [tab, setTab] = useState<'masters' | 'transactions' | 'reports' | 'others'>('masters');
   const [editable, setEditable] = useState(false);
   const [dirty, setDirty] = useState(false);
-  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const [masters, setMasters] = useState<FormRightRow[]>([]);
   const [transactions, setTransactions] = useState<FormRightRow[]>([]);
@@ -56,9 +70,25 @@ export default function UserRightsPage() {
   const [ownRecords, setOwnRecords] = useState(false);
   const [otherRecords, setOtherRecords] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newFormDetails, setNewFormDetails] = useState<CreateNewFormIn>({
+    form_name: '',
+    category: 'master',
+    prefix: '',
+    last_id: '0',
+    start_with: '1',
+    len: '10',
+    module_name: '',
+    module_caption: '',
+    news: false,
+  });
+
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3500);
+    if (type === 'error') {
+      toast.error(msg);
+    } else {
+      toast.success(msg);
+    }
   };
 
   const mark = () => setDirty(true);
@@ -92,8 +122,8 @@ export default function UserRightsPage() {
       setBranches(rightsData.branches);
       setDashboards(rightsData.dashboards);
       setProcesses(rightsData.processes);
-      setOwnRecords(rightsData.user.OwnRecords);
-      setOtherRecords(rightsData.user.OtherRecords);
+      setOwnRecords(rightsData.user.own_records);
+      setOtherRecords(rightsData.user.other_records);
       setDirty(false);
     }
   }, [rightsData]);
@@ -109,6 +139,32 @@ export default function UserRightsPage() {
     },
     onError: (e: any) => {
       showToast(e.message || 'Failed to save rights', 'error');
+    },
+  });
+
+  const addFormMutation = useMutation({
+    mutationFn: api.createNewForm,
+    onSuccess: () => {
+      showToast('Form registered successfully');
+      setIsModalOpen(false);
+      setNewFormDetails({
+        form_name: '',
+        category: 'master',
+        prefix: '',
+        last_id: '0',
+        start_with: '1',
+        len: '10',
+        module_name: '',
+        module_caption: '',
+        news: false,
+      });
+      if (selectedUser) {
+        refetchRights();
+      }
+    },
+    onError: (e: any) => {
+      const errMsg = e.response?.data?.message || e.message || 'Failed to create form';
+      showToast(errMsg, 'error');
     },
   });
 
@@ -208,6 +264,14 @@ export default function UserRightsPage() {
       ]
     : [
         {
+          label: 'Add New',
+          icon: Plus,
+          variant: 'primary',
+          onClick: () => {
+            setIsModalOpen(true);
+          },
+        },
+        {
           label: 'Edit',
           icon: Edit3,
           variant: 'primary',
@@ -303,6 +367,153 @@ export default function UserRightsPage() {
           />
         </div>
       </div>
+
+      {/* Register New Form Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="bg-popover border-border animate-in fade-in zoom-in text-foreground w-full max-w-2xl overflow-hidden rounded-xl border shadow-2xl duration-200">
+            {/* Modal Header */}
+            <div className="bg-muted border-border flex items-center justify-between border-b px-6 py-4">
+              <h3 className="flex items-center gap-2 text-lg font-semibold">
+                <Plus className="text-primary h-4 w-4" />
+                Register New Form / Menu Item
+              </h3>
+              <Button variant="ghost" size="icon-sm" onClick={() => setIsModalOpen(false)}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Modal Body / Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addFormMutation.mutate(newFormDetails);
+              }}
+              className="space-y-4 p-6 text-sm"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="form_name">Form Name *</Label>
+                  <Input
+                    id="form_name"
+                    type="text"
+                    required
+                    value={newFormDetails.form_name}
+                    onChange={(e) =>
+                      setNewFormDetails({ ...newFormDetails, form_name: e.target.value })
+                    }
+                    placeholder="e.g. sales_order"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="prefix">Prefix</Label>
+                  <Input
+                    id="prefix"
+                    type="text"
+                    maxLength={5}
+                    value={newFormDetails.prefix || ''}
+                    onChange={(e) =>
+                      setNewFormDetails({ ...newFormDetails, prefix: e.target.value })
+                    }
+                    placeholder="e.g. SO"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="module_name">Module Name *</Label>
+                  <Input
+                    id="module_name"
+                    type="text"
+                    required
+                    value={newFormDetails.module_name || ''}
+                    onChange={(e) =>
+                      setNewFormDetails({ ...newFormDetails, module_name: e.target.value })
+                    }
+                    placeholder="e.g. Sales"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="module_caption">Module Caption</Label>
+                  <Input
+                    id="module_caption"
+                    type="text"
+                    value={newFormDetails.module_caption || ''}
+                    onChange={(e) =>
+                      setNewFormDetails({ ...newFormDetails, module_caption: e.target.value })
+                    }
+                    placeholder="e.g. Sales Management"
+                  />
+                </div>
+
+                <div className="col-span-2 space-y-1.5">
+                  <Label>Category *</Label>
+                  <Tabs
+                    value={newFormDetails.category}
+                    onValueChange={(val: any) =>
+                      setNewFormDetails({ ...newFormDetails, category: val })
+                    }
+                    className="w-full"
+                  >
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="master">Master</TabsTrigger>
+                      <TabsTrigger value="transaction">Transaction</TabsTrigger>
+                      <TabsTrigger value="report">Report</TabsTrigger>
+                      <TabsTrigger value="other">Other</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="start_with">Start With ID</Label>
+                  <Input
+                    id="start_with"
+                    type="text"
+                    value={newFormDetails.start_with || ''}
+                    onChange={(e) =>
+                      setNewFormDetails({ ...newFormDetails, start_with: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="len">Length of ID</Label>
+                  <Input
+                    id="len"
+                    type="text"
+                    value={newFormDetails.len || ''}
+                    onChange={(e) => setNewFormDetails({ ...newFormDetails, len: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 pt-2">
+                <Checkbox
+                  id="news_form_chk"
+                  checked={!!newFormDetails.news}
+                  onCheckedChange={(checked) =>
+                    setNewFormDetails({ ...newFormDetails, news: !!checked })
+                  }
+                />
+                <Label htmlFor="news_form_chk" className="cursor-pointer">
+                  News Form (Flag as recently added)
+                </Label>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="border-border flex justify-end gap-3 border-t pt-4">
+                <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="success" disabled={addFormMutation.isPending}>
+                  {addFormMutation.isPending ? 'Registering...' : 'Register Form'}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
