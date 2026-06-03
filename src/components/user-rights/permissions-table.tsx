@@ -75,8 +75,8 @@ export default function PermissionTable({
           </TableHeader>
 
           <TableBody className="divide-border divide-y">
-            {modules.map((group) => (
-              <React.Fragment key={group.group}>
+            {modules.map((group, index) => (
+              <React.Fragment key={`${group.group}-${index}`}>
                 {/* Group Header */}
                 <TableRow className="bg-brand-muted/20 dark:bg-brand-muted/30">
                   <TableCell
