@@ -50,7 +50,7 @@ export default function UserSelection({
   };
 
   return (
-    <div className="border-border bg-card mb-2 rounded-md border p-4">
+    <div className="border-border/60 bg-card mb-2 rounded-sm border p-4">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {/* User Dropdown Selection */}
         <div className="space-y-2">
@@ -69,7 +69,7 @@ export default function UserSelection({
             <SelectTrigger
               id="user-profile"
               className={cn(
-                'border-input bg-background text-foreground w-full rounded-md border px-3 py-1.5 text-sm font-medium transition-all outline-none',
+                'border-border/60 bg-background/50 text-foreground w-full rounded-sm border px-3 py-1.5 text-sm font-medium transition-all focus:bg-background outline-none',
                 'focus:border-ring focus:ring-ring focus:ring-1',
               )}
             >
@@ -80,7 +80,7 @@ export default function UserSelection({
               position="popper"
               side="bottom"
               sideOffset={4}
-              className="border-border bg-popover text-popover-foreground max-h-60 min-w-[var(--radix-select-trigger-width)] rounded-md border p-1"
+              className="border-border bg-popover text-popover-foreground max-h-60 min-w-[var(--radix-select-trigger-width)] rounded-sm border p-1"
             >
               {users.map((user) => (
                 <SelectItem
@@ -147,7 +147,7 @@ export default function UserSelection({
           <label
             htmlFor="modify-other-users"
             className={cn(
-              'border-border bg-background flex items-start gap-3 rounded-md border px-3 py-2.5 transition-all',
+              'border-border bg-background flex items-start gap-3 rounded-sm border px-3 py-2.5 transition-all',
               isInteractionDisabled
                 ? 'cursor-not-allowed opacity-50'
                 : 'hover:border-input cursor-pointer',

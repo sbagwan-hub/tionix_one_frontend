@@ -371,7 +371,7 @@ export default function UserRightsPage() {
       {/* Register New Form Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-popover border-border animate-in fade-in zoom-in text-foreground w-full max-w-2xl overflow-hidden rounded-xl border shadow-2xl duration-200">
+          <div className="bg-popover border-border/60 animate-in fade-in zoom-in text-foreground w-full max-w-2xl overflow-hidden rounded-sm border shadow-md duration-200">
             {/* Modal Header */}
             <div className="bg-muted border-border flex items-center justify-between border-b px-6 py-4">
               <h3 className="flex items-center gap-2 text-lg font-semibold">

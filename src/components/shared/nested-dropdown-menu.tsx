@@ -70,7 +70,7 @@ function RenderMenuItems({ items }: { items: MenuItem[] }) {
               <DropdownMenuPortal>
                 <DropdownMenuSubContent
                   className={cn(
-                    'border-border/80 bg-popover text-popover-foreground min-w-[14rem] rounded-md border p-1',
+                    'border-border/80 bg-popover text-popover-foreground min-w-[14rem] rounded-sm border p-1',
                     'animate-in fade-in-50 slide-in-from-left-1 duration-100',
                   )}
                 >
@@ -109,7 +109,7 @@ export function NavbarMenu({ label, items }: NavbarMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          'text-muted-foreground/90 inline-flex h-9 items-center justify-center rounded-md bg-transparent px-4 py-2 text-xs font-medium text-black transition-colors outline-none',
+          'text-muted-foreground/90 inline-flex h-9 items-center justify-center rounded-sm bg-transparent px-4 py-2 text-xs font-medium text-black transition-colors outline-none',
           'hover:bg-accent/50 hover:text-foreground',
           'data-[state=open]:bg-accent/60 data-[state=open]:text-foreground',
           'focus:bg-accent/50 focus:text-foreground text-black',
@@ -121,7 +121,7 @@ export function NavbarMenu({ label, items }: NavbarMenuProps) {
         align="start"
         sideOffset={4}
         className={cn(
-          'border-border/80 bg-popover text-popover-foreground min-w-[16rem] rounded-md border p-1',
+          'border-border/80 bg-popover text-popover-foreground min-w-[16rem] rounded-sm border p-1',
           'animate-in fade-in-50 slide-in-from-top-1 duration-150',
         )}
       >

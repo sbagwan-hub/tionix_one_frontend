@@ -12,7 +12,7 @@ export default function HrmsGeofencingPage() {
       <div className={`flex flex-col gap-6 ${hrmsControlRadiusClassName}`}>
         <div className="flex items-start gap-4">
           <Link href="/hrms/dashboard">
-            <Button type="button" variant="outline" size="icon" className="h-9 w-9 rounded-sm border-gray-200 dark:border-gray-800">
+            <Button type="button" variant="outline" size="icon" className="h-9 w-9 rounded-sm border-border/60">
               <ArrowLeft className="size-4 text-foreground" />
             </Button>
           </Link>

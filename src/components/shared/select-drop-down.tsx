@@ -54,7 +54,7 @@ export function SelectDropDown({
     <div
       ref={wrapperRef}
       className={cn(
-        'bg-accent border-border flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5',
+        'bg-accent border-border flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5',
         className,
       )}
     >

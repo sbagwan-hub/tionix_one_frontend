@@ -42,7 +42,7 @@ function ToolbarButton({ action }: { action: Action }) {
       variant={variant}
       size={size}
       disabled={action.disabled}
-      className={action.variant === 'icon' ? 'dark:text-muted-foreground text-slate-500' : ''}
+      className={action.variant === 'icon' ? 'dark:text-muted-foreground text-muted-foreground' : ''}
     >
       <Icon size={16} />
       {action.label && <span className="text-sm font-medium">{action.label}</span>}
@@ -53,7 +53,7 @@ function ToolbarButton({ action }: { action: Action }) {
 export default function Toolbar({ navigation = [], actions = [], utilities = [] }: ToolbarProps) {
   return (
     <div className="ring-border/50 dark:border-input/60 dark:bg-card bg-background border-foreground/10 mb-2 flex flex-wrap items-center justify-between gap-4 rounded-sm border p-3">
-      <div className="dark:border-input/60 flex items-center gap-1 border-r border-slate-200 pr-4">
+      <div className="dark:border-input/60 flex items-center gap-1 border-r border-border/40 pr-4">
         {navigation.map((item, idx) => (
           <ToolbarButton
             key={idx}
@@ -71,7 +71,7 @@ export default function Toolbar({ navigation = [], actions = [], utilities = [] 
         ))}
       </div>
 
-      <div className="dark:border-input/60 flex items-center gap-2 border-l border-slate-200 pl-4">
+      <div className="dark:border-input/60 flex items-center gap-2 border-l border-border/40 pl-4">
         {utilities.map((item, idx) => (
           <ToolbarButton
             key={idx}

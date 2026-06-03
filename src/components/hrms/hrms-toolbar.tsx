@@ -37,7 +37,7 @@ function HrmsToolbarButton({ action }: { action: Action }) {
       size={size}
       className={cn(
         hrmsButtonClassName,
-        action.variant === 'icon' ? 'dark:text-muted-foreground text-slate-500' : '',
+        action.variant === 'icon' ? 'dark:text-muted-foreground text-muted-foreground' : '',
       )}
     >
       <Icon size={16} />

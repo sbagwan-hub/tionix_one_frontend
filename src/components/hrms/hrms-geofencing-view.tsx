@@ -137,7 +137,7 @@ export default function HrmsGeofencingView() {
               </Label>
               <Input
                 id="site-name"
-                className={`${hrmsInputClassName} h-10 border-gray-200 dark:border-gray-800`}
+                className={`${hrmsInputClassName} h-10 border-border/60`}
                 value={siteName}
                 onChange={(e) => setSiteName(e.target.value)}
                 placeholder="e.g. Thane Office"
@@ -156,7 +156,7 @@ export default function HrmsGeofencingView() {
                   id="latitude"
                   type="number"
                   step="0.000001"
-                  className={`${hrmsInputClassName} h-10 border-gray-200 dark:border-gray-800`}
+                  className={`${hrmsInputClassName} h-10 border-border/60`}
                   value={latitude}
                   onChange={(e) => setLatitude(Number(e.target.value))}
                 />
@@ -172,7 +172,7 @@ export default function HrmsGeofencingView() {
                   id="longitude"
                   type="number"
                   step="0.000001"
-                  className={`${hrmsInputClassName} h-10 border-gray-200 dark:border-gray-800`}
+                  className={`${hrmsInputClassName} h-10 border-border/60`}
                   value={longitude}
                   onChange={(e) => setLongitude(Number(e.target.value))}
                 />
@@ -195,7 +195,7 @@ export default function HrmsGeofencingView() {
                 min="25"
                 max="1000"
                 step="25"
-                className="w-full accent-black dark:accent-white cursor-pointer h-1.5 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none"
+                className="w-full accent-black dark:accent-white cursor-pointer h-1.5 bg-muted rounded-sm appearance-none"
                 value={radius}
                 onChange={(e) => setRadius(Number(e.target.value))}
               />
@@ -203,7 +203,8 @@ export default function HrmsGeofencingView() {
 
             <Button
               type="button"
-              className="w-full h-10 mt-2 bg-black text-white dark:bg-white dark:text-black hover:bg-black/90 dark:hover:bg-white/90 rounded-sm font-medium transition-colors"
+              variant="default"
+              className="w-full h-10 mt-2 rounded-sm font-medium transition-colors"
               onClick={handleSaveGeofence}
             >
               Save Geo-fence
@@ -225,7 +226,7 @@ export default function HrmsGeofencingView() {
                   className={`w-full text-left p-3 rounded-sm border transition-all flex items-start gap-3 ${
                     isActive
                       ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60'
-                      : 'bg-background hover:bg-muted/30 border-gray-100 dark:border-gray-900'
+                      : 'bg-background hover:bg-muted/30 border-border/40'
                   }`}
                 >
                   <MapPin className={`size-4 mt-0.5 shrink-0 ${isActive ? 'text-emerald-500' : 'text-muted-foreground'}`} />
@@ -248,9 +249,9 @@ export default function HrmsGeofencingView() {
       <div className="lg:col-span-7 flex flex-col">
         <div className={`${hrmsCardClassName} flex-1 flex flex-col overflow-hidden`}>
           {/* Header Info Bar */}
-          <div className="flex items-center justify-between border-b px-4 py-3 bg-gray-50/50 dark:bg-zinc-900/50 border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between border-b px-4 py-3 bg-muted/30 border-border/60">
             <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
-              <Target className="size-4 text-gray-400" />
+              <Target className="size-4 text-muted-foreground/60" />
               <span>Click anywhere to position the new center</span>
             </div>
             

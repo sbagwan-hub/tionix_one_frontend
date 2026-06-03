@@ -110,7 +110,7 @@ api.interceptors.response.use(
         processQueue(err, null);
         clearTokens();
 
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
 
         return Promise.reject(err);
       } finally {
