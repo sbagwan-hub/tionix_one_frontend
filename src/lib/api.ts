@@ -1,37 +1,17 @@
-// lib/api.ts — typed API client, PostgreSQL backend
-// All user IDs: number (BigInteger). fkSetId: number. fkProdId: string (char 10).
-
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
-
-async function req<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...init,
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API ${res.status}: ${text}`);
-  }
-  if (res.status === 204) return undefined as T;
-  const json = await res.json();
-  if (json && typeof json === 'object' && 'data' in json) return json.data as T;
-  return json as T;
-}
-
-// ── Types ─────────────────────────────────────────────────────────────────────
+import axiosClient from './axios';
 
 export interface UserListItem {
-  pkUserId: number;
-  UserName: string;
-  SysDefined: boolean;
+  pk_user_id: number;
+  username: string;
+  sys_defined: boolean;
 }
 
 export interface UserOut {
-  pkUserId: number;
-  UserName: string;
-  SysDefined: boolean;
-  OwnRecords: boolean;
-  OtherRecords: boolean;
+  pk_user_id: number;
+  username: string;
+  sys_defined: boolean;
+  own_records: boolean;
+  other_records: boolean;
 }
 
 export interface FormRightRow {
@@ -40,13 +20,13 @@ export interface FormRightRow {
   module_caption: string;
   module_id: number;
   form_id: number;
-  RAdd: boolean;
-  REdit: boolean;
-  RDelete: boolean;
-  RView: boolean;
-  RPrint: boolean;
-  RExport: boolean;
-  RAuthorize: boolean;
+  add: boolean;
+  edit: boolean;
+  delete: boolean;
+  view: boolean;
+  print: boolean;
+  export: boolean;
+  authorize: boolean;
 }
 
 export interface FormReportRow {
@@ -55,9 +35,9 @@ export interface FormReportRow {
   module_caption: string;
   module_id: number;
   form_id: number;
-  RView: boolean;
-  RPrint: boolean;
-  RExport: boolean;
+  view: boolean;
+  print: boolean;
+  export: boolean;
 }
 
 export interface FormOtherRow {
@@ -66,7 +46,7 @@ export interface FormOtherRow {
   module_caption: string;
   module_id: number;
   form_id: number;
-  RRights: boolean;
+  rights: boolean;
 }
 
 export interface SpecialRow {
@@ -118,13 +98,13 @@ export const emptyRightRow = (overrides?: Partial<FormRightRow>): FormRightRow =
   module_caption: '',
   module_id: 0,
   form_id: 0,
-  RAdd: false,
-  REdit: false,
-  RDelete: false,
-  RView: false,
-  RPrint: false,
-  RExport: false,
-  RAuthorize: false,
+  add: false,
+  edit: false,
+  delete: false,
+  view: false,
+  print: false,
+  export: false,
+  authorize: false,
   ...overrides,
 });
 
@@ -134,9 +114,9 @@ export const emptyReportRow = (overrides?: Partial<FormReportRow>): FormReportRo
   module_caption: '',
   module_id: 0,
   form_id: 0,
-  RView: false,
-  RPrint: false,
-  RExport: false,
+  view: false,
+  print: false,
+  export: false,
   ...overrides,
 });
 
@@ -146,7 +126,7 @@ export const emptyOtherRow = (overrides?: Partial<FormOtherRow>): FormOtherRow =
   module_caption: '',
   module_id: 0,
   form_id: 0,
-  RRights: false,
+  rights: false,
   ...overrides,
 });
 
@@ -168,10 +148,19 @@ export const emptySavePayload = (userId: number, operatorId: number): SaveUserRi
 // ── Endpoints ─────────────────────────────────────────────────────────────────
 
 export const api = {
-  listUsers: () => req<UserListItem[]>('/user-rights/users'),
+  listUsers: async (): Promise<UserListItem[]> => {
+    const res = await axiosClient.get<{ data: UserListItem[] }>('/user-rights/users');
+    return res.data.data;
+  },
 
-  getUserRights: (userId: number) => req<UserRightsOut>(`/user-rights/${userId}`),
+  getUserRights: async (userId: number): Promise<UserRightsOut> => {
+    const res = await axiosClient.get<{ data: UserRightsOut }>(
+      `/user-rights/users/${userId}/rights`,
+    );
+    return res.data.data;
+  },
 
-  saveUserRights: (payload: SaveUserRightsIn) =>
-    req<void>('/user-rights', { method: 'POST', body: JSON.stringify(payload) }),
+  saveUserRights: async (payload: SaveUserRightsIn): Promise<void> => {
+    await axiosClient.post('/user-rights/users/rights', payload);
+  },
 };

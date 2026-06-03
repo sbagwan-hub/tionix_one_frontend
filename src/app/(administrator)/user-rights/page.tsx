@@ -1,15 +1,9 @@
 'use client';
 
 import { TabItem } from '@/components/shared/dynamic-tabs';
-import Toolbar from '@/components/shared/toolbar';
+import Toolbar, { Action } from '@/components/shared/toolbar';
 import PermissionTable from '@/components/user-rights/permissions-table';
 import UserSelection from '@/components/user-rights/user-selection';
-import {
-  actionToolbar,
-  moduleGroups,
-  navigationToolbar,
-  utilityToolbar,
-} from '@/constants/permission.constants';
 import {
   api,
   BranchRow,
@@ -23,27 +17,32 @@ import {
   UserRightsOut,
 } from '@/lib/api';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Edit3,
+  Save,
+  X,
+  RefreshCw,
+  Printer,
+  FileOutput,
+  HelpCircle,
+  LogOut,
+} from 'lucide-react';
 
 export default function UserRightsPage() {
-  const [users, setUsers] = useState<UserListItem[]>([]);
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
   const [selectedUser, setSelectedUser] = useState<UserListItem | null>(null);
-  const [rights, setRights] = useState<UserRightsOut | null>(null);
-  const [tab, setTab] = useState<
-    | 'masters'
-    | 'transactions'
-    | 'reports'
-    | 'others'
-    | 'specials'
-    | 'branches'
-    | 'dashboards'
-    | 'processes'
-  >('masters');
+  const [tab, setTab] = useState<'masters' | 'transactions' | 'reports' | 'others'>('masters');
   const [editable, setEditable] = useState(false);
   const [dirty, setDirty] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [search, setSearch] = useState('');
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const [masters, setMasters] = useState<FormRightRow[]>([]);
@@ -64,126 +63,218 @@ export default function UserRightsPage() {
 
   const mark = () => setDirty(true);
 
-  // Load users list once
-  useEffect(() => {
-    api.listUsers().then(setUsers).catch(console.error);
-  }, []);
+  // Load users list
+  const { data: usersData } = useQuery<UserListItem[]>({
+    queryKey: ['users'],
+    queryFn: api.listUsers,
+  });
+  const users = usersData || [];
 
-  const loadRights = useCallback(
-    async (user: UserListItem) => {
-      if (dirty && !confirm('Discard unsaved changes?')) return;
-      setLoading(true);
+  // Load user rights
+  const {
+    data: rightsData,
+    isFetching: loading,
+    refetch: refetchRights,
+  } = useQuery<UserRightsOut>({
+    queryKey: ['userRights', selectedUser?.pk_user_id],
+    queryFn: () => api.getUserRights(selectedUser!.pk_user_id),
+    enabled: !!selectedUser,
+  });
+
+  // Sync loaded rights to local states
+  useEffect(() => {
+    if (rightsData) {
+      setMasters(rightsData.masters);
+      setTransactions(rightsData.transactions);
+      setReports(rightsData.reports);
+      setOthers(rightsData.others);
+      setSpecials(rightsData.specials);
+      setBranches(rightsData.branches);
+      setDashboards(rightsData.dashboards);
+      setProcesses(rightsData.processes);
+      setOwnRecords(rightsData.user.OwnRecords);
+      setOtherRecords(rightsData.user.OtherRecords);
+      setDirty(false);
+    }
+  }, [rightsData]);
+
+  // Save mutation
+  const saveMutation = useMutation({
+    mutationFn: api.saveUserRights,
+    onSuccess: () => {
+      showToast(`Rights saved for ${selectedUser?.username}`);
       setEditable(false);
       setDirty(false);
-      try {
-        const data = await api.getUserRights(user.pkUserId);
-        setRights(data);
-        setMasters(data.masters);
-        setTransactions(data.transactions);
-        setReports(data.reports);
-        setOthers(data.others);
-        setSpecials(data.specials);
-        setBranches(data.branches);
-        setDashboards(data.dashboards);
-        setProcesses(data.processes);
-        setOwnRecords(data.user.OwnRecords);
-        setOtherRecords(data.user.OtherRecords);
-        setSelectedUser(user);
-        setTab('masters');
-      } catch (e: any) {
-        showToast(e.message, 'error');
-      } finally {
-        setLoading(false);
-      }
+      queryClient.invalidateQueries({ queryKey: ['userRights', selectedUser?.pk_user_id] });
     },
-    [dirty],
-  );
+    onError: (e: any) => {
+      showToast(e.message || 'Failed to save rights', 'error');
+    },
+  });
 
   const handleSave = async () => {
     if (!selectedUser) return;
-    if (!confirm(`Save rights for ${selectedUser.UserName}?`)) return;
-    setSaving(true);
-    try {
-      await api.saveUserRights({
-        user_id: selectedUser.pkUserId,
-        operator_id: 1, // adjust as needed
-        own_records: ownRecords,
-        other_records: otherRecords,
-        masters,
-        transactions,
-        reports,
-        others,
-        specials,
-        branches,
-        dashboards,
-        processes,
-      });
-      showToast(`Rights saved for ${selectedUser.UserName}`);
-      setEditable(false);
-      setDirty(false);
-    } catch (e: any) {
-      showToast(e.message, 'error');
-    } finally {
-      setSaving(false);
-    }
+    saveMutation.mutate({
+      user_id: selectedUser.pk_user_id,
+      operator_id: 1, // adjust as needed
+      own_records: ownRecords,
+      other_records: otherRecords,
+      masters,
+      transactions,
+      reports,
+      others,
+      specials,
+      branches,
+      dashboards,
+      processes,
+    });
   };
 
   const handleCancel = () => {
     setEditable(false);
     setDirty(false);
-    if (selectedUser) loadRights(selectedUser);
+    if (selectedUser) {
+      refetchRights();
+    }
   };
+
+  const handleSelectUser = (user: UserListItem | null) => {
+    setSelectedUser(user);
+    setEditable(false);
+    setTab('masters');
+  };
+
+  // Toolbar Navigation Indexing
+  const currentIndex = selectedUser
+    ? users.findIndex((u) => u.pk_user_id === selectedUser.pk_user_id)
+    : -1;
+
+  const handleFirst = () => {
+    if (users.length > 0) handleSelectUser(users[0]);
+  };
+  const handlePrevious = () => {
+    if (currentIndex > 0) handleSelectUser(users[currentIndex - 1]);
+  };
+  const handleNext = () => {
+    if (currentIndex >= 0 && currentIndex < users.length - 1)
+      handleSelectUser(users[currentIndex + 1]);
+  };
+  const handleLast = () => {
+    if (users.length > 0) handleSelectUser(users[users.length - 1]);
+  };
+
+  const dynamicNavigation: Action[] = [
+    {
+      icon: ChevronsLeft,
+      title: 'First',
+      onClick: handleFirst,
+      disabled: users.length === 0 || currentIndex === 0,
+    },
+    {
+      icon: ChevronLeft,
+      title: 'Previous',
+      onClick: handlePrevious,
+      disabled: currentIndex <= 0,
+    },
+    {
+      icon: ChevronRight,
+      title: 'Next',
+      onClick: handleNext,
+      disabled: currentIndex === -1 || currentIndex === users.length - 1,
+    },
+    {
+      icon: ChevronsRight,
+      title: 'Last',
+      onClick: handleLast,
+      disabled: users.length === 0 || currentIndex === users.length - 1,
+    },
+  ];
+
+  const dynamicActions: Action[] = editable
+    ? [
+        {
+          label: saveMutation.isPending ? 'Saving…' : 'Save',
+          icon: Save,
+          variant: 'success',
+          onClick: handleSave,
+          disabled: saveMutation.isPending,
+        },
+        {
+          label: 'Cancel',
+          icon: X,
+          variant: 'danger',
+          onClick: handleCancel,
+        },
+      ]
+    : [
+        {
+          label: 'Edit',
+          icon: Edit3,
+          variant: 'primary',
+          onClick: () => setEditable(true),
+          disabled: !selectedUser,
+        },
+        {
+          label: 'Refresh',
+          icon: RefreshCw,
+          variant: 'secondary',
+          onClick: () => {
+            if (selectedUser) {
+              refetchRights();
+              showToast('Permissions reloaded');
+            }
+          },
+          disabled: !selectedUser,
+        },
+      ];
+
+  const dynamicUtilities: Action[] = [
+    {
+      icon: Printer,
+      title: 'Print',
+      onClick: () => window.print(),
+    },
+    {
+      icon: FileOutput,
+      title: 'Export',
+      onClick: () => {
+        showToast('Export function not implemented', 'error');
+      },
+    },
+    {
+      icon: HelpCircle,
+      title: 'Help',
+      onClick: () =>
+        alert(
+          'Use this screen to manage user roles and granular permissions across various sections.',
+        ),
+    },
+    {
+      icon: LogOut,
+      title: 'Exit',
+      onClick: () => router.push('/'),
+    },
+  ];
 
   return (
     <div className="bg-background text-foreground h-full font-sans">
       <div className="flex h-full flex-col py-2">
         <div>
           <Toolbar
-            navigation={navigationToolbar}
-            actions={actionToolbar}
-            utilities={utilityToolbar}
+            navigation={dynamicNavigation}
+            actions={dynamicActions}
+            utilities={dynamicUtilities}
           />
           <UserSelection
             users={users}
             selectedUser={selectedUser}
-            onSelectUser={(user) => {
-              setSelectedUser(user);
-              if (user) loadRights(user);
-            }}
+            onSelectUser={handleSelectUser}
             ownRecords={ownRecords}
             setOwnRecords={setOwnRecords}
             otherRecords={otherRecords}
             setOtherRecords={setOtherRecords}
             editable={editable}
           />
-        </div>
-
-        <div className="flex items-center gap-2 p-2">
-          {selectedUser && !editable && (
-            <button
-              onClick={() => setEditable(true)}
-              className="rounded bg-blue-600 px-3 py-1 text-white hover:bg-blue-700"
-            >
-              ✎ Edit
-            </button>
-          )}
-          {editable && (
-            <>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="rounded bg-emerald-600 px-3 py-1 text-white hover:bg-emerald-700"
-              >
-                {saving ? 'Saving…' : '✓ Save'}
-              </button>
-              <button
-                onClick={handleCancel}
-                className="rounded bg-gray-600 px-3 py-1 text-white hover:bg-gray-700"
-              >
-                ✕ Cancel
-              </button>
-            </>
-          )}
         </div>
 
         <div className="h-[calc(100vh-310px)] overflow-y-auto">

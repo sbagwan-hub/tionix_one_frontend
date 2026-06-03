@@ -72,10 +72,6 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'transactions', label: 'Transactions' },
   { id: 'reports', label: 'Reports' },
   { id: 'others', label: 'Others' },
-  { id: 'specials', label: 'Specials' },
-  { id: 'branches', label: 'Branches' },
-  { id: 'dashboards', label: 'Dashboards' },
-  { id: 'processes', label: 'Processes' },
 ];
 
 export default function PermissionTable({
@@ -240,7 +236,7 @@ export default function PermissionTable({
                         <TableCell className="text-foreground p-3 text-sm font-medium">
                           {r.form_name}
                         </TableCell>
-                        {(['RAdd', 'REdit', 'RDelete', 'RView', 'RPrint', 'RExport'] as const).map(
+                        {(['add', 'edit', 'delete', 'view', 'print', 'export'] as const).map(
                           (col) => (
                             <TableCell key={col} className="p-3 text-center">
                               <div className="flex items-center justify-center">
@@ -267,12 +263,12 @@ export default function PermissionTable({
                           <TableCell className="p-3 text-center">
                             <div className="flex items-center justify-center">
                               <Checkbox
-                                checked={r.RAuthorize}
+                                checked={r.authorize}
                                 disabled={!editable}
                                 onCheckedChange={(checked) => {
                                   setTransactions(
                                     transactions.map((row, i) =>
-                                      i === idx ? { ...row, RAuthorize: Boolean(checked) } : row,
+                                      i === idx ? { ...row, authorize: Boolean(checked) } : row,
                                     ),
                                   );
                                   markDirty();
@@ -335,7 +331,7 @@ export default function PermissionTable({
                         <TableCell className="text-foreground p-3 text-sm font-medium">
                           {r.form_name}
                         </TableCell>
-                        {(['RView', 'RPrint', 'RExport'] as const).map((col) => (
+                        {(['view', 'print', 'export'] as const).map((col) => (
                           <TableCell key={col} className="p-3 text-center">
                             <div className="flex items-center justify-center">
                               <Checkbox
@@ -404,12 +400,12 @@ export default function PermissionTable({
                         <TableCell className="p-3 text-center">
                           <div className="flex items-center justify-center">
                             <Checkbox
-                              checked={r.RRights}
+                              checked={r.rights}
                               disabled={!editable}
                               onCheckedChange={(checked) => {
                                 setOthers(
                                   others.map((row, i) =>
-                                    i === idx ? { ...row, RRights: Boolean(checked) } : row,
+                                    i === idx ? { ...row, rights: Boolean(checked) } : row,
                                   ),
                                 );
                                 markDirty();

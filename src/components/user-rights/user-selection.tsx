@@ -42,7 +42,7 @@ export default function UserSelection({
 
   const handleUserChange = (valStr: string) => {
     const userId = parseInt(valStr);
-    const user = users.find((u) => u.pkUserId === userId) || null;
+    const user = users.find((u) => u.pk_user_id === userId) || null;
     onSelectUser(user);
   };
 
@@ -59,7 +59,7 @@ export default function UserSelection({
           </Label>
 
           <Select
-            value={selectedUser?.pkUserId?.toString() ?? ''}
+            value={selectedUser?.pk_user_id?.toString() ?? ''}
             onValueChange={handleUserChange}
             disabled={editable}
           >
@@ -77,11 +77,11 @@ export default function UserSelection({
             >
               {users?.map((user) => (
                 <SelectItem
-                  key={user.pkUserId}
-                  value={user.pkUserId.toString()}
+                  key={user.pk_user_id}
+                  value={user.pk_user_id.toString()}
                   className="hover:bg-accent focus:bg-brand/50 cursor-pointer px-2.5 py-2.5 text-xs transition-colors hover:text-white focus:text-white"
                 >
-                  {user.UserName} {user.SysDefined ? '(System)' : ''}
+                  {user.username} {user.sys_defined ? '(System)' : ''}
                 </SelectItem>
               ))}
               {users?.length === 0 && (
