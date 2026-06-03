@@ -78,6 +78,34 @@ export interface ProcessRow {
   fkProdId: number | null;
 }
 
+export interface SelectionRow {
+  name: string;
+  selected: boolean;
+}
+
+export interface SpecialFlags {
+  cb_pr: boolean;
+  cb_cr: boolean;
+  cb_sr: boolean;
+  cb_ur: boolean;
+  cb_c_rating: boolean;
+  cb_s_rating: boolean;
+  cb_cpr: boolean;
+  cb_spr: boolean;
+  cb_account: boolean;
+  cb_employee: boolean;
+  cb_job_entry: boolean;
+  cb_tax_invoice: boolean;
+  cb_sec: boolean;
+  cb_order_acceptance: boolean;
+  cb_authorizer: boolean;
+  cb_pm: boolean;
+  cb_sapo: boolean;
+  cb_sapr: boolean;
+  cb_sl: boolean;
+  cb_open_close_unreceived: boolean;
+}
+
 // ── User detail ───────────────────────────────────────────────────────────────
 export interface UserOut {
   pkUserId: number;
