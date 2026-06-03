@@ -2,17 +2,11 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import type { Action } from '@/components/shared/toolbar';
+import { cn } from '@/lib/utils';
+import { hrmsButtonClassName, hrmsCardClassName } from './hrms-styles';
 
-export type Action = {
-  label?: string;
-  icon: React.ElementType;
-  title?: string;
-  onClick?: () => void | Promise<void>;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'icon';
-  disabled?: boolean;
-};
-
-type ToolbarProps = {
+type HrmsToolbarProps = {
   navigation?: readonly Action[];
   actions?: readonly Action[];
   utilities?: readonly Action[];
@@ -29,7 +23,7 @@ const variantMap: Record<
   icon: 'ghost',
 };
 
-function ToolbarButton({ action }: { action: Action }) {
+function HrmsToolbarButton({ action }: { action: Action }) {
   const Icon = action.icon;
   const variant = action.variant ? variantMap[action.variant] : 'secondary';
   const size = action.variant === 'icon' ? 'icon' : 'default';
@@ -41,8 +35,10 @@ function ToolbarButton({ action }: { action: Action }) {
       onClick={action.onClick}
       variant={variant}
       size={size}
-      disabled={action.disabled}
-      className={action.variant === 'icon' ? 'dark:text-muted-foreground text-muted-foreground' : ''}
+      className={cn(
+        hrmsButtonClassName,
+        action.variant === 'icon' ? 'dark:text-muted-foreground text-muted-foreground' : '',
+      )}
     >
       <Icon size={16} />
       {action.label && <span className="text-sm font-medium">{action.label}</span>}
@@ -50,12 +46,16 @@ function ToolbarButton({ action }: { action: Action }) {
   );
 }
 
-export default function Toolbar({ navigation = [], actions = [], utilities = [] }: ToolbarProps) {
+export default function HrmsToolbar({
+  navigation = [],
+  actions = [],
+  utilities = [],
+}: HrmsToolbarProps) {
   return (
-    <div className="ring-border/50 dark:border-input/60 dark:bg-card bg-background border-foreground/10 mb-2 flex flex-wrap items-center justify-between gap-4 rounded-sm border p-3">
-      <div className="dark:border-input/60 flex items-center gap-1 border-r border-border/40 pr-4">
+    <div className={cn(hrmsCardClassName, 'flex flex-wrap items-center justify-between gap-4 p-3')}>
+      <div className="border-border flex items-center gap-1 border-r pr-4">
         {navigation.map((item, idx) => (
-          <ToolbarButton
+          <HrmsToolbarButton
             key={idx}
             action={{
               ...item,
@@ -67,13 +67,13 @@ export default function Toolbar({ navigation = [], actions = [], utilities = [] 
 
       <div className="flex flex-1 flex-wrap items-center gap-2">
         {actions.map((item, idx) => (
-          <ToolbarButton key={idx} action={item} />
+          <HrmsToolbarButton key={idx} action={item} />
         ))}
       </div>
 
-      <div className="dark:border-input/60 flex items-center gap-2 border-l border-border/40 pl-4">
+      <div className="border-border flex items-center gap-2 border-l pl-4">
         {utilities.map((item, idx) => (
-          <ToolbarButton
+          <HrmsToolbarButton
             key={idx}
             action={{
               ...item,

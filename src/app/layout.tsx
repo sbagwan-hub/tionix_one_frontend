@@ -3,10 +3,9 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 import QueryProviders from '@/providers/QueryProviders';
-import Navbar from '@/components/shared/navbar';
-import Footer from '@/components/shared/footer';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { LayoutWrapper } from '@/components/shared/layout-wrapper';
 import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
@@ -39,15 +38,8 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProviders>
             <LocaleUpdater />
+            <LayoutWrapper>{children}</LayoutWrapper>
             <Toaster position="top-right" />
-            <div className="fixed top-0 right-0 left-0 z-50">
-              <Navbar />
-            </div>
-
-            <main className="mx-4 my-2 h-full overflow-hidden pt-20 pb-8">{children}</main>
-            <div className="fixed right-0 bottom-0 left-0 z-50">
-              <Footer />
-            </div>
           </QueryProviders>
         </ThemeProvider>
       </body>

@@ -105,56 +105,6 @@ export const moduleGroups = [
       },
     ],
   },
-  {
-    group: 'Utilities',
-    rows: [
-      {
-        id: 6,
-        title: 'Backup & Restore',
-        add: true,
-        edit: false,
-        delete: false,
-        view: true,
-        print: false,
-        export: true,
-      },
-      {
-        id: 7,
-        title: 'System Logs',
-        add: false,
-        edit: false,
-        delete: false,
-        view: true,
-        print: true,
-        export: true,
-      },
-    ],
-  },
-  {
-    group: 'Utilities',
-    rows: [
-      {
-        id: 6,
-        title: 'Backup & Restore',
-        add: true,
-        edit: false,
-        delete: false,
-        view: true,
-        print: false,
-        export: true,
-      },
-      {
-        id: 7,
-        title: 'System Logs',
-        add: false,
-        edit: false,
-        delete: false,
-        view: true,
-        print: true,
-        export: true,
-      },
-    ],
-  },
 ];
 
 export const navigationToolbar = [
