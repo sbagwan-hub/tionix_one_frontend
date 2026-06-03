@@ -6,6 +6,7 @@ import QueryProviders from '@/providers/QueryProviders';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { LayoutWrapper } from '@/components/shared/layout-wrapper';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +39,7 @@ export default function RootLayout({
           <QueryProviders>
             <LocaleUpdater />
             <LayoutWrapper>{children}</LayoutWrapper>
+            <Toaster position="top-right" />
           </QueryProviders>
         </ThemeProvider>
       </body>

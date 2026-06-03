@@ -17,7 +17,6 @@ function Navbar() {
 
   return (
     <div className="border-border/40 bg-background flex w-full flex-col border-b select-none">
-      {/* Top Meta Info Utility Bar */}
       <header className="bg-muted/30 border-border/30 flex h-9 items-center justify-between border-b px-6">
         <div className="flex items-center gap-4">
           <div

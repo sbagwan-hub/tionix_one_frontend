@@ -56,7 +56,7 @@ export default function UserSelection({
         <div className="space-y-2">
           <Label
             htmlFor="user-profile"
-            className="text-muted-foreground block text-[11px] font-bold tracking-widest uppercase"
+            className="text-foreground block text-[11px] font-bold tracking-widest uppercase"
           >
             Select User <span className="text-destructive">*</span>
           </Label>
@@ -92,7 +92,7 @@ export default function UserSelection({
                 </SelectItem>
               ))}
               {users.length === 0 && (
-                <div className="text-muted-foreground py-6 text-center text-xs">No users found</div>
+                <div className="text-foreground py-6 text-center text-xs">No users found</div>
               )}
             </SelectContent>
           </Select>
@@ -100,7 +100,7 @@ export default function UserSelection({
 
         {/* Data Access Scope */}
         <div className="flex flex-col space-y-2">
-          <span className="text-muted-foreground text-[11px] font-bold tracking-widest uppercase">
+          <span className="text-foreground text-[11px] font-bold tracking-widest uppercase">
             Data Access Scope
           </span>
 
@@ -117,7 +117,7 @@ export default function UserSelection({
                 className={cn(
                   'text-sm font-medium',
                   isInteractionDisabled
-                    ? 'text-muted-foreground cursor-not-allowed'
+                    ? 'text-foreground cursor-not-allowed'
                     : 'text-foreground cursor-pointer',
                 )}
               >
@@ -132,7 +132,7 @@ export default function UserSelection({
                 className={cn(
                   'text-sm font-medium',
                   isInteractionDisabled
-                    ? 'text-muted-foreground cursor-not-allowed'
+                    ? 'text-foreground cursor-not-allowed'
                     : 'text-foreground cursor-pointer',
                 )}
               >
@@ -167,12 +167,12 @@ export default function UserSelection({
               <span
                 className={cn(
                   'text-sm leading-none font-semibold',
-                  isInteractionDisabled ? 'text-muted-foreground' : 'text-foreground',
+                  isInteractionDisabled ? 'text-foreground' : 'text-foreground',
                 )}
               >
                 Modify Other User Records
               </span>
-              <span className="text-muted-foreground text-[11px] leading-normal">
+              <span className="text-foreground text-[11px] leading-normal">
                 Allows global management rights
               </span>
             </div>
