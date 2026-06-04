@@ -11,13 +11,13 @@ export const NAV_MENUS: NavMenu[] = [
     items: [
       {
         key: 'users',
-        href: '/users',
+        href: '/administrator/users',
         icon: 'User',
       },
       {
         key: 'userRights',
         shortcut: '⌘ R',
-        href: '/user-rights',
+        href: '/administrator/user-rights',
         icon: 'ShieldAlert',
       },
       {
