@@ -148,7 +148,7 @@ export default function LoginPage() {
       localStorage.setItem('selected_book', bookName);
       // Elegant redirect
       setTimeout(() => {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }, 800);
     }, 1200);
   };
