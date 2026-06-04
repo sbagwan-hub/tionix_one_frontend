@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth-store';
+import { useBooks } from '@/modules/auth/hooks/use-books';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -114,6 +115,10 @@ export default function LoginPage() {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [bookName, setBookName] = React.useState('');
+  
+  // Fetch books from API
+  const { data: booksResponse, isLoading: isLoadingBooks } = useBooks();
+  const booksList = booksResponse?.data || [];
   const [rememberMe, setRememberMe] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -305,7 +310,7 @@ export default function LoginPage() {
                   <BookOpen className="h-4 w-4" />
                 </div>
                 <Select
-                  disabled={isLoading || loginSuccess}
+                  disabled={isLoading || loginSuccess || isLoadingBooks}
                   value={bookName}
                   onValueChange={(val) => {
                     setBookName(val);
@@ -318,16 +323,19 @@ export default function LoginPage() {
                       isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
                     } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
-                    <SelectValue placeholder={t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
+                    <SelectValue placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
                   </SelectTrigger>
                   <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md"
                     position='popper'
                   >
-                    <SelectItem value="FALCON MATERIAL HANDLING FZ LLC">
-                      FALCON MATERIAL HANDLING FZ LLC
-                    </SelectItem>
-                    <SelectItem value="KAMDHENU COMMERCIALS">KAMDHENU COMMERCIALS</SelectItem>
-                    <SelectItem value="TIONIX ONE OPERATIONS">TIONIX ONE OPERATIONS</SelectItem>
+                    {booksList.map((b) => (
+                      <SelectItem key={b.pk_book_id.trim()} value={b.book_name}>
+                        {b.book_name}
+                      </SelectItem>
+                    ))}
+                    {booksList.length === 0 && !isLoadingBooks && (
+                       <SelectItem value="none" disabled>No books available</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
