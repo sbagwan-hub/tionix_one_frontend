@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '@/stores/auth-store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -105,10 +106,10 @@ const LOCALES = {
 export default function LoginPage() {
   const router = useRouter();
   const { i18n } = useTranslation();
+  const login = useAuthStore((state) => state.login);
   const lang = (i18n.language as 'en' | 'ar' | 'hi') || 'en';
   const t = LOCALES[lang] || LOCALES.en;
   const isRtl = lang === 'ar';
-
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [bookName, setBookName] = React.useState('');
@@ -140,17 +141,39 @@ export default function LoginPage() {
     if (!handleValidation()) return;
 
     setIsLoading(true);
-    // Simulate server communication latency
-    setTimeout(() => {
+    
+    try {
+      // Simulate server communication latency
+      await new Promise(resolve => setTimeout(resolve, 1200));
+      
+      // Create user object for auth store
+      const user = {
+        id: '1',
+        username: username,
+        email: username.includes('@') ? username : `${username}@tionix.com`,
+        role: 'admin'
+      };
+      
+      const token = 'tionix_dummy_access_token';
+      
+      // Update auth store (this will also set localStorage)
+      login(user, token);
+      
+      // Store selected book
+      localStorage.setItem('selected_book', bookName);
+      
       setIsLoading(false);
       setLoginSuccess(true);
-      localStorage.setItem('access_token', 'tionix_dummy_access_token');
-      localStorage.setItem('selected_book', bookName);
-      // Elegant redirect
+      
+      // Use Next.js router for proper navigation
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        router.push('/dashboard');
       }, 800);
-    }, 1200);
+      
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Login error:', error);
+    }
   };
 
   return (
@@ -304,9 +327,11 @@ export default function LoginPage() {
                     className={`w-full rounded-sm bg-background/50 h-9 transition-all text-xs focus:bg-background cursor-pointer ${isRtl ? 'pr-9 pl-8' : 'pl-9 pr-8'
                       } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
-                    <SelectValue placeholder={t.bookPlaceholder} />
+                    <SelectValue placeholder={t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
                   </SelectTrigger>
-                  <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md">
+                  <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md"
+                    position='popper'
+                  >
                     <SelectItem value="FALCON MATERIAL HANDLING FZ LLC">
                       FALCON MATERIAL HANDLING FZ LLC
                     </SelectItem>

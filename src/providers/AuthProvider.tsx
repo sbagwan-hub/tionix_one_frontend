@@ -24,18 +24,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     logout,
     setLoading,
+    initialize,
   } = useAuthStore();
 
   useEffect(() => {
-    // Check for existing token on mount
-    const storedToken = localStorage.getItem('access_token');
-    if (storedToken && !isAuthenticated) {
-      // Validate token and set user data
-      setLoading(true);
-      // Here you would typically validate the token with your API
-      setLoading(false);
-    }
-  }, [isAuthenticated, setLoading]);
+    // Initialize auth state from cookies on mount
+    initialize();
+  }, [initialize]);
 
   const value: AuthContextType = {
     user,
