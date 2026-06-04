@@ -238,13 +238,12 @@ export default function LoginPage() {
                 >
                   {t.password}
                 </Label>
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="text-brand text-xxs font-medium tracking-tight hover:underline"
+                <button
+                  onClick={() => router.push('/auth/forgot-password')}
+                  className="text-brand text-xxs font-medium tracking-tight hover:underline cursor-pointer"
                 >
                   {t.forgotPassword}
-                </a>
+                </button>
               </div>
               <div className="relative">
                 <div className="text-muted-foreground absolute top-1/2 -translate-y-1/2 flex items-center px-3">
