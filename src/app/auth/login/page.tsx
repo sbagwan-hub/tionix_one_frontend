@@ -148,14 +148,14 @@ export default function LoginPage() {
       localStorage.setItem('selected_book', bookName);
       // Elegant redirect
       setTimeout(() => {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }, 800);
     }, 1200);
   };
 
   return (
     <div
-      className="flex h-full w-full items-center justify-center p-4 select-none"
+      className="flex min-h-screen w-full items-center justify-center p-4 select-none"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       <div className="border-border/60 bg-card text-card-foreground relative w-full max-w-[420px] overflow-hidden border rounded-sm p-6 md:p-8 flex flex-col justify-center min-h-[500px]">

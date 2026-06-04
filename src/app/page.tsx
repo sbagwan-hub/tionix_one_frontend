@@ -1,15 +1,19 @@
 'use client';
 
-import { Pagination } from '@/components/common/Pagination';
-import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const { t } = useTranslation();
+  const router = useRouter();
 
-  return (
-    <main className="">
-      <h1 className="text-foreground text-xl font-semibold">{t('welcome')}</h1>
-      <p className="text-muted-foreground mt-2 text-sm">{t('dashboard')}</p>
-    </main>
-  );
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      router.push('/dashboard');
+    } else {
+      router.push('/auth/login');
+    }
+  }, [router]);
+
+  return null;
 }

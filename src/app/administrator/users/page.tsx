@@ -238,11 +238,11 @@ export default function AdministratorUsersPage() {
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-center p-4 select-none gap-2"
+      className="flex h-full w-full flex-col items-center justify-center select-none gap-2"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* ── Action Toolbar (above card) ── */}
-      <div className="w-full max-w-7xl">
+      <div className="w-full">
         <Toolbar
           actions={[
             { icon: Plus,      label: t.add,     variant: 'secondary' },
@@ -260,7 +260,7 @@ export default function AdministratorUsersPage() {
           ]}
         />
       </div>
-      <div className="border-border/60 bg-card text-card-foreground relative w-full max-w-7xl overflow-hidden border rounded-sm flex flex-col">
+      <div className="border-border/60 bg-card text-card-foreground relative w-full overflow-hidden border rounded-sm flex flex-col">
         {/* Glow Effects */}
         <div className="from-brand/15 to-transparent pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial blur-3xl opacity-30" />
         <div className="from-brand/10 to-transparent pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[300px] rounded-full bg-radial blur-3xl opacity-20" />
