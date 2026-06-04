@@ -1,17 +1,15 @@
 'use client';
 
 import Toolbar, { Action } from '@/components/shared/toolbar';
-import PermissionTable from '@/components/user-rights/permissions-table';
-import UserSelection from '@/components/user-rights/user-selection';
-import RegisterFormModal from '@/components/user-rights/register-form-modal';
+import PermissionTable from '@/modules/user-right/components/permissions-table';
+import UserSelection from '@/modules/user-right/components/user-selection';
+import RegisterFormModal from '@/modules/user-right/components/register-form-modal';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
-  api,
   BranchRow,
   DashboardRow,
   FormOtherRow,
@@ -21,10 +19,14 @@ import {
   SpecialRow,
   UserListItem,
   UserRightsOut,
-  CreateNewFormIn,
-} from '@/lib/api';
-
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+} from '@/modules/user-right/types';
+import {
+  useUsersList,
+  useUserRights,
+  useSaveUserRights,
+  useCreateForm,
+} from '@/modules/user-right/hooks/use-user-rights';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -73,10 +75,7 @@ export default function UserRightsPage() {
   const mark = () => setDirty(true);
 
   // Load users list
-  const { data: usersData } = useQuery<UserListItem[]>({
-    queryKey: ['users'],
-    queryFn: api.listUsers,
-  });
+  const { data: usersData } = useUsersList();
   const users = usersData || [];
 
   // Load user rights
@@ -84,11 +83,7 @@ export default function UserRightsPage() {
     data: rightsData,
     isFetching: loading,
     refetch: refetchRights,
-  } = useQuery<UserRightsOut>({
-    queryKey: ['userRights', selectedUser?.pk_user_id],
-    queryFn: () => api.getUserRights(selectedUser!.pk_user_id),
-    enabled: !!selectedUser,
-  });
+  } = useUserRights(selectedUser?.pk_user_id);
 
   // Sync loaded rights to local states
   useEffect(() => {
@@ -108,33 +103,31 @@ export default function UserRightsPage() {
   }, [rightsData]);
 
   // Save mutation
-  const saveMutation = useMutation({
-    mutationFn: api.saveUserRights,
-    onSuccess: () => {
+  const saveMutation = useSaveUserRights(
+    () => {
       showToast(`Rights saved for ${selectedUser?.username}`);
       setEditable(false);
       setDirty(false);
       queryClient.invalidateQueries({ queryKey: ['userRights', selectedUser?.pk_user_id] });
     },
-    onError: (e: any) => {
+    (e: any) => {
       showToast(e.message || 'Failed to save rights', 'error');
     },
-  });
+  );
 
-  const addFormMutation = useMutation({
-    mutationFn: api.createNewForm,
-    onSuccess: () => {
+  const addFormMutation = useCreateForm(
+    () => {
       showToast('Form registered successfully');
       setIsModalOpen(false);
       if (selectedUser) {
         refetchRights();
       }
     },
-    onError: (e: any) => {
+    (e: any) => {
       const errMsg = e.response?.data?.message || e.message || 'Failed to create form';
       showToast(errMsg, 'error');
     },
-  });
+  );
 
   const handleSave = async () => {
     if (!selectedUser) return;

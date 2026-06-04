@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import PermissionTabs from './permission-tabs';
 import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
+import { FormInput } from '@/components/common/form-input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Plus, X } from 'lucide-react';
 import PermissionGrid, { COL_LABELS } from './permission-grid';
-import { Loading } from '@/components/common/Loading';
+import { Loading } from '@/components/common/loading';
 import {
   FormRightRow,
   FormReportRow,
@@ -16,7 +16,7 @@ import {
   BranchRow,
   DashboardRow,
   ProcessRow,
-} from '@/lib/api';
+} from '../types';
 
 type TabId =
   | 'masters'
@@ -271,13 +271,14 @@ export default function PermissionTable({
               <div className="max-w-2xl space-y-4">
                 {editable && (
                   <div className="flex items-center gap-2">
-                    <Input
+                    <FormInput
                       type="number"
                       placeholder="Set ID (numeric)"
                       value={branchInput}
                       onChange={(e) => setBranchInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addBranch()}
-                      className="w-48 text-sm"
+                      containerClassName="w-48"
+                      className="text-sm"
                     />
                     <Button variant="outline" size="sm" onClick={addBranch}>
                       <Plus className="mr-1 size-4" /> Add Branch
@@ -313,13 +314,14 @@ export default function PermissionTable({
               <div className="max-w-2xl space-y-4">
                 {editable && (
                   <div className="flex items-center gap-2">
-                    <Input
+                    <FormInput
                       type="number"
                       placeholder="Dashboard ID"
                       value={dashboardInput}
                       onChange={(e) => setDashboardInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addDashboard()}
-                      className="w-48 text-sm"
+                      containerClassName="w-48"
+                      className="text-sm"
                     />
                     <Button variant="outline" size="sm" onClick={addDashboard}>
                       <Plus className="mr-1 size-4" /> Add Dashboard
@@ -354,13 +356,14 @@ export default function PermissionTable({
               <div className="max-w-2xl space-y-4">
                 {editable && (
                   <div className="flex items-center gap-2">
-                    <Input
+                    <FormInput
                       placeholder="Product ID (max 10 chars)"
                       value={processInput}
                       maxLength={10}
                       onChange={(e) => setProcessInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addProcess()}
-                      className="w-56 text-sm"
+                      containerClassName="w-56"
+                      className="text-sm"
                     />
                     <Button variant="outline" size="sm" onClick={addProcess}>
                       <Plus className="mr-1 size-4" /> Add Product

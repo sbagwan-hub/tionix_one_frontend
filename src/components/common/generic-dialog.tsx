@@ -60,6 +60,7 @@ export default function GenericDialog({
     >
       <DialogContent
         className={cn('border-border/60 bg-popover text-foreground max-w-lg', className)}
+        {...(!description && { 'aria-describedby': undefined })}
       >
         <DialogHeader className="space-y-1">
           <DialogTitle className="text-lg font-semibold tracking-tight">{title}</DialogTitle>

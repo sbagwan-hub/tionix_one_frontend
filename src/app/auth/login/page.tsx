@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth-store';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { FormInput } from '@/components/common/form-input';
+import { Loading } from '@/components/common/loading';
 import {
   Select,
   SelectContent,
@@ -116,7 +117,11 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [errors, setErrors] = React.useState<{ username?: string; password?: string; book?: string }>({});
+  const [errors, setErrors] = React.useState<{
+    username?: string;
+    password?: string;
+    book?: string;
+  }>({});
   const [loginSuccess, setLoginSuccess] = React.useState(false);
 
   const handleValidation = () => {
@@ -184,25 +189,25 @@ export default function LoginPage() {
       className="flex min-h-screen w-full items-center justify-center p-4 select-none"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
-      <div className="border-border/60 bg-card text-card-foreground relative w-full max-w-[420px] overflow-hidden border rounded-sm p-6 md:p-8 flex flex-col justify-center min-h-[500px]">
+      <div className="border-border/60 bg-card text-card-foreground relative flex min-h-[500px] w-full max-w-[420px] flex-col justify-center overflow-hidden rounded-sm border p-6 md:p-8">
         {/* Glow Effects / Radial Brand Shading */}
-        <div className="from-brand/15 to-transparent pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial blur-3xl opacity-30" />
-        <div className="from-brand/10 to-transparent pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[300px] rounded-full bg-radial blur-3xl opacity-20" />
+        <div className="from-brand/15 pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-30 blur-3xl" />
+        <div className="from-brand/10 pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-20 blur-3xl" />
 
-        <div className="mx-auto flex w-full flex-col gap-5 relative z-10">
-          <div className="flex flex-col items-center text-center gap-1.5 mb-2">
+        <div className="relative z-10 mx-auto flex w-full flex-col gap-5">
+          <div className="mb-2 flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
-              <span className="text-brand border-brand/20 bg-brand/10 text-xxs font-mono rounded border px-2 py-0.5 font-semibold tracking-wider uppercase">
+              <span className="text-brand border-brand/20 bg-brand/10 text-xxs rounded border px-2 py-0.5 font-mono font-semibold tracking-wider uppercase">
                 Tionix One
               </span>
               <span className="bg-muted text-muted-foreground border-border/50 scale-90 rounded border px-1.5 py-0.5 font-mono text-[9px] tracking-tight">
                 v2026.01
               </span>
             </div>
-            <h3 className="text-foreground text-xl font-bold tracking-tight mt-2">
+            <h3 className="text-foreground mt-2 text-xl font-bold tracking-tight">
               {t.welcomeBack}
             </h3>
-            <p className="text-muted-foreground text-xs max-w-xs">{t.signInToText}</p>
+            <p className="text-muted-foreground max-w-xs text-xs">{t.signInToText}</p>
           </div>
 
           {/* Error notifications */}
@@ -215,94 +220,76 @@ export default function LoginPage() {
 
           {/* Login Success Notification */}
           {loginSuccess && (
-            <div className="border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center gap-2 rounded-sm border p-3 text-xs">
+            <div className="flex items-center gap-2 rounded-sm border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="h-4 w-4 shrink-0 animate-bounce" />
               <span>Authentication successful! Access authorized...</span>
             </div>
           )}
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
-            {/* Username Input Container */}
-            <div className="flex flex-col gap-1.5">
-              <Label
-                htmlFor="username"
-                className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase"
-              >
-                {t.usernameOrEmail}
-              </Label>
-              <div className="relative">
-                <div className="text-muted-foreground absolute top-1/2 -translate-y-1/2 flex items-center px-3">
-                  <Mail className="h-4 w-4" />
-                </div>
-                <Input
-                  id="username"
-                  type="text"
-                  disabled={isLoading || loginSuccess}
-                  className={`rounded-sm bg-background/50 h-9 transition-all focus:bg-background ${isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'} ${errors.username ? 'border-destructive ring-destructive/20' : ''
-                    }`}
-                  placeholder={t.usernamePlaceholder}
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
-                  }}
-                />
-              </div>
-              {errors.username && (
-                <span className="text-destructive text-[10px] font-medium">
-                  {errors.username}
+            <FormInput
+              id="username"
+              label={
+                <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                  {t.usernameOrEmail}
                 </span>
-              )}
-            </div>
+              }
+              type="text"
+              disabled={isLoading || loginSuccess}
+              icon={Mail}
+              error={errors.username}
+              placeholder={t.usernamePlaceholder}
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
+              }}
+              className="h-9 rounded-sm"
+            />
 
-            {/* Password Input Container */}
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <Label
-                  htmlFor="password"
-                  className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase"
-                >
-                  {t.password}
-                </Label>
-                <button
-                  onClick={() => router.push('/auth/forgot-password')}
-                  className="text-brand text-xxs font-medium tracking-tight hover:underline cursor-pointer"
-                >
-                  {t.forgotPassword}
-                </button>
-              </div>
-              <div className="relative">
-                <div className="text-muted-foreground absolute top-1/2 -translate-y-1/2 flex items-center px-3">
-                  <Lock className="h-4 w-4" />
-                </div>
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  disabled={isLoading || loginSuccess}
-                  className={`rounded-sm bg-background/50 h-9 transition-all focus:bg-background ${isRtl ? 'pr-9 pl-10' : 'pl-9 pr-10'} ${errors.password ? 'border-destructive ring-destructive/20' : ''
-                    }`}
-                  placeholder={t.passwordPlaceholder}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
-                  }}
-                />
-                <button
-                  type="button"
-                  tabIndex={-1}
-                  onClick={() => setShowPassword(!showPassword)}
-                  className={`text-muted-foreground hover:text-foreground absolute top-1/2 -translate-y-1/2 transition-colors cursor-pointer ${isRtl ? 'left-3' : 'right-3'
-                    }`}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              {errors.password && (
-                <span className="text-destructive text-[10px] font-medium">
-                  {errors.password}
-                </span>
-              )}
+            <div className="relative">
+              <FormInput
+                id="password"
+                label={
+                  <div className="flex w-full items-center justify-between">
+                    <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                      {t.password}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => router.push('/auth/forgot-password')}
+                      className="text-brand text-xxs cursor-pointer font-medium tracking-tight hover:underline"
+                    >
+                      {t.forgotPassword}
+                    </button>
+                  </div>
+                }
+                type={showPassword ? 'text' : 'password'}
+                disabled={isLoading || loginSuccess}
+                icon={Lock}
+                error={errors.password}
+                placeholder={t.passwordPlaceholder}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
+                }}
+                className="h-9 rounded-sm"
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPassword(!showPassword)}
+                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
+                  isRtl ? 'left-3' : 'right-3'
+                }`}
+                style={{
+                  top: errors.password ? 'calc(50% - 9px)' : '50%',
+                  transform: 'translateY(-10%)',
+                }}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
 
             {/* Book Select Dropdown Container */}
@@ -314,7 +301,7 @@ export default function LoginPage() {
                 {t.book}
               </Label>
               <div className="relative">
-                <div className="text-muted-foreground absolute top-1/2 -translate-y-1/2 flex items-center px-3 z-10">
+                <div className="text-muted-foreground absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
                   <BookOpen className="h-4 w-4" />
                 </div>
                 <Select
@@ -327,8 +314,9 @@ export default function LoginPage() {
                 >
                   <SelectTrigger
                     id="book"
-                    className={`w-full rounded-sm bg-background/50 h-9 transition-all text-xs focus:bg-background cursor-pointer ${isRtl ? 'pr-9 pl-8' : 'pl-9 pr-8'
-                      } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
+                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
+                      isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                    } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
                     <SelectValue placeholder={t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
                   </SelectTrigger>
@@ -338,19 +326,13 @@ export default function LoginPage() {
                     <SelectItem value="FALCON MATERIAL HANDLING FZ LLC">
                       FALCON MATERIAL HANDLING FZ LLC
                     </SelectItem>
-                    <SelectItem value="KAMDHENU COMMERCIALS">
-                      KAMDHENU COMMERCIALS
-                    </SelectItem>
-                    <SelectItem value="TIONIX ONE OPERATIONS">
-                      TIONIX ONE OPERATIONS
-                    </SelectItem>
+                    <SelectItem value="KAMDHENU COMMERCIALS">KAMDHENU COMMERCIALS</SelectItem>
+                    <SelectItem value="TIONIX ONE OPERATIONS">TIONIX ONE OPERATIONS</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               {errors.book && (
-                <span className="text-destructive text-[10px] font-medium">
-                  {errors.book}
-                </span>
+                <span className="text-destructive text-[10px] font-medium">{errors.book}</span>
               )}
             </div>
 
@@ -365,7 +347,7 @@ export default function LoginPage() {
               />
               <label
                 htmlFor="remember"
-                className="text-muted-foreground text-xs font-medium cursor-pointer"
+                className="text-muted-foreground cursor-pointer text-xs font-medium"
               >
                 {t.rememberMe}
               </label>
@@ -376,29 +358,11 @@ export default function LoginPage() {
               type="submit"
               disabled={isLoading || loginSuccess}
               variant="default"
-              className={`w-full h-9 rounded-sm ${hrmsRadiusClassName} text-sm font-semibold tracking-wide uppercase transition-all duration-300 cursor-pointer`}
+              className={`h-9 w-full rounded-sm ${hrmsRadiusClassName} cursor-pointer text-sm font-semibold tracking-wide uppercase transition-all duration-300`}
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="h-4 w-4 animate-spin text-current"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
+                  <Loading size="sm" />
                   {t.signingIn}
                 </span>
               ) : (
@@ -411,10 +375,8 @@ export default function LoginPage() {
           </form>
 
           <div className="border-border/30 border-t pt-4 text-center">
-            <p className="text-muted-foreground/60 text-[9px] leading-relaxed">
-              {t.licenseText}
-            </p>
-            <p className="text-muted-foreground/40 text-[9px] leading-relaxed mt-1">
+            <p className="text-muted-foreground/60 text-[9px] leading-relaxed">{t.licenseText}</p>
+            <p className="text-muted-foreground/40 mt-1 text-[9px] leading-relaxed">
               {t.unauthorizedAccessWarning}
             </p>
           </div>

@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/common/DataTable';
-import { FormHeader } from '@/components/common/FormHeader';
+import { DataTable } from '@/components/common/data-table';
+import { FormHeader } from '@/components/common/form-header';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 
 // Sample data
@@ -62,7 +62,7 @@ export default function UsersPage() {
       key: 'role',
       label: 'Role',
       render: (value: string) => (
-        <span className="capitalize px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+        <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800 capitalize">
           {value}
         </span>
       ),
@@ -71,9 +71,11 @@ export default function UsersPage() {
       key: 'isActive',
       label: 'Status',
       render: (value: boolean) => (
-        <span className={`px-2 py-1 text-xs rounded-full ${
-          value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`}>
+        <span
+          className={`rounded-full px-2 py-1 text-xs ${
+            value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          }`}
+        >
           {value ? 'Active' : 'Inactive'}
         </span>
       ),
@@ -101,20 +103,16 @@ export default function UsersPage() {
     <div className="p-6">
       <FormHeader
         title="Users"
-        subtitle="Manage user accounts and permissions"
+        description="Manage user accounts and permissions"
         actions={
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Add User
           </Button>
         }
       />
-      
-      <DataTable
-        data={sampleUsers}
-        columns={columns}
-        className="mt-6"
-      />
+
+      <DataTable data={sampleUsers} columns={columns} className="mt-6" />
     </div>
   );
 }
