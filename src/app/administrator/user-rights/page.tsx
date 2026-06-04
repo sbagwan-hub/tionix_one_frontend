@@ -1,20 +1,14 @@
 'use client';
 
-import { TabItem } from '@/components/shared/dynamic-tabs';
 import Toolbar, { Action } from '@/components/shared/toolbar';
 import PermissionTable from '@/components/user-rights/permissions-table';
 import UserSelection from '@/components/user-rights/user-selection';
+import RegisterFormModal from '@/components/user-rights/register-form-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   api,
@@ -34,10 +28,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   Edit3,
   Save,
   X,
@@ -71,17 +61,6 @@ export default function UserRightsPage() {
   const [otherRecords, setOtherRecords] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newFormDetails, setNewFormDetails] = useState<CreateNewFormIn>({
-    form_name: '',
-    category: 'master',
-    prefix: '',
-    last_id: '0',
-    start_with: '1',
-    len: '10',
-    module_name: '',
-    module_caption: '',
-    news: false,
-  });
 
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
     if (type === 'error') {
@@ -147,17 +126,6 @@ export default function UserRightsPage() {
     onSuccess: () => {
       showToast('Form registered successfully');
       setIsModalOpen(false);
-      setNewFormDetails({
-        form_name: '',
-        category: 'master',
-        prefix: '',
-        last_id: '0',
-        start_with: '1',
-        len: '10',
-        module_name: '',
-        module_caption: '',
-        news: false,
-      });
       if (selectedUser) {
         refetchRights();
       }
@@ -199,52 +167,6 @@ export default function UserRightsPage() {
     setEditable(false);
     setTab('masters');
   };
-
-  // Toolbar Navigation Indexing
-  const currentIndex = selectedUser
-    ? users.findIndex((u) => u.pk_user_id === selectedUser.pk_user_id)
-    : -1;
-
-  const handleFirst = () => {
-    if (users.length > 0) handleSelectUser(users[0]);
-  };
-  const handlePrevious = () => {
-    if (currentIndex > 0) handleSelectUser(users[currentIndex - 1]);
-  };
-  const handleNext = () => {
-    if (currentIndex >= 0 && currentIndex < users.length - 1)
-      handleSelectUser(users[currentIndex + 1]);
-  };
-  const handleLast = () => {
-    if (users.length > 0) handleSelectUser(users[users.length - 1]);
-  };
-
-  const dynamicNavigation: Action[] = [
-    {
-      icon: ChevronsLeft,
-      title: 'First',
-      onClick: handleFirst,
-      disabled: users.length === 0 || currentIndex === 0,
-    },
-    {
-      icon: ChevronLeft,
-      title: 'Previous',
-      onClick: handlePrevious,
-      disabled: currentIndex <= 0,
-    },
-    {
-      icon: ChevronRight,
-      title: 'Next',
-      onClick: handleNext,
-      disabled: currentIndex === -1 || currentIndex === users.length - 1,
-    },
-    {
-      icon: ChevronsRight,
-      title: 'Last',
-      onClick: handleLast,
-      disabled: users.length === 0 || currentIndex === users.length - 1,
-    },
-  ];
 
   const dynamicActions: Action[] = editable
     ? [
@@ -341,7 +263,7 @@ export default function UserRightsPage() {
           />
         </div>
 
-        <div className="h-[calc(100vh-310px)] overflow-y-auto">
+        <div className="h-[calc(100vh-270px)] overflow-y-auto">
           <PermissionTable
             activeTab={tab}
             setActiveTab={setTab as any}
@@ -363,157 +285,18 @@ export default function UserRightsPage() {
             setDashboards={setDashboards}
             processes={processes}
             setProcesses={setProcesses}
-            className="p-4"
+            loading={loading}
+            className="p-0"
           />
         </div>
       </div>
 
-      {/* Register New Form Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-popover border-border/60 animate-in fade-in zoom-in text-foreground w-full max-w-2xl overflow-hidden rounded-sm border shadow-md duration-200">
-            {/* Modal Header */}
-            <div className="bg-muted border-border flex items-center justify-between border-b px-6 py-4">
-              <h3 className="flex items-center gap-2 text-lg font-semibold">
-                <Plus className="text-primary h-4 w-4" />
-                Register New Form / Menu Item
-              </h3>
-              <Button variant="ghost" size="icon-sm" onClick={() => setIsModalOpen(false)}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Modal Body / Form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                addFormMutation.mutate(newFormDetails);
-              }}
-              className="space-y-4 p-6 text-sm"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="form_name">Form Name *</Label>
-                  <Input
-                    id="form_name"
-                    type="text"
-                    required
-                    value={newFormDetails.form_name}
-                    onChange={(e) =>
-                      setNewFormDetails({ ...newFormDetails, form_name: e.target.value })
-                    }
-                    placeholder="e.g. sales_order"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="prefix">Prefix</Label>
-                  <Input
-                    id="prefix"
-                    type="text"
-                    maxLength={5}
-                    value={newFormDetails.prefix || ''}
-                    onChange={(e) =>
-                      setNewFormDetails({ ...newFormDetails, prefix: e.target.value })
-                    }
-                    placeholder="e.g. SO"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="module_name">Module Name *</Label>
-                  <Input
-                    id="module_name"
-                    type="text"
-                    required
-                    value={newFormDetails.module_name || ''}
-                    onChange={(e) =>
-                      setNewFormDetails({ ...newFormDetails, module_name: e.target.value })
-                    }
-                    placeholder="e.g. Sales"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="module_caption">Module Caption</Label>
-                  <Input
-                    id="module_caption"
-                    type="text"
-                    value={newFormDetails.module_caption || ''}
-                    onChange={(e) =>
-                      setNewFormDetails({ ...newFormDetails, module_caption: e.target.value })
-                    }
-                    placeholder="e.g. Sales Management"
-                  />
-                </div>
-
-                <div className="col-span-2 space-y-1.5">
-                  <Label>Category *</Label>
-                  <Tabs
-                    value={newFormDetails.category}
-                    onValueChange={(val: any) =>
-                      setNewFormDetails({ ...newFormDetails, category: val })
-                    }
-                    className="w-full"
-                  >
-                    <TabsList className="grid w-full grid-cols-4">
-                      <TabsTrigger value="master">Master</TabsTrigger>
-                      <TabsTrigger value="transaction">Transaction</TabsTrigger>
-                      <TabsTrigger value="report">Report</TabsTrigger>
-                      <TabsTrigger value="other">Other</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="start_with">Start With ID</Label>
-                  <Input
-                    id="start_with"
-                    type="text"
-                    value={newFormDetails.start_with || ''}
-                    onChange={(e) =>
-                      setNewFormDetails({ ...newFormDetails, start_with: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label htmlFor="len">Length of ID</Label>
-                  <Input
-                    id="len"
-                    type="text"
-                    value={newFormDetails.len || ''}
-                    onChange={(e) => setNewFormDetails({ ...newFormDetails, len: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5 pt-2">
-                <Checkbox
-                  id="news_form_chk"
-                  checked={!!newFormDetails.news}
-                  onCheckedChange={(checked) =>
-                    setNewFormDetails({ ...newFormDetails, news: !!checked })
-                  }
-                />
-                <Label htmlFor="news_form_chk" className="cursor-pointer">
-                  News Form (Flag as recently added)
-                </Label>
-              </div>
-
-              {/* Modal Footer */}
-              <div className="border-border flex justify-end gap-3 border-t pt-4">
-                <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" variant="success" disabled={addFormMutation.isPending}>
-                  {addFormMutation.isPending ? 'Registering...' : 'Register Form'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <RegisterFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={(details) => addFormMutation.mutate(details)}
+        isPending={addFormMutation.isPending}
+      />
     </div>
   );
 }

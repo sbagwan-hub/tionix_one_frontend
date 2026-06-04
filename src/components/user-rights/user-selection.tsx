@@ -36,7 +36,6 @@ export default function UserSelection({
   editable,
 }: UserSelectionProps) {
   const accessScope = ownRecords ? 'self' : 'all';
-
   const isInteractionDisabled = !editable || !selectedUser;
 
   const handleScopeChange = (value: string) => {
@@ -50,13 +49,13 @@ export default function UserSelection({
   };
 
   return (
-    <div className="border-border/60 bg-card mb-2 rounded-sm border p-4">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div className="border-border/60 bg-muted/40 mb-3 rounded-md border p-4 shadow-none dark:bg-zinc-950/40">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {/* User Dropdown Selection */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label
             htmlFor="user-profile"
-            className="text-foreground block text-[11px] font-bold tracking-widest uppercase"
+            className="text-muted-foreground block text-xs font-medium tracking-tight"
           >
             Select User <span className="text-destructive">*</span>
           </Label>
@@ -68,10 +67,7 @@ export default function UserSelection({
           >
             <SelectTrigger
               id="user-profile"
-              className={cn(
-                'border-border/60 bg-background/50 text-foreground w-full rounded-sm border px-3 py-1.5 text-sm font-medium transition-all focus:bg-background outline-none',
-                'focus:border-ring focus:ring-ring focus:ring-1',
-              )}
+              className="border-border bg-background text-foreground focus:ring-ring focus:border-ring h-8 w-full rounded-md border px-3 text-xs font-medium shadow-none transition-all outline-none focus:ring-1"
             >
               <SelectValue placeholder="Choose a user profile..." />
             </SelectTrigger>
@@ -80,19 +76,19 @@ export default function UserSelection({
               position="popper"
               side="bottom"
               sideOffset={4}
-              className="border-border bg-popover text-popover-foreground max-h-60 min-w-[var(--radix-select-trigger-width)] rounded-sm border p-1"
+              className="border-border bg-popover text-popover-foreground max-h-60 min-w-[var(--radix-select-trigger-width)] rounded-md border p-1 shadow-none"
             >
               {users.map((user) => (
                 <SelectItem
                   key={user.pk_user_id}
                   value={user.pk_user_id.toString()}
-                  className="cursor-pointer rounded-sm px-2.5 py-2 text-xs font-medium"
+                  className="cursor-pointer rounded-sm px-2 py-1.5 text-xs font-medium tracking-tight"
                 >
                   {user.username} {user.sys_defined ? '(System)' : ''}
                 </SelectItem>
               ))}
               {users.length === 0 && (
-                <div className="text-foreground py-6 text-center text-xs">No users found</div>
+                <div className="text-muted-foreground py-6 text-center text-xs">No users found</div>
               )}
             </SelectContent>
           </Select>
@@ -100,7 +96,7 @@ export default function UserSelection({
 
         {/* Data Access Scope */}
         <div className="flex flex-col space-y-2">
-          <span className="text-foreground text-[11px] font-bold tracking-widest uppercase">
+          <span className="text-muted-foreground text-xs font-medium tracking-tight">
             Data Access Scope
           </span>
 
@@ -108,16 +104,16 @@ export default function UserSelection({
             value={accessScope}
             onValueChange={handleScopeChange}
             disabled={isInteractionDisabled}
-            className="flex flex-wrap items-center gap-4 py-1.5"
+            className="flex h-8 flex-wrap items-center gap-4"
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="all" id="all-records" />
+              <RadioGroupItem value="all" id="all-records" className="border-border h-4 w-4" />
               <Label
                 htmlFor="all-records"
                 className={cn(
-                  'text-sm font-medium',
+                  'text-xs font-medium tracking-tight select-none',
                   isInteractionDisabled
-                    ? 'text-foreground cursor-not-allowed'
+                    ? 'text-muted-foreground cursor-not-allowed'
                     : 'text-foreground cursor-pointer',
                 )}
               >
@@ -126,13 +122,13 @@ export default function UserSelection({
             </div>
 
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="self" id="self-records" />
+              <RadioGroupItem value="self" id="self-records" className="border-border h-4 w-4" />
               <Label
                 htmlFor="self-records"
                 className={cn(
-                  'text-sm font-medium',
+                  'text-xs font-medium tracking-tight select-none',
                   isInteractionDisabled
-                    ? 'text-foreground cursor-not-allowed'
+                    ? 'text-muted-foreground cursor-not-allowed'
                     : 'text-foreground cursor-pointer',
                 )}
               >
@@ -147,10 +143,10 @@ export default function UserSelection({
           <label
             htmlFor="modify-other-users"
             className={cn(
-              'border-border bg-background flex items-start gap-3 rounded-sm border px-3 py-2.5 transition-all',
+              'border-border bg-background flex h-14 w-full items-start gap-3 rounded-md border px-3 py-2 transition-colors select-none',
               isInteractionDisabled
                 ? 'cursor-not-allowed opacity-50'
-                : 'hover:border-input cursor-pointer',
+                : 'hover:bg-muted/30 cursor-pointer',
             )}
           >
             <Checkbox
@@ -160,19 +156,14 @@ export default function UserSelection({
                 !isInteractionDisabled && setOtherRecords(Boolean(checked))
               }
               disabled={isInteractionDisabled}
-              className="mt-0.5"
+              className="border-border data-[state=checked]:border-primary mt-0.5 h-4 w-4 rounded-sm"
             />
 
-            <div className="flex flex-col space-y-0.5 select-none">
-              <span
-                className={cn(
-                  'text-sm leading-none font-semibold',
-                  isInteractionDisabled ? 'text-foreground' : 'text-foreground',
-                )}
-              >
+            <div className="flex flex-col space-y-0.5">
+              <span className="text-foreground text-xs font-medium tracking-tight">
                 Modify Other User Records
               </span>
-              <span className="text-foreground text-[11px] leading-normal">
+              <span className="text-muted-foreground text-[11px] leading-normal tracking-tight">
                 Allows global management rights
               </span>
             </div>
