@@ -41,7 +41,6 @@ export function SelectDropDown({
     if (!wrapperRef.current) return;
 
     const update = () => setWrapperWidth(wrapperRef.current?.offsetWidth ?? 0);
-
     update();
 
     const observer = new ResizeObserver(update);
@@ -54,17 +53,20 @@ export function SelectDropDown({
     <div
       ref={wrapperRef}
       className={cn(
-        'bg-accent border-border flex cursor-pointer items-center gap-1 rounded-sm border px-2 py-0.5',
+        'bg-background hover:bg-muted/50 border-border/80 flex h-8 cursor-pointer items-center gap-2 rounded-md border px-3 transition-colors',
         className,
       )}
     >
-      <span className="text-muted-foreground text-[11px] font-medium">{label}:</span>
+      {/* Clean label styling with comfortable spacing */}
+      <span className="text-muted-foreground shrink-0 text-xs font-medium tracking-tight select-none">
+        {label}
+      </span>
 
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           className={cn(
-            'text-foreground h-5 cursor-pointer border-0 bg-transparent p-0 text-xs shadow-none hover:ring-0 focus:ring-0',
-            width ?? 'min-w-24',
+            'text-foreground h-full cursor-pointer gap-1.5 border-0 bg-transparent p-0 text-xs font-medium shadow-none hover:ring-0 focus:ring-0',
+            width ?? 'min-w-[90px]',
           )}
         >
           <SelectValue
@@ -75,7 +77,7 @@ export function SelectDropDown({
 
         <SelectContent
           position="popper"
-          side="top"
+          side="bottom"
           sideOffset={4}
           align="end"
           style={{
@@ -83,7 +85,7 @@ export function SelectDropDown({
             minWidth: wrapperWidth,
           }}
           className={cn(
-            'border-border bg-popover rounded-sm border p-0 shadow-md ring-0',
+            'border-border bg-popover rounded-md border p-1 ring-0',
             selectContentClassName,
           )}
         >
@@ -91,7 +93,7 @@ export function SelectDropDown({
             <SelectItem
               key={option.value}
               value={option.value}
-              className="cursor-pointer px-2.5 py-2.5 text-xs"
+              className="cursor-pointer rounded-sm px-2 py-1.5 text-xs font-medium tracking-tight transition-colors"
             >
               {option.label}
             </SelectItem>

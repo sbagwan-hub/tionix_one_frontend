@@ -1,46 +1,41 @@
 'use client';
 
-import * as React from 'react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export interface FormHeaderProps {
+interface FormHeaderProps {
   title: string;
-  subtitle?: string;
-  showBackButton?: boolean;
-  onBack?: () => void;
+  description?: string;
+  backHref?: string;
   actions?: React.ReactNode;
 }
 
-export function FormHeader({ 
-  title, 
-  subtitle, 
-  showBackButton = false, 
-  onBack,
-  actions 
-}: FormHeaderProps) {
+export function FormHeader({ title, description, backHref, actions }: FormHeaderProps) {
+  const router = useRouter();
+
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-4">
-        {showBackButton && (
+    <div className="border-border/40 bg-card mb-6 flex flex-col justify-between gap-4 rounded-lg border p-4 sm:flex-row sm:items-center">
+      <div className="flex items-center gap-3">
+        {backHref && (
           <Button
-            variant="outline"
-            size="sm"
-            onClick={onBack}
-            className="flex items-center gap-2"
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push(backHref)}
+            className="h-8 w-8 rounded-full"
+            type="button"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back
+            <span className="sr-only">Back</span>
           </Button>
         )}
         <div>
-          <h1 className="text-2xl font-bold">{title}</h1>
-          {subtitle && (
-            <p className="text-muted-foreground text-sm mt-1">{subtitle}</p>
-          )}
+          <h1 className="text-foreground text-lg font-bold tracking-tight sm:text-xl">{title}</h1>
+          {description && <p className="text-muted-foreground text-xs sm:text-sm">{description}</p>}
         </div>
       </div>
-      {actions && <div>{actions}</div>}
+      {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   );
 }

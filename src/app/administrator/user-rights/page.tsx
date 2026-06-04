@@ -325,7 +325,7 @@ export default function UserRightsPage() {
       <div className="flex h-full flex-col py-2">
         <div>
           <Toolbar
-            navigation={dynamicNavigation}
+            // navigation={dynamicNavigation}
             actions={dynamicActions}
             utilities={dynamicUtilities}
           />

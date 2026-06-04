@@ -7,7 +7,11 @@ import Footer from './footer';
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAuth = pathname === '/log_in' || pathname === '/login' || pathname === '/sign_up' || pathname?.startsWith('/auth/');
+  const isAuth =
+    pathname === '/log_in' ||
+    pathname === '/login' ||
+    pathname === '/sign_up' ||
+    pathname?.startsWith('/auth/');
 
   return (
     <>
@@ -19,7 +23,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
 
       <main
         className={`overflow-hidden transition-all duration-300 ${
-          isAuth ? 'h-screen w-screen mx-0 my-0 pt-0 pb-0' : 'h-full mx-4 my-2 pt-20 pb-8'
+          isAuth ? 'mx-0 my-0 h-screen w-screen pt-0 pb-0' : 'mx-4 my-2 h-full pt-15 pb-8'
         }`}
       >
         {children}

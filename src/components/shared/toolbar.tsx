@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export type Action = {
   label?: string;
@@ -16,6 +17,7 @@ type ToolbarProps = {
   navigation?: readonly Action[];
   actions?: readonly Action[];
   utilities?: readonly Action[];
+  className?: string;
 };
 
 const variantMap: Record<
@@ -25,14 +27,16 @@ const variantMap: Record<
   primary: 'default',
   secondary: 'secondary',
   danger: 'destructive',
-  success: 'success',
+  success: 'outline',
   icon: 'ghost',
 };
 
-function ToolbarButton({ action }: { action: Action }) {
+function ToolbarButton({ action, compactIcon }: { action: Action; compactIcon?: boolean }) {
   const Icon = action.icon;
+  const isIconVariant = action.variant === 'icon' || compactIcon;
+
   const variant = action.variant ? variantMap[action.variant] : 'secondary';
-  const size = action.variant === 'icon' ? 'icon' : 'default';
+  const size = isIconVariant && !action.label ? 'icon' : 'sm';
 
   return (
     <Button
@@ -42,46 +46,70 @@ function ToolbarButton({ action }: { action: Action }) {
       variant={variant}
       size={size}
       disabled={action.disabled}
-      className={action.variant === 'icon' ? 'dark:text-muted-foreground text-muted-foreground' : ''}
+      className={cn(
+        'h-7 gap-1.5 rounded-sm px-2 text-xs font-medium tracking-tight',
+        isIconVariant && 'text-muted-foreground hover:text-foreground hover:bg-muted h-7 w-7 p-0',
+      )}
     >
-      <Icon size={16} />
-      {action.label && <span className="text-sm font-medium">{action.label}</span>}
+      <Icon className="h-3.5 w-3.5 shrink-0" />
+      {action.label && <span>{action.label}</span>}
     </Button>
   );
 }
 
-export default function Toolbar({ navigation = [], actions = [], utilities = [] }: ToolbarProps) {
+export default function Toolbar({
+  navigation = [],
+  actions = [],
+  utilities = [],
+  className,
+}: ToolbarProps) {
+  const hasNavigation = navigation.length > 0;
+  const hasActions = actions.length > 0;
+  const hasUtilities = utilities.length > 0;
+
   return (
-    <div className="ring-border/50 dark:border-input/60 dark:bg-card bg-background border-foreground/10 mb-2 flex flex-wrap items-center justify-between gap-4 rounded-sm border p-3">
-      <div className="dark:border-input/60 flex items-center gap-1 border-r border-border/40 pr-4">
-        {navigation.map((item, idx) => (
-          <ToolbarButton
-            key={idx}
-            action={{
-              ...item,
-              variant: 'icon',
-            }}
-          />
-        ))}
+    <div
+      className={cn(
+        'bg-muted/40 border-border/60 mb-2 flex min-h-9 w-full items-center justify-between gap-1 rounded-sm border p-1 dark:bg-zinc-900/40',
+        className,
+      )}
+    >
+      {/* Left side: Navigation & Actions grouped together */}
+      <div className="flex items-center gap-1">
+        {hasNavigation && (
+          <div className="flex items-center gap-1">
+            {navigation.map((item, idx) => (
+              <ToolbarButton key={`nav-${idx}`} action={{ ...item, variant: 'icon' }} />
+            ))}
+          </div>
+        )}
+
+        {/* Separator between Nav and Actions */}
+        {hasNavigation && hasActions && (
+          <div className="bg-border mx-1 h-3.5 w-[1px]" aria-hidden="true" />
+        )}
+
+        {hasActions && (
+          <div className="flex items-center gap-1">
+            {actions.map((item, idx) => (
+              <ToolbarButton key={`act-${idx}`} action={item} />
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-wrap items-center gap-2">
-        {actions.map((item, idx) => (
-          <ToolbarButton key={idx} action={item} />
-        ))}
-      </div>
-
-      <div className="dark:border-input/60 flex items-center gap-2 border-l border-border/40 pl-4">
-        {utilities.map((item, idx) => (
-          <ToolbarButton
-            key={idx}
-            action={{
-              ...item,
-              variant: 'icon',
-            }}
-          />
-        ))}
-      </div>
+      {/* Right side: Utilities */}
+      {hasUtilities && (
+        <div className="flex items-center gap-1">
+          {/* Separator before Utilities if there's content on the left */}
+          {(hasNavigation || hasActions) && (
+            <div className="bg-border mx-1 h-3.5 w-[1px]" aria-hidden="true" />
+          )}
+          {utilities.map((item, idx) => (
+            <ToolbarButton key={`util-${idx}`} action={{ ...item, variant: 'icon' }} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

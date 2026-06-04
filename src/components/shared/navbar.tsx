@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { SelectDropDown } from './select-drop-down';
 import { useTranslation } from 'react-i18next';
 import { NAV_MENUS } from '@/constants/navbar.constant';
@@ -16,31 +17,32 @@ function Navbar() {
   const router = useRouter();
 
   return (
-    <div className="border-border/40 bg-background flex w-full flex-col border-b select-none">
-      <header className="bg-muted/30 border-border/30 flex h-9 items-center justify-between border-b px-6">
-        <div className="flex items-center gap-4">
+    <div className="border-border bg-background flex w-full flex-col border-b select-none">
+      {/* Meta Header */}
+      <header className="border-border/40 flex h-7 items-center justify-between border-b px-4">
+        <div className="flex items-center gap-3">
           <div
             className="group flex cursor-pointer items-center gap-2"
             onClick={() => router.push('/dashboard')}
           >
-            <div className="transition-transform duration-300 group-hover:scale-105">
+            <div className="transition-transform duration-200 group-hover:scale-102">
               <Image
                 src={LOCAL_IMAGE.APP_LOGO_TRANSPARENT}
                 alt="Tionix_Logo"
-                className="h-auto w-14 object-contain"
+                className="h-auto w-12 object-contain"
               />
             </div>
             <span className="text-foreground/90 text-xs font-semibold tracking-tight">
               Tionix One
             </span>
-            <span className="bg-muted/80 text-muted-foreground border-border/50 scale-90 rounded border px-1.5 py-0.5 font-mono text-[9px] tracking-tight">
+            <span className="bg-muted text-muted-foreground border-border/60 scale-95 rounded border px-1 py-0.5 font-mono text-[9px] leading-none tracking-tight">
               v2026.01
             </span>
           </div>
 
-          <span className="bg-border/60 h-3 w-px" />
+          <span className="bg-border/60 h-2.5 w-px" />
 
-          <p className="text-muted-foreground text-[11px] font-medium tracking-wide">
+          <p className="text-muted-foreground text-[10px] font-medium tracking-tight">
             {t('licensedTo')}:{' '}
             <span className="text-foreground/80 font-semibold">
               {t('FALCON MATERIAL HANDLING FZ LLC')}
@@ -49,29 +51,34 @@ function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="text-xxs inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-0.5 font-semibold tracking-wide text-emerald-600 dark:text-emerald-400">
-            <span className="relative flex h-1.5 w-1.5">
+          {/* System Live Indicator */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/10 bg-emerald-500/5 px-2 py-0.5 text-[10px] font-medium tracking-tight text-emerald-600 dark:text-emerald-400">
+            <span className="relative flex h-1 w-1">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+              <span className="relative inline-flex h-1 w-1 rounded-full bg-emerald-500"></span>
             </span>
             {t('systemLive')}
           </div>
+
           {mounted && (
-            <div className="scale-90 transition-opacity hover:opacity-80">
+            <div className="origin-right scale-85 opacity-90 transition-opacity hover:opacity-100">
               <ThemeSwitcher />
             </div>
           )}
         </div>
       </header>
 
-      <section className="flex h-12 items-center justify-between px-4">
+      {/* Main Bar */}
+      <section className="flex h-10 items-center justify-between px-3">
+        {/* Navigation Menus */}
         <nav className="flex items-center gap-0.5">
           {NAV_MENUS.map((menu) => (
             <NavbarMenu key={menu.key} label={t(menu.key)} items={menu.items} />
           ))}
         </nav>
 
-        <div className="flex items-center gap-2.5">
+        {/* Global Select Utilities */}
+        <div className="flex origin-right scale-95 items-center gap-1.5">
           <SelectDropDown
             label={t('language')}
             value={i18n.language}
@@ -89,22 +96,22 @@ function Navbar() {
           <SelectDropDown
             label={t('format')}
             value="pdf"
-            width="w-24"
+            width="w-20"
             options={[
               { label: 'PDF', value: 'pdf' },
               { label: 'Excel', value: 'excel' },
             ]}
-            selectContentClassName="w-28"
+            selectContentClassName="w-24"
           />
           <SelectDropDown
             label={t('financialYear')}
             value="2025/04 - 2026/03"
-            width="w-40"
+            width="w-36"
             options={[
               { label: '2025/04 - 2026/03', value: '2025/04 - 2026/03' },
               { label: '2024/04 - 2025/03', value: '2024/04 - 2025/03' },
             ]}
-            selectContentClassName="w-44"
+            selectContentClassName="w-40"
           />
         </div>
       </section>
