@@ -1,6 +1,5 @@
 'use client';
 
-import { TabItem } from '@/components/shared/dynamic-tabs';
 import Toolbar, { Action } from '@/components/shared/toolbar';
 import PermissionTable from '@/components/user-rights/permissions-table';
 import UserSelection from '@/components/user-rights/user-selection';
@@ -8,13 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   api,
@@ -34,10 +27,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   Edit3,
   Save,
   X,
@@ -200,52 +189,6 @@ export default function UserRightsPage() {
     setTab('masters');
   };
 
-  // Toolbar Navigation Indexing
-  const currentIndex = selectedUser
-    ? users.findIndex((u) => u.pk_user_id === selectedUser.pk_user_id)
-    : -1;
-
-  const handleFirst = () => {
-    if (users.length > 0) handleSelectUser(users[0]);
-  };
-  const handlePrevious = () => {
-    if (currentIndex > 0) handleSelectUser(users[currentIndex - 1]);
-  };
-  const handleNext = () => {
-    if (currentIndex >= 0 && currentIndex < users.length - 1)
-      handleSelectUser(users[currentIndex + 1]);
-  };
-  const handleLast = () => {
-    if (users.length > 0) handleSelectUser(users[users.length - 1]);
-  };
-
-  const dynamicNavigation: Action[] = [
-    {
-      icon: ChevronsLeft,
-      title: 'First',
-      onClick: handleFirst,
-      disabled: users.length === 0 || currentIndex === 0,
-    },
-    {
-      icon: ChevronLeft,
-      title: 'Previous',
-      onClick: handlePrevious,
-      disabled: currentIndex <= 0,
-    },
-    {
-      icon: ChevronRight,
-      title: 'Next',
-      onClick: handleNext,
-      disabled: currentIndex === -1 || currentIndex === users.length - 1,
-    },
-    {
-      icon: ChevronsRight,
-      title: 'Last',
-      onClick: handleLast,
-      disabled: users.length === 0 || currentIndex === users.length - 1,
-    },
-  ];
-
   const dynamicActions: Action[] = editable
     ? [
         {
@@ -341,7 +284,7 @@ export default function UserRightsPage() {
           />
         </div>
 
-        <div className="h-[calc(100vh-310px)] overflow-y-auto">
+        <div className="h-[calc(100vh-270px)] overflow-y-auto">
           <PermissionTable
             activeTab={tab}
             setActiveTab={setTab as any}
@@ -363,16 +306,14 @@ export default function UserRightsPage() {
             setDashboards={setDashboards}
             processes={processes}
             setProcesses={setProcesses}
-            className="p-4"
+            className="p-0"
           />
         </div>
       </div>
 
-      {/* Register New Form Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="bg-popover border-border/60 animate-in fade-in zoom-in text-foreground w-full max-w-2xl overflow-hidden rounded-sm border shadow-md duration-200">
-            {/* Modal Header */}
             <div className="bg-muted border-border flex items-center justify-between border-b px-6 py-4">
               <h3 className="flex items-center gap-2 text-lg font-semibold">
                 <Plus className="text-primary h-4 w-4" />
@@ -383,7 +324,6 @@ export default function UserRightsPage() {
               </Button>
             </div>
 
-            {/* Modal Body / Form */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();

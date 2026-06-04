@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, startTransition } from 'react';
 import PermissionTabs from './permission-tabs';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -97,9 +97,14 @@ export default function PermissionTable({
   setProcesses,
   className,
 }: PermissionTableProps) {
+  const [localActiveTab, setLocalActiveTab] = useState<TabId>(activeTab);
   const [branchInput, setBranchInput] = useState('');
   const [dashboardInput, setDashboardInput] = useState('');
   const [processInput, setProcessInput] = useState('');
+
+  useEffect(() => {
+    setLocalActiveTab(activeTab);
+  }, [activeTab]);
 
   // ── Handlers for simple lists ───────────────────────────────────────────────
   const addBranch = () => {
@@ -168,21 +173,20 @@ export default function PermissionTable({
   return (
     <div
       className={cn(
-        'border-border bg-card dark:border-input/70 dark:bg-card flex h-full max-h-full min-h-0 flex-col overflow-hidden rounded-sm border shadow-sm',
+        'border-border bg-card dark:border-input/70 dark:bg-card flex h-full max-h-full min-h-0 flex-col overflow-hidden rounded-sm border',
         className,
       )}
     >
       <PermissionTabs
         tabs={TABS.map((t) => t.label)}
-        activeTab={TABS.find((t) => t.id === activeTab)?.label || 'Masters'}
+        activeTab={TABS.find((t) => t.id === localActiveTab)?.label || 'Masters'}
         setActiveTab={(lbl) => {
           const t = TABS.find((t) => t.label === lbl);
           if (t) setActiveTab(t.id);
         }}
       />
 
-      <div className="min-h-0 flex-1 overflow-x-auto overflow-y-auto p-4">
-        {/* ── MASTERS / TRANSACTIONS ── */}
+      <div className="min-h-0 flex-1 overflow-x-auto overflow-y-auto px-4 py-0">
         {(activeTab === 'masters' || activeTab === 'transactions') && (
           <div className="max-h-full overflow-auto">
             <Table className="min-w-full border-separate border-spacing-0 text-left">
@@ -495,7 +499,7 @@ export default function PermissionTable({
               {branches?.map((b, idx) => (
                 <span
                   key={idx}
-                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium shadow-sm transition-all"
+                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                 >
                   Set ID: <strong>{b.fkSetId}</strong>
                   {editable && (
@@ -537,7 +541,7 @@ export default function PermissionTable({
               {dashboards?.map((d, idx) => (
                 <span
                   key={idx}
-                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium shadow-sm transition-all"
+                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                 >
                   Dashboard: <strong>#{d.Id}</strong>
                   {editable && (
@@ -579,7 +583,7 @@ export default function PermissionTable({
               {processes?.map((p, idx) => (
                 <span
                   key={idx}
-                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium shadow-sm transition-all"
+                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                 >
                   Prod ID: <strong>{p.fkProdId}</strong>
                   {editable && (
