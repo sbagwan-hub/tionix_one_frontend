@@ -16,7 +16,7 @@ import {
 import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
-import { LucideIcon } from '@/components/shared/lucide-icon'; // Imported your new component
+import { LucideIcon } from '@/components/shared/lucide-icon';
 
 export interface MenuItem {
   key?: string;
@@ -25,7 +25,7 @@ export interface MenuItem {
   children?: MenuItem[];
   href?: string;
   action?: () => void;
-  icon?: string; // Extended to accept the dynamic icon string name
+  icon?: string;
 }
 
 interface NavbarMenuProps {
@@ -50,7 +50,7 @@ function RenderMenuItems({ items }: { items: MenuItem[] }) {
       {items.map((item, idx) => {
         // --- Separator ---
         if (item.separator) {
-          return <DropdownMenuSeparator key={`sep-${idx}`} className="bg-border/40 my-1" />;
+          return <DropdownMenuSeparator key={`sep-${idx}`} className="bg-border/60 my-1" />;
         }
 
         const hasChildren = !!item.children?.length;
@@ -63,19 +63,21 @@ function RenderMenuItems({ items }: { items: MenuItem[] }) {
               <DropdownMenuSubTrigger
                 className={cn(
                   'text-foreground flex cursor-default items-center rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none select-none',
-                  'focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+                  'focus:bg-muted focus:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground',
                 )}
               >
                 <div className="flex items-center gap-2">
-                  {item.icon && <LucideIcon name={item.icon} className="h-3.5 w-3.5 opacity-60" />}
+                  {item.icon && (
+                    <LucideIcon name={item.icon} className="text-muted-foreground h-3.5 w-3.5" />
+                  )}
                   <span>{displayLabel}</span>
                 </div>
-                <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-50" />
+                <ChevronRight className="text-muted-foreground/70 ml-auto h-3.5 w-3.5" />
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent
                   className={cn(
-                    'border-border/40 bg-popover text-popover-foreground min-w-[14rem] rounded-md border p-1 shadow-none',
+                    'border-border bg-popover text-popover-foreground min-w-[14rem] rounded-md border p-1 shadow-none',
                     'animate-in fade-in-50 slide-in-from-left-1 duration-100',
                   )}
                 >
@@ -93,15 +95,17 @@ function RenderMenuItems({ items }: { items: MenuItem[] }) {
             onClick={() => handleClick(item)}
             className={cn(
               'text-foreground flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none select-none',
-              'focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
+              'focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
             )}
           >
             <div className="flex items-center gap-2">
-              {item.icon && <LucideIcon name={item.icon} className="h-3.5 w-3.5 opacity-60" />}
+              {item.icon && (
+                <LucideIcon name={item.icon} className="text-muted-foreground h-3.5 w-3.5" />
+              )}
               <span>{displayLabel}</span>
             </div>
             {item.shortcut && (
-              <kbd className="bg-muted/60 text-foreground/80 pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium tracking-wider select-none">
+              <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium tracking-wider select-none">
                 {item.shortcut}
               </kbd>
             )}
@@ -117,19 +121,19 @@ export function NavbarMenu({ label, items }: NavbarMenuProps) {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         className={cn(
-          'text-foreground inline-flex h-9 items-center justify-center rounded-md bg-transparent px-4 py-2 text-xs font-medium transition-colors outline-none select-none',
-          'hover:bg-accent/40 hover:text-foreground',
-          'data-[state=open]:bg-accent/50 data-[state=open]:text-foreground',
-          'focus:bg-accent/40 focus:text-foreground cursor-pointer',
+          'text-foreground inline-flex h-8 items-center justify-center rounded-md bg-transparent px-3 text-xs font-medium transition-colors outline-none select-none',
+          'hover:bg-muted/60 hover:text-foreground',
+          'data-[state=open]:bg-muted data-[state=open]:text-foreground',
+          'focus:bg-muted/60 focus:text-foreground cursor-pointer',
         )}
       >
         {label}
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        sideOffset={4}
+        sideOffset={6}
         className={cn(
-          'border-border/40 bg-popover text-popover-foreground min-w-[16rem] rounded-md border p-1 shadow-none',
+          'border-border bg-popover text-popover-foreground min-w-[16rem] rounded-md border p-1 shadow-none',
           'animate-in fade-in-50 slide-in-from-top-1 duration-150',
         )}
       >

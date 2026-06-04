@@ -70,7 +70,7 @@ export default function Toolbar({
   return (
     <div
       className={cn(
-        'bg-muted/40 border-border/60 mb-2 flex min-h-9 w-full items-center justify-between gap-1 rounded-md border p-1 dark:bg-zinc-900/40',
+        'bg-muted/40 border-border/60 mb-2 flex min-h-9 w-full items-center justify-between gap-1 rounded-sm border p-1 dark:bg-zinc-900/40',
         className,
       )}
     >
