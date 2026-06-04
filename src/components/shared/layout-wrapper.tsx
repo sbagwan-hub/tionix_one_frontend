@@ -7,11 +7,7 @@ import Footer from './footer';
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAuth =
-    pathname === '/log_in' ||
-    pathname === '/login' ||
-    pathname === '/sign_up' ||
-    pathname?.startsWith('/auth/');
+  const isAuth = pathname?.startsWith('/auth/');
 
   return (
     <>
