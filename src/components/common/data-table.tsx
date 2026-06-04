@@ -14,8 +14,9 @@ import { cn } from '@/lib/utils';
 
 export interface ColumnDef<T> {
   key: string;
-  header: React.ReactNode;
-  render?: (row: T, index: number) => React.ReactNode;
+  header?: React.ReactNode;
+  label?: string;
+  render?: (value: any, row: T) => React.ReactNode;
   className?: string;
 }
 
@@ -56,7 +57,7 @@ export function DataTable<T>({
                   col.className,
                 )}
               >
-                {col.header}
+                {col.header ?? col.label}
               </TableHead>
             ))}
           </TableRow>
@@ -100,7 +101,7 @@ export function DataTable<T>({
                     key={col.key}
                     className={cn('text-foreground/90 py-3.5 text-xs font-medium', col.className)}
                   >
-                    {col.render ? col.render(row, rowIndex) : (row as any)[col.key]}
+                    {col.render ? col.render((row as any)[col.key], row) : (row as any)[col.key]}
                   </TableCell>
                 ))}
               </TableRow>

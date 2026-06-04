@@ -1,5 +1,3 @@
-import axiosClient from './axios';
-
 export interface UserListItem {
   pk_user_id: number;
   username: string;
@@ -53,12 +51,15 @@ export interface SpecialRow {
   Form: string;
   Rights: boolean;
 }
+
 export interface BranchRow {
   fkSetId: number;
 }
+
 export interface DashboardRow {
   Id: number;
 }
+
 export interface ProcessRow {
   fkProdId: string;
 }
@@ -102,8 +103,7 @@ export interface CreateNewFormIn {
   news?: boolean | null | undefined;
 }
 
-// ── Default / empty row factories ─────────────────────────────────────────────
-
+// Default / empty row factories
 export const emptyRightRow = (overrides?: Partial<FormRightRow>): FormRightRow => ({
   form_name: '',
   module_name: '',
@@ -156,27 +156,3 @@ export const emptySavePayload = (userId: number, operatorId: number): SaveUserRi
   dashboards: [],
   processes: [],
 });
-
-// ── Endpoints ─────────────────────────────────────────────────────────────────
-
-export const api = {
-  listUsers: async (): Promise<UserListItem[]> => {
-    const res = await axiosClient.get<{ data: UserListItem[] }>('/user-rights/users');
-    return res.data.data;
-  },
-
-  getUserRights: async (userId: number): Promise<UserRightsOut> => {
-    const res = await axiosClient.get<{ data: UserRightsOut }>(
-      `/user-rights/users/${userId}/rights`,
-    );
-    return res.data.data;
-  },
-
-  saveUserRights: async (payload: SaveUserRightsIn): Promise<void> => {
-    await axiosClient.post('/user-rights/users/rights', payload);
-  },
-
-  createNewForm: async (payload: CreateNewFormIn): Promise<void> => {
-    await axiosClient.post('/user-rights/forms', payload);
-  },
-};

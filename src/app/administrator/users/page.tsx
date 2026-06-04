@@ -3,14 +3,8 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { FormInput } from '@/components/common/form-input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   User,
   Lock,
@@ -170,36 +164,6 @@ const LOCALES = {
   },
 };
 
-// Reusable field row component
-function FieldRow({
-  label,
-  icon: Icon,
-  error,
-  children,
-}: {
-  label: string;
-  icon: React.ElementType;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-        {label}
-      </Label>
-      <div className="relative">
-        <div className="text-muted-foreground absolute top-1/2 -translate-y-1/2 flex items-center px-3 z-10 pointer-events-none">
-          <Icon className="h-4 w-4" />
-        </div>
-        {children}
-      </div>
-      {error && (
-        <span className="text-destructive text-[10px] font-medium">{error}</span>
-      )}
-    </div>
-  );
-}
-
 export default function AdministratorUsersPage() {
   const router = useRouter();
   const { i18n } = useTranslation();
@@ -224,7 +188,7 @@ export default function AdministratorUsersPage() {
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
@@ -232,43 +196,45 @@ export default function AdministratorUsersPage() {
     setTimeout(() => setIsLoading(false), 1000);
   };
 
-  const inputCls = (hasError?: boolean, extraPad?: string) =>
-    `rounded-sm bg-background/50 h-9 transition-all focus:bg-background text-sm ${isRtl ? `pr-9 ${extraPad ?? 'pl-3'}` : `pl-9 ${extraPad ?? 'pr-3'}`
-    } ${hasError ? 'border-destructive ring-destructive/20' : ''}`;
-
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-center select-none gap-2"
+      className="flex h-full w-full flex-col items-center justify-center gap-2 select-none"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* ── Action Toolbar (above card) ── */}
       <div className="w-full">
         <Toolbar
           actions={[
-            { icon: Plus,      label: t.add,     variant: 'secondary' },
-            { icon: Edit,      label: t.edit,    variant: 'secondary' },
-            { icon: Trash2,    label: t.delete,  variant: 'secondary' },
-            { icon: RotateCcw, label: t.undo,    variant: 'secondary' },
-            { icon: isLoading ? RefreshCw : Save, label: t.save, variant: 'primary', onClick: handleSave, disabled: isLoading },
+            { icon: Plus, label: t.add, variant: 'secondary' },
+            { icon: Edit, label: t.edit, variant: 'secondary' },
+            { icon: Trash2, label: t.delete, variant: 'secondary' },
+            { icon: RotateCcw, label: t.undo, variant: 'secondary' },
+            {
+              icon: isLoading ? RefreshCw : Save,
+              label: t.save,
+              variant: 'primary',
+              onClick: handleSave,
+              disabled: isLoading,
+            },
           ]}
           utilities={[
             { icon: RefreshCw, title: t.refresh },
-            { icon: Printer,   title: t.print },
-            { icon: Download,  title: t.export },
-            { icon: Help,      title: t.help },
-            { icon: LogOut,    title: t.exit, onClick: () => router.push('/administrator') },
+            { icon: Printer, title: t.print },
+            { icon: Download, title: t.export },
+            { icon: Help, title: t.help },
+            { icon: LogOut, title: t.exit, onClick: () => router.push('/administrator') },
           ]}
         />
       </div>
-      <div className="border-border/60 bg-card text-card-foreground relative w-full overflow-hidden border rounded-sm flex flex-col">
+      <div className="border-border/60 bg-card text-card-foreground relative flex w-full flex-col overflow-hidden rounded-sm border">
         {/* Glow Effects */}
-        <div className="from-brand/15 to-transparent pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial blur-3xl opacity-30" />
-        <div className="from-brand/10 to-transparent pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[300px] rounded-full bg-radial blur-3xl opacity-20" />
+        <div className="from-brand/15 pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-30 blur-3xl" />
+        <div className="from-brand/10 pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-20 blur-3xl" />
 
         {/* ── Header ── */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border/50 relative z-10">
+        <div className="border-border/50 relative z-10 flex items-center justify-between border-b px-6 py-4">
           <div className="flex items-center gap-3">
-            <span className="text-brand border-brand/20 bg-brand/10 text-xxs font-mono rounded-sm border px-2 py-0.5 font-semibold tracking-wider uppercase">
+            <span className="text-brand border-brand/20 bg-brand/10 text-xxs rounded-sm border px-2 py-0.5 font-mono font-semibold tracking-wider uppercase">
               {t.payrollHR}
             </span>
             <div className="flex items-center gap-1">
@@ -289,143 +255,150 @@ export default function AdministratorUsersPage() {
           </div>
         </div>
 
-
-
         {/* ── Tabs + Form ── */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 relative z-10">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="relative z-10 flex-1">
           <div className="px-6 pt-4">
-            <TabsList className="rounded-sm h-8 p-0.5">
-              <TabsTrigger value="user" className="text-xs h-full rounded-[2px] px-5">
+            <TabsList className="h-8 rounded-sm p-0.5">
+              <TabsTrigger value="user" className="h-full rounded-[2px] px-5 text-xs">
                 {t.user}
               </TabsTrigger>
-              <TabsTrigger value="list" className="text-xs h-full rounded-[2px] px-5">
+              <TabsTrigger value="list" className="h-full rounded-[2px] px-5 text-xs">
                 {t.userList}
               </TabsTrigger>
             </TabsList>
           </div>
 
           {/* User Form Tab */}
-          <TabsContent value="user" className="m-0 px-6 pb-4 pt-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-
+          <TabsContent value="user" className="m-0 px-6 pt-5 pb-4">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
               {/* ── Column 1 ── */}
               {/* USERNAME */}
-              <FieldRow label={t.username} icon={User}>
-                <Input
-                  className={inputCls()}
-                  value={formData.username}
-                  onChange={e => handleInputChange('username', e.target.value)}
-                  placeholder={t.usernamePlaceholder}
-                />
-              </FieldRow>
+              <FormInput
+                label={t.username}
+                icon={User}
+                value={formData.username}
+                onChange={(e) => handleInputChange('username', e.target.value)}
+                placeholder={t.usernamePlaceholder}
+                className="h-9 rounded-sm"
+              />
 
               {/* PASSWORD */}
-              <FieldRow label={t.password} icon={Lock}>
-                <Input
+              <div className="relative">
+                <FormInput
+                  label={t.password}
+                  icon={Lock}
                   type={showPassword ? 'text' : 'password'}
-                  className={inputCls(false, isRtl ? 'pl-9' : 'pr-9')}
                   value={formData.password}
-                  onChange={e => handleInputChange('password', e.target.value)}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
                   placeholder={t.passwordPlaceholder}
+                  className="h-9 rounded-sm"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(v => !v)}
-                  className={`text-muted-foreground hover:text-foreground absolute top-1/2 -translate-y-1/2 transition-colors cursor-pointer ${isRtl ? 'left-3' : 'right-3'}`}
+                  onClick={() => setShowPassword((v) => !v)}
+                  className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
+                    isRtl ? 'left-3' : 'right-3'
+                  }`}
+                  style={{ top: 'calc(50% + 8px)', transform: 'translateY(-50%)' }}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
-              </FieldRow>
+              </div>
 
               {/* CONFIRM PASSWORD */}
-              <FieldRow label={t.confirmPassword} icon={Lock}>
-                <Input
+              <div className="relative">
+                <FormInput
+                  label={t.confirmPassword}
+                  icon={Lock}
                   type={showConfirmPassword ? 'text' : 'password'}
-                  className={inputCls(false, isRtl ? 'pl-9' : 'pr-9')}
                   value={formData.confirmPassword}
-                  onChange={e => handleInputChange('confirmPassword', e.target.value)}
+                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                   placeholder={t.confirmPlaceholder}
+                  className="h-9 rounded-sm"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(v => !v)}
-                  className={`text-muted-foreground hover:text-foreground absolute top-1/2 -translate-y-1/2 transition-colors cursor-pointer ${isRtl ? 'left-3' : 'right-3'}`}
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
+                    isRtl ? 'left-3' : 'right-3'
+                  }`}
+                  style={{ top: 'calc(50% + 8px)', transform: 'translateY(-50%)' }}
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
-              </FieldRow>
-
-
+              </div>
 
               {/* ── Column 2 ── */}
               {/* QUESTION */}
-              <FieldRow label={t.question} icon={HelpCircle}>
-                <Input
-                  className={inputCls()}
-                  value={formData.question}
-                  onChange={e => handleInputChange('question', e.target.value)}
-                />
-              </FieldRow>
+              <FormInput
+                label={t.question}
+                icon={HelpCircle}
+                value={formData.question}
+                onChange={(e) => handleInputChange('question', e.target.value)}
+                className="h-9 rounded-sm"
+              />
 
               {/* ANSWER */}
-              <FieldRow label={t.answer} icon={HelpCircle}>
-                <Input
-                  className={inputCls()}
-                  value={formData.answer}
-                  onChange={e => handleInputChange('answer', e.target.value)}
-                  placeholder={t.answerPlaceholder}
-                />
-              </FieldRow>
+              <FormInput
+                label={t.answer}
+                icon={HelpCircle}
+                value={formData.answer}
+                onChange={(e) => handleInputChange('answer', e.target.value)}
+                placeholder={t.answerPlaceholder}
+                className="h-9 rounded-sm"
+              />
 
               {/* EMPLOYEE */}
-              <FieldRow label={t.employee} icon={User}>
-                <Input
-                  className={inputCls()}
-                  value={formData.employee}
-                  onChange={e => handleInputChange('employee', e.target.value)}
-                  placeholder={t.employeePlaceholder}
-                />
-              </FieldRow>
+              <FormInput
+                label={t.employee}
+                icon={User}
+                value={formData.employee}
+                onChange={(e) => handleInputChange('employee', e.target.value)}
+                placeholder={t.employeePlaceholder}
+                className="h-9 rounded-sm"
+              />
 
               {/* EMAIL */}
-              <FieldRow label={t.email} icon={Mail}>
-                <Input
-                  type="email"
-                  className={inputCls()}
-                  value={formData.email}
-                  onChange={e => handleInputChange('email', e.target.value)}
-                  placeholder={t.emailPlaceholder}
-                />
-              </FieldRow>
+              <FormInput
+                label={t.email}
+                icon={Mail}
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder={t.emailPlaceholder}
+                className="h-9 rounded-sm"
+              />
 
               {/* MOBILE */}
-              <FieldRow label={t.mobile} icon={Phone}>
-                <Input
-                  className={inputCls()}
-                  value={formData.mobile}
-                  onChange={e => handleInputChange('mobile', e.target.value)}
-                  placeholder={t.mobilePlaceholder}
-                />
-              </FieldRow>
+              <FormInput
+                label={t.mobile}
+                icon={Phone}
+                value={formData.mobile}
+                onChange={(e) => handleInputChange('mobile', e.target.value)}
+                placeholder={t.mobilePlaceholder}
+                className="h-9 rounded-sm"
+              />
             </div>
           </TabsContent>
 
           {/* User List Tab */}
-          <TabsContent value="list" className="m-0 px-6 pb-4 pt-5">
-            <div className="flex flex-col items-center justify-center h-64 border border-dashed border-border/60 rounded-sm text-muted-foreground gap-3">
+          <TabsContent value="list" className="m-0 px-6 pt-5 pb-4">
+            <div className="border-border/60 text-muted-foreground flex h-64 flex-col items-center justify-center gap-3 rounded-sm border border-dashed">
               <User className="h-10 w-10 opacity-25" />
               <p className="text-sm">User list will be displayed here</p>
             </div>
           </TabsContent>
         </Tabs>
 
-
-
-
         {/* ── Footer ── */}
-        <div className="border-t border-border/30 px-6 py-2.5 text-center relative z-10">
+        <div className="border-border/30 relative z-10 border-t px-6 py-2.5 text-center">
           <p className="text-muted-foreground/40 text-[9px] leading-relaxed">
-            Authorized access only. All connection attempts, sessions, and activity logs are tracked for security audits.
+            Authorized access only. All connection attempts, sessions, and activity logs are tracked
+            for security audits.
           </p>
         </div>
       </div>

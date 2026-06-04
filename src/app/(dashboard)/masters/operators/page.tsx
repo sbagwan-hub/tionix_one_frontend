@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/common/DataTable';
-import { FormHeader } from '@/components/common/FormHeader';
+import { DataTable } from '@/components/common/data-table';
+import { FormHeader } from '@/components/common/form-header';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 
 // Sample data
@@ -62,9 +62,9 @@ export default function OperatorsPage() {
       key: 'certifications',
       label: 'Certifications',
       render: (value: string[]) => (
-        <div className="flex gap-1 flex-wrap">
+        <div className="flex flex-wrap gap-1">
           {value.map((cert, index) => (
-            <span key={index} className="px-2 py-1 text-xs rounded bg-gray-100 text-gray-800">
+            <span key={index} className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-800">
               {cert}
             </span>
           ))}
@@ -75,9 +75,11 @@ export default function OperatorsPage() {
       key: 'isActive',
       label: 'Status',
       render: (value: boolean) => (
-        <span className={`px-2 py-1 text-xs rounded-full ${
-          value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`}>
+        <span
+          className={`rounded-full px-2 py-1 text-xs ${
+            value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          }`}
+        >
           {value ? 'Active' : 'Inactive'}
         </span>
       ),
@@ -105,20 +107,16 @@ export default function OperatorsPage() {
     <div className="p-6">
       <FormHeader
         title="Operators"
-        subtitle="Manage operator profiles and assignments"
+        description="Manage operator profiles and assignments"
         actions={
           <Button>
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Add Operator
           </Button>
         }
       />
-      
-      <DataTable
-        data={sampleOperators}
-        columns={columns}
-        className="mt-6"
-      />
+
+      <DataTable data={sampleOperators} columns={columns} className="mt-6" />
     </div>
   );
 }

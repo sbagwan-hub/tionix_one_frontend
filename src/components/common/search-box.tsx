@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Search, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { FormInput } from '@/components/common/form-input';
 import { useDebounce } from '@/hooks/use-debounce';
 
 interface SearchBoxProps {
@@ -38,19 +38,19 @@ export function SearchBox({
 
   return (
     <div className={`relative flex items-center ${className}`}>
-      <Search className="text-muted-foreground absolute left-2.5 h-4 w-4" />
-      <Input
+      <FormInput
         type="text"
         placeholder={placeholder}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="bg-background border-input pr-8 pl-9"
+        icon={Search}
+        containerClassName="w-full"
       />
       {searchTerm && (
         <button
           type="button"
           onClick={handleClear}
-          className="text-muted-foreground hover:text-foreground absolute right-2.5 rounded-full p-0.5 outline-hidden"
+          className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2.5 z-20 -translate-y-1/2 rounded-full p-0.5 outline-hidden"
         >
           <X className="h-3.5 w-3.5" />
           <span className="sr-only">Clear</span>
