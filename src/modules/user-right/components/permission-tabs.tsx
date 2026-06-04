@@ -10,12 +10,7 @@ interface PermissionTabsProps {
   className?: string;
 }
 
-export default function PermissionTabs({
-  tabs,
-  activeTab,
-  setActiveTab,
-  className,
-}: PermissionTabsProps) {
+const PermissionTabs = ({ tabs, activeTab, setActiveTab, className }: PermissionTabsProps) => {
   return (
     <div
       className={cn(
@@ -44,4 +39,6 @@ export default function PermissionTabs({
       })}
     </div>
   );
-}
+};
+
+export default React.memo(PermissionTabs);

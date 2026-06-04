@@ -27,7 +27,7 @@ import {
   useCreateForm,
 } from '@/modules/user-right/hooks/use-user-rights';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Edit3,
@@ -72,7 +72,7 @@ export default function UserRightsPage() {
     }
   };
 
-  const mark = () => setDirty(true);
+  const mark = useCallback(() => setDirty(true), []);
 
   // Load users list
   const { data: usersData } = useUsersList();

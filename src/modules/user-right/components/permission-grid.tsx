@@ -23,31 +23,29 @@ export const COL_LABELS: Record<string, string> = {
 };
 
 interface PermissionGridProps<T extends Record<string, any>> {
-  activeTab: string;
-  targetTab: string;
   rows: T[];
   setRows: (rows: T[]) => void;
   cols: readonly (keyof T & string)[];
   colLabels: Record<string, string>;
   hasAuth?: boolean;
+  isReport?: boolean;
   editable: boolean;
   markDirty: () => void;
   emptyText: string;
 }
 
 function PermissionGridInner<T extends Record<string, any>>({
-  activeTab,
-  targetTab,
   rows,
   setRows,
   cols,
   colLabels,
   hasAuth = false,
+  isReport = false,
   editable,
   markDirty,
   emptyText,
 }: PermissionGridProps<T>) {
-  const getGroups = (data: T[]) => {
+  const getGroups = React.useCallback((data: T[]) => {
     const grps: { cap: string; items: { r: T; idx: number }[] }[] = [];
     data?.forEach((r, i) => {
       const cap = r.module_caption || r.module_name || 'General';
@@ -59,7 +57,9 @@ function PermissionGridInner<T extends Record<string, any>>({
       g.items.push({ r, idx: i });
     });
     return grps;
-  };
+  }, []);
+
+  const groups = React.useMemo(() => getGroups(rows), [rows, getGroups]);
 
   const handleToggle = (idx: number, col: keyof T & string, checked: boolean) => {
     setRows(rows.map((row, i) => (i === idx ? { ...row, [col]: checked } : row)));
@@ -67,12 +67,12 @@ function PermissionGridInner<T extends Record<string, any>>({
   };
 
   return (
-    <div className={cn('max-h-full overflow-auto', activeTab !== targetTab && 'hidden')}>
+    <div className="max-h-full overflow-auto">
       <Table className="min-w-full border-separate border-spacing-0 text-left">
         <TableHeader>
           <TableRow className="border-border bg-muted/50 dark:bg-muted/20 sticky top-0 z-10 border-b">
             <TableHead className="text-muted-foreground bg-card w-2/5 p-3 text-left text-xs font-semibold tracking-[0.14em] uppercase">
-              {targetTab === 'reports' ? 'Report Form Title' : 'Form Title / Functional Module'}
+              {isReport ? 'Report Form Title' : 'Form Title / Functional Module'}
             </TableHead>
             {cols.map((col) => (
               <TableHead
@@ -90,7 +90,7 @@ function PermissionGridInner<T extends Record<string, any>>({
           </TableRow>
         </TableHeader>
         <TableBody className="divide-border divide-y">
-          {getGroups(rows).map((group) => (
+          {groups.map((group) => (
             <React.Fragment key={group.cap}>
               <TableRow className="bg-muted/30 hover:bg-muted/30 border-none">
                 <TableCell

@@ -69,6 +69,13 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'others', label: 'Others' },
 ];
 
+const TAB_LABELS = TABS.map((t) => t.label);
+
+const MASTERS_COLS = ['add', 'edit', 'delete', 'view', 'print', 'export'] as const;
+const TRANSACTIONS_COLS = ['add', 'edit', 'delete', 'view', 'print', 'export'] as const;
+const REPORTS_COLS = ['view', 'print', 'export'] as const;
+const OTHERS_COLS = ['rights'] as const;
+
 export default function PermissionTable({
   activeTab,
   setActiveTab,
@@ -158,7 +165,7 @@ export default function PermissionTable({
       )}
     >
       <PermissionTabs
-        tabs={TABS.map((t) => t.label)}
+        tabs={TAB_LABELS}
         activeTab={TABS.find((t) => t.id === localActiveTab)?.label || 'Masters'}
         setActiveTab={(lbl) => {
           const t = TABS.find((t) => t.label === lbl);
@@ -177,54 +184,55 @@ export default function PermissionTable({
           </div>
         ) : (
           <>
-            <PermissionGrid
-              activeTab={activeTab}
-              targetTab="masters"
-              rows={masters}
-              setRows={setMasters}
-              cols={['add', 'edit', 'delete', 'view', 'print', 'export'] as const}
-              colLabels={COL_LABELS}
-              editable={editable}
-              markDirty={markDirty}
-              emptyText="No modules loaded for this user."
-            />
+            <div className={cn(activeTab !== 'masters' && 'hidden')}>
+              <PermissionGrid
+                rows={masters}
+                setRows={setMasters}
+                cols={MASTERS_COLS}
+                colLabels={COL_LABELS}
+                editable={editable}
+                markDirty={markDirty}
+                emptyText="No modules loaded for this user."
+              />
+            </div>
 
-            <PermissionGrid
-              activeTab={activeTab}
-              targetTab="transactions"
-              rows={transactions}
-              setRows={setTransactions}
-              cols={['add', 'edit', 'delete', 'view', 'print', 'export'] as const}
-              colLabels={COL_LABELS}
-              hasAuth={true}
-              editable={editable}
-              markDirty={markDirty}
-              emptyText="No modules loaded for this user."
-            />
+            <div className={cn(activeTab !== 'transactions' && 'hidden')}>
+              <PermissionGrid
+                rows={transactions}
+                setRows={setTransactions}
+                cols={TRANSACTIONS_COLS}
+                colLabels={COL_LABELS}
+                hasAuth={true}
+                editable={editable}
+                markDirty={markDirty}
+                emptyText="No modules loaded for this user."
+              />
+            </div>
 
-            <PermissionGrid
-              activeTab={activeTab}
-              targetTab="reports"
-              rows={reports}
-              setRows={setReports}
-              cols={['view', 'print', 'export'] as const}
-              colLabels={COL_LABELS}
-              editable={editable}
-              markDirty={markDirty}
-              emptyText="No reports found."
-            />
+            <div className={cn(activeTab !== 'reports' && 'hidden')}>
+              <PermissionGrid
+                rows={reports}
+                setRows={setReports}
+                cols={REPORTS_COLS}
+                colLabels={COL_LABELS}
+                isReport={true}
+                editable={editable}
+                markDirty={markDirty}
+                emptyText="No reports found."
+              />
+            </div>
 
-            <PermissionGrid
-              activeTab={activeTab}
-              targetTab="others"
-              rows={others}
-              setRows={setOthers}
-              cols={['rights'] as const}
-              colLabels={COL_LABELS}
-              editable={editable}
-              markDirty={markDirty}
-              emptyText="No other forms found."
-            />
+            <div className={cn(activeTab !== 'others' && 'hidden')}>
+              <PermissionGrid
+                rows={others}
+                setRows={setOthers}
+                cols={OTHERS_COLS}
+                colLabels={COL_LABELS}
+                editable={editable}
+                markDirty={markDirty}
+                emptyText="No other forms found."
+              />
+            </div>
 
             <div className={cn(activeTab !== 'specials' && 'hidden')}>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
