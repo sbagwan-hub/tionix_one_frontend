@@ -159,6 +159,9 @@ export default function LoginPage() {
       // Update auth store (this will also set localStorage)
       login(user, token);
       
+      // Set cookie for Next.js middleware to read
+      document.cookie = `access_token=${token}; path=/; max-age=86400`;
+      
       // Store selected book
       localStorage.setItem('selected_book', bookName);
       

@@ -53,17 +53,19 @@ export default function HrmsToolbar({
 }: HrmsToolbarProps) {
   return (
     <div className={cn(hrmsCardClassName, 'flex flex-wrap items-center justify-between gap-4 p-3')}>
-      <div className="border-border flex items-center gap-1 border-r pr-4">
-        {navigation.map((item, idx) => (
-          <HrmsToolbarButton
-            key={idx}
-            action={{
-              ...item,
-              variant: 'icon',
-            }}
-          />
-        ))}
-      </div>
+      {navigation.length > 0 && (
+        <div className="border-border flex items-center gap-1 border-r pr-4">
+          {navigation.map((item, idx) => (
+            <HrmsToolbarButton
+              key={idx}
+              action={{
+                ...item,
+                variant: 'icon',
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="flex flex-1 flex-wrap items-center gap-2">
         {actions.map((item, idx) => (

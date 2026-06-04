@@ -152,7 +152,6 @@ export default function HrmsDashboardPage() {
         </div>
 
         <HrmsToolbar
-          navigation={hrmsNavigationToolbar}
           actions={actionToolbar}
           utilities={hrmsUtilityToolbar}
         />
