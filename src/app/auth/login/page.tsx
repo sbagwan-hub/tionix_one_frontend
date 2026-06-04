@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '@/stores/auth-store';
+import { useBooks } from '@/modules/auth/hooks/use-books';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -106,13 +108,17 @@ const LOCALES = {
 export default function LoginPage() {
   const router = useRouter();
   const { i18n } = useTranslation();
+  const login = useAuthStore((state) => state.login);
   const lang = (i18n.language as 'en' | 'ar' | 'hi') || 'en';
   const t = LOCALES[lang] || LOCALES.en;
   const isRtl = lang === 'ar';
-
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [bookName, setBookName] = React.useState('');
+  
+  // Fetch books from API
+  const { data: booksResponse, isLoading: isLoadingBooks } = useBooks();
+  const booksList = booksResponse?.data || [];
   const [rememberMe, setRememberMe] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -145,17 +151,42 @@ export default function LoginPage() {
     if (!handleValidation()) return;
 
     setIsLoading(true);
-    // Simulate server communication latency
-    setTimeout(() => {
+    
+    try {
+      // Simulate server communication latency
+      await new Promise(resolve => setTimeout(resolve, 1200));
+      
+      // Create user object for auth store
+      const user = {
+        id: '1',
+        username: username,
+        email: username.includes('@') ? username : `${username}@tionix.com`,
+        role: 'admin'
+      };
+      
+      const token = 'tionix_dummy_access_token';
+      
+      // Update auth store (this will also set localStorage)
+      login(user, token);
+      
+      // Set cookie for Next.js middleware to read
+      document.cookie = `access_token=${token}; path=/; max-age=86400`;
+      
+      // Store selected book
+      localStorage.setItem('selected_book', bookName);
+      
       setIsLoading(false);
       setLoginSuccess(true);
-      localStorage.setItem('access_token', 'tionix_dummy_access_token');
-      localStorage.setItem('selected_book', bookName);
-      // Elegant redirect
+      
+      // Use Next.js router for proper navigation
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        router.push('/dashboard');
       }, 800);
-    }, 1200);
+      
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Login error:', error);
+    }
   };
 
   return (
@@ -279,7 +310,7 @@ export default function LoginPage() {
                   <BookOpen className="h-4 w-4" />
                 </div>
                 <Select
-                  disabled={isLoading || loginSuccess}
+                  disabled={isLoading || loginSuccess || isLoadingBooks}
                   value={bookName}
                   onValueChange={(val) => {
                     setBookName(val);
@@ -292,14 +323,19 @@ export default function LoginPage() {
                       isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
                     } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
-                    <SelectValue placeholder={t.bookPlaceholder} />
+                    <SelectValue placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
                   </SelectTrigger>
-                  <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md">
-                    <SelectItem value="FALCON MATERIAL HANDLING FZ LLC">
-                      FALCON MATERIAL HANDLING FZ LLC
-                    </SelectItem>
-                    <SelectItem value="KAMDHENU COMMERCIALS">KAMDHENU COMMERCIALS</SelectItem>
-                    <SelectItem value="TIONIX ONE OPERATIONS">TIONIX ONE OPERATIONS</SelectItem>
+                  <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md"
+                    position='popper'
+                  >
+                    {booksList.map((b) => (
+                      <SelectItem key={b.pk_book_id.trim()} value={b.book_name}>
+                        {b.book_name}
+                      </SelectItem>
+                    ))}
+                    {booksList.length === 0 && !isLoadingBooks && (
+                       <SelectItem value="none" disabled>No books available</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </div>

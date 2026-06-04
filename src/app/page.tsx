@@ -1,19 +1,7 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      router.push('/dashboard');
-    } else {
-      router.push('/auth/login');
-    }
-  }, [router]);
-
-  return null;
+  // Middleware (proxy.ts) handles the actual routing based on auth state.
+  // This is a fallback in case middleware is bypassed.
+  redirect('/auth/login');
 }

@@ -1,5 +1,5 @@
 import axiosClient from '@/lib/axios';
-import { UserListItem, UserRightsOut, SaveUserRightsIn, CreateNewFormIn } from '../types';
+import { UserListItem, UserRightsOut, SaveUserRightsIn, CreateNewFormIn } from './types';
 
 export const userRightApi = {
   listUsers: async (): Promise<UserListItem[]> => {

@@ -85,7 +85,7 @@
   --ring: oklch(0.708 0 0);
   --brand: oklch(0.5461 0.2152 262.88);
   --brand-muted: oklch(0.946 0.033 262.88);
-  --radius: 0.5rem;
+  --radius: 0.25rem;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

@@ -5,6 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { FormInput } from '@/components/common/form-input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   User,
   Lock,
@@ -334,13 +342,31 @@ export default function AdministratorUsersPage() {
 
               {/* ── Column 2 ── */}
               {/* QUESTION */}
-              <FormInput
-                label={t.question}
-                icon={HelpCircle}
-                value={formData.question}
-                onChange={(e) => handleInputChange('question', e.target.value)}
-                className="h-9 rounded-sm"
-              />
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                  {t.question}
+                </Label>
+                <div className="relative">
+                  <div className="text-muted-foreground absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3 pointer-events-none">
+                    <HelpCircle className="h-4 w-4" />
+                  </div>
+                  <Select
+                    value={formData.question}
+                    onValueChange={(val) => handleInputChange('question', val)}
+                  >
+                    <SelectTrigger className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}>
+                      <SelectValue placeholder="Select a security question" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="What is your favorite food?">What is your favorite food?</SelectItem>
+                      <SelectItem value="What was your first pet's name?">What was your first pet's name?</SelectItem>
+                      <SelectItem value="What city were you born in?">What city were you born in?</SelectItem>
+                      <SelectItem value="What is your mother's maiden name?">What is your mother's maiden name?</SelectItem>
+                      <SelectItem value="What high school did you attend?">What high school did you attend?</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
               {/* ANSWER */}
               <FormInput

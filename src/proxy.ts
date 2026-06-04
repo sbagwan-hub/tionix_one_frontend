@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { PUBLIC_ROUTES, PROTECTED_ROUTES } from '@/lib/routes';
 
-export function proxy(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('access_token')?.value;
 
@@ -11,6 +11,14 @@ export function proxy(request: NextRequest) {
   
   // Check if the current path is a protected route
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+
+  // Handle root path
+  if (pathname === '/') {
+    if (token) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+    return NextResponse.redirect(new URL('/auth/login', request.url));
+  }
 
   // If user is not authenticated and trying to access protected route
   if (!token && isProtectedRoute) {
