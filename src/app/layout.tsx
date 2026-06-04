@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
-import QueryProviders from '@/providers/QueryProviders';
+import QueryProviders from '@/providers/query-providers';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
-import { ThemeProvider } from '@/providers/ThemeProvider';
+import { ThemeProvider } from '@/providers/theme-provider';
 import { LayoutWrapper } from '@/components/shared/layout-wrapper';
 import { Toaster } from '@/components/ui/sonner';
 
