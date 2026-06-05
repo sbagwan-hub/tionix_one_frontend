@@ -23,6 +23,13 @@
   "backup": "Backup (Database, Documents, Resumes, Images)",
   "exit": "Exit",
   "financialYearMenu": "Financial Year",
+  "group": "Group",
+  "account": "Account",
+  "bankAccount": "Bank Account",
+  "debitCard": "Debit Card",
+  "chequeBook": "Cheque Book",
+  "openingBalanceSplitUp": "Opening Balance Split Up",
+  "paymentPurpose": "Payment Purpose",
 
   "theme": "Theme",
   "preferences": "Preferences",

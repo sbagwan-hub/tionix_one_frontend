@@ -84,7 +84,14 @@ export default function UserSelection({
                   value={user.pk_user_id.toString()}
                   className="cursor-pointer rounded-sm px-2 py-1.5 text-xs font-medium tracking-tight"
                 >
-                  {user.username} {user.sys_defined ? '(System)' : ''}
+                  <span className="flex items-center gap-1">
+                    {user.username}
+                    {user.sys_defined && (
+                      <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-amber-700 uppercase select-none dark:bg-amber-950 dark:text-amber-300">
+                        sys
+                      </span>
+                    )}
+                  </span>
                 </SelectItem>
               ))}
               {users.length === 0 && (

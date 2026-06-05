@@ -23,6 +23,13 @@
   "backup": "النسخ الاحتياطي (قاعدة البيانات، الوثائق، السيرة الذاتية، الصور)",
   "exit": "خروج",
   "financialYearMenu": "السنة المالية",
+  "group": "المجموعة (Group)",
+  "account": "الحساب (Account)",
+  "bankAccount": "حساب البنك (Bank Account)",
+  "debitCard": "بطاقة الخصم (Debit Card)",
+  "chequeBook": "دفتر الشيكات (Cheque Book)",
+  "openingBalanceSplitUp": "تفصيل الرصيد الافتتاحي (Opening Balance Split Up)",
+  "paymentPurpose": "غرض الدفع (Payment Purpose)",
 
   "theme": "الثيم",
   "preferences": "التفضيلات",
