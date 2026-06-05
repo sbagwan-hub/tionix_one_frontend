@@ -23,6 +23,13 @@
   "backup": "बैकअप (डेटाबेस, दस्तावेज़, रिज्यूमे, चित्र)",
   "exit": "बाहर निकलें",
   "financialYearMenu": "वित्तीय वर्ष",
+  "group": "समूह (Group)",
+  "account": "खाता (Account)",
+  "bankAccount": "बैंक खाता (Bank Account)",
+  "debitCard": "डेबिट कार्ड (Debit Card)",
+  "chequeBook": "चेक बुक (Cheque Book)",
+  "openingBalanceSplitUp": "प्रारंभिक शेष विभाजन (Opening Balance Split Up)",
+  "paymentPurpose": "भुगतान का उद्देश्य (Payment Purpose)",
 
   "theme": "थीम",
   "preferences": "पसंद",

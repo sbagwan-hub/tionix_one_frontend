@@ -53,19 +53,19 @@ export const PERMISSIONS = {
   USER_READ: 'user:read',
   USER_UPDATE: 'user:update',
   USER_DELETE: 'user:delete',
-  
+
   // Company permissions
   COMPANY_CREATE: 'company:create',
   COMPANY_READ: 'company:read',
   COMPANY_UPDATE: 'company:update',
   COMPANY_DELETE: 'company:delete',
-  
+
   // Operator permissions
   OPERATOR_CREATE: 'operator:create',
   OPERATOR_READ: 'operator:read',
   OPERATOR_UPDATE: 'operator:update',
   OPERATOR_DELETE: 'operator:delete',
-  
+
   // System permissions
   SYSTEM_SETTINGS: 'system:settings',
   SYSTEM_REPORTS: 'system:reports',

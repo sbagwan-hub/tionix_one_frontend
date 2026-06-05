@@ -56,10 +56,27 @@ export const NAV_MENUS: NavMenu[] = [
   {
     key: 'master',
     items: [
-      { key: 'company', href: '/company', icon: 'Building2' },
-      { key: 'customer', href: '/customer', icon: 'Users' },
-      { key: 'supplier', href: '/supplier', icon: 'Truck' },
-      { key: 'items', href: '/items', icon: 'Package' },
+      { key: 'Documents', href: '/documents', icon: 'List' },
+      { key: 'Contacts', href: '/contacts', icon: 'User' },
+      {
+        key: 'Accounts',
+        icon: 'PieChart',
+        children: [
+          { key: 'group', href: '/masters/accounts/account-groups', icon: 'Folder' },
+          { key: 'account', href: '/masters/accounts/accounts', icon: 'FileText' },
+          { key: 'bankAccount', href: '/masters/accounts/bank-accounts', icon: 'Briefcase' },
+          { key: 'debitCard', href: '/masters/accounts/debit-cards', icon: 'CreditCard' },
+          { key: 'chequeBook', href: '/masters/accounts/cheque-books', icon: 'BookOpen' },
+          {
+            key: 'openingBalanceSplitUp',
+            href: '/masters/accounts/opening-balance-split',
+            icon: 'Scale',
+          },
+          { key: 'paymentPurpose', href: '/masters/accounts/payment-purposes', icon: 'Wallet' },
+        ],
+      },
+      { key: 'HR', href: '/hr', icon: 'Users' },
+      { key: 'Salary', href: '/salary', icon: 'DollarSign' },
     ],
   },
 

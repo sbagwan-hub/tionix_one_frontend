@@ -14,15 +14,18 @@ export interface UsePaginationOptions {
 
 export function usePagination(options: UsePaginationOptions = {}) {
   const { initialPage = 1, initialPageSize = 10, total = 0 } = options;
-  
+
   const [page, setPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialPageSize);
 
-  const paginationState = useMemo<PaginationState>(() => ({
-    page,
-    pageSize,
-    total,
-  }), [page, pageSize, total]);
+  const paginationState = useMemo<PaginationState>(
+    () => ({
+      page,
+      pageSize,
+      total,
+    }),
+    [page, pageSize, total],
+  );
 
   const totalPages = useMemo(() => {
     return Math.ceil(total / pageSize);
@@ -38,13 +41,13 @@ export function usePagination(options: UsePaginationOptions = {}) {
 
   const nextPage = () => {
     if (hasNextPage) {
-      setPage(prev => prev + 1);
+      setPage((prev) => prev + 1);
     }
   };
 
   const previousPage = () => {
     if (hasPreviousPage) {
-      setPage(prev => prev - 1);
+      setPage((prev) => prev - 1);
     }
   };
 
@@ -67,11 +70,11 @@ export function usePagination(options: UsePaginationOptions = {}) {
     totalPages,
     hasNextPage,
     hasPreviousPage,
-    
+
     // Computed
     startIndex: (page - 1) * pageSize,
     endIndex: page * pageSize,
-    
+
     // Actions
     setPage,
     setPageSize,

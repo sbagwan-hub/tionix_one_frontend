@@ -1,4 +1,11 @@
-export type ThemeName = 'light' | 'dark' | 'nord' | 'cyberpunk' | 'minimalist';
+export type ThemeName =
+  | 'light'
+  | 'dark'
+  | 'nord'
+  | 'cyberpunk'
+  | 'minimalist'
+  | 'teal'
+  | 'dark-teal';
 
 export const themes: Record<ThemeName, { name: string; colors: Record<string, string> }> = {
   light: {
@@ -131,6 +138,66 @@ export const themes: Record<ThemeName, { name: string; colors: Record<string, st
       'brand-muted': 'oklch(0.90 0 0)',
     },
   },
+  teal: {
+    name: 'Teal',
+    colors: {
+      background: 'oklch(1 0 0)',
+      foreground: 'oklch(0.145 0 0)',
+      card: 'oklch(1 0 0)',
+      'card-foreground': 'oklch(0.145 0 0)',
+      popover: 'oklch(1 0 0)',
+      'popover-foreground': 'oklch(0.145 0 0)',
+      primary: 'oklch(0.511 0.096 186.391)',
+      'primary-foreground': 'oklch(0.984 0.014 180.72)',
+      secondary: 'oklch(0.967 0.001 286.375)',
+      'secondary-foreground': 'oklch(0.21 0.006 285.885)',
+      muted: 'oklch(0.97 0 0)',
+      'muted-foreground': 'oklch(0.556 0 0)',
+      accent: 'oklch(0.97 0 0)',
+      'accent-foreground': 'oklch(0.205 0 0)',
+      destructive: 'oklch(0.577 0.245 27.325)',
+      'destructive-foreground': 'oklch(1 0 0)',
+      border: 'oklch(0.922 0 0)',
+      input: 'oklch(0.922 0 0)',
+      ring: 'oklch(0.708 0 0)',
+      brand: 'oklch(0.511 0.096 186.391)',
+      'brand-muted': 'oklch(0.97 0 0)',
+    },
+  },
+  'dark-teal': {
+    name: 'Dark Teal',
+    colors: {
+      background: 'oklch(0.145 0 0)',
+      foreground: 'oklch(0.985 0 0)',
+      card: 'oklch(0.205 0 0)',
+      'card-foreground': 'oklch(0.985 0 0)',
+      popover: 'oklch(0.205 0 0)',
+      'popover-foreground': 'oklch(0.985 0 0)',
+      primary: 'oklch(0.437 0.078 188.216)',
+      'primary-foreground': 'oklch(0.984 0.014 180.72)',
+      secondary: 'oklch(0.274 0.006 286.033)',
+      'secondary-foreground': 'oklch(0.985 0 0)',
+      muted: 'oklch(0.269 0 0)',
+      'muted-foreground': 'oklch(0.708 0 0)',
+      accent: 'oklch(0.269 0 0)',
+      'accent-foreground': 'oklch(0.985 0 0)',
+      destructive: 'oklch(0.704 0.191 22.216)',
+      'destructive-foreground': 'oklch(0.985 0 0)',
+      border: 'oklch(1 0 0 / 10%)',
+      input: 'oklch(1 0 0 / 15%)',
+      ring: 'oklch(0.556 0 0)',
+      brand: 'oklch(0.437 0.078 188.216)',
+      'brand-muted': 'oklch(0.269 0 0)',
+    },
+  },
 };
 
-export const themeList: ThemeName[] = ['light', 'dark', 'nord', 'cyberpunk', 'minimalist'];
+export const themeList: ThemeName[] = [
+  'light',
+  'dark',
+  'nord',
+  'cyberpunk',
+  'minimalist',
+  'teal',
+  'dark-teal',
+];

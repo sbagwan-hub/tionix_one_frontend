@@ -55,7 +55,7 @@ export default function UserSelection({
         <div className="space-y-1.5">
           <Label
             htmlFor="user-profile"
-            className="text-muted-foreground block text-xs font-medium tracking-tight"
+            className="text-foreground block text-xs font-medium tracking-tight"
           >
             Select User <span className="text-destructive">*</span>
           </Label>
@@ -67,7 +67,7 @@ export default function UserSelection({
           >
             <SelectTrigger
               id="user-profile"
-              className="border-border bg-background text-foreground focus:ring-ring focus:border-ring h-8 w-full rounded-md border px-3 text-xs font-medium shadow-none transition-all outline-none focus:ring-1"
+              className="border-border bg-background text-foreground focus:border-ring focus:ring-ring h-8 w-full rounded-md border px-3 text-xs font-medium shadow-none transition-all outline-none focus:ring-1"
             >
               <SelectValue placeholder="Choose a user profile..." />
             </SelectTrigger>
@@ -84,11 +84,18 @@ export default function UserSelection({
                   value={user.pk_user_id.toString()}
                   className="cursor-pointer rounded-sm px-2 py-1.5 text-xs font-medium tracking-tight"
                 >
-                  {user.username} {user.sys_defined ? '(System)' : ''}
+                  <span className="flex items-center gap-1">
+                    {user.username}
+                    {user.sys_defined && (
+                      <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-amber-700 uppercase select-none dark:bg-amber-950 dark:text-amber-300">
+                        sys
+                      </span>
+                    )}
+                  </span>
                 </SelectItem>
               ))}
               {users.length === 0 && (
-                <div className="text-muted-foreground py-6 text-center text-xs">No users found</div>
+                <div className="text-foreground py-6 text-center text-xs">No users found</div>
               )}
             </SelectContent>
           </Select>
@@ -96,7 +103,7 @@ export default function UserSelection({
 
         {/* Data Access Scope */}
         <div className="flex flex-col space-y-2">
-          <span className="text-muted-foreground text-xs font-medium tracking-tight">
+          <span className="text-foreground text-xs font-medium tracking-tight">
             Data Access Scope
           </span>
 
@@ -111,10 +118,8 @@ export default function UserSelection({
               <Label
                 htmlFor="all-records"
                 className={cn(
-                  'text-xs font-medium tracking-tight select-none',
-                  isInteractionDisabled
-                    ? 'text-muted-foreground cursor-not-allowed'
-                    : 'text-foreground cursor-pointer',
+                  'text-foreground text-xs font-medium tracking-tight select-none',
+                  isInteractionDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
               >
                 All Records
@@ -126,10 +131,8 @@ export default function UserSelection({
               <Label
                 htmlFor="self-records"
                 className={cn(
-                  'text-xs font-medium tracking-tight select-none',
-                  isInteractionDisabled
-                    ? 'text-muted-foreground cursor-not-allowed'
-                    : 'text-foreground cursor-pointer',
+                  'text-foreground text-xs font-medium tracking-tight select-none',
+                  isInteractionDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
               >
                 Self Records Only
@@ -163,7 +166,7 @@ export default function UserSelection({
               <span className="text-foreground text-xs font-medium tracking-tight">
                 Modify Other User Records
               </span>
-              <span className="text-muted-foreground text-[11px] leading-normal tracking-tight">
+              <span className="text-foreground text-[11px] leading-normal tracking-tight">
                 Allows global management rights
               </span>
             </div>

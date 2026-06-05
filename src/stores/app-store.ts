@@ -13,7 +13,7 @@ export const useAppStore = create<AppState>((set) => ({
   sidebarOpen: true,
   theme: 'system',
   language: 'en',
-  
+
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
   setTheme: (theme) => set({ theme }),
   setLanguage: (language) => set({ language }),

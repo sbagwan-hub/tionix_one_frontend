@@ -27,7 +27,7 @@ import {
   useCreateForm,
 } from '@/modules/user-right/hooks/use-user-rights';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Edit3,
@@ -72,7 +72,7 @@ export default function UserRightsPage() {
     }
   };
 
-  const mark = () => setDirty(true);
+  const mark = useCallback(() => setDirty(true), []);
 
   // Load users list
   const { data: usersData } = useUsersList();
@@ -85,22 +85,26 @@ export default function UserRightsPage() {
     refetch: refetchRights,
   } = useUserRights(selectedUser?.pk_user_id);
 
+  const syncRightsToState = useCallback((data: UserRightsOut) => {
+    setMasters(JSON.parse(JSON.stringify(data.masters)));
+    setTransactions(JSON.parse(JSON.stringify(data.transactions)));
+    setReports(JSON.parse(JSON.stringify(data.reports)));
+    setOthers(JSON.parse(JSON.stringify(data.others)));
+    setSpecials(JSON.parse(JSON.stringify(data.specials)));
+    setBranches(JSON.parse(JSON.stringify(data.branches)));
+    setDashboards(JSON.parse(JSON.stringify(data.dashboards)));
+    setProcesses(JSON.parse(JSON.stringify(data.processes)));
+    setOwnRecords(data.user.own_records);
+    setOtherRecords(data.user.other_records);
+    setDirty(false);
+  }, []);
+
   // Sync loaded rights to local states
   useEffect(() => {
     if (rightsData) {
-      setMasters(rightsData.masters);
-      setTransactions(rightsData.transactions);
-      setReports(rightsData.reports);
-      setOthers(rightsData.others);
-      setSpecials(rightsData.specials);
-      setBranches(rightsData.branches);
-      setDashboards(rightsData.dashboards);
-      setProcesses(rightsData.processes);
-      setOwnRecords(rightsData.user.own_records);
-      setOtherRecords(rightsData.user.other_records);
-      setDirty(false);
+      syncRightsToState(rightsData);
     }
-  }, [rightsData]);
+  }, [rightsData, syncRightsToState]);
 
   // Save mutation
   const saveMutation = useSaveUserRights(
@@ -150,8 +154,8 @@ export default function UserRightsPage() {
   const handleCancel = () => {
     setEditable(false);
     setDirty(false);
-    if (selectedUser) {
-      refetchRights();
+    if (rightsData) {
+      syncRightsToState(rightsData);
     }
   };
 

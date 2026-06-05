@@ -11,17 +11,12 @@ export function getDistanceMeters(from: GeoPoint, to: GeoPoint) {
   const toLat = (to.latitude * Math.PI) / 180;
 
   const a =
-    Math.sin(latDelta / 2) ** 2 +
-    Math.cos(fromLat) * Math.cos(toLat) * Math.sin(lngDelta / 2) ** 2;
+    Math.sin(latDelta / 2) ** 2 + Math.cos(fromLat) * Math.cos(toLat) * Math.sin(lngDelta / 2) ** 2;
 
   return earthRadiusMeters * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-export function isInsideGeofence(
-  point: GeoPoint,
-  center: GeoPoint,
-  radiusMeters: number,
-) {
+export function isInsideGeofence(point: GeoPoint, center: GeoPoint, radiusMeters: number) {
   return getDistanceMeters(center, point) <= radiusMeters;
 }
 
