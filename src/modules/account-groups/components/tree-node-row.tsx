@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import { Folder } from 'lucide-react';
+import { ChevronRight, Folder, FolderOpen } from 'lucide-react';
 import { TreeNode } from '../types';
 
 interface TreeNodeRowProps {
@@ -23,29 +23,33 @@ export function TreeNodeRow({
   const [open, setOpen] = useState(depth < 2);
   const hasChildren = node.children && node.children.length > 0;
   const isLast = ancestorsIsLast[depth];
+  const isSelected = selectedId === node.pk_grp_id;
 
   return (
-    <div className="select-none">
+    <div className="w-full select-none">
+      {/* Row Wrapper */}
       <div
-        className={`relative mx-1.5 flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1.5 transition-colors ${
-          selectedId === node.pk_grp_id
-            ? 'bg-primary/15 text-primary font-medium'
-            : 'hover:bg-muted text-foreground'
+        className={`group relative mx-1.5 flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-all duration-150 ease-in-out ${
+          isSelected
+            ? 'bg-primary/10 text-primary font-medium shadow-sm'
+            : 'text-foreground hover:bg-muted/60 hover:text-foreground'
         }`}
-        style={{ paddingLeft: `${depth * 16 + 20}px` }}
+        style={{ paddingLeft: `${depth * 20 + 24}px` }}
         onClick={() => {
           onSelect(node);
           if (hasChildren) setOpen((p) => !p);
         }}
       >
-        {/* Render parent ancestor vertical dotted lines */}
+        {/* --- TREE LINES GRAPHICS --- */}
+
+        {/* Render parent ancestor vertical connecting lines */}
         {Array.from({ length: depth }).map((_, i) => {
           if (!ancestorsIsLast[i]) {
             return (
               <span
                 key={i}
-                className="border-foreground/30 absolute top-0 bottom-0 w-[1px] border-l border-dotted"
-                style={{ left: `${i * 16 + 8}px` }}
+                className="border-foreground/80 group-hover:border-foreground/90 absolute top-0 bottom-0 w-[1px] border-l border-dashed transition-colors"
+                style={{ left: `${i * 20 + 14}px` }}
                 aria-hidden="true"
               />
             );
@@ -56,10 +60,10 @@ export function TreeNodeRow({
         {/* Current node branch vertical line */}
         {depth >= 0 && (
           <span
-            className={`border-foreground/40 absolute top-0 w-[1px] border-l border-dotted ${
+            className={`border-foreground/80 group-hover:border-foreground/90 absolute top-0 w-[1px] border-l border-dashed transition-colors ${
               isLast ? 'h-1/2' : 'h-full'
             }`}
-            style={{ left: `${depth * 16 + 8}px` }}
+            style={{ left: `${depth * 20 + 14}px` }}
             aria-hidden="true"
           />
         )}
@@ -67,24 +71,54 @@ export function TreeNodeRow({
         {/* Current node branch horizontal tick line */}
         {depth >= 0 && (
           <span
-            className="border-foreground/40 absolute top-1/2 h-[1px] w-[12px] border-t border-dotted"
-            style={{ left: `${depth * 16 + 8}px` }}
+            className="border-foreground/80 group-hover:border-foreground/90 absolute top-1/2 h-[1px] w-[12px] -translate-y-1/2 border-t border-dashed transition-colors"
+            style={{ left: `${depth * 20 + 14}px` }}
             aria-hidden="true"
           />
         )}
 
-        <Folder
-          className={`h-4 w-4 shrink-0 ${selectedId === node.pk_grp_id ? 'text-primary' : 'text-muted-foreground'}`}
-        />
-        <span className="truncate text-xs">{node.group_name}</span>
+        {/* --- INTERACTIVE ELEMENTS & ICONS --- */}
+
+        {/* Inline Chevron (Rotates beautifully if there are children) */}
+        <div className="z-10 flex h-4 w-4 items-center justify-center">
+          {hasChildren && (
+            <ChevronRight
+              className={`text-foreground/60 group-hover:text-foreground h-3 w-3 shrink-0 transition-transform duration-200 ease-out ${
+                open ? 'rotate-90' : ''
+              }`}
+            />
+          )}
+        </div>
+
+        {/* Dynamic Folder Icon */}
+        <div className="z-10">
+          {open && hasChildren ? (
+            <FolderOpen className={`h-4 w-4 shrink-0 transition-colors duration-150`} />
+          ) : (
+            <Folder
+              className={`h-4 w-4 shrink-0 transition-colors duration-150 ${
+                isSelected ? 'text-primary' : 'text-foreground/70 group-hover:text-foreground'
+              }`}
+            />
+          )}
+        </div>
+
+        {/* Node Label */}
+        <span className="z-10 truncate text-[13px] tracking-wide transition-colors">
+          {node.group_name}
+        </span>
+
+        {/* Modernized Pill Tag */}
         {node.sys_defined && (
-          <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-amber-700 uppercase select-none dark:bg-amber-950 dark:text-amber-300">
+          <span className="z-10 ml-auto inline-flex items-center rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-amber-600 uppercase ring-1 ring-amber-500/20 ring-inset dark:bg-amber-500/5 dark:text-amber-400 dark:ring-amber-500/10">
             sys
           </span>
         )}
       </div>
+
+      {/* --- CHILDREN RENDERER --- */}
       {open && hasChildren && (
-        <div className="mt-0.5">
+        <div className="animate-in fade-in slide-in-from-top-1 mt-[1px] duration-150 ease-out">
           {node.children.map((c, index) => (
             <TreeNodeRow
               key={c.pk_grp_id}

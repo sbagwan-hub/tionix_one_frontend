@@ -1,7 +1,19 @@
 'use client';
 
 import * as React from 'react';
-import { Circle, Info } from 'lucide-react';
+import {
+  Circle,
+  Info,
+  Layers,
+  KeyRound,
+  ShieldAlert,
+  Clock,
+  User,
+  Eye,
+  PlusCircle,
+  Settings2,
+  FolderOpen,
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AcctGroup } from '../types';
@@ -35,131 +47,213 @@ export function AccountGroupForm({
   cursor,
   groupInputRef,
 }: AccountGroupFormProps) {
+  const currentRecord = records[cursor];
+
   return (
-    <div className="flex flex-col gap-4 p-5 md:col-span-5">
-      {isEditing && (
+    <div className="from-card to-card/70 border-border/60 shadow-foreground/[0.02] relative flex h-full min-h-[480px] flex-col rounded-xl border bg-gradient-to-b p-6 shadow-md transition-all duration-300 md:col-span-5">
+      {/* Dynamic Status Badges */}
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+          Form Inspector
+        </span>
+
         <div
-          className={`text-xxs inline-flex items-center gap-1.5 self-start rounded-full border px-2.5 py-0.5 font-medium ${
-            mode === 'add'
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-              : 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300'
+          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 select-none ${
+            !isEditing
+              ? 'border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400'
+              : mode === 'add'
+                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                : 'border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400'
           }`}
         >
-          <Circle className="h-2 w-2 animate-pulse fill-current" />
-          {mode === 'add' ? 'Add Mode' : 'Edit Mode'}
+          {!isEditing ? (
+            <>
+              <Eye className="h-3 w-3" />
+              <span>Read-Only Mode</span>
+            </>
+          ) : mode === 'add' ? (
+            <>
+              <PlusCircle className="h-3 w-3 animate-pulse" />
+              <span>Add Mode</span>
+            </>
+          ) : (
+            <>
+              <Settings2 className="h-3 w-3" />
+              <span>Edit Mode</span>
+            </>
+          )}
         </div>
-      )}
-
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="group_name" className="text-xs font-semibold">
-          Group Name <span className="text-destructive">*</span>
-        </Label>
-        <Input
-          id="group_name"
-          ref={groupInputRef}
-          value={groupName}
-          onChange={(e) => setGroupName(e.target.value)}
-          disabled={!isEditing || !selectedParent}
-          maxLength={40}
-          placeholder={
-            isEditing
-              ? selectedParent
-                ? 'Enter unique group name…'
-                : 'Select parent from tree first…'
-              : ''
-          }
-          autoComplete="off"
-          className="bg-background/50 focus:bg-background focus:ring-ring h-8 text-xs focus:ring-1"
-        />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="parent_group" className="text-xs font-semibold">
-          Parent Group <span className="text-destructive">*</span>
-        </Label>
-        {isEditing ? (
-          <select
-            id="parent_group"
-            value={selectedParent ? selectedParent.pk_grp_id : ''}
-            disabled
-            className="border-input bg-muted focus-visible:ring-ring text-muted-foreground h-8 cursor-not-allowed rounded-md border px-3 py-1 text-xs shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
+      <div className="mt-2 space-y-4">
+        {/* Field: Group Name */}
+        <div className="space-y-1.5">
+          <Label
+            htmlFor="group_name"
+            className="text-foreground/80 flex items-center gap-1 text-xs font-semibold tracking-wide"
           >
-            <option value="">-- Click Tree to Select --</option>
-            {/* Merged unique parent lists */}
-            {Array.from(new Map([...parents, ...records].map((x) => [x.pk_grp_id, x])).values())
-              .filter((p) => p.pk_grp_id !== selectedId) // Prevent selecting self as parent
-              .map((p) => (
-                <option key={p.pk_grp_id} value={p.pk_grp_id}>
-                  {p.group_name}
-                </option>
-              ))}
-          </select>
-        ) : (
-          <Input
-            id="parent_group"
-            value={selectedParent ? selectedParent.group_name : ''}
-            disabled
-            placeholder=""
-            autoComplete="off"
-            className="bg-muted text-muted-foreground h-8 text-xs"
-          />
-        )}
-        {isEditing && (
-          <span className="text-muted-foreground mt-1 flex items-center gap-1 text-[10px]">
-            <Info className="text-primary h-3 w-3" />
-            Click a node in the tree hierarchy to assign the parent.
-          </span>
-        )}
+            Group Name {isEditing && <span className="text-destructive font-bold">*</span>}
+          </Label>
+          <div className="relative">
+            <Input
+              id="group_name"
+              ref={groupInputRef}
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              disabled={!isEditing || !selectedParent}
+              maxLength={40}
+              placeholder={
+                isEditing
+                  ? selectedParent
+                    ? 'Enter unique group name…'
+                    : 'Select parent from tree first…'
+                  : 'No account group highlighted'
+              }
+              autoComplete="off"
+              className="border-border/80 bg-background/40 focus:bg-background shadow-3xs focus-visible:ring-primary/40 disabled:bg-muted/30 h-9.5 text-xs transition-all duration-200 focus-visible:ring-1 disabled:opacity-65"
+            />
+          </div>
+        </div>
+
+        {/* Field: Parent Group */}
+        <div className="space-y-1.5">
+          <Label
+            htmlFor="parent_group"
+            className="text-foreground/80 flex items-center gap-1 text-xs font-semibold tracking-wide"
+          >
+            Parent Group {isEditing && <span className="text-destructive font-bold">*</span>}
+          </Label>
+
+          <div className="group relative">
+            <FolderOpen className="text-muted-foreground/50 group-focus-within:text-primary absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 transition-colors" />
+            <Input
+              id="parent_group"
+              value={selectedParent ? selectedParent.group_name : ''}
+              disabled
+              placeholder={isEditing ? 'Choose parent from hierarchy tree...' : 'Root Context'}
+              className={`border-border/50 bg-muted/30 text-muted-foreground h-9.5 cursor-not-allowed pl-9 text-xs font-medium transition-all duration-200 select-none ${
+                isEditing && !selectedParent
+                  ? 'border-amber-500/30 bg-amber-500/[0.02] placeholder:font-medium placeholder:text-amber-600/70 dark:placeholder:text-amber-400/60'
+                  : ''
+              }`}
+            />
+          </div>
+
+          {isEditing && (
+            <div className="bg-muted/20 border-border/30 text-muted-foreground/90 mt-1.5 flex items-start gap-2 rounded-md border p-2 text-[11px] leading-normal">
+              <Info className="text-primary mt-0.5 h-3.5 w-3.5 shrink-0" />
+              <span>
+                {`Click any structural node in the tree list grid to immediately assign or re-nest
+                this element's location.`}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Readonly Inherited Fields Info */}
+      {/* Inherited Properties Module */}
       {selectedParent && isEditing && (
-        <div className="bg-muted/30 mt-2 flex flex-col gap-2 rounded border p-3">
-          <span className="text-muted-foreground border-b pb-1 text-[11px] font-bold tracking-wider uppercase">
-            Inherited Properties
-          </span>
-          <div className="text-xxs grid grid-cols-2 gap-2">
-            <div>
-              <span className="text-muted-foreground block font-medium">Debit/Credit:</span>
-              <span className="text-primary font-bold">{selectedParent.dc}</span>
+        <div className="border-border/60 bg-muted/10 animate-in fade-in slide-in-from-top-1.5 mt-5 flex flex-col gap-3 rounded-lg border p-4 duration-200">
+          <div className="border-border/40 flex items-center gap-1.5 border-b pb-2">
+            <Layers className="text-muted-foreground/60 h-3.5 w-3.5" />
+            <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+              Cascaded Inherited Vectors
+            </span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2.5 text-xs">
+            <div className="bg-background border-border/40 shadow-3xs rounded-md border p-2 text-center">
+              <span className="text-muted-foreground/80 mb-0.5 block text-[10px] font-medium">
+                DC Variant
+              </span>
+              <span className="text-foreground text-[13px] font-semibold tracking-wide">
+                {selectedParent.dc}
+              </span>
             </div>
-            <div>
-              <span className="text-muted-foreground block font-medium">Group Prefix:</span>
-              <span className="text-primary font-bold">{selectedParent.prefix}</span>
+            <div className="bg-background border-border/40 shadow-3xs rounded-md border p-2 text-center">
+              <span className="text-muted-foreground/80 mb-0.5 block text-[10px] font-medium">
+                Prefix ID
+              </span>
+              <span className="text-foreground text-[13px] font-semibold tracking-wide">
+                {selectedParent.prefix}
+              </span>
             </div>
-            <div>
-              <span className="text-muted-foreground block font-medium">Grouping Code:</span>
-              <span className="text-primary font-bold">{selectedParent.grouping}</span>
+            <div className="bg-background border-border/40 shadow-3xs rounded-md border p-2 text-center">
+              <span className="text-muted-foreground/80 mb-0.5 block text-[10px] font-medium">
+                Group Vector
+              </span>
+              <span className="text-foreground text-[13px] font-semibold tracking-wide">
+                {selectedParent.grouping}
+              </span>
             </div>
           </div>
         </div>
       )}
 
+      {/* Audit & System Telemetry Footer */}
       {selectedId && !isEditing && (
-        <div className="bg-muted/40 text-xxs mt-auto flex items-start gap-2.5 rounded border p-3">
-          <Info className="text-primary mt-0.5 h-3.5 w-3.5 shrink-0" />
-          <div className="text-muted-foreground flex-1 space-y-0.5">
-            <p>
-              Group ID: <strong className="text-foreground">{selectedId}</strong>
-            </p>
-            <p>
-              Defined Type:{' '}
-              <strong className="text-foreground">
-                {isSysDefined ? 'System Defined (Read Only)' : 'User Defined'}
-              </strong>
-            </p>
-            {records[cursor]?.user_name && (
-              <p>
-                Created By: <strong className="text-foreground">{records[cursor].user_name}</strong>
-              </p>
+        <div className="border-border/40 bg-muted/20 shadow-3xs animate-in fade-in zoom-in-98 mt-auto rounded-xl border p-4 text-xs duration-300">
+          <div className="space-y-2.5">
+            {/* Meta Row 1: ID */}
+            <div className="border-border/30 flex items-center justify-between border-b pb-2">
+              <div className="flex items-center gap-2">
+                <KeyRound className="text-muted-foreground/60 h-3.5 w-3.5" />
+                <span className="text-muted-foreground text-[11px]">Node Identifier</span>
+              </div>
+              <span className="text-foreground bg-background border-border/80 shadow-3xs rounded border px-2 py-0.5 font-mono text-[12px] font-semibold">
+                {selectedId}
+              </span>
+            </div>
+
+            {/* Meta Row 2: Authority Level */}
+            <div className="border-border/30 flex items-center justify-between border-b pb-2">
+              <div className="flex items-center gap-2">
+                <ShieldAlert className="text-muted-foreground/60 h-3.5 w-3.5" />
+                <span className="text-muted-foreground text-[11px]">System Integrity</span>
+              </div>
+              <span
+                className={`rounded px-2 py-0.5 text-[10px] font-bold tracking-wide uppercase ${
+                  isSysDefined
+                    ? 'border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                    : 'border border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                }`}
+              >
+                {isSysDefined ? 'Protected Core' : 'Custom Field'}
+              </span>
+            </div>
+
+            {/* Meta Row 3: User Author */}
+            {currentRecord?.user_name && (
+              <div className="border-border/30 flex items-center justify-between border-b pb-2">
+                <div className="flex items-center gap-2">
+                  <User className="text-muted-foreground/60 h-3.5 w-3.5" />
+                  <span className="text-muted-foreground text-[11px]">Created By</span>
+                </div>
+                <span className="text-foreground text-[11px] font-semibold">
+                  {currentRecord.user_name}
+                </span>
+              </div>
             )}
-            {records[cursor]?.date_time_stamp && (
-              <p>
-                Last Audit:{' '}
-                <strong className="text-foreground">
-                  {new Date(records[cursor].date_time_stamp).toLocaleString()}
-                </strong>
-              </p>
+
+            {/* Meta Row 4: Updated Stamp */}
+            {currentRecord?.date_time_stamp && (
+              <div className="flex items-center justify-between pt-0.5">
+                <div className="flex items-center gap-2">
+                  <Clock className="text-muted-foreground/60 h-3.5 w-3.5" />
+                  <span className="text-muted-foreground text-[11px]">
+                    Last Integrity Validation
+                  </span>
+                </div>
+                <span className="text-muted-foreground/90 font-mono text-[11px] font-medium">
+                  {new Date(currentRecord.date_time_stamp).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
             )}
           </div>
         </div>
