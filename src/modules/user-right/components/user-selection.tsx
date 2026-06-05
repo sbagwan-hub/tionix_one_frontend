@@ -55,7 +55,7 @@ export default function UserSelection({
         <div className="space-y-1.5">
           <Label
             htmlFor="user-profile"
-            className="text-muted-foreground block text-xs font-medium tracking-tight"
+            className="text-foreground block text-xs font-medium tracking-tight"
           >
             Select User <span className="text-destructive">*</span>
           </Label>
@@ -88,7 +88,7 @@ export default function UserSelection({
                 </SelectItem>
               ))}
               {users.length === 0 && (
-                <div className="text-muted-foreground py-6 text-center text-xs">No users found</div>
+                <div className="text-foreground py-6 text-center text-xs">No users found</div>
               )}
             </SelectContent>
           </Select>
@@ -96,7 +96,7 @@ export default function UserSelection({
 
         {/* Data Access Scope */}
         <div className="flex flex-col space-y-2">
-          <span className="text-muted-foreground text-xs font-medium tracking-tight">
+          <span className="text-foreground text-xs font-medium tracking-tight">
             Data Access Scope
           </span>
 
@@ -111,10 +111,8 @@ export default function UserSelection({
               <Label
                 htmlFor="all-records"
                 className={cn(
-                  'text-xs font-medium tracking-tight select-none',
-                  isInteractionDisabled
-                    ? 'text-muted-foreground cursor-not-allowed'
-                    : 'text-foreground cursor-pointer',
+                  'text-foreground text-xs font-medium tracking-tight select-none',
+                  isInteractionDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
               >
                 All Records
@@ -126,10 +124,8 @@ export default function UserSelection({
               <Label
                 htmlFor="self-records"
                 className={cn(
-                  'text-xs font-medium tracking-tight select-none',
-                  isInteractionDisabled
-                    ? 'text-muted-foreground cursor-not-allowed'
-                    : 'text-foreground cursor-pointer',
+                  'text-foreground text-xs font-medium tracking-tight select-none',
+                  isInteractionDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
               >
                 Self Records Only
@@ -163,7 +159,7 @@ export default function UserSelection({
               <span className="text-foreground text-xs font-medium tracking-tight">
                 Modify Other User Records
               </span>
-              <span className="text-muted-foreground text-[11px] leading-normal tracking-tight">
+              <span className="text-foreground text-[11px] leading-normal tracking-tight">
                 Allows global management rights
               </span>
             </div>
