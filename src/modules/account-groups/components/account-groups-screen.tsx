@@ -4,10 +4,6 @@ import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
 import {
-  ChevronFirst,
-  ChevronLeft,
-  ChevronRight,
-  ChevronLast,
   Plus,
   Edit,
   Trash2,
@@ -19,19 +15,23 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
-import { acctGroupApi } from '../services';
 import { AcctGroup, TreeNode } from '../types';
 import { AccountGroupForm } from './account-group-form';
 import { AccountGroupsTree } from './account-groups-tree';
 import { AccountGroupsList } from './account-groups-list';
+import { DeleteDialog } from '@/components/common/delete-dialog';
+import {
+  useAccountGroupsList,
+  useAccountGroupsTree,
+  useAccountGroupsParents,
+  useCreateAccountGroup,
+  useUpdateAccountGroup,
+  useDeleteAccountGroup,
+} from '../hooks/use-account-groups';
 
 type Mode = 'view' | 'add' | 'edit';
 
 export function AccountGroupsScreen() {
-  const [records, setRecords] = useState<AcctGroup[]>([]);
-  const [tree, setTree] = useState<TreeNode[]>([]);
-  const [parents, setParents] = useState<AcctGroup[]>([]);
-  const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<Mode>('view');
   const [activeTab, setActiveTab] = useState<'group' | 'list'>('group');
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -43,38 +43,49 @@ export function AccountGroupsScreen() {
 
   const [filterGroup, setFilterGroup] = useState('');
   const [filterParent, setFilterParent] = useState('');
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const groupInputRef = useRef<HTMLInputElement>(null);
 
-  // ── Data loading ────────────────────────────────────────────────────────────
+  // ── Queries & Mutations ──────────────────────────────────────────────────────
+  const {
+    data: records = [],
+    isLoading: isListLoading,
+    refetch: refetchList,
+  } = useAccountGroupsList({
+    ...(filterGroup ? { group_name: filterGroup } : {}),
+    ...(filterParent ? { parent_name: filterParent } : {}),
+  });
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [recs, treeData, parentData] = await Promise.all([
-        acctGroupApi.list({
-          ...(filterGroup ? { group_name: filterGroup } : {}),
-          ...(filterParent ? { parent_name: filterParent } : {}),
-        }),
-        acctGroupApi.tree(),
-        acctGroupApi.parents(),
-      ]);
-      setRecords(recs);
-      setTree(treeData);
-      setParents(parentData);
-      if (recs.length > 0 && cursor >= recs.length) {
-        setCursor(recs.length - 1);
-      }
-    } catch (e: any) {
-      toast.error(e.message || 'Failed to load account groups data');
-    } finally {
-      setLoading(false);
-    }
-  }, [filterGroup, filterParent, cursor]);
+  const {
+    data: tree = [],
+    isLoading: isTreeLoading,
+    refetch: refetchTree,
+  } = useAccountGroupsTree();
+  const {
+    data: parents = [],
+    isLoading: isParentsLoading,
+    refetch: refetchParents,
+  } = useAccountGroupsParents();
 
+  const createMutation = useCreateAccountGroup();
+  const updateMutation = useUpdateAccountGroup();
+  const deleteMutation = useDeleteAccountGroup();
+
+  const loading =
+    isListLoading ||
+    isTreeLoading ||
+    isParentsLoading ||
+    createMutation.isPending ||
+    updateMutation.isPending ||
+    deleteMutation.isPending;
+
+  // Auto-adjust cursor if it goes out of bounds when records list changes
   useEffect(() => {
-    loadData();
-  }, []);
+    if (records.length > 0 && cursor >= records.length) {
+      setCursor(records.length - 1);
+    }
+  }, [records, cursor]);
 
   // ── Populate form from record ───────────────────────────────────────────────
 
@@ -112,39 +123,15 @@ export function AccountGroupsScreen() {
     }
   }, [cursor, records, mode, populateForm]);
 
-  // ── Navigation actions ──────────────────────────────────────────────────────
-
-  const handleFirst = () => {
-    if (records.length === 0) return;
-    setCursor(0);
-    setMode('view');
-    setActiveTab('group');
-  };
-
-  const handlePrior = () => {
-    setCursor((p) => Math.max(0, p - 1));
-    setMode('view');
-    setActiveTab('group');
-  };
-
-  const handleNext = () => {
-    setCursor((p) => Math.min(records.length - 1, p + 1));
-    setMode('view');
-    setActiveTab('group');
-  };
-
-  const handleLast = () => {
-    if (records.length === 0) return;
-    setCursor(records.length - 1);
-    setMode('view');
-    setActiveTab('group');
-  };
-
-  // ── CRUD actions ────────────────────────────────────────────────────────────
-
   const handleAdd = () => {
+    const parentForNew = selectedId
+      ? records.find((r) => r.pk_grp_id === selectedId) ||
+        parents.find((r) => r.pk_grp_id === selectedId) ||
+        ({ pk_grp_id: selectedId, group_name: groupName } as AcctGroup)
+      : null;
+
     setGroupName('');
-    setSelectedParent(null);
+    setSelectedParent(parentForNew);
     setSelectedId(null);
     setIsSysDefined(false);
     setMode('add');
@@ -182,9 +169,8 @@ export function AccountGroupsScreen() {
       return;
     }
     try {
-      setLoading(true);
       if (mode === 'add') {
-        await acctGroupApi.create({
+        await createMutation.mutateAsync({
           group_name: groupName.trim(),
           fk_prt_id: selectedParent.pk_grp_id,
           grouping: selectedParent.grouping ?? 0,
@@ -194,20 +180,20 @@ export function AccountGroupsScreen() {
         });
         toast.success(`"${groupName.trim()}" saved.`);
       } else if (mode === 'edit' && selectedId) {
-        await acctGroupApi.update(selectedId, {
-          group_name: groupName.trim(),
-          fk_prt_id: selectedParent.pk_grp_id,
-          fk_user_id: '1',
+        await updateMutation.mutateAsync({
+          id: selectedId,
+          body: {
+            group_name: groupName.trim(),
+            fk_prt_id: selectedParent.pk_grp_id,
+            fk_user_id: '1',
+          },
         });
         toast.success(`"${groupName.trim()}" updated.`);
       }
       setMode('view');
-      await loadData();
     } catch (e: any) {
       const msg = e.response?.data?.message || e.message || 'Failed to save record';
       toast.error(msg);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -220,30 +206,28 @@ export function AccountGroupsScreen() {
       toast.error('Cannot delete system-defined records.');
       return;
     }
+    setIsConfirmOpen(true);
+  };
 
-    if (confirm(`Delete "${groupName}"?`)) {
-      (async () => {
-        try {
-          setLoading(true);
-          await acctGroupApi.remove(selectedId!);
-          toast.success(`"${groupName}" deleted.`);
-          setCursor(0);
-          setMode('view');
-          await loadData();
-        } catch (e: any) {
-          const msg = e.response?.data?.message || e.message || 'Failed to delete record';
-          toast.error(msg);
-        } finally {
-          setLoading(false);
-        }
-      })();
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+    try {
+      await deleteMutation.mutateAsync(selectedId);
+      toast.success(`"${groupName}" deleted.`);
+      setCursor(0);
+      setMode('view');
+    } catch (e: any) {
+      const msg = e.response?.data?.message || e.message || 'Failed to delete record';
+      toast.error(msg);
     }
   };
 
   const handleRefresh = async () => {
     setFilterGroup('');
     setFilterParent('');
-    await loadData();
+    refetchList();
+    refetchTree();
+    refetchParents();
     toast.success('Data refreshed.');
   };
 
@@ -258,35 +242,39 @@ export function AccountGroupsScreen() {
     }
   };
 
+  const getSelectedNodeDepth = () => {
+    if (!selectedId) return 0;
+    let depth = 0;
+    let currentId = selectedId;
+    const visited = new Set<number>();
+    while (currentId && !visited.has(currentId)) {
+      visited.add(currentId);
+      const node =
+        records.find((r) => r.pk_grp_id === currentId) ||
+        parents.find((r) => r.pk_grp_id === currentId);
+      if (node && node.fk_prt_id && node.fk_prt_id !== currentId) {
+        depth++;
+        currentId = node.fk_prt_id;
+      } else {
+        break;
+      }
+    }
+    return depth;
+  };
+
   const isEditing = mode === 'add' || mode === 'edit';
   const canNav = !isEditing && records.length > 0;
 
-  // ── Toolbar Items ───────────────────────────────────────────────────────────
-
-  const navigationActions = [
-    { icon: ChevronFirst, title: 'First', onClick: handleFirst, disabled: !canNav || cursor === 0 },
-    { icon: ChevronLeft, title: 'Prior', onClick: handlePrior, disabled: !canNav || cursor === 0 },
-    {
-      icon: ChevronRight,
-      title: 'Next',
-      onClick: handleNext,
-      disabled: !canNav || cursor === records.length - 1,
-    },
-    {
-      icon: ChevronLast,
-      title: 'Last',
-      onClick: handleLast,
-      disabled: !canNav || cursor === records.length - 1,
-    },
-  ] as const;
-
   const crudActions = [
     {
-      label: 'Add',
-      icon: Plus,
+      label: mode === 'edit' ? 'Save' : 'Add',
+      icon: mode === 'edit' ? Save : Plus,
       variant: 'success',
-      onClick: handleSave,
-      disabled: mode !== 'add' || loading || groupName.trim().length <= 2,
+      onClick: mode === 'view' ? handleAdd : handleSave,
+      disabled:
+        loading ||
+        (mode === 'view' && getSelectedNodeDepth() >= 4) ||
+        (mode !== 'view' && groupName.trim().length <= 2),
     },
     {
       label: 'Edit',
@@ -308,13 +296,6 @@ export function AccountGroupsScreen() {
       variant: 'secondary',
       onClick: handleUndo,
       disabled: !isEditing || loading,
-    },
-    {
-      label: 'Save',
-      icon: Save,
-      variant: 'success',
-      onClick: handleSave,
-      disabled: mode !== 'edit' || loading || groupName.trim().length <= 2,
     },
   ] as const;
 
@@ -371,7 +352,7 @@ export function AccountGroupsScreen() {
       </div>
 
       {/* Toolbar */}
-      <Toolbar navigation={navigationActions} actions={crudActions} utilities={utilityActions} />
+      <Toolbar actions={crudActions} utilities={utilityActions} />
 
       {/* Tabs list toggle */}
       <div className="my-2 flex border-b">
@@ -393,7 +374,7 @@ export function AccountGroupsScreen() {
           }`}
           onClick={() => {
             setActiveTab('list');
-            if (records.length === 0) loadData();
+            if (records.length === 0) refetchList();
           }}
         >
           All Records List
@@ -424,13 +405,7 @@ export function AccountGroupsScreen() {
             tree={tree}
             loading={loading}
             selectedId={mode === 'add' ? (selectedParent?.pk_grp_id ?? null) : selectedId}
-            onSelectNode={(node) => {
-              setSelectedParent(node);
-              setGroupName('');
-              setSelectedId(null);
-              setMode('add');
-              setTimeout(() => groupInputRef.current?.focus(), 80);
-            }}
+            onSelectNode={handleTreeSelect}
           />
         </div>
       ) : (
@@ -442,7 +417,7 @@ export function AccountGroupsScreen() {
           setFilterGroup={setFilterGroup}
           filterParent={filterParent}
           setFilterParent={setFilterParent}
-          loadData={loadData}
+          loadData={refetchList}
           onSelectRecord={handleSelectRecord}
           onDoubleClickRecord={handleDoubleClickRecord}
         />
@@ -472,6 +447,16 @@ export function AccountGroupsScreen() {
         )}
         <span className="ml-auto font-medium">Total: {records.length} records</span>
       </div>
+
+      <DeleteDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        description="Are you sure you want to permanently delete this account group? This action cannot be undone."
+        itemName={groupName}
+        isDeleting={loading}
+      />
     </div>
   );
 }
