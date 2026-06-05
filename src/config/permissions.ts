@@ -8,10 +8,10 @@ export const PERMISSION_CONFIG = {
     operator: ['create', 'read', 'update', 'delete'],
     system: ['settings', 'reports'],
   },
-  
+
   // Define role-based permissions
   roles: ROLE_PERMISSIONS,
-  
+
   // Define permission hierarchy
   hierarchy: {
     admin: ['manager', 'operator', 'viewer'],

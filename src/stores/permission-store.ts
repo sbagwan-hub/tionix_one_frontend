@@ -24,40 +24,40 @@ export const usePermissionStore = create<PermissionState>()(
     (set, get) => ({
       permissions: [],
       loading: false,
-      
+
       setPermissions: (permissions) => {
         set({ permissions, loading: false });
       },
-      
+
       setLoading: (loading) => {
         set({ loading });
       },
-      
+
       hasPermission: (resource, action) => {
         const { permissions } = get();
         return permissions.some(
-          permission => permission.resource === resource && permission.action === action
+          (permission) => permission.resource === resource && permission.action === action,
         );
       },
-      
+
       hasAnyPermission: (resource, actions) => {
         const { permissions } = get();
-        return actions.some(action =>
+        return actions.some((action) =>
           permissions.some(
-            permission => permission.resource === resource && permission.action === action
-          )
+            (permission) => permission.resource === resource && permission.action === action,
+          ),
         );
       },
-      
+
       hasAllPermissions: (resource, actions) => {
         const { permissions } = get();
-        return actions.every(action =>
+        return actions.every((action) =>
           permissions.some(
-            permission => permission.resource === resource && permission.action === action
-          )
+            (permission) => permission.resource === resource && permission.action === action,
+          ),
         );
       },
-      
+
       clearPermissions: () => {
         set({ permissions: [], loading: false });
       },
@@ -67,6 +67,6 @@ export const usePermissionStore = create<PermissionState>()(
       partialize: (state) => ({
         permissions: state.permissions,
       }),
-    }
-  )
+    },
+  ),
 );

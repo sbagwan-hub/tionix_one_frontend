@@ -39,29 +39,22 @@ export const ROLE_PERMISSIONS: Record<string, string[]> = {
   ],
 };
 
-export function hasPermission(
-  userPermissions: string[],
-  requiredPermission: string
-): boolean {
+export function hasPermission(userPermissions: string[], requiredPermission: string): boolean {
   return userPermissions.includes(requiredPermission);
 }
 
 export function hasAnyPermission(
   userPermissions: string[],
-  requiredPermissions: string[]
+  requiredPermissions: string[],
 ): boolean {
-  return requiredPermissions.some(permission => 
-    userPermissions.includes(permission)
-  );
+  return requiredPermissions.some((permission) => userPermissions.includes(permission));
 }
 
 export function hasAllPermissions(
   userPermissions: string[],
-  requiredPermissions: string[]
+  requiredPermissions: string[],
 ): boolean {
-  return requiredPermissions.every(permission => 
-    userPermissions.includes(permission)
-  );
+  return requiredPermissions.every((permission) => userPermissions.includes(permission));
 }
 
 export function getPermissionDescription(permission: string): string {
@@ -81,6 +74,6 @@ export function getPermissionDescription(permission: string): string {
     [PERMISSIONS.SYSTEM_SETTINGS]: 'Access system settings',
     [PERMISSIONS.SYSTEM_REPORTS]: 'View system reports',
   };
-  
+
   return descriptions[permission] || permission;
 }

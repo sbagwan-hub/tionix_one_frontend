@@ -29,8 +29,8 @@ const PermissionTabs = ({ tabs, activeTab, setActiveTab, className }: Permission
             className={cn(
               'transiion-colors m-2 h-full cursor-pointer rounded-xs px-3 text-xs font-medium tracking-tight outline-none',
               isActive
-                ? 'bg-background text-foreground border-border/80 border font-semibold'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50',
+                ? 'border-border/80 bg-background text-foreground border font-semibold'
+                : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
             )}
           >
             {tab}

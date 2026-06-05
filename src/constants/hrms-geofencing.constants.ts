@@ -71,8 +71,7 @@ export function buildEmployeeLiveLocations(
   };
 
   return employees.map((employee, index) => {
-    const point =
-      positions?.[employee.id] ?? createSeedLocation(employee, index, geofence);
+    const point = positions?.[employee.id] ?? createSeedLocation(employee, index, geofence);
     const distanceMeters = getDistanceMeters(officePoint, point);
     const insideGeofence = geofence.enabled
       ? isInsideGeofence(point, officePoint, geofence.radiusMeters)
@@ -100,8 +99,7 @@ export function summarizeLiveLocations(locations: readonly HrmsEmployeeLiveLocat
     total: locations.length,
     insideCount,
     outsideCount,
-    attendanceRate:
-      locations.length === 0 ? 0 : Math.round((insideCount / locations.length) * 100),
+    attendanceRate: locations.length === 0 ? 0 : Math.round((insideCount / locations.length) * 100),
   };
 }
 

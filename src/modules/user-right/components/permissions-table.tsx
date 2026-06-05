@@ -297,7 +297,7 @@ export default function PermissionTable({
                   {branches?.map((b, idx) => (
                     <span
                       key={idx}
-                      className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
+                      className="border-border bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                     >
                       Set ID: <strong>{b.fkSetId}</strong>
                       {editable && (
@@ -340,7 +340,7 @@ export default function PermissionTable({
                   {dashboards?.map((d, idx) => (
                     <span
                       key={idx}
-                      className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
+                      className="border-border bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                     >
                       Dashboard: <strong>#{d.Id}</strong>
                       {editable && (
@@ -382,7 +382,7 @@ export default function PermissionTable({
                   {processes?.map((p, idx) => (
                     <span
                       key={idx}
-                      className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
+                      className="border-border bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                     >
                       Prod ID: <strong>{p.fkProdId}</strong>
                       {editable && (

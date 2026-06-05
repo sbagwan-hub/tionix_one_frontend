@@ -16,16 +16,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const {
-    user,
-    token,
-    isAuthenticated,
-    isLoading,
-    login,
-    logout,
-    setLoading,
-    initialize,
-  } = useAuthStore();
+  const { user, token, isAuthenticated, isLoading, login, logout, setLoading, initialize } =
+    useAuthStore();
 
   useEffect(() => {
     // Initialize auth state from cookies on mount
@@ -42,11 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading,
   };
 
-  return React.createElement(
-    AuthContext.Provider,
-    { value },
-    children
-  );
+  return React.createElement(AuthContext.Provider, { value }, children);
 }
 
 export function useAuth() {

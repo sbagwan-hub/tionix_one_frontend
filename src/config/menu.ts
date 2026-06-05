@@ -81,13 +81,13 @@ export const menuItems: MenuItem[] = [
 ];
 
 export function getMenuItemsByPermissions(userPermissions: string[]): MenuItem[] {
-  return menuItems.filter(item => {
+  return menuItems.filter((item) => {
     if (!item.permissions) return true;
-    return item.permissions.some(permission => userPermissions.includes(permission));
+    return item.permissions.some((permission) => userPermissions.includes(permission));
   });
 }
 
 export function hasMenuAccess(menuItem: MenuItem, userPermissions: string[]): boolean {
   if (!menuItem.permissions) return true;
-  return menuItem.permissions.some(permission => userPermissions.includes(permission));
+  return menuItem.permissions.some((permission) => userPermissions.includes(permission));
 }

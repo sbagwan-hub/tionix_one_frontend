@@ -67,7 +67,7 @@ export default function UserSelection({
           >
             <SelectTrigger
               id="user-profile"
-              className="border-border bg-background text-foreground focus:ring-ring focus:border-ring h-8 w-full rounded-md border px-3 text-xs font-medium shadow-none transition-all outline-none focus:ring-1"
+              className="border-border bg-background text-foreground focus:border-ring focus:ring-ring h-8 w-full rounded-md border px-3 text-xs font-medium shadow-none transition-all outline-none focus:ring-1"
             >
               <SelectValue placeholder="Choose a user profile..." />
             </SelectTrigger>

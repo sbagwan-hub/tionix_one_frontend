@@ -7,10 +7,10 @@ export default function proxy(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value;
 
   // Check if the current path is a public route
-  const isPublicRoute = PUBLIC_ROUTES.some(route => pathname.startsWith(route));
-  
+  const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+
   // Check if the current path is a protected route
-  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+  const isProtectedRoute = PROTECTED_ROUTES.some((route) => pathname.startsWith(route));
 
   // Handle root path
   if (pathname === '/') {

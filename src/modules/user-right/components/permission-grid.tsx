@@ -71,19 +71,19 @@ function PermissionGridInner<T extends Record<string, any>>({
       <Table className="min-w-full border-separate border-spacing-0 text-left">
         <TableHeader>
           <TableRow className="border-border bg-muted/50 dark:bg-muted/20 sticky top-0 z-10 border-b">
-            <TableHead className="text-muted-foreground bg-card w-2/5 p-3 text-left text-xs font-semibold tracking-[0.14em] uppercase">
+            <TableHead className="bg-card text-muted-foreground w-2/5 p-3 text-left text-xs font-semibold tracking-[0.14em] uppercase">
               {isReport ? 'Report Form Title' : 'Form Title / Functional Module'}
             </TableHead>
             {cols.map((col) => (
               <TableHead
                 key={col}
-                className="text-muted-foreground bg-card p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase"
+                className="bg-card text-muted-foreground p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase"
               >
                 {colLabels[col] || col}
               </TableHead>
             ))}
             {hasAuth && (
-              <TableHead className="text-muted-foreground bg-card p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="bg-card text-muted-foreground p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Auth
               </TableHead>
             )}
@@ -105,7 +105,7 @@ function PermissionGridInner<T extends Record<string, any>>({
               {group.items.map(({ r, idx }) => (
                 <TableRow
                   key={idx}
-                  className="hover:bg-muted/40 border-border/40 border-b transition-colors"
+                  className="border-border/40 hover:bg-muted/40 border-b transition-colors"
                 >
                   <TableCell className="text-foreground relative max-w-[280px] py-2 text-xs font-medium">
                     <div className="flex items-center pl-4">
