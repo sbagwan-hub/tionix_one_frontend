@@ -9,7 +9,7 @@ export type Action = {
   icon: React.ElementType;
   title?: string;
   onClick?: () => void | Promise<void>;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'icon';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'icon' | 'outline' | 'destructive';
   disabled?: boolean;
 };
 
@@ -31,6 +31,8 @@ const variantMap: Record<
   secondary: 'secondary',
   danger: 'destructive',
   success: 'outline',
+  outline: 'outline',
+  destructive: 'destructive',
   icon: 'ghost',
 };
 

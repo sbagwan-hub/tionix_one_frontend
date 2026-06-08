@@ -269,7 +269,7 @@ export function AccountGroupsScreen() {
     {
       label: mode === 'edit' ? 'Save' : 'Add',
       icon: mode === 'edit' ? Save : Plus,
-      variant: 'success',
+      variant: 'primary',
       onClick: mode === 'view' ? handleAdd : handleSave,
       disabled:
         loading ||
@@ -279,21 +279,21 @@ export function AccountGroupsScreen() {
     {
       label: 'Edit',
       icon: Edit,
-      variant: 'primary',
+      variant: 'secondary',
       onClick: handleEdit,
       disabled: isEditing || !selectedId || isSysDefined || loading,
     },
     {
-      label: 'Del',
+      label: 'Delete',
       icon: Trash2,
       variant: 'danger',
       onClick: handleDelete,
       disabled: isEditing || !selectedId || isSysDefined || loading,
     },
     {
-      label: 'Undo',
+      label: 'Cancel',
       icon: Undo2,
-      variant: 'secondary',
+      variant: 'outline',
       onClick: handleUndo,
       disabled: !isEditing || loading,
     },

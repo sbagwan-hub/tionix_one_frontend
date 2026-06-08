@@ -21,6 +21,8 @@ const variantMap: Record<
   danger: 'destructive',
   success: 'success',
   icon: 'ghost',
+  outline: 'outline',
+  destructive: 'destructive',
 };
 
 function HrmsToolbarButton({ action }: { action: Action }) {

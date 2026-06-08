@@ -95,7 +95,7 @@ function PermissionGridInner<T extends Record<string, any>>({
               <TableRow className="bg-muted/30 hover:bg-muted/30 border-none">
                 <TableCell
                   colSpan={cols.length + (hasAuth ? 2 : 1)}
-                  className="bg-muted/20 px-3 py-1.5 text-[11px] font-bold tracking-tight text-blue-600 uppercase dark:text-blue-400"
+                  className="bg-muted/20 text-primary px-3 py-1.5 text-[11px] font-bold tracking-tight uppercase dark:text-blue-400"
                 >
                   {group.cap}
                 </TableCell>

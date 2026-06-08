@@ -19,10 +19,34 @@ const HrmsLiveLocationMap = dynamic(() => import('@/components/hrms/hrms-live-lo
 });
 
 const DEFAULT_FENCES: HrmsGeofenceConfig[] = [
-  { officeName: 'Thane Office', latitude: 19.187053, longitude: 72.977937, radiusMeters: 250, enabled: true },
-  { officeName: 'Koparkairane Office', latitude: 19.112000, longitude: 73.010000, radiusMeters: 250, enabled: true },
-  { officeName: 'Kalyan Office', latitude: 19.240000, longitude: 73.130000, radiusMeters: 250, enabled: true },
-  { officeName: 'My Home Office', latitude: 19.076000, longitude: 72.877700, radiusMeters: 350, enabled: true },
+  {
+    officeName: 'Thane Office',
+    latitude: 19.187053,
+    longitude: 72.977937,
+    radiusMeters: 250,
+    enabled: true,
+  },
+  {
+    officeName: 'Koparkairane Office',
+    latitude: 19.112,
+    longitude: 73.01,
+    radiusMeters: 250,
+    enabled: true,
+  },
+  {
+    officeName: 'Kalyan Office',
+    latitude: 19.24,
+    longitude: 73.13,
+    radiusMeters: 250,
+    enabled: true,
+  },
+  {
+    officeName: 'My Home Office',
+    latitude: 19.076,
+    longitude: 72.8777,
+    radiusMeters: 350,
+    enabled: true,
+  },
 ];
 
 const STORAGE_FENCES_KEY = 'hrms_configured_fences_list';
@@ -38,10 +62,10 @@ export default function HrmsGeofencingView() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const savedFences = localStorage.getItem(STORAGE_FENCES_KEY);
     const savedActiveIndex = localStorage.getItem(STORAGE_ACTIVE_INDEX_KEY);
-    
+
     if (savedFences) {
       try {
         const parsed = JSON.parse(savedFences) as HrmsGeofenceConfig[];
@@ -86,10 +110,10 @@ export default function HrmsGeofencingView() {
       enabled: true,
     };
 
-    let updatedFences = [...fences];
+    const updatedFences = [...fences];
     // If exact name exists, update it, otherwise check active index, or append if active index is invalid
     const existingIndex = fences.findIndex(
-      (f) => f.officeName.toLowerCase() === siteName.trim().toLowerCase()
+      (f) => f.officeName.toLowerCase() === siteName.trim().toLowerCase(),
     );
 
     if (existingIndex >= 0) {
@@ -125,19 +149,19 @@ export default function HrmsGeofencingView() {
       <div className="flex flex-col gap-6 lg:col-span-3">
         {/* Form */}
         <div className={`${hrmsCardClassName} p-5`}>
-          <h2 className="text-base font-semibold text-foreground mb-4">New Perimeter</h2>
-          
+          <h2 className="text-foreground mb-4 text-base font-semibold">New Perimeter</h2>
+
           <div className="space-y-4">
             <div>
               <Label
                 htmlFor="site-name"
-                className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase mb-1 block"
+                className="text-muted-foreground mb-1 block text-[10px] font-bold tracking-wider uppercase"
               >
                 Site Name
               </Label>
               <Input
                 id="site-name"
-                className={`${hrmsInputClassName} h-10 border-border/60`}
+                className={`${hrmsInputClassName} border-border/60 h-10`}
                 value={siteName}
                 onChange={(e) => setSiteName(e.target.value)}
                 placeholder="e.g. Thane Office"
@@ -148,7 +172,7 @@ export default function HrmsGeofencingView() {
               <div>
                 <Label
                   htmlFor="latitude"
-                  className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase mb-1 block"
+                  className="text-muted-foreground mb-1 block text-[10px] font-bold tracking-wider uppercase"
                 >
                   Latitude
                 </Label>
@@ -156,7 +180,7 @@ export default function HrmsGeofencingView() {
                   id="latitude"
                   type="number"
                   step="0.000001"
-                  className={`${hrmsInputClassName} h-10 border-border/60`}
+                  className={`${hrmsInputClassName} border-border/60 h-10`}
                   value={latitude}
                   onChange={(e) => setLatitude(Number(e.target.value))}
                 />
@@ -164,7 +188,7 @@ export default function HrmsGeofencingView() {
               <div>
                 <Label
                   htmlFor="longitude"
-                  className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase mb-1 block"
+                  className="text-muted-foreground mb-1 block text-[10px] font-bold tracking-wider uppercase"
                 >
                   Longitude
                 </Label>
@@ -172,7 +196,7 @@ export default function HrmsGeofencingView() {
                   id="longitude"
                   type="number"
                   step="0.000001"
-                  className={`${hrmsInputClassName} h-10 border-border/60`}
+                  className={`${hrmsInputClassName} border-border/60 h-10`}
                   value={longitude}
                   onChange={(e) => setLongitude(Number(e.target.value))}
                 />
@@ -180,14 +204,14 @@ export default function HrmsGeofencingView() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="mb-1.5 flex items-center justify-between">
                 <Label
                   htmlFor="radius"
-                  className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase"
+                  className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
                 >
                   Radius (Meters)
                 </Label>
-                <span className="text-xs font-semibold text-foreground">{radius}m</span>
+                <span className="text-foreground text-xs font-semibold">{radius}m</span>
               </div>
               <input
                 id="radius"
@@ -195,7 +219,7 @@ export default function HrmsGeofencingView() {
                 min="25"
                 max="1000"
                 step="25"
-                className="w-full accent-black dark:accent-white cursor-pointer h-1.5 bg-muted rounded-sm appearance-none"
+                className="bg-muted h-1.5 w-full cursor-pointer appearance-none rounded-sm accent-black dark:accent-white"
                 value={radius}
                 onChange={(e) => setRadius(Number(e.target.value))}
               />
@@ -204,7 +228,7 @@ export default function HrmsGeofencingView() {
             <Button
               type="button"
               variant="default"
-              className="w-full h-10 mt-2 rounded-sm font-medium transition-colors"
+              className="mt-2 h-10 w-full rounded-sm font-medium transition-colors"
               onClick={handleSaveGeofence}
             >
               Save Geo-fence
@@ -214,27 +238,31 @@ export default function HrmsGeofencingView() {
 
         {/* List of Configured Fences */}
         <div className={`${hrmsCardClassName} p-5`}>
-          <h2 className="text-base font-semibold text-foreground mb-4">Configured Fences</h2>
-          
-          <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+          <h2 className="text-foreground mb-4 text-base font-semibold">Configured Fences</h2>
+
+          <div className="max-h-[300px] space-y-2 overflow-y-auto pr-1">
             {fences.map((fence, index) => {
               const isActive = index === activeIndex;
               return (
                 <button
                   key={index}
                   onClick={() => handleSelectFence(index)}
-                  className={`w-full text-left p-3 rounded-sm border transition-all flex items-start gap-3 ${
+                  className={`flex w-full items-start gap-3 rounded-sm border p-3 text-left transition-all ${
                     isActive
-                      ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60'
+                      ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20'
                       : 'bg-background hover:bg-muted/30 border-border/40'
                   }`}
                 >
-                  <MapPin className={`size-4 mt-0.5 shrink-0 ${isActive ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+                  <MapPin
+                    className={`mt-0.5 size-4 shrink-0 ${isActive ? 'text-emerald-500' : 'text-muted-foreground'}`}
+                  />
                   <div>
-                    <p className={`text-sm font-semibold ${isActive ? 'text-emerald-700 dark:text-emerald-400' : 'text-foreground'}`}>
+                    <p
+                      className={`text-sm font-semibold ${isActive ? 'text-emerald-700 dark:text-emerald-400' : 'text-foreground'}`}
+                    >
                       {fence.officeName}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                    <p className="text-muted-foreground mt-0.5 text-xs">
                       {fence.radiusMeters}m perimeter
                     </p>
                   </div>
@@ -246,23 +274,23 @@ export default function HrmsGeofencingView() {
       </div>
 
       {/* Main Map Panel */}
-      <div className="lg:col-span-7 flex flex-col">
-        <div className={`${hrmsCardClassName} flex-1 flex flex-col overflow-hidden`}>
+      <div className="flex flex-col lg:col-span-7">
+        <div className={`${hrmsCardClassName} flex flex-1 flex-col overflow-hidden`}>
           {/* Header Info Bar */}
-          <div className="flex items-center justify-between border-b px-4 py-3 bg-muted/30 border-border/60">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
-              <Target className="size-4 text-muted-foreground/60" />
+          <div className="bg-muted/30 border-border/60 flex items-center justify-between border-b px-4 py-3">
+            <div className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
+              <Target className="text-muted-foreground/60 size-4" />
               <span>Click anywhere to position the new center</span>
             </div>
-            
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+
+            <div className="flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold tracking-wider text-emerald-600 uppercase dark:border-emerald-900/40 dark:bg-emerald-950/30">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
               Live Editor
             </div>
           </div>
 
           {/* Interactive Map */}
-          <div className="flex-1 min-h-[500px] h-[550px] relative">
+          <div className="relative h-[550px] min-h-[500px] flex-1">
             <HrmsLiveLocationMap
               geofence={activeGeofence}
               locations={[]}
