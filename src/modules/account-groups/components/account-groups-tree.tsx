@@ -19,9 +19,9 @@ export function AccountGroupsTree({
   onSelectNode,
 }: AccountGroupsTreeProps) {
   return (
-    <div className="border-border/50 bg-card/30 relative flex flex-col rounded-xl border shadow-sm backdrop-blur-sm md:col-span-7">
+    <div className="border-border/50 bg-card/30 relative flex flex-col rounded-xl border shadow-sm backdrop-blur-sm md:col-span-7 md:h-full md:min-h-0">
       {/* Scrollable Tree Area */}
-      <div className="scrollbar-thumb-muted-foreground/10 max-h-[450px] scrollbar-thin scrollbar-track-transparent overflow-y-auto p-3">
+      <div className="scrollbar-thumb-muted-foreground/10 min-h-0 flex-1 scrollbar-thin scrollbar-track-transparent overflow-y-auto p-3">
         {loading && tree.length === 0 ? (
           /* Loading State */
           <div className="animate-in fade-in flex h-48 flex-col items-center justify-center gap-3 text-center transition-all duration-200">
