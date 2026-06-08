@@ -1,6 +1,6 @@
 export const ENV = {
   // API Configuration
-  API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
+  API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4100/api',
   API_TIMEOUT: parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '10000'),
 
   // Application Configuration
