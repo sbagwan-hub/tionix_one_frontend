@@ -1,30 +1,17 @@
 export const ROUTES = {
-  // Auth routes
-  LOGIN: '/auth/login',
-  FORGOT_PASSWORD: '/auth/forgot-password',
-
-  // Dashboard routes
-  DASHBOARD: '/dashboard',
-
-  // Masters routes
-  MASTERS: '/masters',
-  USERS: '/masters/users',
   COMPANIES: '/masters/companies',
-  OPERATORS: '/masters/operators',
-
-  // Operations routes
-  SALES_ORDERS: '/sales-orders',
-  PURCHASE_ORDERS: '/purchase-orders',
+  DASHBOARD: '/dashboard',
+  FORGOT_PASSWORD: '/auth/forgot-password',
   INVENTORY: '/inventory',
-
-  // Reports routes
-  REPORTS: '/reports',
-
-  // Settings routes
-  SETTINGS: '/settings',
-
-  // Profile routes
+  LOGIN: '/auth/login',
+  MASTERS: '/masters',
+  OPERATORS: '/masters/operators',
   PROFILE: '/profile',
+  PURCHASE_ORDERS: '/purchase-orders',
+  REPORTS: '/reports',
+  SALES_ORDERS: '/sales-orders',
+  SETTINGS: '/settings',
+  USERS: '/masters/users',
 } as const;
 
 export const ROUTE_GROUPS = {

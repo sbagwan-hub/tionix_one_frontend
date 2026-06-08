@@ -5,9 +5,3 @@ export interface PermissionRow {
   moduleNameKey: string;
   permissions: Record<PermissionKey, boolean>;
 }
-
-export interface User {
-  id: string;
-  name: string;
-  roleKey: string;
-}

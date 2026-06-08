@@ -1,9 +1,3 @@
-export const APP_CONFIG = {
-  NAME: 'Tionix One',
-  VERSION: '2026.01',
-  DESCRIPTION: 'Enterprise Operations Management System',
-} as const;
-
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login',
@@ -35,9 +29,35 @@ export const API_ENDPOINTS = {
   },
 } as const;
 
+export const APP_CONFIG = {
+  NAME: 'Tionix One',
+  VERSION: '2026.01',
+  DESCRIPTION: 'Enterprise Operations Management System',
+} as const;
+
 export const PAGINATION = {
   DEFAULT_PAGE_SIZE: 10,
   PAGE_SIZE_OPTIONS: [5, 10, 20, 50, 100],
+} as const;
+
+export const PERMISSIONS = {
+  COMPANY_CREATE: 'company:create',
+  COMPANY_DELETE: 'company:delete',
+  COMPANY_READ: 'company:read',
+  COMPANY_UPDATE: 'company:update',
+
+  OPERATOR_CREATE: 'operator:create',
+  OPERATOR_DELETE: 'operator:delete',
+  OPERATOR_READ: 'operator:read',
+  OPERATOR_UPDATE: 'operator:update',
+
+  SYSTEM_REPORTS: 'system:reports',
+  SYSTEM_SETTINGS: 'system:settings',
+
+  USER_CREATE: 'user:create',
+  USER_DELETE: 'user:delete',
+  USER_READ: 'user:read',
+  USER_UPDATE: 'user:update',
 } as const;
 
 export const ROLES = {
@@ -47,33 +67,9 @@ export const ROLES = {
   VIEWER: 'viewer',
 } as const;
 
-export const PERMISSIONS = {
-  // User permissions
-  USER_CREATE: 'user:create',
-  USER_READ: 'user:read',
-  USER_UPDATE: 'user:update',
-  USER_DELETE: 'user:delete',
-
-  // Company permissions
-  COMPANY_CREATE: 'company:create',
-  COMPANY_READ: 'company:read',
-  COMPANY_UPDATE: 'company:update',
-  COMPANY_DELETE: 'company:delete',
-
-  // Operator permissions
-  OPERATOR_CREATE: 'operator:create',
-  OPERATOR_READ: 'operator:read',
-  OPERATOR_UPDATE: 'operator:update',
-  OPERATOR_DELETE: 'operator:delete',
-
-  // System permissions
-  SYSTEM_SETTINGS: 'system:settings',
-  SYSTEM_REPORTS: 'system:reports',
-} as const;
-
 export const VALIDATION_RULES = {
-  PASSWORD_MIN_LENGTH: 8,
-  USERNAME_MIN_LENGTH: 3,
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  PASSWORD_MIN_LENGTH: 8,
   PHONE_REGEX: /^[+]?[\d\s\-\(\)]+$/,
+  USERNAME_MIN_LENGTH: 3,
 } as const;
