@@ -107,13 +107,6 @@ export function TreeNodeRow({
         <span className="z-10 truncate text-[13px] tracking-wide transition-colors">
           {node.group_name}
         </span>
-
-        {/* Modernized Pill Tag */}
-        {node.sys_defined && (
-          <span className="z-10 ml-auto inline-flex items-center rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-amber-600 uppercase ring-1 ring-amber-500/20 ring-inset dark:bg-amber-500/5 dark:text-amber-400 dark:ring-amber-500/10">
-            sys
-          </span>
-        )}
       </div>
 
       {/* --- CHILDREN RENDERER --- */}
