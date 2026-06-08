@@ -336,23 +336,7 @@ export function AccountGroupsScreen() {
 
   return (
     <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans select-none">
-      {/* Form Header */}
-      <div className="mb-4 flex items-center justify-between border-b pb-4">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight">Account Group</h1>
-          <p className="text-foreground mt-0.5 text-xs">
-            Manage your account group hierarchy tree and classification rules
-          </p>
-        </div>
-        {records.length > 0 && (
-          <div className="bg-muted text-foreground rounded border px-2 py-1 text-xs font-semibold">
-            Record: {cursor + 1} of {records.length}
-          </div>
-        )}
-      </div>
-
-      {/* Toolbar */}
-      <Toolbar actions={crudActions} utilities={utilityActions} />
+      <Toolbar title="Account Group" actions={crudActions} utilities={utilityActions} />
 
       {/* Tabs list toggle */}
       <div className="my-2 flex border-b">
@@ -383,7 +367,7 @@ export function AccountGroupsScreen() {
 
       {/* Content Container */}
       {activeTab === 'group' ? (
-        <div className="bg-card grid min-h-[420px] grid-cols-1 divide-y overflow-hidden rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0">
+        <div className="bg-card grid min-h-0 flex-1 grid-cols-1 divide-y overflow-y-auto rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
           {/* Form Component */}
           <AccountGroupForm
             groupName={groupName}
@@ -422,31 +406,6 @@ export function AccountGroupsScreen() {
           onDoubleClickRecord={handleDoubleClickRecord}
         />
       )}
-
-      {/* Status bar */}
-      <div className="text-foreground mt-4 flex items-center gap-2 border-t pt-3 text-[11px] select-none">
-        <span
-          className={`h-2 w-2 rounded-full ${
-            loading ? 'bg-primary animate-pulse' : isEditing ? 'bg-amber-500' : 'bg-emerald-500'
-          }`}
-        />
-        <span>
-          {loading
-            ? 'Processing data…'
-            : isEditing
-              ? `${mode === 'add' ? 'Adding' : 'Editing'} record`
-              : 'Ready'}
-        </span>
-        {selectedId && !loading && (
-          <>
-            <span className="text-foreground/30">|</span>
-            <span>
-              Active Selection: <strong>{groupName}</strong>
-            </span>
-          </>
-        )}
-        <span className="ml-auto font-medium">Total: {records.length} records</span>
-      </div>
 
       <DeleteDialog
         isOpen={isConfirmOpen}

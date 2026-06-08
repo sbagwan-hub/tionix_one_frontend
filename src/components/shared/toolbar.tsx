@@ -14,6 +14,9 @@ export type Action = {
 };
 
 type ToolbarProps = {
+  title?: string;
+  currentRecord?: number;
+  totalRecords?: number;
   navigation?: readonly Action[];
   actions?: readonly Action[];
   utilities?: readonly Action[];
@@ -58,6 +61,9 @@ function ToolbarButton({ action, compactIcon }: { action: Action; compactIcon?: 
 }
 
 export default function Toolbar({
+  title,
+  currentRecord,
+  totalRecords,
   navigation = [],
   actions = [],
   utilities = [],
@@ -66,16 +72,37 @@ export default function Toolbar({
   const hasNavigation = navigation.length > 0;
   const hasActions = actions.length > 0;
   const hasUtilities = utilities.length > 0;
+  const showPagination =
+    currentRecord !== undefined && totalRecords !== undefined && totalRecords > 0;
 
   return (
     <div
       className={cn(
-        'bg-muted/40 border-border/60 mb-2 flex min-h-9 w-full items-center justify-between gap-1 rounded-sm border p-1 dark:bg-zinc-900/40',
+        'bg-muted/40 border-border/60 mb-2 flex min-h-9 w-full flex-wrap items-center justify-between gap-x-1 gap-y-2 rounded-sm border p-1 dark:bg-zinc-900/40',
         className,
       )}
     >
-      {/* Left side: Navigation & Actions grouped together */}
-      <div className="flex items-center gap-1">
+      {/* Left side: Context (Title/Counter) -> Navigation -> Actions */}
+      <div className="flex flex-wrap items-center gap-1">
+        {/* Integrated Title & Counter */}
+        {title && (
+          <div className="flex items-center gap-2 pr-1 pl-1.5">
+            <span className="text-foreground text-xs font-bold tracking-tight whitespace-nowrap">
+              {title}
+            </span>
+            {showPagination && (
+              <span className="text-muted-foreground bg-muted border-border/40 rounded border px-1 py-0.5 font-mono text-[10px]">
+                {currentRecord}/{totalRecords}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Separator between Title Context and Buttons */}
+        {title && (hasNavigation || hasActions) && (
+          <div className="bg-border mx-1 h-3.5 w-[1px]" aria-hidden="true" />
+        )}
+
         {hasNavigation && (
           <div className="flex items-center gap-1">
             {navigation.map((item, idx) => (
@@ -100,9 +127,9 @@ export default function Toolbar({
 
       {/* Right side: Utilities */}
       {hasUtilities && (
-        <div className="flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-1 sm:ml-0">
           {/* Separator before Utilities if there's content on the left */}
-          {(hasNavigation || hasActions) && (
+          {(title || hasNavigation || hasActions) && (
             <div className="bg-border mx-1 h-3.5 w-[1px]" aria-hidden="true" />
           )}
           {utilities.map((item, idx) => (

@@ -72,7 +72,6 @@ function RenderMenuItems({ items }: { items: MenuItem[] }) {
                   )}
                   <span>{displayLabel}</span>
                 </div>
-                <ChevronRight className="text-muted-foreground/70 ml-auto h-3.5 w-3.5" />
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent

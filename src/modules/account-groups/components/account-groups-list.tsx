@@ -40,7 +40,7 @@ export function AccountGroupsList({
   });
 
   return (
-    <div className="bg-card flex min-h-[420px] flex-col overflow-hidden rounded-md border">
+    <div className="bg-card flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border">
       {/* Filters Area */}
       <div className="bg-muted/20 flex flex-wrap items-center gap-3 border-b p-3">
         <div className="min-w-[200px] flex-1">
@@ -71,7 +71,7 @@ export function AccountGroupsList({
       </div>
 
       {/* Table Area */}
-      <div className="overflow-x-auto">
+      <div className="min-h-0 flex-1 overflow-auto">
         <table className="w-full border-collapse text-left">
           <thead>
             <tr className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase select-none">
