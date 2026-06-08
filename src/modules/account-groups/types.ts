@@ -13,7 +13,7 @@ export interface AcctGroup {
   fk_user_id: string;
   last_status: string;
   parent_name?: string;
-  user_name?: string;
+  username?: string;
 }
 
 export interface TreeNode extends AcctGroup {

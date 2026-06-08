@@ -4,7 +4,7 @@ export interface UserRecord {
   employee: string | null;
   mobile: string | null;
   last_status: string | null;
-  datetime_stamp: string;
+  date_time_stamp: string;
   creator: string | null;
   fk_emp_id: number | null;
   fk_ec_id: number | null;
@@ -33,7 +33,7 @@ export interface UserFilterParams {
   employee?: string;
   creator?: string;
   last_status?: string;
-  datetime_stamp?: string;
+  date_time_stamp?: string;
   page?: number;
   pageSize?: number;
 }
