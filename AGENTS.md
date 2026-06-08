@@ -100,6 +100,14 @@ Every CRUD page or entity management panel must use the `Toolbar` component from
 - Wrap page text in standard localization translations using the `useTranslation` hook.
 - Avoid inline `LOCALES` dictionaries in component files. Migrate dictionaries to the centralized JSON structures in `src/locales`.
 
+### E. Database Property Naming and Case Rules
+
+To maintain perfect alignment with the backend and PostgreSQL database columns:
+
+- **Username Naming**: Always use `username` (fully lowercase). Do not use camelCase `userName` or snake_case `user_name` in types, states, or variables.
+- **Primary Keys**: Always use `pk_user_id` (fully lowercase snake_case). Do not use camelCase `pkUserid` or `pkUserId`.
+- **Properties/Variables Matching Database Columns**: Ensure that all frontend module types and variable property names exactly match their database column counterparts (e.g., `fk_set_id`, `fk_prod_id`, `id`, `form`, `rights`). Avoid converting database property names to camelCase on the frontend.
+
 ---
 
 ## 4. Codebase Analysis & Recommendations for Improvement

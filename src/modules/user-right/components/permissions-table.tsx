@@ -112,8 +112,8 @@ export default function PermissionTable({
   const addBranch = () => {
     const v = parseInt(branchInput.trim(), 10);
     if (!isNaN(v)) {
-      if (!branches.some((b) => b.fkSetId === v)) {
-        setBranches([...branches, { fkSetId: v }]);
+      if (!branches.some((b) => b.fk_set_id === v)) {
+        setBranches([...branches, { fk_set_id: v }]);
         markDirty();
       }
       setBranchInput('');
@@ -128,8 +128,8 @@ export default function PermissionTable({
   const addDashboard = () => {
     const v = parseInt(dashboardInput.trim(), 10);
     if (!isNaN(v)) {
-      if (!dashboards.some((d) => d.Id === v)) {
-        setDashboards([...dashboards, { Id: v }]);
+      if (!dashboards.some((d) => d.id === v)) {
+        setDashboards([...dashboards, { id: v }]);
         markDirty();
       }
       setDashboardInput('');
@@ -144,8 +144,8 @@ export default function PermissionTable({
   const addProcess = () => {
     const v = processInput.trim().slice(0, 10);
     if (v) {
-      if (!processes.some((p) => p.fkProdId === v)) {
-        setProcesses([...processes, { fkProdId: v }]);
+      if (!processes.some((p) => p.fk_prod_id === v)) {
+        setProcesses([...processes, { fk_prod_id: v }]);
         markDirty();
       }
       setProcessInput('');
@@ -241,7 +241,7 @@ export default function PermissionTable({
                     key={idx}
                     className={cn(
                       'flex items-center gap-3 rounded-lg border p-3 transition-all select-none',
-                      s.Rights
+                      s.rights
                         ? 'border-emerald-500/40 bg-emerald-500/5 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300'
                         : 'border-border bg-card text-muted-foreground',
                       editable
@@ -250,20 +250,20 @@ export default function PermissionTable({
                     )}
                   >
                     <Checkbox
-                      checked={s.Rights}
+                      checked={s.rights}
                       disabled={!editable}
                       className="border-muted-foreground data-[state=checked]:border-primary"
                       onCheckedChange={(checked) => {
                         const isChecked = checked === true;
                         setSpecials(
                           specials.map((row, i) =>
-                            i === idx ? { ...row, Rights: isChecked } : row,
+                            i === idx ? { ...row, rights: isChecked } : row,
                           ),
                         );
                         markDirty();
                       }}
                     />
-                    <span className="truncate text-sm font-semibold">{s.Form}</span>
+                    <span className="truncate text-sm font-semibold">{s.form}</span>
                   </label>
                 ))}
               </div>
@@ -299,7 +299,7 @@ export default function PermissionTable({
                       key={idx}
                       className="border-border bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                     >
-                      Set ID: <strong>{b.fkSetId}</strong>
+                      Set ID: <strong>{b.fk_set_id}</strong>
                       {editable && (
                         <button
                           onClick={() => removeBranch(idx)}
@@ -342,7 +342,7 @@ export default function PermissionTable({
                       key={idx}
                       className="border-border bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                     >
-                      Dashboard: <strong>#{d.Id}</strong>
+                      Dashboard: <strong>#{d.id}</strong>
                       {editable && (
                         <button
                           onClick={() => removeDashboard(idx)}
@@ -384,7 +384,7 @@ export default function PermissionTable({
                       key={idx}
                       className="border-border bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all"
                     >
-                      Prod ID: <strong>{p.fkProdId}</strong>
+                      Prod ID: <strong>{p.fk_prod_id}</strong>
                       {editable && (
                         <button
                           onClick={() => removeProcess(idx)}
