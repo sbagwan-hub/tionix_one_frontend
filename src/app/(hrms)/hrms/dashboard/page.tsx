@@ -21,7 +21,7 @@ import {
   hrmsPageClassName,
   hrmsTabsListClassName,
   hrmsTabsTriggerClassName,
-} from '@/components/hrms';
+} from '@/modules/hrms/components';
 import {
   buildHrmsActionToolbar,
   defaultHrmsEmployeeFilters,
@@ -35,7 +35,7 @@ import {
 } from '@/constants/hrms-dashboard.constants';
 
 const HrmsLiveLocationView = dynamic(
-  () => import('@/components/hrms/hrms-live-location-view'),
+  () => import('@/modules/hrms/components/hrms-live-location-view'),
   {
     ssr: false,
     loading: () => (
@@ -46,7 +46,7 @@ const HrmsLiveLocationView = dynamic(
   },
 );
 
-const HrmsGeofencingView = dynamic(() => import('@/components/hrms/hrms-geofencing-view'), {
+const HrmsGeofencingView = dynamic(() => import('@/modules/hrms/components/hrms-geofencing-view'), {
   ssr: false,
   loading: () => (
     <div className="text-muted-foreground flex min-h-[240px] items-center justify-center text-sm">

@@ -27,7 +27,7 @@ import {
   CheckCircle2,
   BookOpen,
 } from 'lucide-react';
-import { hrmsRadiusClassName } from '@/components/hrms/hrms-styles';
+import { hrmsRadiusClassName } from '@/modules/hrms/components/hrms-styles';
 
 // Fallback translations matching i18next languages in the app (en, ar, hi)
 const LOCALES = {

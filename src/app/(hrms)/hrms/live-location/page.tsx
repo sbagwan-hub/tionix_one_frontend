@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import HrmsLiveLocationView from '@/components/hrms/hrms-live-location-view';
-import { hrmsControlRadiusClassName, hrmsPageClassName } from '@/components/hrms/hrms-styles';
+import HrmsLiveLocationView from '@/modules/hrms/components/hrms-live-location-view';
+import { hrmsControlRadiusClassName, hrmsPageClassName } from '@/modules/hrms/components/hrms-styles';
 
 export default function HrmsLiveLocationPage() {
   return (

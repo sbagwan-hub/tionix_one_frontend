@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { MapPin, RefreshCw, Users } from 'lucide-react';
-import HrmsLiveLocationPanel from '@/components/hrms/hrms-live-location-panel';
-import { hrmsNestedCardClassName } from '@/components/hrms/hrms-styles';
+import HrmsLiveLocationPanel from '@/modules/hrms/components/hrms-live-location-panel';
+import { hrmsNestedCardClassName } from '@/modules/hrms/components/hrms-styles';
 import { recentEmployees } from '@/constants/hrms-dashboard.constants';
 import {
   buildEmployeeLiveLocations,
@@ -19,7 +19,7 @@ import { jitterGeoPoint, type GeoPoint } from '@/lib/hrms-geofencing';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-const HrmsLiveLocationMap = dynamic(() => import('@/components/hrms/hrms-live-location-map'), {
+const HrmsLiveLocationMap = dynamic(() => import('@/modules/hrms/components/hrms-live-location-map'), {
   ssr: false,
   loading: () => (
     <div className="text-muted-foreground flex h-full min-h-[420px] items-center justify-center text-sm">

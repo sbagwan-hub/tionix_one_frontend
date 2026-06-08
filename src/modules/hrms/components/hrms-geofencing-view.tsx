@@ -6,10 +6,10 @@ import { Target, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { hrmsCardClassName, hrmsInputClassName } from '@/components/hrms/hrms-styles';
+import { hrmsCardClassName, hrmsInputClassName } from '@/modules/hrms/components/hrms-styles';
 import { type HrmsGeofenceConfig } from '@/constants/hrms-geofencing.constants';
 
-const HrmsLiveLocationMap = dynamic(() => import('@/components/hrms/hrms-live-location-map'), {
+const HrmsLiveLocationMap = dynamic(() => import('@/modules/hrms/components/hrms-live-location-map'), {
   ssr: false,
   loading: () => (
     <div className="text-muted-foreground flex h-full min-h-[500px] items-center justify-center text-sm">

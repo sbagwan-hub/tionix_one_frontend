@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { hrmsRadiusClassName } from '@/components/hrms/hrms-styles';
+import { hrmsRadiusClassName } from '@/modules/hrms/components/hrms-styles';
 import {
   Users,
   Building2,
