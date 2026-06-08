@@ -54,8 +54,8 @@ const LOCALES = {
     last: 'Last',
     add: 'Add',
     edit: 'Edit',
-    delete: 'Del',
-    undo: 'Undo',
+    delete: 'Delete',
+    cancel: 'Cancel',
     save: 'Save',
     refresh: 'Refr.',
     print: 'Print',
@@ -100,7 +100,7 @@ const LOCALES = {
     add: 'إضافة',
     edit: 'تحرير',
     delete: 'حذف',
-    undo: 'تراجع',
+    cancel: 'إلغاء',
     save: 'حفظ',
     refresh: 'تحديث',
     print: 'طباعة',
@@ -145,7 +145,7 @@ const LOCALES = {
     add: 'जोड़ें',
     edit: 'संपादित करें',
     delete: 'हटाएं',
-    undo: 'पूर्ववत करें',
+    cancel: 'रद्द करें',
     save: 'सहेजें',
     refresh: 'रिफ्रेश',
     print: 'प्रिंट',
@@ -213,10 +213,10 @@ export default function AdministratorUsersPage() {
       <div className="w-full">
         <Toolbar
           actions={[
-            { icon: Plus, label: t.add, variant: 'secondary' },
+            { icon: Plus, label: t.add, variant: 'primary' },
             { icon: Edit, label: t.edit, variant: 'secondary' },
-            { icon: Trash2, label: t.delete, variant: 'secondary' },
-            { icon: RotateCcw, label: t.undo, variant: 'secondary' },
+            { icon: Trash2, label: t.delete, variant: 'danger' },
+            { icon: RotateCcw, label: t.cancel, variant: 'outline' },
             {
               icon: isLoading ? RefreshCw : Save,
               label: t.save,
@@ -347,22 +347,34 @@ export default function AdministratorUsersPage() {
                   {t.question}
                 </Label>
                 <div className="relative">
-                  <div className="text-muted-foreground absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3 pointer-events-none">
+                  <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
                     <HelpCircle className="h-4 w-4" />
                   </div>
                   <Select
                     value={formData.question}
                     onValueChange={(val) => handleInputChange('question', val)}
                   >
-                    <SelectTrigger className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}>
+                    <SelectTrigger
+                      className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+                    >
                       <SelectValue placeholder="Select a security question" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="What is your favorite food?">What is your favorite food?</SelectItem>
-                      <SelectItem value="What was your first pet's name?">What was your first pet's name?</SelectItem>
-                      <SelectItem value="What city were you born in?">What city were you born in?</SelectItem>
-                      <SelectItem value="What is your mother's maiden name?">What is your mother's maiden name?</SelectItem>
-                      <SelectItem value="What high school did you attend?">What high school did you attend?</SelectItem>
+                      <SelectItem value="What is your favorite food?">
+                        What is your favorite food?
+                      </SelectItem>
+                      <SelectItem value="What was your first pet's name?">
+                        {"What was your first pet's name?"}
+                      </SelectItem>
+                      <SelectItem value="What city were you born in?">
+                        What city were you born in?
+                      </SelectItem>
+                      <SelectItem value="What is your mother's maiden name?">
+                        {"What is your mother's maiden name?"}
+                      </SelectItem>
+                      <SelectItem value="What high school did you attend?">
+                        What high school did you attend?
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

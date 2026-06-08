@@ -5,8 +5,8 @@ import './globals.css';
 import QueryProviders from '@/providers/query-providers';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
 import { ThemeProvider } from '@/providers/theme-provider';
-import { LayoutWrapper } from '@/components/shared/layout-wrapper';
 import { Toaster } from '@/components/ui/sonner';
+import { LayoutWrapper } from '@/components/layout/layout-wrapper';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

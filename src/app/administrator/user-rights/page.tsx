@@ -4,11 +4,7 @@ import Toolbar, { Action } from '@/components/shared/toolbar';
 import PermissionTable from '@/modules/user-right/components/permissions-table';
 import UserSelection from '@/modules/user-right/components/user-selection';
 import RegisterFormModal from '@/modules/user-right/components/register-form-modal';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   BranchRow,
   DashboardRow,
@@ -170,14 +166,14 @@ export default function UserRightsPage() {
         {
           label: saveMutation.isPending ? 'Saving…' : 'Save',
           icon: Save,
-          variant: 'success',
+          variant: 'primary',
           onClick: handleSave,
           disabled: saveMutation.isPending,
         },
         {
           label: 'Cancel',
           icon: X,
-          variant: 'danger',
+          variant: 'outline',
           onClick: handleCancel,
         },
       ]
@@ -193,7 +189,7 @@ export default function UserRightsPage() {
         {
           label: 'Edit',
           icon: Edit3,
-          variant: 'primary',
+          variant: 'secondary',
           onClick: () => setEditable(true),
           disabled: !selectedUser,
         },

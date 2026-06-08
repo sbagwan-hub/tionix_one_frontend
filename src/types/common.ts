@@ -4,18 +4,6 @@ export interface BaseEntity {
   updatedAt: string;
 }
 
-export interface User extends BaseEntity {
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'admin' | 'manager' | 'operator' | 'viewer';
-  phone?: string;
-  isActive: boolean;
-  companyId?: string;
-  lastLoginAt?: string;
-}
-
 export interface Company extends BaseEntity {
   name: string;
   email: string;
@@ -29,6 +17,39 @@ export interface Company extends BaseEntity {
   taxId?: string;
   registrationNumber?: string;
   isActive: boolean;
+}
+
+export interface FormField {
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'password' | 'select' | 'textarea' | 'checkbox' | 'radio';
+  placeholder?: string;
+  required?: boolean;
+  options?: SelectOption[];
+  validation?: {
+    min?: number;
+    max?: number;
+    pattern?: string;
+    message?: string;
+  };
+}
+
+export interface MenuItem {
+  id: string;
+  label: string;
+  href: string;
+  icon?: React.ComponentType<any>;
+  children?: MenuItem[];
+  permissions?: string[];
+}
+
+export interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+  title: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
 }
 
 export interface Operator extends BaseEntity {
@@ -54,35 +75,14 @@ export interface TableColumn<T = any> {
   render?: (value: any, row: T) => React.ReactNode;
 }
 
-export interface FormField {
-  name: string;
-  label: string;
-  type: 'text' | 'email' | 'password' | 'select' | 'textarea' | 'checkbox' | 'radio';
-  placeholder?: string;
-  required?: boolean;
-  options?: SelectOption[];
-  validation?: {
-    min?: number;
-    max?: number;
-    pattern?: string;
-    message?: string;
-  };
-}
-
-export interface Notification {
-  id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  title: string;
-  message: string;
-  timestamp: string;
-  read: boolean;
-}
-
-export interface MenuItem {
-  id: string;
-  label: string;
-  href: string;
-  icon?: React.ComponentType<any>;
-  children?: MenuItem[];
-  permissions?: string[];
+export interface User extends BaseEntity {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: 'admin' | 'manager' | 'operator' | 'viewer';
+  phone?: string;
+  isActive: boolean;
+  companyId?: string;
+  lastLoginAt?: string;
 }

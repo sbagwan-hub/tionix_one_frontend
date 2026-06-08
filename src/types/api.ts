@@ -1,9 +1,19 @@
+export interface ApiError {
+  message: string;
+  code?: string;
+  details?: any;
+}
+
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
   message?: string;
   error?: string;
   errors?: Record<string, string[]>;
+}
+
+export interface FilterParams {
+  [key: string]: any;
 }
 
 export interface PaginatedResponse<T> {
@@ -14,22 +24,12 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-export interface ApiError {
-  message: string;
-  code?: string;
-  details?: any;
-}
-
 export interface PaginationParams {
   page?: number;
   pageSize?: number;
   search?: string;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
-
-export interface FilterParams {
-  [key: string]: any;
 }
 
 export interface RequestParams extends PaginationParams, FilterParams {

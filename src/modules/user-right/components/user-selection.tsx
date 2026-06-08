@@ -87,7 +87,7 @@ export default function UserSelection({
                   <span className="flex items-center gap-1">
                     {user.username}
                     {user.sys_defined && (
-                      <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-semibold tracking-wider text-amber-700 uppercase select-none dark:bg-amber-950 dark:text-amber-300">
+                      <span className="bg-primary/10 text-primary ml-2 rounded px-1.5 py-0.5 text-[9px] font-semibold tracking-wider uppercase select-none dark:bg-amber-950 dark:text-amber-300">
                         sys
                       </span>
                     )}
