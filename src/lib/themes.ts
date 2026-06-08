@@ -112,7 +112,7 @@ export const themes: Record<ThemeName, { name: string; colors: Record<string, st
     },
   },
   'emerald-teal-light': {
-    name: 'Emerald Teal',
+    name: 'Emerald',
     colors: {
       background: 'oklch(1 0 0)',
       foreground: 'oklch(0.145 0 0)',
@@ -138,7 +138,7 @@ export const themes: Record<ThemeName, { name: string; colors: Record<string, st
     },
   },
   'emerald-teal-dark': {
-    name: 'Emerald Teal Dark',
+    name: 'Emerald Dark',
     colors: {
       background: 'oklch(0.145 0 0)',
       foreground: 'oklch(0.985 0 0)',
