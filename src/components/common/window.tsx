@@ -205,7 +205,7 @@ export const Window: React.FC<WindowProps> = ({
       onTouchStart={bringToFront}
       className={cn(
         // Base transitions and styling
-        'flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80',
+        'pointer-events-auto flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80',
         dragging
           ? 'cursor-grabbing shadow-2xl select-none'
           : 'shadow-lg transition-shadow duration-300 hover:shadow-xl',
