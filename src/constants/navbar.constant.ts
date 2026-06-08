@@ -1,4 +1,5 @@
 import { MenuItem } from '@/components/shared/nested-dropdown-menu';
+import { useWindowStore } from '@/stores/window-store';
 
 interface NavMenu {
   key: string;
@@ -57,7 +58,37 @@ export const NAV_MENUS: NavMenu[] = [
     key: 'master',
     items: [
       { key: 'Documents', href: '/documents', icon: 'List' },
-      { key: 'Contacts', href: '/contacts', icon: 'User' },
+      {
+        key: 'Contacts',
+        icon: 'User',
+        children: [
+          {
+            key: 'qualification',
+            icon: 'GraduationCap',
+            action: () => useWindowStore.getState().openWindow('contacts-qualification'),
+          },
+          {
+            key: 'relationship',
+            icon: 'Heart',
+            action: () => useWindowStore.getState().openWindow('contacts-relationship'),
+          },
+          {
+            key: 'productCategory',
+            icon: 'Layers',
+            action: () => useWindowStore.getState().openWindow('contacts-product-category'),
+          },
+          {
+            key: 'department',
+            icon: 'Building2',
+            action: () => useWindowStore.getState().openWindow('contacts-department'),
+          },
+          {
+            key: 'designation',
+            icon: 'Briefcase',
+            action: () => useWindowStore.getState().openWindow('contacts-designation'),
+          },
+        ],
+      },
       {
         key: 'Accounts',
         icon: 'PieChart',

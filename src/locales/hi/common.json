@@ -30,6 +30,11 @@
   "chequeBook": "चेक बुक (Cheque Book)",
   "openingBalanceSplitUp": "प्रारंभिक शेष विभाजन (Opening Balance Split Up)",
   "paymentPurpose": "भुगतान का उद्देश्य (Payment Purpose)",
+  "qualification": "योग्यता (Qualification)",
+  "relationship": "संबंध (Relationship)",
+  "productCategory": "उत्पाद श्रेणी (Product Category)",
+  "department": "विभाग (Department)",
+  "designation": "पद (Designation)",
 
   "theme": "थीम",
   "preferences": "पसंद",

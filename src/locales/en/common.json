@@ -30,6 +30,11 @@
   "chequeBook": "Cheque Book",
   "openingBalanceSplitUp": "Opening Balance Split Up",
   "paymentPurpose": "Payment Purpose",
+  "qualification": "Qualification",
+  "relationship": "Relationship",
+  "productCategory": "Product Category",
+  "department": "Department",
+  "designation": "Designation",
 
   "theme": "Theme",
   "preferences": "Preferences",
