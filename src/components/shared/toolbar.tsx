@@ -11,6 +11,8 @@ export type Action = {
   onClick?: () => void | Promise<void>;
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'icon' | 'outline' | 'destructive';
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  form?: string;
 };
 
 type ToolbarProps = {
@@ -45,7 +47,8 @@ function ToolbarButton({ action, compactIcon }: { action: Action; compactIcon?: 
 
   return (
     <Button
-      type="button"
+      type={action.type || 'button'}
+      form={action.form}
       title={action.title}
       onClick={action.onClick}
       variant={variant}
@@ -89,7 +92,7 @@ export default function Toolbar({
         {/* Integrated Title & Counter */}
         {title && (
           <div className="flex items-center gap-2 pr-1 pl-1.5">
-            <span className="text-foreground text-xs font-bold tracking-tight whitespace-nowrap">
+            <span className="text-foreground text-sm font-semibold tracking-tight whitespace-nowrap">
               {title}
             </span>
             {showPagination && (

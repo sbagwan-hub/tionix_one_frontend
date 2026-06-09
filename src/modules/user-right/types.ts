@@ -48,20 +48,20 @@ export interface FormOtherRow {
 }
 
 export interface SpecialRow {
-  Form: string;
-  Rights: boolean;
+  form: string;
+  rights: boolean;
 }
 
 export interface BranchRow {
-  fkSetId: number;
+  fk_set_id: number;
 }
 
 export interface DashboardRow {
-  Id: number;
+  id: number;
 }
 
 export interface ProcessRow {
-  fkProdId: string;
+  fk_prod_id: string;
 }
 
 export interface UserRightsOut {
