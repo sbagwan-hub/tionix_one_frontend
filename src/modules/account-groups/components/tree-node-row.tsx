@@ -26,16 +26,17 @@ export function TreeNodeRow({
   const isSelected = selectedId === node.pk_grp_id;
 
   return (
-    <div className="w-full select-none">
+    <div className="relative isolate w-full select-none">
       {/* Row Wrapper */}
       <div
-        className={`group relative mx-1.5 flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-all duration-150 ease-in-out ${
+        className={`group relative z-10 mx-1.5 flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-all duration-150 ease-in-out ${
           isSelected
             ? 'bg-primary/10 text-primary font-medium shadow-sm'
             : 'text-foreground hover:bg-muted/60 hover:text-foreground'
         }`}
         style={{ paddingLeft: `${depth * 20 + 24}px` }}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           onSelect(node);
           if (hasChildren) setOpen((p) => !p);
         }}
