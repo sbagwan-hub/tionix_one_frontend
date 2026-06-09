@@ -4,6 +4,7 @@ import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import Navbar from './navbar';
 import Footer from './footer';
+import { GlobalWindows } from './global-windows';
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,6 +25,8 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
       >
         {children}
       </main>
+
+      {!isAuth && <GlobalWindows />}
 
       {!isAuth && (
         <div className="fixed right-0 bottom-0 left-0 z-50">

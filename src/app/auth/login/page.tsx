@@ -115,7 +115,7 @@ export default function LoginPage() {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [bookName, setBookName] = React.useState('');
-  
+
   // Fetch books from API
   const { data: booksResponse, isLoading: isLoadingBooks } = useBooks();
   const booksList = booksResponse?.data || [];
@@ -151,11 +151,11 @@ export default function LoginPage() {
     if (!handleValidation()) return;
 
     setIsLoading(true);
-    
+
     try {
       // Simulate server communication latency
       await new Promise(resolve => setTimeout(resolve, 1200));
-      
+
       // Create user object for auth store
       const user = {
         id: '1',
@@ -163,26 +163,26 @@ export default function LoginPage() {
         email: username.includes('@') ? username : `${username}@tionix.com`,
         role: 'admin'
       };
-      
+
       const token = 'tionix_dummy_access_token';
-      
+
       // Update auth store (this will also set localStorage)
       login(user, token);
-      
+
       // Set cookie for Next.js middleware to read
       document.cookie = `access_token=${token}; path=/; max-age=86400`;
-      
+
       // Store selected book
       localStorage.setItem('selected_book', bookName);
-      
+
       setIsLoading(false);
       setLoginSuccess(true);
-      
+
       // Use Next.js router for proper navigation
       setTimeout(() => {
         router.push('/dashboard');
       }, 800);
-      
+
     } catch (error) {
       setIsLoading(false);
       console.error('Login error:', error);
@@ -285,9 +285,8 @@ export default function LoginPage() {
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShowPassword(!showPassword)}
-                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
-                  isRtl ? 'left-3' : 'right-3'
-                }`}
+                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${isRtl ? 'left-3' : 'right-3'
+                  }`}
                 style={{
                   top: errors.password ? 'calc(50% - 9px)' : '50%',
                   transform: 'translateY(-10%)',
@@ -319,9 +318,8 @@ export default function LoginPage() {
                 >
                   <SelectTrigger
                     id="book"
-                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
-                      isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                    } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
+                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                      } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
                     <SelectValue placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
                   </SelectTrigger>
@@ -334,7 +332,7 @@ export default function LoginPage() {
                       </SelectItem>
                     ))}
                     {booksList.length === 0 && !isLoadingBooks && (
-                       <SelectItem value="none" disabled>No books available</SelectItem>
+                      <SelectItem value="none" disabled>No books available</SelectItem>
                     )}
                   </SelectContent>
                 </Select>
