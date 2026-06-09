@@ -48,7 +48,7 @@ export function TreeNodeRow({
             return (
               <span
                 key={i}
-                className="border-foreground/80 group-hover:border-foreground/90 absolute top-0 bottom-0 w-[1px] border-l border-dashed transition-colors"
+                className="border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-0 bottom-0 w-[1px] border-l border-dashed transition-colors"
                 style={{ left: `${i * 20 + 14}px` }}
                 aria-hidden="true"
               />
@@ -60,7 +60,7 @@ export function TreeNodeRow({
         {/* Current node branch vertical line */}
         {depth >= 0 && (
           <span
-            className={`border-foreground/80 group-hover:border-foreground/90 absolute top-0 w-[1px] border-l border-dashed transition-colors ${
+            className={`border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-0 w-[1px] border-l border-dashed transition-colors ${
               isLast ? 'h-1/2' : 'h-full'
             }`}
             style={{ left: `${depth * 20 + 14}px` }}
@@ -71,7 +71,7 @@ export function TreeNodeRow({
         {/* Current node branch horizontal tick line */}
         {depth >= 0 && (
           <span
-            className="border-foreground/80 group-hover:border-foreground/90 absolute top-1/2 h-[1px] w-[12px] -translate-y-1/2 border-t border-dashed transition-colors"
+            className="border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-1/2 h-[1px] w-[12px] -translate-y-1/2 border-t border-dashed transition-colors"
             style={{ left: `${depth * 20 + 14}px` }}
             aria-hidden="true"
           />
