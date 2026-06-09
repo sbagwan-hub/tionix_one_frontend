@@ -205,14 +205,14 @@ export const Window: React.FC<WindowProps> = ({
       onTouchStart={bringToFront}
       className={cn(
         // Base transitions and styling
-        'pointer-events-auto flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80',
+        'border-foreground/30 ring-border/30 bg-background/90 pointer-events-auto flex flex-col overflow-hidden rounded-sm border shadow-2xl ring-1 backdrop-blur-md',
         dragging
           ? 'cursor-grabbing shadow-2xl select-none'
           : 'shadow-lg transition-shadow duration-300 hover:shadow-xl',
         // Maximize states
         isMaximized
           ? 'fixed inset-0 z-50 h-screen w-screen !transform-none rounded-none'
-          : 'relative w-full max-w-md',
+          : 'relative max-h-[85vh] w-full max-w-md',
         className,
       )}
     >
@@ -223,7 +223,7 @@ export const Window: React.FC<WindowProps> = ({
         onPointerUp={handlePointerUp}
         onDoubleClick={handleHeaderDoubleClick}
         className={cn(
-          'flex items-center justify-between border-b border-neutral-200 bg-neutral-50/50 px-4 py-3 select-none dark:border-neutral-800 dark:bg-neutral-900/50',
+          'border-border/60 bg-muted/50 flex items-center justify-between border-b px-4 py-3 select-none',
           isDraggable && !isMaximized ? 'cursor-grab' : '',
           headerClassName,
         )}
@@ -268,10 +268,8 @@ export const Window: React.FC<WindowProps> = ({
           </div>
 
           {/* Icon and Title */}
-          {icon && <div className="shrink-0 text-neutral-500 dark:text-neutral-400">{icon}</div>}
-          <span className="truncate text-sm font-semibold text-neutral-700 dark:text-neutral-200">
-            {title}
-          </span>
+          {icon && <div className="text-foreground shrink-0">{icon}</div>}
+          <span className="text-foreground truncate text-sm font-semibold">{title}</span>
         </div>
 
         {/* Custom Actions / Extra buttons */}

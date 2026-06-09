@@ -29,8 +29,8 @@ export function GlobalWindows() {
     );
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
-      <div className="pointer-events-auto relative h-full w-full">
+    <div className="pointer-events-none fixed inset-0 z-[100] overflow-hidden">
+      <div className="pointer-events-none relative h-full w-full">
         {openWindowList.map(({ id, config }) => {
           const ChildContent = config.component;
 
@@ -46,8 +46,6 @@ export function GlobalWindows() {
               isDraggable={config.isDraggable}
               className={config.className}
               toolbarTitle={config.toolbarTitle}
-              toolbarActions={config.toolbarActions}
-              toolbarUtilities={config.toolbarUtilities}
             >
               <ChildContent />
             </Window>

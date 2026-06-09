@@ -63,6 +63,11 @@ export const NAV_MENUS: NavMenu[] = [
         icon: 'User',
         children: [
           {
+            key: 'titles',
+            icon: 'User',
+            action: () => useWindowStore.getState().openWindow('contacts-title'),
+          },
+          {
             key: 'qualification',
             icon: 'GraduationCap',
             action: () => useWindowStore.getState().openWindow('contacts-qualification'),
