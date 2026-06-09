@@ -30,6 +30,11 @@
   "chequeBook": "دفتر الشيكات (Cheque Book)",
   "openingBalanceSplitUp": "تفصيل الرصيد الافتتاحي (Opening Balance Split Up)",
   "paymentPurpose": "غرض الدفع (Payment Purpose)",
+  "qualification": "المؤهل (Qualification)",
+  "relationship": "العلاقة (Relationship)",
+  "productCategory": "فئة المنتج (Product Category)",
+  "department": "القسم (Department)",
+  "designation": "المسمى الوظيفي (Designation)",
 
   "theme": "الثيم",
   "preferences": "التفضيلات",
