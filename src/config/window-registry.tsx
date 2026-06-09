@@ -21,6 +21,11 @@ import { QualificationWindow } from '@/modules/master-contacts/components/Qualif
 import { RelationshipWindow } from '@/modules/master-contacts/components/RelationshipWindow';
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
 
+import { SkintoneWindow } from '@/modules/master-salary/components/SkintoneWindow';
+import { CasteWindow } from '@/modules/master-salary/components/CasteWindow';
+import { ReligionWindow } from '@/modules/master-salary/components/ReligionWindow';
+import { ScheduleTypeWindow } from '@/modules/master-salary/components/ScheduleTypeWindow';
+
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
     id: 'contacts-title',
@@ -69,5 +74,39 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-40 left-48 w-full max-w-2xl',
     component: DesignationWindow,
+  },
+
+  // Salary Setup Windows
+  'salary-skintone': {
+    id: 'salary-skintone',
+    title: 'Skintones',
+    icon: <Settings className="h-4 w-4 text-emerald-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-2xl',
+    component: SkintoneWindow,
+  },
+  'salary-caste': {
+    id: 'salary-caste',
+    title: 'Castes/sub-caste',
+    icon: <Settings className="h-4 w-4 text-orange-500" />,
+    isMinimizable: true,
+    className: 'absolute top-24 left-16 w-full max-w-2xl',
+    component: CasteWindow,
+  },
+  'salary-religion': {
+    id: 'salary-religion',
+    title: 'Religions',
+    icon: <Settings className="h-4 w-4 text-amber-500" />,
+    isMinimizable: true,
+    className: 'absolute top-28 left-24 w-full max-w-2xl',
+    component: ReligionWindow,
+  },
+  'salary-schedule-type': {
+    id: 'salary-schedule-type',
+    title: 'Schedule Types',
+    icon: <Settings className="h-4 w-4 text-cyan-500" />,
+    isMinimizable: true,
+    className: 'absolute top-32 left-32 w-full max-w-2xl',
+    component: ScheduleTypeWindow,
   },
 };

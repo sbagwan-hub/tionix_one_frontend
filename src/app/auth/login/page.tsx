@@ -32,8 +32,7 @@ import { hrmsRadiusClassName } from '@/components/hrms/hrms-styles';
 // Fallback translations matching i18next languages in the app (en, ar, hi)
 const LOCALES = {
   en: {
-    welcomeBack: 'Welcome Back',
-    signInToText: 'Sign in to your Tionix One console to manage your enterprise operations.',
+    companyName: 'Tionix One',
     usernameOrEmail: 'Username or Email',
     password: 'Password',
     book: 'Business Book',
@@ -43,8 +42,7 @@ const LOCALES = {
     signIn: 'Sign In',
     signingIn: 'Signing In...',
     licenseTitle: 'Licensed Environment',
-    licenseText:
-      'This server is registered and authorized for corporate operations by Falcon Material Handling FZ LLC.',
+    licenseText: 'Powered by Tionix Solutions Pvt Ltd',
     systemStatus: 'System Status: Online',
     usernamePlaceholder: 'Enter username or email',
     passwordPlaceholder: 'Enter your password',
@@ -52,12 +50,9 @@ const LOCALES = {
     invalidUser: 'Username or email is required',
     invalidPass: 'Password must be at least 4 characters',
     invalidBook: 'Please select a book name',
-    unauthorizedAccessWarning:
-      'Authorized access only. All connection attempts, sessions, and activity logs are tracked for security audits.',
   },
   ar: {
-    welcomeBack: 'مرحباً بعودتك',
-    signInToText: 'قم بتسجيل الدخول إلى وحدة تحكم Tionix One لإدارة عمليات مؤسستك.',
+    companyName: 'Tionix One',
     usernameOrEmail: 'اسم المستخدم أو البريد الإلكتروني',
     password: 'كلمة المرور',
     book: 'الدفتر التجاري',
@@ -67,8 +62,7 @@ const LOCALES = {
     signIn: 'تسجيل الدخول',
     signingIn: 'جاري تسجيل الدخول...',
     licenseTitle: 'البيئة المرخصة',
-    licenseText:
-      'هذا الخادم مسجل ومصرح به للعمليات المؤسسية من قبل شركة فالكون للمناولة المادية ش.م.ح.',
+    licenseText: 'Powered by Tionix Solutions Pvt Ltd',
     systemStatus: 'حالة النظام: متصل',
     usernamePlaceholder: 'أدخل اسم المستخدم أو البريد الإلكتروني',
     passwordPlaceholder: 'أدخل كلمة المرور الخاصة بك',
@@ -76,12 +70,9 @@ const LOCALES = {
     invalidUser: 'اسم المستخدم أو البريد الإلكتروني مطلوب',
     invalidPass: 'يجب أن تتكون كلمة المرور من 4 أحرف على الأقل',
     invalidBook: 'يرجى اختيار اسم الدفتر',
-    unauthorizedAccessWarning:
-      'الدخول المصرح به فقط. يتم تتبع جميع محاولات الاتصال والجلسات وسجلات النشاط لتدقيق الأمن.',
   },
   hi: {
-    welcomeBack: 'वापसी पर स्वागत है',
-    signInToText: 'अपने उद्यम संचालन को प्रबंधित करने के लिए टियोनिक्स वन कंसोल में साइन इन करें।',
+    companyName: 'Tionix One',
     usernameOrEmail: 'उपयोगकर्ता नाम या ईमेल',
     password: 'पासवर्ड',
     book: 'व्यापार बही (Book)',
@@ -91,8 +82,7 @@ const LOCALES = {
     signIn: 'साइन इन करें',
     signingIn: 'साइन इन हो रहा है...',
     licenseTitle: 'लाइसेंस प्राप्त पर्यावरण',
-    licenseText:
-      'यह सर्वर फाल्कन मटेरियल हैंडलिंग एफजेड एलएलसी द्वारा कॉर्पोरेट संचालन के लिए पंजीकृत और अधिकृत है।',
+    licenseText: 'Powered by Tionix Solutions Pvt Ltd',
     systemStatus: 'सिस्टम स्थिति: ऑनलाइन',
     usernamePlaceholder: 'अपना उपयोगकर्ता नाम या ईमेल दर्ज करें',
     passwordPlaceholder: 'अपना पासवर्ड दर्ज करें',
@@ -100,8 +90,6 @@ const LOCALES = {
     invalidUser: 'उपयोगकर्ता नाम या ईमेल आवश्यक है',
     invalidPass: 'पासवर्ड कम से कम 4 अक्षरों का होना चाहिए',
     invalidBook: 'कृपया बही का चयन करें',
-    unauthorizedAccessWarning:
-      'केवल अधिकृत पहुँच। सुरक्षा ऑडिट के लिए सभी कनेक्शन प्रयासों, सत्रों और गतिविधि लॉग को ट्रैक किया जाता है।',
   },
 };
 
@@ -201,18 +189,9 @@ export default function LoginPage() {
 
         <div className="relative z-10 mx-auto flex w-full flex-col gap-5">
           <div className="mb-2 flex flex-col items-center gap-1.5 text-center">
-            <div className="flex items-center gap-2">
-              <span className="text-brand border-brand/20 bg-brand/10 text-xxs rounded border px-2 py-0.5 font-mono font-semibold tracking-wider uppercase">
-                Tionix One
-              </span>
-              <span className="bg-muted text-muted-foreground border-border/50 scale-90 rounded border px-1.5 py-0.5 font-mono text-[9px] tracking-tight">
-                v2026.01
-              </span>
-            </div>
             <h3 className="text-foreground mt-2 text-xl font-bold tracking-tight">
-              {t.welcomeBack}
+              {bookName || t.companyName}
             </h3>
-            <p className="text-muted-foreground max-w-xs text-xs">{t.signInToText}</p>
           </div>
 
           {/* Error notifications */}
@@ -383,7 +362,6 @@ export default function LoginPage() {
           <div className="border-border/30 border-t pt-4 text-center">
             <p className="text-muted-foreground/60 text-[9px] leading-relaxed">{t.licenseText}</p>
             <p className="text-muted-foreground/40 mt-1 text-[9px] leading-relaxed">
-              {t.unauthorizedAccessWarning}
             </p>
           </div>
         </div>

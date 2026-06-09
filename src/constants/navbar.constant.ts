@@ -112,7 +112,32 @@ export const NAV_MENUS: NavMenu[] = [
         ],
       },
       { key: 'HR', href: '/hr', icon: 'Users' },
-      { key: 'Salary', href: '/salary', icon: 'DollarSign' },
+      {
+        key: 'Salary',
+        icon: 'Banknote',
+        children: [
+          {
+            key: 'skintones',
+            icon: 'User',
+            action: () => useWindowStore.getState().openWindow('salary-skintone'),
+          },
+          {
+            key: 'castes/sub-caste',
+            icon: 'Users',
+            action: () => useWindowStore.getState().openWindow('salary-caste'),
+          },
+          {
+            key: 'religions',
+            icon: 'Heart',
+            action: () => useWindowStore.getState().openWindow('salary-religion'),
+          },
+          {
+            key: 'scheduleTypes',
+            icon: 'Calendar',
+            action: () => useWindowStore.getState().openWindow('salary-schedule-type'),
+          },
+        ],
+      },
     ],
   },
 
