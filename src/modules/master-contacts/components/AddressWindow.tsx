@@ -6,6 +6,8 @@ import { useMasterContacts } from '../hooks/useMasterContacts';
 import { addressSchema, AddressDto, CityDto } from '../types';
 import WindowPanel, { WindowPanelItem } from '@/components/common/window-panel';
 import { FormInput } from '@/components/common/form-input';
+import { toast } from '@/components/modern-ui/sonner';
+import { extractAxiosErrorMessage } from '@/lib/axios';
 
 export const AddressWindow: React.FC = () => {
   const { list: addressList, create, update, remove } = useMasterContacts('address');
@@ -33,11 +35,17 @@ export const AddressWindow: React.FC = () => {
         { id: editingId, data },
         {
           onSuccess: () => resetForm(),
+          onError: (error) => {
+            toast.error(extractAxiosErrorMessage(error));
+          },
         },
       );
     } else {
       create.mutate(data, {
         onSuccess: () => resetForm(),
+        onError: (error) => {
+          toast.error(extractAxiosErrorMessage(error));
+        },
       });
     }
   };
@@ -74,7 +82,11 @@ export const AddressWindow: React.FC = () => {
   };
 
   const handleDelete = (item: WindowPanelItem) => {
-    remove.mutate(parseInt(item.id, 10));
+    remove.mutate(parseInt(item.id, 10), {
+      onError: (error) => {
+        toast.error(extractAxiosErrorMessage(error));
+      },
+    });
   };
 
   const handleOrganizationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -123,7 +135,7 @@ export const AddressWindow: React.FC = () => {
           ))}
         </select>
         {form.formState.errors.fk_cont_id && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.fk_cont_id.message}
           </span>
         )}
@@ -137,9 +149,7 @@ export const AddressWindow: React.FC = () => {
           {...form.register('address')}
         />
         {form.formState.errors.address && (
-          <span className="text-destructive text-[10px]">
-            {form.formState.errors.address.message}
-          </span>
+          <span className="text-destructive text-xxs">{form.formState.errors.address.message}</span>
         )}
       </div>
 
@@ -159,7 +169,7 @@ export const AddressWindow: React.FC = () => {
             ))}
           </select>
           {form.formState.errors.fk_city_id && (
-            <span className="text-destructive text-[10px]">
+            <span className="text-destructive text-xxs">
               {form.formState.errors.fk_city_id.message}
             </span>
           )}
@@ -185,7 +195,7 @@ export const AddressWindow: React.FC = () => {
             {...form.register('region')}
           />
           {form.formState.errors.region && (
-            <span className="text-destructive text-[10px]">
+            <span className="text-destructive text-xxs">
               {form.formState.errors.region.message}
             </span>
           )}
@@ -198,7 +208,7 @@ export const AddressWindow: React.FC = () => {
             {...form.register('pincode')}
           />
           {form.formState.errors.pincode && (
-            <span className="text-destructive text-[10px]">
+            <span className="text-destructive text-xxs">
               {form.formState.errors.pincode.message}
             </span>
           )}
@@ -230,7 +240,7 @@ export const AddressWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
-      className="h-[380px]"
+      className="h-105"
     />
   );
 };
