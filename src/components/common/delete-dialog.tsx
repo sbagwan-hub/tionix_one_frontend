@@ -52,6 +52,13 @@ export function DeleteDialog({
 
   if (!isOpen) return null;
 
+  const onConfirmDelete = () => {
+    onConfirm();
+    setTimeout(() => {
+      onClose();
+    }, 1000);
+  };
+
   return (
     <div
       className={`animate-in fade-in fixed inset-0 ${zIndex} flex items-center justify-center p-4 duration-200 select-none sm:p-6`}
@@ -130,7 +137,7 @@ export function DeleteDialog({
           <Button
             type="button"
             variant="destructive"
-            onClick={onConfirm}
+            onClick={onConfirmDelete}
             disabled={isDeleting}
             className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-md px-4 text-xs font-medium shadow-sm transition-all duration-200 disabled:opacity-50 sm:w-auto"
           >
