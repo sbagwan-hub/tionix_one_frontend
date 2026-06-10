@@ -20,6 +20,8 @@ type ResourceTypeMap = {
   titles: TitleDto;
   city: CityDto;
   address: AddressDto;
+  country: any;
+  state: any;
 };
 
 export const useMasterContacts = <T extends keyof typeof masterContactsApi>(resource: T) => {

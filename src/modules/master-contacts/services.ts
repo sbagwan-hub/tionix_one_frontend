@@ -151,4 +151,18 @@ export const masterContactsApi = {
       ).data.data,
     remove: async (id: number) => axiosClient.delete(`/master-contacts/address/${id}`),
   },
+  country: {
+    list: async () =>
+      (await axiosClient.get<{ data: any[] }>('/master-contacts/country/dropdown')).data.data,
+    create: async () => ({}) as any,
+    update: async () => ({}) as any,
+    remove: async () => {},
+  },
+  state: {
+    list: async () =>
+      (await axiosClient.get<{ data: any[] }>('/master-contacts/state/dropdown')).data.data,
+    create: async () => ({}) as any,
+    update: async () => ({}) as any,
+    remove: async () => {},
+  },
 };
