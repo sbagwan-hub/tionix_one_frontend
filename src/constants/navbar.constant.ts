@@ -92,6 +92,16 @@ export const NAV_MENUS: NavMenu[] = [
             icon: 'Briefcase',
             action: () => useWindowStore.getState().openWindow('contacts-designation'),
           },
+          {
+            key: 'city',
+            icon: 'MapPin',
+            action: () => useWindowStore.getState().openWindow('contacts-city'),
+          },
+          {
+            key: 'address',
+            icon: 'Home',
+            action: () => useWindowStore.getState().openWindow('contacts-address'),
+          },
         ],
       },
       {

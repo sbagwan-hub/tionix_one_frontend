@@ -36,6 +36,8 @@
   "department": "Department",
   "designation": "Designation",
   "titles": "Titles",
+  "city": "Cities",
+  "address": "Addresses",
   "Contacts": "Contacts",
 
   "theme": "Theme",

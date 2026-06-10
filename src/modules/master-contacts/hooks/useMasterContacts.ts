@@ -7,6 +7,8 @@ import {
   QualificationDto,
   RelationshipDto,
   TitleDto,
+  CityDto,
+  AddressDto,
 } from '../types';
 
 type ResourceTypeMap = {
@@ -16,6 +18,8 @@ type ResourceTypeMap = {
   qualifications: QualificationDto;
   relationships: RelationshipDto;
   titles: TitleDto;
+  city: CityDto;
+  address: AddressDto;
 };
 
 export const useMasterContacts = <T extends keyof typeof masterContactsApi>(resource: T) => {

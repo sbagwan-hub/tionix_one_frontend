@@ -6,6 +6,8 @@ import {
   QualificationDto,
   RelationshipDto,
   TitleDto,
+  CityDto,
+  AddressDto,
 } from './types';
 
 // Common wrapper to inject fk_user_id for now
@@ -112,13 +114,41 @@ export const masterContactsApi = {
   },
   titles: {
     list: async () =>
-      (await axiosClient.get<{ data: TitleDto[] }>('/master-contacts/titles')).data.data,
+      (await axiosClient.get<{ data: TitleDto[] }>('/master-contacts/title')).data.data,
     create: async (data: TitleDto) =>
-      (await axiosClient.post<{ data: TitleDto }>('/master-contacts/titles', withUserId(data))).data
+      (await axiosClient.post<{ data: TitleDto }>('/master-contacts/title', withUserId(data))).data
         .data,
     update: async (id: number, data: Partial<TitleDto>) =>
-      (await axiosClient.put<{ data: TitleDto }>(`/master-contacts/titles/${id}`, withUserId(data)))
+      (await axiosClient.put<{ data: TitleDto }>(`/master-contacts/title/${id}`, withUserId(data)))
         .data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/titles/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master-contacts/title/${id}`),
+  },
+  city: {
+    list: async () =>
+      (await axiosClient.get<{ data: { data: CityDto[] } }>('/master-contacts/city')).data.data
+        .data,
+    create: async (data: CityDto) =>
+      (await axiosClient.post<{ data: CityDto }>('/master-contacts/city', withUserId(data))).data
+        .data,
+    update: async (id: string | number, data: Partial<CityDto>) =>
+      (await axiosClient.put<{ data: CityDto }>(`/master-contacts/city/${id}`, withUserId(data)))
+        .data.data,
+    remove: async (id: string | number) => axiosClient.delete(`/master-contacts/city/${id}`),
+  },
+  address: {
+    list: async () =>
+      (await axiosClient.get<{ data: { data: AddressDto[] } }>('/master-contacts/address')).data
+        .data.data,
+    create: async (data: AddressDto) =>
+      (await axiosClient.post<{ data: AddressDto }>('/master-contacts/address', withUserId(data)))
+        .data.data,
+    update: async (id: number, data: Partial<AddressDto>) =>
+      (
+        await axiosClient.put<{ data: AddressDto }>(
+          `/master-contacts/address/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-contacts/address/${id}`),
   },
 };
