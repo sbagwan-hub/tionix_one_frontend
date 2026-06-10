@@ -9,8 +9,8 @@ import { FormInput } from '@/components/common/form-input';
 
 export const CityWindow: React.FC = () => {
   const { list, create, update, remove } = useMasterContacts('city');
-  const { list: countryList } = useMasterContacts('country');
-  const { list: stateList } = useMasterContacts('state');
+  const { list: countryList } = useMasterContacts('countryDropdown');
+  const { list: stateList } = useMasterContacts('stateDropdown');
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const form = useForm<z.input<typeof citySchema>, any, CityDto>({

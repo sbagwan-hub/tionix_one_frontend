@@ -14,6 +14,7 @@ import {
   Shield,
   Database,
   Settings,
+  Contact,
 } from 'lucide-react';
 
 // Fallback translations matching i18next languages in the app (en, ar, hi)
@@ -27,6 +28,9 @@ const LOCALES = {
     companiesDescription: 'Manage company information and organizational structure',
     operators: 'Operators',
     operatorsDescription: 'Manage operator profiles and assignments',
+    contacts: 'Master Contacts',
+    contactsDescription:
+      'Manage contact titles, qualifications, relationships, departments, designations, categories, cities, and addresses',
     payrollHR: 'PayrollHR',
     analyze: 'ANALYZE',
     execute: 'EXECUTE',
@@ -55,6 +59,9 @@ const LOCALES = {
     companiesDescription: 'إدارة معلومات الشركة والهيكل التنظيمي',
     operators: 'المشغلون',
     operatorsDescription: 'إدارة ملفات المشغلين والمهام',
+    contacts: 'جهات الاتصال الرئيسية',
+    contactsDescription:
+      'إدارة ألقاب جهات الاتصال والمؤهلات والعلاقات والأقسام والمسميات الوظيفية والفئات والمدن والعناوين',
     payrollHR: 'PayrollHR',
     analyze: 'تحليل',
     execute: 'تنفيذ',
@@ -83,6 +90,9 @@ const LOCALES = {
     companiesDescription: 'कंपनी जानकारी और संगठनात्मक संरचना प्रबंधित करें',
     operators: 'ऑपरेटर',
     operatorsDescription: 'ऑपरेटर प्रोफाइल और असाइनमेंट प्रबंधित करें',
+    contacts: 'मुख्य संपर्क',
+    contactsDescription:
+      'संपर्क शीर्षक, योग्यता, संबंध, विभाग, पदनाम, श्रेणियां, शहर और पते प्रबंधित करें',
     payrollHR: 'PayrollHR',
     analyze: 'विश्लेषण',
     execute: 'निष्पादित करें',
@@ -117,37 +127,35 @@ function MasterCard({ title, description, icon, href, count }: MasterCardProps) 
 
   return (
     <Card
-      className="group relative overflow-hidden border-border/60 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:border-border hover:shadow-lg hover:shadow-brand/10 cursor-pointer"
+      className="group border-border/60 bg-card/80 hover:border-border hover:shadow-brand/10 relative cursor-pointer overflow-hidden backdrop-blur-sm transition-all duration-300 hover:shadow-lg"
       onClick={() => router.push(href)}
     >
       {/* Glow effect on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      
-      <div className="p-6 relative z-10">
-        <div className="flex items-start justify-between mb-4">
+      <div className="from-brand/5 absolute inset-0 bg-gradient-to-br to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+      <div className="relative z-10 p-6">
+        <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand/10 text-brand">
+            <div className="bg-brand/10 text-brand flex h-12 w-12 items-center justify-center rounded-lg">
               {icon}
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-foreground group-hover:text-brand transition-colors">
+              <h3 className="text-foreground group-hover:text-brand text-lg font-semibold transition-colors">
                 {title}
               </h3>
               {count !== undefined && (
-                <span className="text-sm text-muted-foreground">{count} records</span>
+                <span className="text-muted-foreground text-sm">{count} records</span>
               )}
             </div>
           </div>
-          <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-brand" />
+          <ArrowRight className="text-muted-foreground group-hover:text-brand h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
         </div>
-        
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          {description}
-        </p>
-        
+
+        <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+
         <div className="mt-4 flex items-center gap-2">
-          <span className="text-xs text-brand font-medium">View Details</span>
-          <ArrowRight className="h-3 w-3 text-brand" />
+          <span className="text-brand text-xs font-medium">View Details</span>
+          <ArrowRight className="text-brand h-3 w-3" />
         </div>
       </div>
     </Card>
@@ -188,18 +196,18 @@ export default function MastersPage() {
       {/* Main Container */}
       <div className="mx-auto max-w-7xl">
         {/* Header with Menu Bar */}
-        <div className="border-border/60 bg-card text-card-foreground relative overflow-hidden border rounded-sm p-4 mb-6">
+        <div className="border-border/60 bg-card text-card-foreground relative mb-6 overflow-hidden rounded-sm border p-4">
           {/* Glow Effects */}
-          <div className="from-brand/15 to-transparent pointer-events-none absolute -top-20 -left-20 h-[200px] w-[200px] rounded-full bg-radial blur-3xl opacity-30" />
-          <div className="from-brand/10 to-transparent pointer-events-none absolute -right-20 -bottom-20 h-[200px] w-[200px] rounded-full bg-radial blur-3xl opacity-20" />
+          <div className="from-brand/15 pointer-events-none absolute -top-20 -left-20 h-[200px] w-[200px] rounded-full bg-radial to-transparent opacity-30 blur-3xl" />
+          <div className="from-brand/10 pointer-events-none absolute -right-20 -bottom-20 h-[200px] w-[200px] rounded-full bg-radial to-transparent opacity-20 blur-3xl" />
 
           {/* Menu Bar */}
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex items-center justify-between">
               {/* Logo and Title */}
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-brand border-brand/20 bg-brand/10 text-xs font-mono rounded border px-2 py-1 font-semibold tracking-wider uppercase">
+                  <span className="text-brand border-brand/20 bg-brand/10 rounded border px-2 py-1 font-mono text-xs font-semibold tracking-wider uppercase">
                     {t.payrollHR}
                   </span>
                   <div className="flex items-center gap-1">
@@ -212,13 +220,11 @@ export default function MastersPage() {
                     </span>
                   </div>
                 </div>
-                <div className="text-lg font-bold text-foreground">
-                  {t.erpPowerPro}
-                </div>
+                <div className="text-foreground text-lg font-bold">{t.erpPowerPro}</div>
               </div>
 
               {/* Language and Settings */}
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-4 text-xs">
                 <span>English</span>
                 <span>|</span>
                 <span>A4</span>
@@ -232,8 +238,8 @@ export default function MastersPage() {
               {menuItems.map((item, index) => (
                 <button
                   key={item}
-                  className={`font-medium transition-colors hover:text-brand ${
-                    index === 1 ? 'text-brand border-b border-brand pb-1' : 'text-muted-foreground'
+                  className={`hover:text-brand font-medium transition-colors ${
+                    index === 1 ? 'text-brand border-brand border-b pb-1' : 'text-muted-foreground'
                   }`}
                 >
                   {item}
@@ -244,23 +250,19 @@ export default function MastersPage() {
         </div>
 
         {/* Main Content Area */}
-        <div className="border-border/60 bg-card text-card-foreground relative overflow-hidden border rounded-sm p-8">
+        <div className="border-border/60 bg-card text-card-foreground relative overflow-hidden rounded-sm border p-8">
           {/* Glow Effects */}
-          <div className="from-brand/15 to-transparent pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-radial blur-3xl opacity-20" />
+          <div className="from-brand/15 pointer-events-none absolute top-1/2 left-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-radial to-transparent opacity-20 blur-3xl" />
 
           <div className="relative z-10">
             {/* Page Title */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-foreground mb-2">
-                {t.masters}
-              </h1>
-              <p className="text-muted-foreground">
-                {t.mastersDescription}
-              </p>
+            <div className="mb-8 text-center">
+              <h1 className="text-foreground mb-2 text-3xl font-bold">{t.masters}</h1>
+              <p className="text-muted-foreground">{t.mastersDescription}</p>
             </div>
 
             {/* Master Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               <MasterCard
                 title={t.users}
                 description={t.usersDescription}
@@ -282,33 +284,28 @@ export default function MastersPage() {
                 href="/masters/operators"
                 count={45}
               />
+              <MasterCard
+                title={t.contacts}
+                description={t.contactsDescription}
+                icon={<Contact className="h-6 w-6" />}
+                href="/masters/contacts"
+                count={8}
+              />
             </div>
 
             {/* Quick Actions */}
-            <div className="border-t border-border/30 pt-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
+            <div className="border-border/30 border-t pt-6">
+              <h3 className="text-foreground mb-4 text-lg font-semibold">Quick Actions</h3>
               <div className="flex flex-wrap gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={`gap-2 ${hrmsRadiusClassName}`}
-                >
+                <Button variant="outline" size="sm" className={`gap-2 ${hrmsRadiusClassName}`}>
                   <Database className="h-4 w-4" />
                   Data Import
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={`gap-2 ${hrmsRadiusClassName}`}
-                >
+                <Button variant="outline" size="sm" className={`gap-2 ${hrmsRadiusClassName}`}>
                   <Settings className="h-4 w-4" />
                   Configuration
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={`gap-2 ${hrmsRadiusClassName}`}
-                >
+                <Button variant="outline" size="sm" className={`gap-2 ${hrmsRadiusClassName}`}>
                   <Shield className="h-4 w-4" />
                   Permissions
                 </Button>
@@ -318,19 +315,19 @@ export default function MastersPage() {
         </div>
 
         {/* Footer */}
-        <div className="border-border/60 bg-card text-card-foreground relative overflow-hidden border rounded-sm p-4 mt-6">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="border-border/60 bg-card text-card-foreground relative mt-6 overflow-hidden rounded-sm border p-4">
+          <div className="text-muted-foreground flex items-center justify-between text-xs">
             {/* Left Side - Logo */}
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 bg-brand/10 rounded flex items-center justify-center">
-                <span className="text-brand font-bold text-xs">ERP</span>
+              <div className="bg-brand/10 flex h-8 w-8 items-center justify-center rounded">
+                <span className="text-brand text-xs font-bold">ERP</span>
               </div>
               <span>{t.designedInIndia}</span>
             </div>
 
             {/* Right Side - Contact Info */}
             <div className="text-right">
-              <div className="font-semibold text-foreground">{t.threeASolutions}</div>
+              <div className="text-foreground font-semibold">{t.threeASolutions}</div>
               <div>{t.phone}</div>
               <div>{t.email}</div>
               <div>{t.website}</div>
@@ -340,8 +337,8 @@ export default function MastersPage() {
         </div>
 
         {/* Status Bar */}
-        <div className="border-border/60 bg-card text-card-foreground border rounded-sm p-2 mt-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="border-border/60 bg-card text-card-foreground mt-2 rounded-sm border p-2">
+          <div className="text-muted-foreground flex items-center justify-between text-xs">
             <div className="flex items-center gap-4">
               <span>Department: Head Office</span>
               <span>|</span>
@@ -351,9 +348,7 @@ export default function MastersPage() {
               <span>|</span>
               <span>User: Admin</span>
             </div>
-            <div>
-              {currentTime.toLocaleString()}
-            </div>
+            <div>{currentTime.toLocaleString()}</div>
           </div>
         </div>
       </div>

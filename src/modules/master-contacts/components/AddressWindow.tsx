@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMasterContacts } from '../hooks/useMasterContacts';
@@ -10,6 +10,7 @@ import { FormInput } from '@/components/common/form-input';
 export const AddressWindow: React.FC = () => {
   const { list: addressList, create, update, remove } = useMasterContacts('address');
   const { list: cityList } = useMasterContacts('city');
+  const { list: organizationList } = useMasterContacts('organizationsDropdown');
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const form = useForm<z.input<typeof addressSchema>, any, AddressDto>({
@@ -76,17 +77,62 @@ export const AddressWindow: React.FC = () => {
     remove.mutate(parseInt(item.id, 10));
   };
 
+  const handleOrganizationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const orgId = parseInt(e.target.value, 10);
+    if (!isNaN(orgId)) {
+      const org = (organizationList.data || []).find((o: any) => o.pk_cont_id === orgId);
+      if (org) {
+        form.setValue('address', org.address || '', { shouldDirty: true, shouldValidate: true });
+        form.setValue('fk_city_id', org.fk_city_id || undefined, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+        form.setValue('region', org.region || '', { shouldDirty: true, shouldValidate: true });
+        form.setValue('pincode', org.pincode || '', { shouldDirty: true, shouldValidate: true });
+      }
+    }
+  };
+
   const items: WindowPanelItem[] = (addressList.data || []).map((a: AddressDto) => ({
     id: String(a.pk_ca_id),
     label: `${a.address}, ${a.region || ''}`,
   }));
 
+  const selectedCityId = useWatch({ control: form.control, name: 'fk_city_id' });
+  const selectedCity = (cityList.data || []).find(
+    (c: any) => c.pk_city_id === selectedCityId,
+  ) as any;
+  const resolvedState = selectedCity?.state || '';
+  const resolvedCountry = selectedCity?.country || '';
+
   const formContent = (
     <form id="address-form" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
       <div>
+        <label className="text-foreground mb-1 block text-xs font-semibold">Organization *</label>
+        <select
+          id="address-organization-select"
+          className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-sm border px-3 py-1 text-xs shadow-none file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          {...form.register('fk_cont_id', { valueAsNumber: true })}
+          onChange={handleOrganizationChange}
+        >
+          <option value="">Select an organization...</option>
+          {(organizationList.data || []).map((o: any) => (
+            <option key={o.pk_cont_id} value={o.pk_cont_id}>
+              {o.contact_name}
+            </option>
+          ))}
+        </select>
+        {form.formState.errors.fk_cont_id && (
+          <span className="text-destructive text-[10px]">
+            {form.formState.errors.fk_cont_id.message}
+          </span>
+        )}
+      </div>
+
+      <div>
         <FormInput
           id="address-input"
-          label="Address Line"
+          label="Address Line *"
           placeholder="Enter street/building address"
           {...form.register('address')}
         />
@@ -120,6 +166,19 @@ export const AddressWindow: React.FC = () => {
         </div>
         <div>
           <FormInput
+            id="address-state-input"
+            label="State"
+            value={resolvedState}
+            disabled
+            readOnly
+            placeholder="Auto-resolved from City"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3">
+        <div>
+          <FormInput
             id="address-region-input"
             label="Region / Area"
             placeholder="Enter region"
@@ -131,14 +190,11 @@ export const AddressWindow: React.FC = () => {
             </span>
           )}
         </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
         <div>
           <FormInput
             id="address-pincode-input"
             label="Pincode / ZIP"
-            placeholder="e.g. 400001"
+            placeholder="ZIP code"
             {...form.register('pincode')}
           />
           {form.formState.errors.pincode && (
@@ -149,18 +205,13 @@ export const AddressWindow: React.FC = () => {
         </div>
         <div>
           <FormInput
-            id="address-contact-input"
-            label="Contact ID (Optional)"
-            type="number"
-            {...form.register('fk_cont_id', {
-              setValueAsValue: (v: any) => (v === '' ? null : parseInt(v, 10)),
-            } as any)}
+            id="address-country-input"
+            label="Country"
+            value={resolvedCountry}
+            disabled
+            readOnly
+            placeholder="Auto-resolved from City"
           />
-          {form.formState.errors.fk_cont_id && (
-            <span className="text-destructive text-[10px]">
-              {form.formState.errors.fk_cont_id.message}
-            </span>
-          )}
         </div>
       </div>
     </form>
@@ -179,6 +230,7 @@ export const AddressWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      className="h-[380px]"
     />
   );
 };
