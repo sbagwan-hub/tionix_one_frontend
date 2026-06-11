@@ -20,6 +20,8 @@ import { DesignationWindow } from '@/modules/master-contacts/components/Designat
 import { QualificationWindow } from '@/modules/master-contacts/components/QualificationWindow';
 import { RelationshipWindow } from '@/modules/master-contacts/components/RelationshipWindow';
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
+import { CityWindow } from '@/modules/master-contacts/components/CityWindow';
+import { AddressWindow } from '@/modules/master-contacts/components/AddressWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -69,5 +71,21 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-40 left-48 w-full max-w-2xl',
     component: DesignationWindow,
+  },
+  'contacts-city': {
+    id: 'contacts-city',
+    title: 'Cities',
+    icon: <Settings className="h-4 w-4 text-emerald-500" />,
+    isMinimizable: true,
+    className: 'absolute top-44 left-56 w-full max-w-2xl',
+    component: CityWindow,
+  },
+  'contacts-address': {
+    id: 'contacts-address',
+    title: 'Addresses',
+    icon: <Settings className="h-4 w-4 text-cyan-500" />,
+    isMinimizable: true,
+    className: 'absolute top-48 left-64 w-full max-w-2xl',
+    component: AddressWindow,
   },
 };

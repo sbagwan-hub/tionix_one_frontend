@@ -50,3 +50,26 @@ export const titleSchema = z.object({
   sys_defined: z.boolean().default(false),
 });
 export type TitleDto = z.infer<typeof titleSchema>;
+
+export const citySchema = z.object({
+  pk_city_id: z.number().int().positive().optional(),
+  city: z.string().min(1, 'City name is required').max(30),
+  fk_state_id: z.number().int().nullable().optional(),
+  fk_ctry_id: z.number().int().positive('Country is required'),
+  std_code: z.string().max(10).default(''),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+});
+export type CityDto = z.infer<typeof citySchema>;
+
+export const addressSchema = z.object({
+  pk_ca_id: z.number().int().positive().optional(),
+  fk_cont_id: z.number().int().nullable().optional(),
+  address: z.string().min(1, 'Address is required').max(150),
+  fk_city_id: z.number().int().positive('City is required'),
+  region: z.string().max(50).default(''),
+  pincode: z.string().max(10).nullable().optional(),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+});
+export type AddressDto = z.infer<typeof addressSchema>;
