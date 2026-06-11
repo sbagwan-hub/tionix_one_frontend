@@ -170,23 +170,6 @@ export const NAV_MENUS: NavMenu[] = [
       },
     ],
   },
-
-  {
-    key: 'window',
-    items: [
-      {
-        key: 'minimize',
-        icon: 'Minus',
-        action: () => console.log('Minimize'),
-      },
-      {
-        key: 'maximize',
-        icon: 'Square',
-        action: () => console.log('Maximize'),
-      },
-    ],
-  },
-
   {
     key: 'help',
     items: [

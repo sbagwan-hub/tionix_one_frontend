@@ -115,6 +115,14 @@ To maintain codebase readability, testability, and maintainability:
 - **Max File Length**: Any component or file exceeding **300-400 lines** of code MUST be split into smaller, focused sub-components or utility modules.
 - **Form Splitting**: For complex forms, split logical form sections (e.g. General Profile, Contacts, Work Details, Login Security, Demographics, Family Relatives, Licenses/Certificates) into separate component files inside the module's `components/` directory. Pass form state and change handlers down as standard props.
 
+### G. Responsive Layout Guidelines
+
+To support a variety of viewports (desktops, tablets, and mobile devices):
+
+- **Dynamic Collapsing**: Hide non-essential layout decorations (e.g. system status, operator labels) and secondary controls on smaller viewports using Tailwind's responsive class prefixes (e.g., `hidden sm:block`, `hidden md:flex`).
+- **Mobile Navigation**: Navigation links, menus, and advanced selection dropdowns in headers/navbars must fall back to a clean mobile menu (such as a hamburger trigger or collapsible list) on touch/small screens.
+- **Viewport Scaling**: Elements should adapt seamlessly using flexible grid/flex dimensions instead of hardcoded layouts.
+
 ---
 
 ## 4. Codebase Analysis & Recommendations for Improvement

@@ -46,6 +46,10 @@ function Footer() {
 
       {/* Date and Time */}
       <div className="flex shrink-0 items-center gap-3 pl-3">
+        <span className="bg-muted text-muted-foreground border-border/50 rounded px-1.5 py-0.5 font-mono text-[9px] leading-none font-semibold">
+          v2026.01
+        </span>
+        <div className="bg-border/50 h-3 w-[1px] shrink-0" />
         <div className="flex items-center gap-1.5">
           <Calendar className="h-3 w-3 opacity-60" />
           <span className="text-foreground/80 font-mono">{date}</span>
