@@ -10,7 +10,8 @@ import { LOCAL_IMAGE } from '@/constants/images.constant';
 import { SelectDropDown } from '../shared/select-drop-down';
 import { ThemeSwitcher } from '../shared/theme-switcher';
 import { NavbarMenu, RenderMenuItems } from '../shared/nested-dropdown-menu';
-import { Menu } from 'lucide-react';
+import { Menu, User, LogOut } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth-store';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +28,7 @@ function Navbar() {
   const { t, i18n } = useTranslation();
   const mounted = useMounted();
   const router = useRouter();
+  const { isAuthenticated, user, logout } = useAuthStore();
 
   return (
     <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5 select-none">
@@ -93,11 +95,52 @@ function Navbar() {
           />
         </div>
 
-        {/* Theme Switcher */}
+        {/* Theme Switcher or User Dropdown depending on auth status */}
         {mounted && (
-          <div className="scale-85 opacity-90 transition-opacity hover:opacity-100">
-            <ThemeSwitcher />
-          </div>
+          <>
+            {!isAuthenticated ? (
+              <div className="scale-85 opacity-90 transition-opacity hover:opacity-100">
+                <ThemeSwitcher />
+              </div>
+            ) : (
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <button className="hover:bg-muted/80 text-foreground bg-muted flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full transition-colors focus:outline-none">
+                    <User className="h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="border-border bg-popover text-popover-foreground w-52 border p-1.5 shadow-md"
+                >
+                  <div className="flex flex-col space-y-1 p-2">
+                    <p className="text-xs leading-none font-bold">{user?.username}</p>
+                    {user?.email && (
+                      <p className="text-muted-foreground text-[10px] leading-none">
+                        {user?.email}
+                      </p>
+                    )}
+                  </div>
+                  <DropdownMenuSeparator className="bg-border/60 my-1" />
+                  <div className="flex items-center justify-between px-2 py-1.5">
+                    <span className="text-muted-foreground text-xs font-medium">Theme</span>
+                    <ThemeSwitcher />
+                  </div>
+                  <DropdownMenuSeparator className="bg-border/60 my-1" />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      logout();
+                      router.push('/auth/login');
+                    }}
+                    className="text-destructive focus:bg-destructive/10 focus:text-destructive flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-xs font-medium transition-colors"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </>
         )}
 
         {/* Mobile Hamburger Menu (Mobile/Tablet only) */}

@@ -170,7 +170,19 @@ api.interceptors.response.use(
       }
     }
 
-    toast.error(extractAxiosErrorMessage(error));
+    // Only toast on the final failure (do not toast during retries)
+    const retryConfig = originalRequest?.['axios-retry'];
+    const isRetryable =
+      originalRequest &&
+      (axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 500);
+    const willRetry =
+      retryConfig && isRetryable && retryConfig.retryCount < (retryConfig.retries ?? 3);
+
+    if (!willRetry) {
+      const message = extractAxiosErrorMessage(error);
+      toast.error(message, { id: message });
+    }
+
     return Promise.reject(error);
   },
 );

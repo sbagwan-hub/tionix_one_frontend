@@ -68,6 +68,7 @@ export const useAuthStore = create<AuthState>()(
         });
         deleteCookie('access_token');
         localStorage.removeItem('selected_book');
+        localStorage.removeItem('refresh_token');
       },
 
       setLoading: (loading) => {

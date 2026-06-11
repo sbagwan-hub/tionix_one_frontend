@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
-import Navbar from './navbar';
-import Footer from './footer';
+import Navbar from './Navbar';
+import Footer from './Footer';
 import { GlobalWindows } from './global-windows';
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {

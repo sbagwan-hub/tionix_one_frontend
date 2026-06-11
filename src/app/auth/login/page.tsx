@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth-store';
 import { useBooks } from '@/modules/auth/hooks/use-books';
+import axiosClient, { extractAxiosErrorMessage } from '@/lib/axios';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -115,7 +116,7 @@ export default function LoginPage() {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [bookName, setBookName] = React.useState('');
-  
+
   // Fetch books from API
   const { data: booksResponse, isLoading: isLoadingBooks } = useBooks();
   const booksList = booksResponse?.data || [];
@@ -151,40 +152,47 @@ export default function LoginPage() {
     if (!handleValidation()) return;
 
     setIsLoading(true);
-    
+
     try {
-      // Simulate server communication latency
-      await new Promise(resolve => setTimeout(resolve, 1200));
-      
-      // Create user object for auth store
-      const user = {
-        id: '1',
-        username: username,
-        email: username.includes('@') ? username : `${username}@tionix.com`,
-        role: 'admin'
-      };
-      
-      const token = 'tionix_dummy_access_token';
-      
-      // Update auth store (this will also set localStorage)
-      login(user, token);
-      
-      // Set cookie for Next.js middleware to read
-      document.cookie = `access_token=${token}; path=/; max-age=86400`;
-      
-      // Store selected book
+      const response = await axiosClient.post('/auth/login', {
+        username,
+        password,
+        book_name: bookName,
+      });
+
+      const { access_token, refresh_token, user, role } = response.data.data;
+
+      // Update auth store
+      login(
+        {
+          id: String(user.pk_user_id || user.id),
+          username: user.username,
+          email: user.email || `${user.username}@tionix.com`,
+          role: role,
+        },
+        access_token,
+      );
+
+      // Save refresh token to localStorage so axios can handle token refresh
+      localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('selected_book', bookName);
-      
+
+      // Set cookie for Next.js middleware to read
+      document.cookie = `access_token=${access_token}; path=/; max-age=86400; SameSite=Lax`;
+
       setIsLoading(false);
       setLoginSuccess(true);
-      
-      // Use Next.js router for proper navigation
+
+      // Redirect to dashboard
       setTimeout(() => {
         router.push('/dashboard');
       }, 800);
-      
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
+      const errorMessage = extractAxiosErrorMessage(error);
+      setErrors({
+        username: errorMessage,
+      });
       console.error('Login error:', error);
     }
   };
@@ -323,10 +331,14 @@ export default function LoginPage() {
                       isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
                     } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
-                    <SelectValue placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
+                    <SelectValue
+                      placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder}
+                      defaultValue="FALCON MATERIAL HANDLING FZ LLC"
+                    />
                   </SelectTrigger>
-                  <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md"
-                    position='popper'
+                  <SelectContent
+                    className="border-border bg-popover rounded-sm border p-0 shadow-md"
+                    position="popper"
                   >
                     {booksList.map((b) => (
                       <SelectItem key={b.pk_book_id.trim()} value={b.book_name}>
@@ -334,7 +346,9 @@ export default function LoginPage() {
                       </SelectItem>
                     ))}
                     {booksList.length === 0 && !isLoadingBooks && (
-                       <SelectItem value="none" disabled>No books available</SelectItem>
+                      <SelectItem value="none" disabled>
+                        No books available
+                      </SelectItem>
                     )}
                   </SelectContent>
                 </Select>

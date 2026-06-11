@@ -6,6 +6,7 @@ import React from 'react';
 type ToastOptions = {
   description?: React.ReactNode;
   duration?: number;
+  id?: string | number;
 };
 
 // Base close button component
