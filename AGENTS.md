@@ -123,6 +123,10 @@ To support a variety of viewports (desktops, tablets, and mobile devices):
 - **Mobile Navigation**: Navigation links, menus, and advanced selection dropdowns in headers/navbars must fall back to a clean mobile menu (such as a hamburger trigger or collapsible list) on touch/small screens.
 - **Viewport Scaling**: Elements should adapt seamlessly using flexible grid/flex dimensions instead of hardcoded layouts.
 
+### H. Backward Compatibility
+
+- **Regression Prevention**: Never alter or delete existing properties, component props, styling themes, state variables, or function signatures unless explicitly required. Ensure all modifications remain fully backward-compatible to avoid breaking existing working functionality in other parts of the application.
+
 ---
 
 ## 4. Codebase Analysis & Recommendations for Improvement
