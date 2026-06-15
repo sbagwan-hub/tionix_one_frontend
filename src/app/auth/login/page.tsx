@@ -29,6 +29,7 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { hrmsRadiusClassName } from '@/components/hrms/hrms-styles';
+import { clonePageVaryPathWithNewSearchParams } from 'next/dist/client/components/segment-cache/vary-path';
 
 // Fallback translations matching i18next languages in the app (en, ar, hi)
 const LOCALES = {
@@ -174,6 +175,7 @@ export default function LoginPage() {
       );
 
       // Save refresh token to localStorage so axios can handle token refresh
+      localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('selected_book', bookName);
 
