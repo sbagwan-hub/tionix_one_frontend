@@ -37,7 +37,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
     <div className="space-y-4">
       {/* Resident Address */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider">
           Resident Address
         </Label>
         <Textarea
@@ -53,9 +53,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* City */}
         <div className="flex flex-col gap-1.5">
-          <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
-            City
-          </Label>
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider">City</Label>
           <div className="relative">
             <div className="text-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
               <MapPin className="h-4 w-4" />
@@ -98,9 +96,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
 
         {/* State */}
         <div className="flex flex-col gap-1.5">
-          <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
-            State
-          </Label>
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider">State</Label>
           <div className="relative">
             <div className="text-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
               <MapPin className="h-4 w-4" />
@@ -151,7 +147,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
 
         {/* Country */}
         <div className="flex flex-col gap-1.5">
-          <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider">
             Country
           </Label>
           <div className="relative">

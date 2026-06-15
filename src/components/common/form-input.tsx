@@ -16,22 +16,39 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ label, error, icon: Icon, className, id, disabled, containerClassName, ...props }, ref) => {
     const inputId = id ?? 'form-input';
 
+    // Helper to format text labels and colorize asterisks dynamically
+    const renderLabelContent = (node: React.ReactNode) => {
+      if (typeof node === 'string' && node.includes('*')) {
+        const parts = node.split(/(\*)/);
+        return parts.map((part, i) =>
+          part === '*' ? (
+            <span key={i} className="text-destructive ml-0.5 font-medium" aria-hidden="true">
+              *
+            </span>
+          ) : (
+            part
+          ),
+        );
+      }
+      return node;
+    };
+
     return (
       <div className={cn('flex w-full flex-col gap-1.5', containerClassName)}>
         {/* Label block */}
         {label && (
           <Label
             htmlFor={inputId}
-            className="text-muted-foreground block text-xs font-medium tracking-tight select-none"
+            className="text-foreground text-[10px] font-semibold tracking-wider"
           >
-            {label}
+            {renderLabelContent(label)}
           </Label>
         )}
 
         {/* Input area element with layered wrapper */}
         <div className="relative w-full">
           {Icon && (
-            <div className="text-muted-foreground pointer-events-none absolute top-1/2 left-0 z-10 flex -translate-y-1/2 items-center px-3">
+            <div className="text-muted-foreground/70 pointer-events-none absolute top-1/2 left-0 z-10 flex -translate-y-1/2 items-center px-3">
               <Icon className="h-4 w-4" />
             </div>
           )}
@@ -41,8 +58,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
             id={inputId}
             disabled={disabled}
             className={cn(
-              'bg-background/50 border-border h-8 rounded-md text-xs font-medium shadow-none transition-all outline-none',
-              'focus:bg-background focus:ring-ring focus:border-ring focus:ring-1',
+              'bg-background border-border/80 focus-visible:ring-primary focus-visible:border-primary h-9 rounded-lg text-xs font-medium shadow-sm transition-all focus-visible:ring-1 focus-visible:outline-none',
               Icon ? 'pr-3 pl-9' : 'px-3',
               error &&
                 'border-destructive focus:border-destructive focus:ring-destructive/30 bg-destructive/5 dark:bg-destructive/10',
@@ -64,3 +80,5 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
 );
 
 FormInput.displayName = 'FormInput';
+
+export default FormInput;
