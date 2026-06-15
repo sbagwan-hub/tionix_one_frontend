@@ -13,7 +13,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import { LucideIcon } from '@/components/shared/lucide-icon';
@@ -33,7 +32,7 @@ interface NavbarMenuProps {
   items: MenuItem[];
 }
 
-function RenderMenuItems({ items }: { items: MenuItem[] }) {
+export function RenderMenuItems({ items }: { items: MenuItem[] }) {
   const { t } = useTranslation();
   const router = useRouter();
 

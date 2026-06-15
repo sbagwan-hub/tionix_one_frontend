@@ -9,76 +9,56 @@ import Image from 'next/image';
 import { LOCAL_IMAGE } from '@/constants/images.constant';
 import { SelectDropDown } from '../shared/select-drop-down';
 import { ThemeSwitcher } from '../shared/theme-switcher';
-import { NavbarMenu } from '../shared/nested-dropdown-menu';
+import { NavbarMenu, RenderMenuItems } from '../shared/nested-dropdown-menu';
+import { Menu, User, LogOut } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth-store';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 function Navbar() {
   const { t, i18n } = useTranslation();
   const mounted = useMounted();
   const router = useRouter();
+  const { isAuthenticated, user, logout } = useAuthStore();
 
   return (
-    <div className="border-border bg-background flex w-full flex-col border-b select-none">
-      {/* Meta Header */}
-      <header className="border-border/40 flex h-7 items-center justify-between border-b px-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="group flex cursor-pointer items-center gap-2"
-            onClick={() => router.push('/dashboard')}
-          >
-            <div className="transition-transform duration-200 group-hover:scale-102">
-              <Image
-                src={LOCAL_IMAGE.APP_LOGO_TRANSPARENT}
-                alt="Tionix_Logo"
-                className="h-auto w-12 object-contain"
-              />
-            </div>
-            <span className="text-foreground/90 text-xs font-semibold tracking-tight">
-              Tionix One
-            </span>
-            <span className="bg-muted text-muted-foreground border-border/60 scale-95 rounded border px-1 py-0.5 font-mono text-[9px] leading-none tracking-tight">
-              v2026.01
-            </span>
-          </div>
-
-          <span className="bg-border/60 h-2.5 w-px" />
-
-          <p className="text-muted-foreground text-[10px] font-medium tracking-tight">
-            {t('licensedTo')}:{' '}
-            <span className="text-foreground/80 font-semibold">
-              {t('FALCON MATERIAL HANDLING FZ LLC')}
-            </span>
-          </p>
+    <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5 select-none">
+      {/* Left section: Logo + Desktop Menu */}
+      <div className="flex min-w-0 items-center gap-0">
+        <div
+          className="group flex shrink-0 cursor-pointer items-center gap-0"
+          onClick={() => router.push('/dashboard')}
+        >
+          <Image
+            src={LOCAL_IMAGE.APP_LOGO_TRANSPARENT}
+            alt="Tionix_Logo"
+            className="h-auto w-18 object-contain"
+          />
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* System Live Indicator */}
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/10 bg-emerald-500/5 px-2 py-0.5 text-[10px] font-medium tracking-tight text-emerald-600 dark:text-emerald-400">
-            <span className="relative flex h-1 w-1">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex h-1 w-1 rounded-full bg-emerald-500"></span>
-            </span>
-            {t('systemLive')}
-          </div>
+        <span className="bg-border/60 hidden h-4 w-px shrink-0 lg:block" />
 
-          {mounted && (
-            <div className="origin-right scale-85 opacity-90 transition-opacity hover:opacity-100">
-              <ThemeSwitcher />
-            </div>
-          )}
-        </div>
-      </header>
-
-      {/* Main Bar */}
-      <section className="flex h-10 items-center justify-between px-3">
-        {/* Navigation Menus */}
-        <nav className="flex items-center gap-0.5">
+        {/* Navigation Menus (Desktop only) */}
+        <nav className="hidden min-w-0 items-center gap-0.5 lg:flex">
           {NAV_MENUS.map((menu) => (
             <NavbarMenu key={menu.key} label={t(menu.key)} items={menu.items} />
           ))}
         </nav>
+      </div>
 
-        {/* Global Select Utilities */}
-        <div className="flex origin-right scale-95 items-center gap-1.5">
+      {/* Right section: Dropdowns + Utilities */}
+      <div className="flex shrink-0 items-center gap-3">
+        {/* Dropdowns (Desktop only) */}
+        <div className="hidden items-center gap-2 md:flex">
           <SelectDropDown
             label={t('language')}
             value={i18n.language}
@@ -114,7 +94,123 @@ function Navbar() {
             selectContentClassName="w-40"
           />
         </div>
-      </section>
+
+        {/* Theme Switcher or User Dropdown depending on auth status */}
+        {mounted && (
+          <>
+            {!isAuthenticated ? (
+              <div className="scale-85 opacity-90 transition-opacity hover:opacity-100">
+                <ThemeSwitcher />
+              </div>
+            ) : (
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <button className="hover:bg-muted/80 text-foreground bg-muted flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full transition-colors focus:outline-none">
+                    <User className="h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="border-border bg-popover text-popover-foreground w-52 border p-1.5 shadow-md"
+                >
+                  <div className="flex flex-col space-y-1 p-2">
+                    <p className="text-xs leading-none font-bold">{user?.username}</p>
+                    {user?.email && (
+                      <p className="text-muted-foreground text-[10px] leading-none">
+                        {user?.email}
+                      </p>
+                    )}
+                  </div>
+                  <DropdownMenuSeparator className="bg-border/60 my-1" />
+                  <div className="flex items-center justify-between px-2 py-1.5">
+                    <span className="text-muted-foreground text-xs font-medium">Theme</span>
+                    <ThemeSwitcher />
+                  </div>
+                  <DropdownMenuSeparator className="bg-border/60 my-1" />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      logout();
+                      router.push('/auth/login');
+                    }}
+                    className="text-destructive focus:bg-destructive/10 focus:text-destructive flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-xs font-medium transition-colors"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </>
+        )}
+
+        {/* Mobile Hamburger Menu (Mobile/Tablet only) */}
+        <div className="lg:hidden">
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <button className="text-foreground/75 hover:text-foreground hover:bg-muted/80 shrink-0 cursor-pointer rounded-md p-1.5 transition-colors">
+                <Menu className="h-4.5 w-4.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="border-border/80 bg-popover text-popover-foreground w-52 border p-1 shadow-md"
+            >
+              {NAV_MENUS.map((menu) => (
+                <DropdownMenuSub key={menu.key}>
+                  <DropdownMenuSubTrigger className="hover:bg-muted cursor-pointer px-2.5 py-1.5 text-xs font-semibold">
+                    {t(menu.key)}
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent className="border-border/80 bg-popover text-popover-foreground w-48 border p-1 shadow-md">
+                      <RenderMenuItems items={menu.items} />
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              ))}
+
+              <DropdownMenuSeparator className="bg-border/65 my-1" />
+
+              {/* Mobile Lang Option */}
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger className="hover:bg-muted cursor-pointer px-2.5 py-1.5 text-xs font-semibold">
+                  {t('language')}
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent className="border-border/80 bg-popover text-popover-foreground w-40 border p-1 shadow-md">
+                    <DropdownMenuItem
+                      onClick={() => {
+                        i18n.changeLanguage('en');
+                        localStorage.setItem('lang', 'en');
+                      }}
+                      className="cursor-pointer px-2.5 py-1.5 text-xs"
+                    >
+                      English
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        i18n.changeLanguage('ar');
+                        localStorage.setItem('lang', 'ar');
+                      }}
+                      className="cursor-pointer px-2.5 py-1.5 text-xs"
+                    >
+                      العربية
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        i18n.changeLanguage('hi');
+                        localStorage.setItem('lang', 'hi');
+                      }}
+                      className="cursor-pointer px-2.5 py-1.5 text-xs"
+                    >
+                      हिन्दी
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
     </div>
   );
 }

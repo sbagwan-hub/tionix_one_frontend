@@ -20,6 +20,8 @@ import { DesignationWindow } from '@/modules/master-contacts/components/Designat
 import { QualificationWindow } from '@/modules/master-contacts/components/QualificationWindow';
 import { RelationshipWindow } from '@/modules/master-contacts/components/RelationshipWindow';
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
+import { CityWindow } from '@/modules/master-contacts/components/CityWindow';
+import { AddressWindow } from '@/modules/master-contacts/components/AddressWindow';
 
 import { SkintoneWindow } from '@/modules/master-salary/components/SkintoneWindow';
 import { CasteWindow } from '@/modules/master-salary/components/CasteWindow';
@@ -77,54 +79,20 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     className: 'absolute top-40 left-48 w-full max-w-2xl',
     component: DesignationWindow,
   },
-
-  // Salary Setup Windows
-  'salary-skintone': {
-    id: 'salary-skintone',
-    title: 'Skintones',
+  'contacts-city': {
+    id: 'contacts-city',
+    title: 'Cities',
     icon: <Settings className="h-4 w-4 text-emerald-500" />,
     isMinimizable: true,
-    className: 'absolute top-20 left-12 w-full max-w-2xl',
-    component: SkintoneWindow,
+    className: 'absolute top-44 left-56 w-full max-w-2xl',
+    component: CityWindow,
   },
-  'salary-caste': {
-    id: 'salary-caste',
-    title: 'Castes/Sub-Castes',
-    icon: <Settings className="h-4 w-4 text-orange-500" />,
-    isMinimizable: true,
-    className: 'absolute top-24 left-16 w-full max-w-2xl',
-    component: CasteWindow,
-  },
-  'salary-religion': {
-    id: 'salary-religion',
-    title: 'Religions',
-    icon: <Settings className="h-4 w-4 text-amber-500" />,
-    isMinimizable: true,
-    className: 'absolute top-28 left-24 w-full max-w-2xl',
-    component: ReligionWindow,
-  },
-  'salary-schedule-type': {
-    id: 'salary-schedule-type',
-    title: 'Schedule Types',
+  'contacts-address': {
+    id: 'contacts-address',
+    title: 'Addresses',
     icon: <Settings className="h-4 w-4 text-cyan-500" />,
     isMinimizable: true,
-    className: 'absolute top-32 left-32 w-full max-w-2xl',
-    component: ScheduleTypeWindow,
-  },
-  'salary-nature-of-work': {
-    id: 'salary-nature-of-work',
-    title: 'Nature of Work',
-    icon: <Settings className="h-4 w-4 text-violet-500" />,
-    isMinimizable: true,
-    className: 'absolute top-36 left-40 w-full max-w-2xl',
-    component: NatureOfWorkWindow,
-  },
-  'salary-sal-it-section': {
-    id: 'salary-sal-it-section',
-    title: 'Income Tax Sections',
-    icon: <Settings className="h-4 w-4 text-rose-500" />,
-    isMinimizable: true,
-    className: 'absolute top-40 left-48 w-full max-w-2xl',
-    component: SalItSectionWindow,
+    className: 'absolute top-48 left-64 w-full max-w-2xl',
+    component: AddressWindow,
   },
 };

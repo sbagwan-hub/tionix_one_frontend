@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
+import { toast } from '@/components/modern-ui/sonner';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4100/api';
 
@@ -67,8 +68,59 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
+type BackendResponse = {
+  message?: string;
+  error?: {
+    details?: string;
+  };
+};
+
+const getBackendResponseData = (data: unknown): BackendResponse => {
+  if (data && typeof data === 'object') {
+    return data as BackendResponse;
+  }
+  return {};
+};
+
+const shouldToastSuccess = (response: AxiosResponse) => {
+  const method = String(response.config.method).toLowerCase();
+  const url = response.config.url ?? '';
+
+  if (url.includes('/auth')) return false;
+  return ['post', 'put', 'delete'].includes(method);
+};
+
+export const extractAxiosErrorMessage = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    const data = getBackendResponseData(error.response?.data);
+    const details = data.error?.details;
+    if (typeof details === 'string' && details.trim()) return details;
+    if (data.message) return data.message;
+    if (error.message) return error.message;
+    return 'Something went wrong. Please try again.';
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return 'Something went wrong. Please try again.';
+};
+
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (shouldToastSuccess(response)) {
+      const data = response.data as Record<string, any>;
+      const message =
+        data?.message ||
+        (response.status === 201 && 'Created successfully.') ||
+        (response.status === 200 && 'Saved successfully.') ||
+        'Operation completed successfully.';
+      toast.success(message);
+    }
+
+    return response;
+  },
   async (error: AxiosError) => {
     const originalRequest: any = error.config;
 
@@ -116,6 +168,19 @@ api.interceptors.response.use(
       } finally {
         isRefreshing = false;
       }
+    }
+
+    // Only toast on the final failure (do not toast during retries)
+    const retryConfig = originalRequest?.['axios-retry'];
+    const isRetryable =
+      originalRequest &&
+      (axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 500);
+    const willRetry =
+      retryConfig && isRetryable && retryConfig.retryCount < (retryConfig.retries ?? 3);
+
+    if (!willRetry) {
+      const message = extractAxiosErrorMessage(error);
+      toast.error(message, { id: message });
     }
 
     return Promise.reject(error);
