@@ -146,7 +146,7 @@ export default function IndividualContactsPage() {
     const tempId = `I${String(Date.now()).substring(2, 13)}`;
     setFormData({
       pk_ind_id: tempId,
-      fk_com_id: 'C001',
+      fk_com_id: '',
       fk_tit_id: null,
       first_name: '',
       middle_name: '',
@@ -191,8 +191,26 @@ export default function IndividualContactsPage() {
       return;
     }
 
+    const sanitizePayload = (data: IndividualDto) => {
+      return {
+        ...data,
+        fk_com_id: data.fk_com_id ? Number(data.fk_com_id) : undefined,
+        fk_tit_id: data.fk_tit_id ? Number(data.fk_tit_id) : null,
+        fk_qual_id: data.fk_qual_id ? Number(data.fk_qual_id) : null,
+        fk_org_id: data.fk_org_id ? Number(data.fk_org_id) : null,
+        fk_dep_id: data.fk_dep_id ? Number(data.fk_dep_id) : null,
+        fk_deg_id: data.fk_deg_id ? Number(data.fk_deg_id) : null,
+        fk_spo_id: data.fk_spo_id ? Number(data.fk_spo_id) : null,
+        fk_city_id: data.fk_city_id ? Number(data.fk_city_id) : null,
+        fk_state_id: data.fk_state_id ? Number(data.fk_state_id) : null,
+        fk_ctry_id: data.fk_ctry_id ? Number(data.fk_ctry_id) : null,
+      };
+    };
+
     if (isAdding) {
-      createInd.mutate(formData, {
+      const { pk_ind_id, ...rest } = formData;
+      const payload = sanitizePayload(rest as any);
+      createInd.mutate(payload as any, {
         onSuccess: (data) => {
           toast.success('Individual contact created successfully!');
           handleSelectIndividual(data);
@@ -202,8 +220,9 @@ export default function IndividualContactsPage() {
         },
       });
     } else if (isEditMode && selectedInd) {
+      const payload = sanitizePayload(formData);
       updateInd.mutate(
-        { id: selectedInd.pk_ind_id, data: formData },
+        { id: String(selectedInd.pk_ind_id), data: payload as any },
         {
           onSuccess: (data) => {
             toast.success('Individual contact updated successfully!');

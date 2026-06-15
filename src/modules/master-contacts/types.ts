@@ -117,8 +117,8 @@ export const regionSchema = z.object({
 export type RegionDto = z.infer<typeof regionSchema>;
 
 export const individualSchema = z.object({
-  pk_ind_id: z.string().length(12, 'Individual ID must be exactly 12 characters'),
-  fk_com_id: z.string().max(10).default(''),
+  pk_ind_id: z.union([z.number(), z.string()]).optional(),
+  fk_com_id: z.union([z.number(), z.string()]).default(''),
   fk_tit_id: z.number().nullable().optional(),
   first_name: z.string().min(1, 'First name is required').max(50),
   middle_name: z.string().max(40).default(''),
@@ -131,7 +131,7 @@ export const individualSchema = z.object({
   fk_org_id: z.number().nullable().optional(),
   fk_dep_id: z.number().nullable().optional(),
   fk_deg_id: z.number().nullable().optional(),
-  fk_spo_id: z.string().max(10).nullable().optional(),
+  fk_spo_id: z.union([z.number(), z.string()]).nullable().optional(),
   anni: z.string().nullable().optional(),
   ext: z.string().max(10).nullable().optional(),
   address: z.string().max(150).nullable().optional(),

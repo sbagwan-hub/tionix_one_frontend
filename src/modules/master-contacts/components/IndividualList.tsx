@@ -39,7 +39,7 @@ export const IndividualList: React.FC<IndividualListProps> = ({
     const fullName = `${ind.first_name} ${ind.middle_name || ''} ${ind.surname}`.toLowerCase();
     return (
       fullName.includes(search.toLowerCase()) ||
-      ind.pk_ind_id.toLowerCase().includes(search.toLowerCase())
+      String(ind.pk_ind_id).toLowerCase().includes(search.toLowerCase())
     );
   });
 
