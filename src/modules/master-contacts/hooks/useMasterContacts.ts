@@ -33,7 +33,9 @@ type ResourceTypeMap = {
   region: RegionDto;
 };
 
-export const useMasterContacts = <T extends keyof typeof masterContactsApi>(resource: T) => {
+export const useMasterContacts = <T extends Exclude<keyof typeof masterContactsApi, 'individuals'>>(
+  resource: T,
+) => {
   const queryClient = useQueryClient();
   type DTO = ResourceTypeMap[T];
 

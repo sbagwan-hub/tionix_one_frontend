@@ -12,6 +12,8 @@ import {
   ModeOfContactTypeDto,
   StateDto,
   RegionDto,
+  IndividualDto,
+  IndividualRecord,
 } from './types';
 
 // Common wrapper to inject fk_user_id for now
@@ -268,5 +270,27 @@ export const masterContactsApi = {
     create: async () => ({}) as any,
     update: async () => ({}) as any,
     remove: async () => {},
+  },
+  individuals: {
+    list: async (): Promise<IndividualRecord[]> =>
+      (await axiosClient.get<{ data: IndividualRecord[] }>('/master/master-contacts/individuals'))
+        .data.data,
+    create: async (data: IndividualDto): Promise<IndividualRecord> =>
+      (
+        await axiosClient.post<{ data: IndividualRecord }>(
+          '/master/master-contacts/individuals',
+          withUserId(data as any),
+        )
+      ).data.data,
+    update: async (id: string, data: Partial<IndividualDto>): Promise<IndividualRecord> =>
+      (
+        await axiosClient.put<{ data: IndividualRecord }>(
+          `/master/master-contacts/individuals/${id}`,
+          withUserId(data as any),
+        )
+      ).data.data,
+    remove: async (id: string): Promise<void> => {
+      await axiosClient.delete(`/master/master-contacts/individuals/${id}`);
+    },
   },
 };

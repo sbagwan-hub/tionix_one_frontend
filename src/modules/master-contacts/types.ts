@@ -115,3 +115,43 @@ export const regionSchema = z.object({
   username: z.string().optional(),
 });
 export type RegionDto = z.infer<typeof regionSchema>;
+
+export const individualSchema = z.object({
+  pk_ind_id: z.string().length(12, 'Individual ID must be exactly 12 characters'),
+  fk_com_id: z.string().max(10).default(''),
+  fk_tit_id: z.number().nullable().optional(),
+  first_name: z.string().min(1, 'First name is required').max(50),
+  middle_name: z.string().max(40).default(''),
+  surname: z.string().min(1, 'Surname is required').max(25),
+  dob: z.string().nullable().optional(),
+  photo: z.string().nullable().optional(),
+  fk_qual_id: z.number().nullable().optional(),
+  male: z.boolean().default(true),
+  married: z.boolean().default(false),
+  fk_org_id: z.number().nullable().optional(),
+  fk_dep_id: z.number().nullable().optional(),
+  fk_deg_id: z.number().nullable().optional(),
+  fk_spo_id: z.string().max(10).nullable().optional(),
+  anni: z.string().nullable().optional(),
+  ext: z.string().max(10).nullable().optional(),
+  address: z.string().max(150).nullable().optional(),
+  fk_city_id: z.number().nullable().optional(),
+  region: z.string().max(50).nullable().optional(),
+  pincode: z.string().max(10).nullable().optional(),
+  fk_state_id: z.number().nullable().optional(),
+  fk_ctry_id: z.number().nullable().optional(),
+  postfix: z.string().max(25).nullable().optional(),
+});
+
+export type IndividualDto = z.infer<typeof individualSchema>;
+
+export interface IndividualRecord extends IndividualDto {
+  title?: string;
+  qualification?: string;
+  organization?: string;
+  department?: string;
+  designation?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+}
