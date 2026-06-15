@@ -36,6 +36,9 @@
   "department": "القسم (Department)",
   "designation": "المسمى الوظيفي (Designation)",
   "modeOfContact": "طريقة الاتصال (Mode of Contact)",
+  "state": "الولاية",
+  "modeOf": "طريقة",
+  "region": "المنطقة",
 
   "theme": "الثيم",
   "preferences": "التفضيلات",

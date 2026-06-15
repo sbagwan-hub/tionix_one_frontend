@@ -39,6 +39,9 @@
   "city": "Cities",
   "address": "Addresses",
   "modeOfContact": "Mode of Contact",
+  "state": "State",
+  "modeOf": "Mode of",
+  "region": "Region",
   "Contacts": "Contacts",
 
   "theme": "Theme",
