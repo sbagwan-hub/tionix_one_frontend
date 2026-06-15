@@ -17,7 +17,7 @@ export const usersApi = {
       success: boolean;
       data: UserRecord[];
       meta?: { total: number; page: number; pageSize: number };
-    }>('/users', { params });
+    }>('/admin/users', { params });
     return {
       data: res.data.data || [],
       total: res.data.meta?.total || 0,
@@ -27,30 +27,33 @@ export const usersApi = {
   },
 
   getUser: async (id: number): Promise<UserRecord> => {
-    const res = await axiosClient.get<{ success: boolean; data: UserRecord }>(`/users/${id}`);
+    const res = await axiosClient.get<{ success: boolean; data: UserRecord }>(`/admin/users/${id}`);
     return res.data.data;
   },
 
   createUser: async (payload: CreateUserPayload): Promise<UserRecord> => {
-    const res = await axiosClient.post<{ success: boolean; data: UserRecord }>('/users', payload);
+    const res = await axiosClient.post<{ success: boolean; data: UserRecord }>(
+      '/admin/users',
+      payload,
+    );
     return res.data.data;
   },
 
   updateUser: async (args: { id: number; payload: UpdateUserPayload }): Promise<UserRecord> => {
     const res = await axiosClient.put<{ success: boolean; data: UserRecord }>(
-      `/users/${args.id}`,
+      `/admin/users/${args.id}`,
       args.payload,
     );
     return res.data.data;
   },
 
   deleteUser: async (id: number): Promise<void> => {
-    await axiosClient.delete(`/users/${id}`);
+    await axiosClient.delete(`/admin/users/${id}`);
   },
 
   exportUsers: async (params?: UserFilterParams): Promise<Record<string, any>[]> => {
     const res = await axiosClient.get<{ success: boolean; data: Record<string, any>[] }>(
-      '/users/export',
+      '/admin/users/export',
       { params },
     );
     return res.data.data;
@@ -58,21 +61,21 @@ export const usersApi = {
 
   getEmployees: async (): Promise<EmployeeLookup[]> => {
     const res = await axiosClient.get<{ success: boolean; data: EmployeeLookup[] }>(
-      '/users/lookups/employees',
+      '/admin/users/lookups/employees',
     );
     return res.data.data;
   },
 
   getEmailConfigs: async (): Promise<EmailConfigLookup[]> => {
     const res = await axiosClient.get<{ success: boolean; data: EmailConfigLookup[] }>(
-      '/users/lookups/email-configurations',
+      '/admin/users/lookups/email-configurations',
     );
     return res.data.data;
   },
 
   getSecurityQuestions: async (): Promise<SecurityQuestionLookup[]> => {
     const res = await axiosClient.get<{ success: boolean; data: SecurityQuestionLookup[] }>(
-      '/users/lookups/security-questions',
+      '/admin/users/lookups/security-questions',
     );
     return res.data.data;
   },
