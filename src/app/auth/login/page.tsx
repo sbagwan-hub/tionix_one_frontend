@@ -306,7 +306,7 @@ export default function LoginPage() {
                     position='popper'
                   >
                     {booksList.map((b) => (
-                      <SelectItem key={b.pk_book_id.trim()} value={b.book_name}>
+                      <SelectItem key={String(b.pk_book_id)} value={b.book_name}>
                         {b.book_name}
                       </SelectItem>
                     ))}

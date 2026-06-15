@@ -4,6 +4,8 @@ import {
   CasteDto,
   ReligionDto,
   ScheduleTypeDto,
+  NatureOfWorkDto,
+  SalItSectionDto,
 } from './types';
 
 // Common wrapper to inject fk_user_id for now
@@ -85,5 +87,43 @@ export const masterSalaryApi = {
         )
       ).data.data,
     remove: async (id: number) => axiosClient.delete(`/master-salary/schedule-type/${id}`),
+  },
+  natureOfWorks: {
+    list: async () =>
+      (await axiosClient.get<{ data: NatureOfWorkDto[] }>('/nature-of-work')).data.data,
+    create: async (data: NatureOfWorkDto) =>
+      (
+        await axiosClient.post<{ data: NatureOfWorkDto }>(
+          '/nature-of-work',
+          withUserId(data),
+        )
+      ).data.data,
+    update: async (id: number, data: Partial<NatureOfWorkDto>) =>
+      (
+        await axiosClient.put<{ data: NatureOfWorkDto }>(
+          `/nature-of-work/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/nature-of-work/${id}`),
+  },
+  salItSections: {
+    list: async () =>
+      (await axiosClient.get<{ data: SalItSectionDto[] }>('/master-salary/sal-it-section')).data.data,
+    create: async (data: SalItSectionDto) =>
+      (
+        await axiosClient.post<{ data: SalItSectionDto }>(
+          '/master-salary/sal-it-section',
+          withUserId(data),
+        )
+      ).data.data,
+    update: async (id: number, data: Partial<SalItSectionDto>) =>
+      (
+        await axiosClient.put<{ data: SalItSectionDto }>(
+          `/master-salary/sal-it-section/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-salary/sal-it-section/${id}`),
   },
 };

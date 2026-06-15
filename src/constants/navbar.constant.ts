@@ -111,30 +111,40 @@ export const NAV_MENUS: NavMenu[] = [
           { key: 'paymentPurpose', href: '/masters/accounts/payment-purposes', icon: 'Wallet' },
         ],
       },
-      { key: 'HR', href: '/hr', icon: 'Users' },
+      { key: 'employee', href: '/masters/employees', icon: 'Users' },
       {
         key: 'Salary',
         icon: 'Banknote',
         children: [
           {
-            key: 'skintones',
+            key: 'Skintones',
             icon: 'User',
             action: () => useWindowStore.getState().openWindow('salary-skintone'),
           },
           {
-            key: 'castes/sub-caste',
+            key: 'Castes/Sub-Castes',
             icon: 'Users',
             action: () => useWindowStore.getState().openWindow('salary-caste'),
           },
           {
-            key: 'religions',
+            key: 'Religions',
             icon: 'Heart',
             action: () => useWindowStore.getState().openWindow('salary-religion'),
           },
           {
-            key: 'scheduleTypes',
+            key: 'Schedule Types',
             icon: 'Calendar',
             action: () => useWindowStore.getState().openWindow('salary-schedule-type'),
+          },
+          {
+            key: 'Nature Of Work',
+            icon: 'FileText',
+            action: () => useWindowStore.getState().openWindow('salary-nature-of-work'),
+          },
+          {
+            key: 'Income Tax Sections',
+            icon: 'Percent',
+            action: () => useWindowStore.getState().openWindow('salary-sal-it-section'),
           },
         ],
       },

@@ -157,12 +157,15 @@ export default function AdministratorUsersPage() {
       return;
     }
 
+    const matchedQuestion = securityQuestions.find((sq) => sq.questions === selectedQuestion);
     const payload: any = {
       username: formData.username,
       fk_emp_id: formData.fk_emp_id,
       fk_ec_id: formData.fk_ec_id,
       answer: formData.answer || null,
       mobile: formData.mobile || null,
+      security_question: selectedQuestion || null,
+      security_question_id: matchedQuestion ? matchedQuestion.pk_question_id : null,
     };
 
     if (formData.password) {
@@ -185,6 +188,7 @@ export default function AdministratorUsersPage() {
       fk_ec_id: null,
       mobile: '',
     });
+    setSelectedQuestion(securityQuestions[0]?.questions || '');
     setIsEditMode(false);
     setIsAdding(true);
     setSelectedUser(null);
@@ -204,6 +208,7 @@ export default function AdministratorUsersPage() {
       fk_ec_id: selectedUser.fk_ec_id,
       mobile: selectedUser.mobile || '',
     });
+    setSelectedQuestion(selectedUser.security_question || (securityQuestions[0]?.questions || ''));
     setIsEditMode(true);
     setIsAdding(false);
     setActiveTab('user');

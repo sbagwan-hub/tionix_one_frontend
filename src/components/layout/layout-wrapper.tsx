@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
-import Navbar from './navbar';
-import Footer from './footer';
+import Navbar from './Navbar';
+import Footer from './Footer';
 import { GlobalWindows } from './global-windows';
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
@@ -11,16 +11,16 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const isAuth = pathname?.startsWith('/auth/');
 
   return (
-    <>
+    <div className="h-screen w-full flex flex-col overflow-hidden bg-background">
       {!isAuth && (
-        <div className="fixed top-0 right-0 left-0 z-50">
+        <div className="shrink-0 z-50">
           <Navbar />
         </div>
       )}
 
       <main
-        className={`overflow-hidden transition-all duration-300 ${
-          isAuth ? 'mx-0 my-0 h-screen w-screen pt-0 pb-0' : 'mx-4 my-2 h-full pt-15 pb-8'
+        className={`overflow-x-hidden overflow-y-auto flex-1 min-h-0 transition-all duration-300 ${
+          isAuth ? 'mx-0 my-0 h-full w-full' : 'mx-4 my-2'
         }`}
       >
         {children}
@@ -29,10 +29,10 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
       {!isAuth && <GlobalWindows />}
 
       {!isAuth && (
-        <div className="fixed right-0 bottom-0 left-0 z-50">
+        <div className="shrink-0 z-50">
           <Footer />
         </div>
       )}
-    </>
+    </div>
   );
 }

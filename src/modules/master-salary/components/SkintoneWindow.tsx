@@ -6,6 +6,7 @@ import { useMasterSalary } from '../hooks/useMasterSalary';
 import { skintoneSchema, SkintoneDto } from '../types';
 import WindowPanel, { WindowPanelItem } from '@/components/common/window-panel';
 import { FormInput } from '@/components/common/form-input';
+import { toast } from '@/components/modern-ui/sonner';
 
 export const SkintoneWindow: React.FC = () => {
   const { list, create, update, remove } = useMasterSalary('skintones');
@@ -22,12 +23,26 @@ export const SkintoneWindow: React.FC = () => {
       update.mutate(
         { id: editingId, data },
         {
-          onSuccess: () => resetForm(),
+          onSuccess: () => {
+            toast.success('Skintone updated successfully.');
+            resetForm();
+          },
+          onError: (error: any) => {
+            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update skintone.';
+            toast.error(msg);
+          },
         },
       );
     } else {
       create.mutate(data, {
-        onSuccess: () => resetForm(),
+        onSuccess: () => {
+          toast.success('Skintone created successfully.');
+          resetForm();
+        },
+        onError: (error: any) => {
+          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create skintone.';
+          toast.error(msg);
+        },
       });
     }
   };
@@ -51,7 +66,15 @@ export const SkintoneWindow: React.FC = () => {
   };
 
   const handleDelete = (item: WindowPanelItem) => {
-    remove.mutate(parseInt(item.id, 10));
+    remove.mutate(parseInt(item.id, 10), {
+      onSuccess: () => {
+        toast.success('Skintone deleted successfully.');
+      },
+      onError: (error: any) => {
+        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete skintone.';
+        toast.error(msg);
+      },
+    });
   };
 
   const items: WindowPanelItem[] = (list.data || []).map((c: SkintoneDto) => ({

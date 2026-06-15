@@ -5,6 +5,8 @@ import {
   CasteDto,
   ReligionDto,
   ScheduleTypeDto,
+  NatureOfWorkDto,
+  SalItSectionDto,
 } from '../types';
 
 type ResourceTypeMap = {
@@ -12,6 +14,8 @@ type ResourceTypeMap = {
   castes: CasteDto;
   religions: ReligionDto;
   scheduleTypes: ScheduleTypeDto;
+  natureOfWorks: NatureOfWorkDto;
+  salItSections: SalItSectionDto;
 };
 
 export const useMasterSalary = <T extends keyof typeof masterSalaryApi>(resource: T) => {

@@ -122,7 +122,7 @@ function MasterCard({ title, description, icon, href, count }: MasterCardProps) 
     >
       {/* Glow effect on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      
+
       <div className="p-6 relative z-10">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -140,11 +140,11 @@ function MasterCard({ title, description, icon, href, count }: MasterCardProps) 
           </div>
           <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-brand" />
         </div>
-        
+
         <p className="text-sm text-muted-foreground leading-relaxed">
           {description}
         </p>
-        
+
         <div className="mt-4 flex items-center gap-2">
           <span className="text-xs text-brand font-medium">View Details</span>
           <ArrowRight className="h-3 w-3 text-brand" />
@@ -232,9 +232,8 @@ export default function MastersPage() {
               {menuItems.map((item, index) => (
                 <button
                   key={item}
-                  className={`font-medium transition-colors hover:text-brand ${
-                    index === 1 ? 'text-brand border-b border-brand pb-1' : 'text-muted-foreground'
-                  }`}
+                  className={`font-medium transition-colors hover:text-brand ${index === 1 ? 'text-brand border-b border-brand pb-1' : 'text-muted-foreground'
+                    }`}
                 >
                   {item}
                 </button>
@@ -267,6 +266,13 @@ export default function MastersPage() {
                 icon={<Users className="h-6 w-6" />}
                 href="/masters/users"
                 count={156}
+              />
+              <MasterCard
+                title="Employee"
+                description="Manage employee profiles, contact details, bank accounts, and credentials"
+                icon={<Users className="h-6 w-6" />}
+                href="/masters/employees"
+                count={1}
               />
               <MasterCard
                 title={t.companies}

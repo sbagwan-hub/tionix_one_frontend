@@ -1,5 +1,5 @@
 export interface Book {
-  pk_book_id: string;
+  pk_book_id: number;
   book_name: string;
   active: boolean;
   file_name: string;

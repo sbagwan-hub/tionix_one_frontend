@@ -108,6 +108,12 @@ To maintain perfect alignment with the backend and PostgreSQL database columns:
 - **Primary Keys**: Always use `pk_user_id` (fully lowercase snake_case). Do not use camelCase `pkUserid` or `pkUserId`.
 - **Properties/Variables Matching Database Columns**: Ensure that all frontend module types and variable property names exactly match their database column counterparts (e.g., `fk_set_id`, `fk_prod_id`, `id`, `form`, `rights`). Avoid converting database property names to camelCase on the frontend.
 
+### F. Code Splitting & File Length Limits
+
+To maintain codebase readability, testability, and maintainability:
+- **Max File Length**: Any component or file exceeding **300-400 lines** of code MUST be split into smaller, focused sub-components or utility modules.
+- **Form Splitting**: For complex forms, split logical form sections (e.g. General Profile, Contacts, Work Details, Login Security, Demographics, Family Relatives, Licenses/Certificates) into separate component files inside the module's `components/` directory. Pass form state and change handlers down as standard props.
+
 ---
 
 ## 4. Codebase Analysis & Recommendations for Improvement

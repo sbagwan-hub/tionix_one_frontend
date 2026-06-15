@@ -25,6 +25,8 @@ import { SkintoneWindow } from '@/modules/master-salary/components/SkintoneWindo
 import { CasteWindow } from '@/modules/master-salary/components/CasteWindow';
 import { ReligionWindow } from '@/modules/master-salary/components/ReligionWindow';
 import { ScheduleTypeWindow } from '@/modules/master-salary/components/ScheduleTypeWindow';
+import { NatureOfWorkWindow } from '@/modules/master-salary/components/NatureOfWorkWindow';
+import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSectionWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -87,7 +89,7 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   },
   'salary-caste': {
     id: 'salary-caste',
-    title: 'Castes/sub-caste',
+    title: 'Castes/Sub-Castes',
     icon: <Settings className="h-4 w-4 text-orange-500" />,
     isMinimizable: true,
     className: 'absolute top-24 left-16 w-full max-w-2xl',
@@ -108,5 +110,21 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-32 left-32 w-full max-w-2xl',
     component: ScheduleTypeWindow,
+  },
+  'salary-nature-of-work': {
+    id: 'salary-nature-of-work',
+    title: 'Nature of Work',
+    icon: <Settings className="h-4 w-4 text-violet-500" />,
+    isMinimizable: true,
+    className: 'absolute top-36 left-40 w-full max-w-2xl',
+    component: NatureOfWorkWindow,
+  },
+  'salary-sal-it-section': {
+    id: 'salary-sal-it-section',
+    title: 'Income Tax Sections',
+    icon: <Settings className="h-4 w-4 text-rose-500" />,
+    isMinimizable: true,
+    className: 'absolute top-40 left-48 w-full max-w-2xl',
+    component: SalItSectionWindow,
   },
 };

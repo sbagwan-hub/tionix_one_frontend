@@ -6,6 +6,7 @@ import { useMasterSalary } from '../hooks/useMasterSalary';
 import { religionSchema, ReligionDto } from '../types';
 import WindowPanel, { WindowPanelItem } from '@/components/common/window-panel';
 import { FormInput } from '@/components/common/form-input';
+import { toast } from '@/components/modern-ui/sonner';
 
 export const ReligionWindow: React.FC = () => {
   const { list, create, update, remove } = useMasterSalary('religions');
@@ -22,12 +23,26 @@ export const ReligionWindow: React.FC = () => {
       update.mutate(
         { id: editingId, data },
         {
-          onSuccess: () => resetForm(),
+          onSuccess: () => {
+            toast.success('Religion updated successfully.');
+            resetForm();
+          },
+          onError: (error: any) => {
+            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update religion.';
+            toast.error(msg);
+          },
         },
       );
     } else {
       create.mutate(data, {
-        onSuccess: () => resetForm(),
+        onSuccess: () => {
+          toast.success('Religion created successfully.');
+          resetForm();
+        },
+        onError: (error: any) => {
+          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create religion.';
+          toast.error(msg);
+        },
       });
     }
   };
@@ -51,7 +66,15 @@ export const ReligionWindow: React.FC = () => {
   };
 
   const handleDelete = (item: WindowPanelItem) => {
-    remove.mutate(parseInt(item.id, 10));
+    remove.mutate(parseInt(item.id, 10), {
+      onSuccess: () => {
+        toast.success('Religion deleted successfully.');
+      },
+      onError: (error: any) => {
+        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete religion.';
+        toast.error(msg);
+      },
+    });
   };
 
   const items: WindowPanelItem[] = (list.data || []).map((c: ReligionDto) => ({

@@ -10,6 +10,8 @@ export interface UserRecord {
   fk_ec_id: number | null;
   email: string | null;
   answer: string | null;
+  security_question_id: number | null;
+  security_question: string | null;
 }
 
 export interface EmployeeLookup {
@@ -45,6 +47,8 @@ export interface CreateUserPayload {
   fk_ec_id?: number | null;
   answer?: string | null;
   mobile?: string | null;
+  security_question_id?: number | null;
+  security_question?: string | null;
 }
 
 export interface UpdateUserPayload {
@@ -54,4 +58,6 @@ export interface UpdateUserPayload {
   fk_ec_id?: number | null;
   answer?: string | null;
   mobile?: string | null;
+  security_question_id?: number | null;
+  security_question?: string | null;
 }

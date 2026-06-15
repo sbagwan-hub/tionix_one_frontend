@@ -6,6 +6,7 @@ import { useMasterSalary } from '../hooks/useMasterSalary';
 import { casteSchema, CasteDto } from '../types';
 import WindowPanel, { WindowPanelItem } from '@/components/common/window-panel';
 import { FormInput } from '@/components/common/form-input';
+import { toast } from '@/components/modern-ui/sonner';
 
 export const CasteWindow: React.FC = () => {
   const { list, create, update, remove } = useMasterSalary('castes');
@@ -22,12 +23,26 @@ export const CasteWindow: React.FC = () => {
       update.mutate(
         { id: editingId, data },
         {
-          onSuccess: () => resetForm(),
+          onSuccess: () => {
+            toast.success('Caste updated successfully.');
+            resetForm();
+          },
+          onError: (error: any) => {
+            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update caste.';
+            toast.error(msg);
+          },
         },
       );
     } else {
       create.mutate(data, {
-        onSuccess: () => resetForm(),
+        onSuccess: () => {
+          toast.success('Caste created successfully.');
+          resetForm();
+        },
+        onError: (error: any) => {
+          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create caste.';
+          toast.error(msg);
+        },
       });
     }
   };
@@ -51,7 +66,15 @@ export const CasteWindow: React.FC = () => {
   };
 
   const handleDelete = (item: WindowPanelItem) => {
-    remove.mutate(parseInt(item.id, 10));
+    remove.mutate(parseInt(item.id, 10), {
+      onSuccess: () => {
+        toast.success('Caste deleted successfully.');
+      },
+      onError: (error: any) => {
+        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete caste.';
+        toast.error(msg);
+      },
+    });
   };
 
   const items: WindowPanelItem[] = (list.data || []).map((c: CasteDto) => ({

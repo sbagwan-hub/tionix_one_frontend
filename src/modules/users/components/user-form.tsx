@@ -57,7 +57,7 @@ export const UserForm: React.FC<UserFormProps> = ({
         icon={UserIcon}
         value={formData.username}
         onChange={(e) => onInputChange('username', e.target.value)}
-        placeholder={t('usernamePlaceholder')}
+        placeholder={'Enter your username'}
         className="h-9 rounded-sm"
         disabled={disabled}
       />
@@ -71,7 +71,7 @@ export const UserForm: React.FC<UserFormProps> = ({
           value={formData.password || ''}
           onChange={(e) => onInputChange('password', e.target.value)}
           placeholder={
-            isEditMode ? 'Leave blank to keep current password' : t('passwordPlaceholder')
+            isEditMode ? 'Leave blank to keep current password' : 'Enter your password'
           }
           className="h-9 rounded-sm"
           disabled={disabled}
@@ -80,9 +80,8 @@ export const UserForm: React.FC<UserFormProps> = ({
           type="button"
           disabled={disabled}
           onClick={() => setShowPassword((v) => !v)}
-          className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
-            isRtl ? 'left-3' : 'right-3'
-          } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
+          className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${isRtl ? 'left-3' : 'right-3'
+            } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
           style={{ top: 'calc(50% + 8px)', transform: 'translateY(-50%)' }}
         >
           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -100,9 +99,8 @@ export const UserForm: React.FC<UserFormProps> = ({
           </div>
           <Select value={selectedQuestion} onValueChange={onQuestionChange} disabled={disabled}>
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
-                isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-              }`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                }`}
             >
               <SelectValue placeholder="Select a security question" />
             </SelectTrigger>
@@ -128,7 +126,7 @@ export const UserForm: React.FC<UserFormProps> = ({
         icon={HelpCircle}
         value={formData.answer || ''}
         onChange={(e) => onInputChange('answer', e.target.value)}
-        placeholder={t('answerPlaceholder')}
+        placeholder={'Enter your answer'}
         className="h-9 rounded-sm"
         disabled={disabled}
       />
@@ -150,11 +148,10 @@ export const UserForm: React.FC<UserFormProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
-                isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-              }`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                }`}
             >
-              <SelectValue placeholder={t('employeePlaceholder')} />
+              <SelectValue placeholder={t('Select Employee')} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">None / Unlinked</SelectItem>
@@ -185,11 +182,10 @@ export const UserForm: React.FC<UserFormProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
-                isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-              }`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                }`}
             >
-              <SelectValue placeholder={t('emailPlaceholder')} />
+              <SelectValue placeholder={t('Select Email')} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">None / Unconfigured</SelectItem>
@@ -209,7 +205,7 @@ export const UserForm: React.FC<UserFormProps> = ({
         icon={Phone}
         value={formData.mobile || ''}
         onChange={(e) => onInputChange('mobile', e.target.value)}
-        placeholder={t('mobilePlaceholder')}
+        placeholder={t('+1 (555) 000-0000')}
         className="h-9 rounded-sm"
         disabled={disabled}
       />
