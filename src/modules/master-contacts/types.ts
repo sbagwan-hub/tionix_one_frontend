@@ -73,3 +73,45 @@ export const addressSchema = z.object({
   sys_defined: z.boolean().default(false),
 });
 export type AddressDto = z.infer<typeof addressSchema>;
+
+export const modeOfContactSchema = z.object({
+  pk_moc_id: z.number().int().positive().optional(),
+  moc: z.string().min(1, 'Mode of Contact name is required').max(25),
+  fk_mt_id: z.coerce.number().int().positive('Mode of Contact Type is required'),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  last_status: z.string().optional(),
+  mode: z.string().optional(),
+  username: z.string().optional(),
+});
+export type ModeOfContactDto = z.infer<typeof modeOfContactSchema>;
+
+export interface ModeOfContactTypeDto {
+  pk_mt_id: number;
+  mode: string;
+}
+
+export const stateSchema = z.object({
+  pk_state_id: z.number().int().positive().optional(),
+  state: z.string().min(1, 'State name is required').max(30),
+  fk_ctry_id: z.coerce.number().int().positive('Country is required'),
+  state_code: z.string().max(10).default(''),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  last_status: z.string().optional(),
+  country: z.string().optional(),
+  username: z.string().optional(),
+});
+export type StateDto = z.infer<typeof stateSchema>;
+
+export const regionSchema = z.object({
+  pk_reg_id: z.number().int().positive().optional(),
+  region: z.string().min(1, 'Area/Region/Shipping Location name is required').max(30),
+  rate1: z.coerce.number().min(0, 'Trip Rate must be a positive number'),
+  rate2: z.coerce.number().min(0, 'Extra Charges must be a positive number'),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  last_status: z.string().optional(),
+  username: z.string().optional(),
+});
+export type RegionDto = z.infer<typeof regionSchema>;

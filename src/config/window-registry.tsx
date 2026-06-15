@@ -22,6 +22,9 @@ import { RelationshipWindow } from '@/modules/master-contacts/components/Relatio
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
 import { CityWindow } from '@/modules/master-contacts/components/CityWindow';
 import { AddressWindow } from '@/modules/master-contacts/components/AddressWindow';
+import { ModeOfContactWindow } from '@/modules/master-contacts/components/ModeOfContactWindow';
+import { StateWindow } from '@/modules/master-contacts/components/StateWindow';
+import { RegionWindow } from '@/modules/master-contacts/components/RegionWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -87,5 +90,29 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-48 left-64 w-full max-w-2xl',
     component: AddressWindow,
+  },
+  'contacts-mode-of-contact': {
+    id: 'contacts-mode-of-contact',
+    title: 'Modes of Contact',
+    icon: <Settings className="h-4 w-4 text-violet-500" />,
+    isMinimizable: true,
+    className: 'absolute top-52 left-72 w-full max-w-2xl',
+    component: ModeOfContactWindow,
+  },
+  'contacts-state': {
+    id: 'contacts-state',
+    title: 'States',
+    icon: <Settings className="h-4 w-4 text-indigo-500" />,
+    isMinimizable: true,
+    className: 'absolute top-56 left-80 w-full max-w-2xl',
+    component: StateWindow,
+  },
+  'contacts-region': {
+    id: 'contacts-region',
+    title: 'Area\\Region\\Shipping Location',
+    icon: <Settings className="h-4 w-4 text-orange-500" />,
+    isMinimizable: true,
+    className: 'absolute top-60 left-88 w-full max-w-2xl',
+    component: RegionWindow,
   },
 };

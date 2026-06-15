@@ -16,6 +16,8 @@ import {
   Briefcase,
   MapPin,
   Home,
+  Map,
+  Locate,
 } from 'lucide-react';
 
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
@@ -26,6 +28,8 @@ import { DepartmentWindow } from '@/modules/master-contacts/components/Departmen
 import { DesignationWindow } from '@/modules/master-contacts/components/DesignationWindow';
 import { CityWindow } from '@/modules/master-contacts/components/CityWindow';
 import { AddressWindow } from '@/modules/master-contacts/components/AddressWindow';
+import { StateWindow } from '@/modules/master-contacts/components/StateWindow';
+import { RegionWindow } from '@/modules/master-contacts/components/RegionWindow';
 
 export default function ContactsDashboardPage() {
   const router = useRouter();
@@ -73,6 +77,18 @@ export default function ContactsDashboardPage() {
       label: t('city', 'Cities'),
       icon: <MapPin className="h-4 w-4" />,
       component: CityWindow,
+    },
+    {
+      id: 'states',
+      label: t('state', 'States'),
+      icon: <Map className="h-4 w-4" />,
+      component: StateWindow,
+    },
+    {
+      id: 'regions',
+      label: t('region', 'Regions'),
+      icon: <Locate className="h-4 w-4" />,
+      component: RegionWindow,
     },
     {
       id: 'addresses',

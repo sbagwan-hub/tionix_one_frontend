@@ -98,9 +98,24 @@ export const NAV_MENUS: NavMenu[] = [
             action: () => useWindowStore.getState().openWindow('contacts-city'),
           },
           {
+            key: 'state',
+            icon: 'Map',
+            action: () => useWindowStore.getState().openWindow('contacts-state'),
+          },
+          {
+            key: 'region',
+            icon: 'Locate',
+            action: () => useWindowStore.getState().openWindow('contacts-region'),
+          },
+          {
             key: 'address',
             icon: 'Home',
             action: () => useWindowStore.getState().openWindow('contacts-address'),
+          },
+          {
+            key: 'modeOfContact',
+            icon: 'Settings',
+            action: () => useWindowStore.getState().openWindow('contacts-mode-of-contact'),
           },
         ],
       },

@@ -8,6 +8,10 @@ import {
   TitleDto,
   CityDto,
   AddressDto,
+  ModeOfContactDto,
+  ModeOfContactTypeDto,
+  StateDto,
+  RegionDto,
 } from './types';
 
 // Common wrapper to inject fk_user_id for now
@@ -169,6 +173,68 @@ export const masterContactsApi = {
   stateDropdown: {
     list: async () =>
       (await axiosClient.get<{ data: any[] }>('/master-contacts/state/dropdown')).data.data,
+    create: async () => ({}) as any,
+    update: async () => ({}) as any,
+    remove: async () => {},
+  },
+  modeOfContact: {
+    list: async () =>
+      (
+        await axiosClient.get<{ data: { rows: ModeOfContactDto[] } }>(
+          '/master-contacts/mode-of-contact',
+        )
+      ).data.data.rows,
+    create: async (data: ModeOfContactDto) =>
+      (
+        await axiosClient.post<{ data: ModeOfContactDto }>(
+          '/master-contacts/mode-of-contact',
+          withUserId(data),
+        )
+      ).data.data,
+    update: async (id: number, data: Partial<ModeOfContactDto>) =>
+      (
+        await axiosClient.put<{ data: ModeOfContactDto }>(
+          `/master-contacts/mode-of-contact/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-contacts/mode-of-contact/${id}`),
+  },
+  state: {
+    list: async () =>
+      (await axiosClient.get<{ data: { rows: StateDto[] } }>('/master-contacts/state')).data.data
+        .rows,
+    create: async (data: StateDto) =>
+      (await axiosClient.post<{ data: StateDto }>('/master-contacts/state', withUserId(data))).data
+        .data,
+    update: async (id: number, data: Partial<StateDto>) =>
+      (await axiosClient.put<{ data: StateDto }>(`/master-contacts/state/${id}`, withUserId(data)))
+        .data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-contacts/state/${id}`),
+  },
+  region: {
+    list: async () =>
+      (await axiosClient.get<{ data: { rows: RegionDto[] } }>('/master-contacts/region')).data.data
+        .rows,
+    create: async (data: RegionDto) =>
+      (await axiosClient.post<{ data: RegionDto }>('/master-contacts/region', withUserId(data)))
+        .data.data,
+    update: async (id: number, data: Partial<RegionDto>) =>
+      (
+        await axiosClient.put<{ data: RegionDto }>(
+          `/master-contacts/region/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-contacts/region/${id}`),
+  },
+  mocTypesDropdown: {
+    list: async () =>
+      (
+        await axiosClient.get<{ data: ModeOfContactTypeDto[] }>(
+          '/master-contacts/mode-of-contact/types',
+        )
+      ).data.data,
     create: async () => ({}) as any,
     update: async () => ({}) as any,
     remove: async () => {},
