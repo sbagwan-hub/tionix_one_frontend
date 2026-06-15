@@ -282,7 +282,7 @@ export default function IndividualContactsPage() {
   ];
 
   return (
-    <div className="flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden p-4 select-none">
+    <div className="mt-2 flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden select-none">
       {/* Action Toolbar */}
       <Toolbar
         title="Individual Contact"
@@ -296,7 +296,7 @@ export default function IndividualContactsPage() {
           onValueChange={setActiveTab}
           className="flex flex-1 flex-col overflow-hidden"
         >
-          <div className="border-border/80 bg-muted/15 flex items-center justify-between border-b px-6 pt-3">
+          <div className="border-border/80 bg-muted/15 flex items-center justify-between border-b p-2">
             <TabsList className="bg-muted h-9 rounded-md p-0.5">
               <TabsTrigger
                 value="individual"

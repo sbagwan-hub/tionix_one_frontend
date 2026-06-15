@@ -37,7 +37,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
     <div className="space-y-4">
       {/* Resident Address */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Resident Address
         </Label>
         <Textarea
@@ -45,7 +45,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
           value={formData.address || ''}
           onChange={(e) => onInputChange('address', e.target.value)}
           placeholder="Resident Address"
-          className="bg-background/50 focus:bg-background min-h-16 rounded-sm text-xs transition-all"
+          className="bg-background/50 focus:bg-background min-h-16 resize-none rounded-sm text-xs transition-all"
         />
       </div>
 
@@ -53,11 +53,11 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* City */}
         <div className="flex flex-col gap-1.5">
-          <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
             City
           </Label>
           <div className="relative">
-            <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
+            <div className="text-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
               <MapPin className="h-4 w-4" />
             </div>
             <Select
@@ -98,11 +98,11 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
 
         {/* State */}
         <div className="flex flex-col gap-1.5">
-          <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
             State
           </Label>
           <div className="relative">
-            <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
+            <div className="text-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
               <MapPin className="h-4 w-4" />
             </div>
             <Select
@@ -151,11 +151,11 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
 
         {/* Country */}
         <div className="flex flex-col gap-1.5">
-          <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
             Country
           </Label>
           <div className="relative">
-            <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
+            <div className="text-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
               <Globe className="h-4 w-4" />
             </div>
             <Select

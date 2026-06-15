@@ -3,11 +3,9 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 import {
-  ArrowLeft,
   User,
   GraduationCap,
   Heart,
@@ -18,6 +16,7 @@ import {
   Home,
   Map,
   Locate,
+  Settings2,
 } from 'lucide-react';
 
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
@@ -32,128 +31,109 @@ import { StateWindow } from '@/modules/master-contacts/components/StateWindow';
 import { RegionWindow } from '@/modules/master-contacts/components/RegionWindow';
 
 export default function ContactsDashboardPage() {
-  const router = useRouter();
   const { t } = useTranslation();
+  const [activeTab, setActiveTab] = React.useState('titles');
 
   const tabs = [
-    {
-      id: 'titles',
-      label: t('titles', 'Titles'),
-      icon: <User className="h-4 w-4" />,
-      component: TitleWindow,
-    },
+    { id: 'titles', label: t('titles', 'Titles'), icon: User, component: TitleWindow },
     {
       id: 'qualifications',
       label: t('qualification', 'Qualifications'),
-      icon: <GraduationCap className="h-4 w-4" />,
+      icon: GraduationCap,
       component: QualificationWindow,
     },
     {
       id: 'relationships',
       label: t('relationship', 'Relationships'),
-      icon: <Heart className="h-4 w-4" />,
+      icon: Heart,
       component: RelationshipWindow,
     },
     {
       id: 'categories',
       label: t('productCategory', 'Categories'),
-      icon: <Layers className="h-4 w-4" />,
+      icon: Layers,
       component: CategoryWindow,
     },
     {
       id: 'departments',
       label: t('department', 'Departments'),
-      icon: <Building2 className="h-4 w-4" />,
+      icon: Building2,
       component: DepartmentWindow,
     },
     {
       id: 'designations',
       label: t('designation', 'Designations'),
-      icon: <Briefcase className="h-4 w-4" />,
+      icon: Briefcase,
       component: DesignationWindow,
     },
-    {
-      id: 'cities',
-      label: t('city', 'Cities'),
-      icon: <MapPin className="h-4 w-4" />,
-      component: CityWindow,
-    },
-    {
-      id: 'states',
-      label: t('state', 'States'),
-      icon: <Map className="h-4 w-4" />,
-      component: StateWindow,
-    },
-    {
-      id: 'regions',
-      label: t('region', 'Regions'),
-      icon: <Locate className="h-4 w-4" />,
-      component: RegionWindow,
-    },
-    {
-      id: 'addresses',
-      label: t('address', 'Addresses'),
-      icon: <Home className="h-4 w-4" />,
-      component: AddressWindow,
-    },
+    { id: 'cities', label: t('city', 'Cities'), icon: MapPin, component: CityWindow },
+    { id: 'states', label: t('state', 'States'), icon: Map, component: StateWindow },
+    { id: 'regions', label: t('region', 'Regions'), icon: Locate, component: RegionWindow },
+    { id: 'addresses', label: t('address', 'Addresses'), icon: Home, component: AddressWindow },
   ];
 
+  const currentTab = tabs.find((t) => t.id === activeTab) || tabs[0];
+  const WindowComponent = currentTab.component;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6 select-none">
-      <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-6 flex items-center gap-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push('/masters')}
-            className="hover:bg-muted flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Masters
-          </Button>
-          <div>
-            <h1 className="text-foreground text-2xl font-bold tracking-tight">
-              {t('Contacts', 'Contacts Master Configuration')}
-            </h1>
-            <p className="text-muted-foreground text-sm">
-              Configure master details, parameters, and entities for contact records.
-            </p>
-          </div>
+    <div className="bg-muted/20 selection:bg-primary/10 min-h-screen antialiased">
+      <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6 lg:p-8">
+        {/* Modern Split View Grid */}
+        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
+          {/* Navigation Control Column */}
+          <aside className="space-y-4 lg:sticky lg:top-6 lg:col-span-3">
+            <Card className="border-border/50 bg-card/70 border p-2.5 shadow-sm backdrop-blur-md">
+              <nav className="space-y-0.5" aria-label="Configuration settings tabs">
+                <div className="flex items-center gap-2 px-3 pt-2 pb-3">
+                  <Settings2 className="text-muted-foreground/80 h-3.5 w-3.5" />
+                  <p className="text-muted-foreground/90 text-[10px] font-bold tracking-wider uppercase">
+                    Configurations
+                  </p>
+                </div>
+
+                {tabs.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  const TabIcon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={cn(
+                        'group focus-visible:ring-primary/20 relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs font-medium transition-all duration-200 outline-none focus-visible:ring-2',
+                        isActive
+                          ? 'bg-primary/10 text-primary font-semibold'
+                          : 'text-muted-foreground/90 hover:bg-muted/80 hover:text-foreground',
+                      )}
+                    >
+                      {/* Active Side Left Stripe Indicator */}
+                      <span
+                        className={cn(
+                          'bg-primary absolute top-2.5 bottom-2.5 left-0 w-0.5 rounded-r-full opacity-0 transition-all duration-200',
+                          isActive && 'opacity-100',
+                        )}
+                      />
+
+                      <TabIcon
+                        className={cn(
+                          'h-4 w-4 shrink-0 transition-colors',
+                          isActive
+                            ? 'text-primary'
+                            : 'text-muted-foreground/60 group-hover:text-muted-foreground',
+                        )}
+                      />
+                      <span className="truncate">{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            </Card>
+          </aside>
+
+          {/* Dynamic Sandboxed Master Component Viewport Canvas */}
+          <main className="bg-card overflow-hidden transition-all duration-300 lg:col-span-9">
+            <WindowComponent />
+          </main>
         </div>
-
-        {/* Tabbed setup dashboard */}
-        <Card className="border-border/60 bg-card/90 p-6 shadow-xl backdrop-blur-sm">
-          <Tabs defaultValue="titles" className="w-full">
-            <TabsList className="bg-muted/40 mb-6 grid h-auto grid-cols-2 gap-2 rounded-lg p-1 md:grid-cols-4 lg:grid-cols-8">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  key={tab.id}
-                  value={tab.id}
-                  className="data-[state=active]:bg-background data-[state=active]:text-primary hover:bg-muted flex items-center gap-2 rounded-md px-3 py-2 text-xs font-medium transition-all data-[state=active]:shadow-sm"
-                >
-                  {tab.icon}
-                  <span className="truncate">{tab.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            {tabs.map((tab) => {
-              const WindowComponent = tab.component;
-              return (
-                <TabsContent
-                  key={tab.id}
-                  value={tab.id}
-                  className="mt-0 focus-visible:ring-0 focus-visible:outline-none"
-                >
-                  <div className="bg-background border-border/40 rounded-lg border p-4">
-                    <WindowComponent />
-                  </div>
-                </TabsContent>
-              );
-            })}
-          </Tabs>
-        </Card>
       </div>
     </div>
   );

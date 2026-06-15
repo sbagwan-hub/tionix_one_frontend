@@ -41,7 +41,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {/* Title */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Title
         </Label>
         <div className="relative">
@@ -74,7 +74,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* First Name */}
       <FormInput
-        label="First Name *"
+        label={
+          <span className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
+            First Name *
+          </span>
+        }
         icon={User}
         value={formData.first_name}
         onChange={(e) => onInputChange('first_name', e.target.value)}
@@ -85,7 +89,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Middle Name */}
       <FormInput
-        label="Middle Name"
+        label={
+          <span className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
+            Middle Name
+          </span>
+        }
         icon={User}
         value={formData.middle_name || ''}
         onChange={(e) => onInputChange('middle_name', e.target.value)}
@@ -96,7 +104,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Surname */}
       <FormInput
-        label="Surname *"
+        label={
+          <span className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
+            Surname *
+          </span>
+        }
         icon={User}
         value={formData.surname}
         onChange={(e) => onInputChange('surname', e.target.value)}
@@ -107,7 +119,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Postfix */}
       <FormInput
-        label="Postfix (if Duplicate)"
+        label={
+          <span className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
+            Postfix (if Duplicate)
+          </span>
+        }
         icon={User}
         value={formData.postfix || ''}
         onChange={(e) => onInputChange('postfix', e.target.value)}
@@ -118,7 +134,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Date of Birth */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Date of Birth
         </Label>
         <div className="relative">
@@ -157,7 +173,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Qualification */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Qualification
         </Label>
         <div className="relative">
@@ -190,7 +206,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Gender */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Gender *
         </Label>
         <div className="relative">
@@ -220,7 +236,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
 
       {/* Marital Status */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Marital Status *
         </Label>
         <div className="relative">

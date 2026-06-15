@@ -39,7 +39,7 @@ export const WorkInfoSection: React.FC<WorkInfoSectionProps> = ({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {/* Organization */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Organization
         </Label>
         <div className="relative">
@@ -72,7 +72,7 @@ export const WorkInfoSection: React.FC<WorkInfoSectionProps> = ({
 
       {/* Department */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Department
         </Label>
         <div className="relative">
@@ -105,7 +105,7 @@ export const WorkInfoSection: React.FC<WorkInfoSectionProps> = ({
 
       {/* Designation */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Designation
         </Label>
         <div className="relative">
@@ -138,7 +138,7 @@ export const WorkInfoSection: React.FC<WorkInfoSectionProps> = ({
 
       {/* Anniversary */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-foreground text-[10px] font-semibold tracking-wider uppercase">
           Anniversary
         </Label>
         <div className="relative">

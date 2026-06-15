@@ -34,11 +34,11 @@ export const masterContactsApi = {
     update: async (id: number, data: Partial<CategoryDto>) =>
       (
         await axiosClient.put<{ data: CategoryDto }>(
-          `/master-contacts/categories/${id}`,
+          `/master/master-contacts/categories/${id}`,
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/categories/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/categories/${id}`),
   },
   departments: {
     list: async () =>
@@ -54,11 +54,11 @@ export const masterContactsApi = {
     update: async (id: number, data: Partial<DepartmentDto>) =>
       (
         await axiosClient.put<{ data: DepartmentDto }>(
-          `/master-contacts/departments/${id}`,
+          `/master/master-contacts/departments/${id}`,
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/departments/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/departments/${id}`),
   },
   designations: {
     list: async () =>
@@ -74,11 +74,11 @@ export const masterContactsApi = {
     update: async (id: number, data: Partial<DesignationDto>) =>
       (
         await axiosClient.put<{ data: DesignationDto }>(
-          `/master-contacts/designations/${id}`,
+          `/master/master-contacts/designations/${id}`,
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/designations/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/designations/${id}`),
   },
   qualifications: {
     list: async () =>
@@ -97,11 +97,12 @@ export const masterContactsApi = {
     update: async (id: number, data: Partial<QualificationDto>) =>
       (
         await axiosClient.put<{ data: QualificationDto }>(
-          `/master-contacts/qualifications/${id}`,
+          `/master/master-contacts/qualifications/${id}`,
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/qualifications/${id}`),
+    remove: async (id: number) =>
+      axiosClient.delete(`/master/master-contacts/qualifications/${id}`),
   },
   relationships: {
     list: async () =>
@@ -117,7 +118,7 @@ export const masterContactsApi = {
     update: async (id: number, data: Partial<RelationshipDto>) =>
       (
         await axiosClient.put<{ data: RelationshipDto }>(
-          `/master-contacts/relationships/${id}`,
+          `/master/master-contacts/relationships/${id}`,
           withUserId(data),
         )
       ).data.data,
@@ -134,9 +135,13 @@ export const masterContactsApi = {
         )
       ).data.data,
     update: async (id: number, data: Partial<TitleDto>) =>
-      (await axiosClient.put<{ data: TitleDto }>(`/master-contacts/title/${id}`, withUserId(data)))
-        .data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/title/${id}`),
+      (
+        await axiosClient.put<{ data: TitleDto }>(
+          `/master/master-contacts/title/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/title/${id}`),
   },
   city: {
     list: async () =>
@@ -146,9 +151,13 @@ export const masterContactsApi = {
       (await axiosClient.post<{ data: CityDto }>('/master/master-contacts/city', withUserId(data)))
         .data.data,
     update: async (id: string | number, data: Partial<CityDto>) =>
-      (await axiosClient.put<{ data: CityDto }>(`/master-contacts/city/${id}`, withUserId(data)))
-        .data.data,
-    remove: async (id: string | number) => axiosClient.delete(`/master-contacts/city/${id}`),
+      (
+        await axiosClient.put<{ data: CityDto }>(
+          `/master/master-contacts/city/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: string | number) => axiosClient.delete(`/master/master-contacts/city/${id}`),
   },
   address: {
     list: async () =>
@@ -164,11 +173,11 @@ export const masterContactsApi = {
     update: async (id: number, data: Partial<AddressDto>) =>
       (
         await axiosClient.put<{ data: AddressDto }>(
-          `/master-contacts/address/${id}`,
+          `/master/master-contacts/address/${id}`,
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/address/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/address/${id}`),
   },
   organizationsDropdown: {
     list: async () =>
@@ -286,24 +295,24 @@ export const masterContactsApi = {
   },
   individuals: {
     list: async (): Promise<IndividualRecord[]> =>
-      (await axiosClient.get<{ data: IndividualRecord[] }>('/master-contacts/individuals')).data
-        .data,
+      (await axiosClient.get<{ data: IndividualRecord[] }>('/master/master-contacts/individuals'))
+        .data.data,
     create: async (data: IndividualDto): Promise<IndividualRecord> =>
       (
         await axiosClient.post<{ data: IndividualRecord }>(
-          '/master-contacts/individuals',
+          '/master/master-contacts/individuals',
           withUserId(data as any),
         )
       ).data.data,
     update: async (id: string, data: Partial<IndividualDto>): Promise<IndividualRecord> =>
       (
         await axiosClient.put<{ data: IndividualRecord }>(
-          `/master-contacts/individuals/${id}`,
+          `/master/master-contacts/individuals/${id}`,
           withUserId(data as any),
         )
       ).data.data,
     remove: async (id: string): Promise<void> => {
-      await axiosClient.delete(`/master-contacts/individuals/${id}`);
+      await axiosClient.delete(`/master/master-contacts/individuals/${id}`);
     },
   },
 };
