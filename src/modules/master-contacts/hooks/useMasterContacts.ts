@@ -31,6 +31,8 @@ type ResourceTypeMap = {
   mocTypesDropdown: ModeOfContactTypeDto;
   state: StateDto;
   region: RegionDto;
+  genders: any;
+  maritalStatuses: any;
 };
 
 export const useMasterContacts = <T extends Exclude<keyof typeof masterContactsApi, 'individuals'>>(

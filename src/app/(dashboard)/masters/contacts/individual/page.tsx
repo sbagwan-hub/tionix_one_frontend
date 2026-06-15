@@ -53,6 +53,8 @@ export default function IndividualContactsPage() {
   const { list: stateList } = useMasterContacts('state');
   const { list: countryList } = useMasterContacts('countryDropdown');
   const { list: orgList } = useMasterContacts('organizationsDropdown');
+  const { list: gendersList } = useMasterContacts('genders');
+  const { list: maritalStatusesList } = useMasterContacts('maritalStatuses');
 
   const titles = titlesList.data || [];
   const qualifications = qualList.data || [];
@@ -62,6 +64,8 @@ export default function IndividualContactsPage() {
   const states = stateList.data || [];
   const countries = countryList.data || [];
   const organizations = orgList.data || [];
+  const genders = gendersList.data || [];
+  const maritalStatuses = maritalStatusesList.data || [];
 
   const [formData, setFormData] = React.useState<IndividualDto>({
     pk_ind_id: '',
@@ -336,6 +340,8 @@ export default function IndividualContactsPage() {
               cities={cities}
               states={states}
               countries={countries}
+              genders={genders}
+              maritalStatuses={maritalStatuses}
               disabled={!isAdding && !isEditMode}
             />
           </TabsContent>

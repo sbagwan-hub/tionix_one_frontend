@@ -271,26 +271,39 @@ export const masterContactsApi = {
     update: async () => ({}) as any,
     remove: async () => {},
   },
+  genders: {
+    list: async () => (await axiosClient.get<{ data: any[] }>('/miscellaneous/genders')).data.data,
+    create: async () => ({}) as any,
+    update: async () => ({}) as any,
+    remove: async () => {},
+  },
+  maritalStatuses: {
+    list: async () =>
+      (await axiosClient.get<{ data: any[] }>('/miscellaneous/marital-statuses')).data.data,
+    create: async () => ({}) as any,
+    update: async () => ({}) as any,
+    remove: async () => {},
+  },
   individuals: {
     list: async (): Promise<IndividualRecord[]> =>
-      (await axiosClient.get<{ data: IndividualRecord[] }>('/master/master-contacts/individuals'))
-        .data.data,
+      (await axiosClient.get<{ data: IndividualRecord[] }>('/master-contacts/individuals')).data
+        .data,
     create: async (data: IndividualDto): Promise<IndividualRecord> =>
       (
         await axiosClient.post<{ data: IndividualRecord }>(
-          '/master/master-contacts/individuals',
+          '/master-contacts/individuals',
           withUserId(data as any),
         )
       ).data.data,
     update: async (id: string, data: Partial<IndividualDto>): Promise<IndividualRecord> =>
       (
         await axiosClient.put<{ data: IndividualRecord }>(
-          `/master/master-contacts/individuals/${id}`,
+          `/master-contacts/individuals/${id}`,
           withUserId(data as any),
         )
       ).data.data,
     remove: async (id: string): Promise<void> => {
-      await axiosClient.delete(`/master/master-contacts/individuals/${id}`);
+      await axiosClient.delete(`/master-contacts/individuals/${id}`);
     },
   },
 };

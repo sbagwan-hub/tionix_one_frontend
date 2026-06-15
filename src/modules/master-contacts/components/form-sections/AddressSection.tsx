@@ -62,17 +62,29 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
             </div>
             <Select
               value={formData.fk_city_id ? String(formData.fk_city_id) : 'none'}
-              onValueChange={(val) =>
-                onInputChange('fk_city_id', val === 'none' ? null : parseInt(val, 10))
-              }
+              onValueChange={(val) => {
+                const cityId = val === 'none' ? null : parseInt(val, 10);
+                onInputChange('fk_city_id', cityId);
+                if (cityId) {
+                  const selectedCity = cities.find((c) => c.pk_city_id === cityId);
+                  if (selectedCity) {
+                    if (selectedCity.fk_state_id) {
+                      onInputChange('fk_state_id', selectedCity.fk_state_id);
+                    }
+                    if (selectedCity.fk_ctry_id) {
+                      onInputChange('fk_ctry_id', selectedCity.fk_ctry_id);
+                    }
+                  }
+                }
+              }}
               disabled={disabled}
             >
               <SelectTrigger
-                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
               >
                 <SelectValue placeholder="Select City" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4}>
                 <SelectItem value="none">None</SelectItem>
                 {cities.map((c) => (
                   <SelectItem key={c.pk_city_id} value={String(c.pk_city_id)}>
@@ -101,11 +113,11 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
               disabled={disabled}
             >
               <SelectTrigger
-                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
               >
                 <SelectValue placeholder="Select State" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4}>
                 <SelectItem value="none">None</SelectItem>
                 {states.map((s) => (
                   <SelectItem key={s.pk_state_id} value={String(s.pk_state_id)}>
@@ -154,11 +166,11 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
               disabled={disabled}
             >
               <SelectTrigger
-                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
               >
                 <SelectValue placeholder="Select Country" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper" sideOffset={4}>
                 <SelectItem value="none">None</SelectItem>
                 {countries.map((c) => (
                   <SelectItem key={c.pk_ctry_id} value={String(c.pk_ctry_id)}>

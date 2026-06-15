@@ -20,6 +20,8 @@ interface IndividualFormProps {
   cities: any[];
   states: any[];
   countries: any[];
+  genders: any[];
+  maritalStatuses: any[];
   disabled?: boolean;
   isRtl?: boolean;
 }
@@ -35,6 +37,8 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
   cities,
   states,
   countries,
+  genders,
+  maritalStatuses,
   disabled = false,
   isRtl = false,
 }) => {
@@ -67,6 +71,8 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
           onInputChange={onInputChange}
           titles={titles}
           qualifications={qualifications}
+          genders={genders}
+          maritalStatuses={maritalStatuses}
           disabled={disabled}
           isRtl={isRtl}
         />

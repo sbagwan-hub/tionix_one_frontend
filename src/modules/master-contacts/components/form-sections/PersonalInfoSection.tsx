@@ -10,7 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { User, Users, Heart, Calendar, GraduationCap } from 'lucide-react';
+import { User, Users, Heart, Calendar, GraduationCap, ChevronDown } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarPicker } from '@/components/ui/calendar';
+import { format } from 'date-fns';
 import { IndividualDto } from '../../types';
 
 interface PersonalInfoSectionProps {
@@ -18,6 +21,8 @@ interface PersonalInfoSectionProps {
   onInputChange: (field: string, value: any) => void;
   titles: any[];
   qualifications: any[];
+  genders: any[];
+  maritalStatuses: any[];
   disabled?: boolean;
   isRtl?: boolean;
 }
@@ -27,6 +32,8 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
   onInputChange,
   titles,
   qualifications,
+  genders,
+  maritalStatuses,
   disabled = false,
   isRtl = false,
 }) => {
@@ -49,11 +56,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
             >
               <SelectValue placeholder="Select Title" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper" sideOffset={4}>
               <SelectItem value="none">None</SelectItem>
               {titles.map((t) => (
                 <SelectItem key={t.pk_tit_id} value={String(t.pk_tit_id)}>
@@ -110,15 +117,43 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
       />
 
       {/* Date of Birth */}
-      <FormInput
-        label="Date of Birth"
-        icon={Calendar}
-        type="date"
-        value={formData.dob ? formData.dob.split('T')[0] : ''}
-        onChange={(e) => onInputChange('dob', e.target.value)}
-        className="h-9 rounded-sm"
-        disabled={disabled}
-      />
+      <div className="flex flex-col gap-1.5">
+        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+          Date of Birth
+        </Label>
+        <div className="relative">
+          <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
+            <Calendar className="h-4 w-4" />
+          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                disabled={disabled}
+                className={`border-border bg-background/50 hover:bg-accent hover:text-accent-foreground focus:bg-background flex h-9 w-full cursor-pointer items-center justify-between rounded-sm border text-xs transition-all ${isRtl ? 'pr-9 pl-3 text-right' : 'pr-3 pl-9 text-left'} ${!formData.dob ? 'text-muted-foreground' : ''}`}
+              >
+                <span>
+                  {formData.dob ? format(new Date(formData.dob), 'PPP') : 'Pick Date of Birth'}
+                </span>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarPicker
+                mode="single"
+                selected={formData.dob ? new Date(formData.dob) : undefined}
+                onSelect={(date) => {
+                  onInputChange('dob', date ? format(date, 'yyyy-MM-dd') : null);
+                }}
+                captionLayout="dropdown"
+                startMonth={new Date(1900, 0)}
+                endMonth={new Date()}
+                disabled={disabled}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
 
       {/* Qualification */}
       <div className="flex flex-col gap-1.5">
@@ -137,11 +172,11 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
             >
               <SelectValue placeholder="Select Qualification" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper" sideOffset={4}>
               <SelectItem value="none">None</SelectItem>
               {qualifications.map((q) => (
                 <SelectItem key={q.pk_qua_id} value={String(q.pk_qua_id)}>
@@ -168,13 +203,16 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
             >
               <SelectValue placeholder="Select Gender" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="male">Male</SelectItem>
-              <SelectItem value="female">Female</SelectItem>
+            <SelectContent position="popper" sideOffset={4}>
+              {genders.map((g) => (
+                <SelectItem key={g.id} value={g.id}>
+                  {g.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -190,18 +228,21 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
             <Heart className="h-4 w-4" />
           </div>
           <Select
-            value={formData.married ? 'married' : 'unmarried'}
+            value={formData.married ? 'married' : 'single'}
             onValueChange={(val) => onInputChange('married', val === 'married')}
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'}`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
             >
               <SelectValue placeholder="Select Marital Status" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="married">Married</SelectItem>
-              <SelectItem value="unmarried">Unmarried</SelectItem>
+            <SelectContent position="popper" sideOffset={4}>
+              {maritalStatuses.map((m) => (
+                <SelectItem key={m.id} value={m.id}>
+                  {m.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
