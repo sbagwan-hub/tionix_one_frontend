@@ -163,3 +163,35 @@ After auditing the current frontend codebase, here are key analysis points and r
 - **Status**: Enhancement.
 - **Issue**: Password toggling eye buttons in forms are manually positioned using relative/absolute alignments and top offsets (e.g., `style={{ top: 'calc(50% + 8px)' }}`).
 - **Recommendation**: Add a `showPasswordToggle` boolean prop inside `FormInput` (`src/components/common/form-input.tsx`) to encapsulate this layout automatically.
+
+---
+
+## 5. Security, Quality, and Compliance Requirements
+
+To ensure enterprise-readiness, the application follows strict criteria covering security, data protection, recovery, and exit readiness:
+
+### A. Security & Compliance
+
+- **ISO/IEC 27001 Compliance**: Operations, asset management, and risk treatment plans must align with ISO 27001 guidelines.
+- **SOC 2 Type II Certification**: Ensure systems maintain continuous compliance audits regarding Security, Availability, and Confidentiality.
+- **GDPR Compliance**: Support user privacy protection, consent management, and data deletion requests (right to be forgotten).
+- **Internal Security Policy Documentation**: Follow established internal security procedures, encryption, and password policies.
+- **Access Control Mechanisms**: Restrict resource access using role-based or permission-based validation before handling critical APIs.
+- **Audit Logs Capability**: Maintain secure, immutable logs tracking write, update, and delete actions for accountability.
+
+### B. Business Continuity & Disaster Recovery
+
+- **ISO 22301 Compliance**: Structural alignment with international business continuity management systems.
+- **Defined RPO and RTO**: Support defined Recovery Point Objectives (RPO) and Recovery Time Objectives (RTO).
+- **Backup Frequency and Storage Location**: Manage database backups systematically, replicating to designated secure offsite/cloud locations.
+
+### C. Quality Assurance
+
+- **ISO 9001 Compliance**: Maintain process consistency, code reviews, and testing to ensure software quality.
+
+### D. Data Portability & Vendor Lock-In Prevention
+
+- **Source Code Escrow Agreement**: Establish code escrow options where applicable.
+- **Data Export in Standard Formats (SQL/CSV/XML)**: Support data exports in open, widely accepted formats.
+- **Transition Assistance and Full Database Backup Access**: Provide tools and raw access for smooth transition offboarding.
+- **Avoidance of Proprietary Encrypted Formats without Keys**: Never lock client data behind custom encryption keys or unreadable structures.
