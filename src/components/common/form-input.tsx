@@ -39,7 +39,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         {label && (
           <Label
             htmlFor={inputId}
-            className="text-foreground text-[10px] font-semibold tracking-wider"
+            className="text-foreground text-[12px] font-semibold tracking-wider"
           >
             {renderLabelContent(label)}
           </Label>
@@ -70,7 +70,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
 
         {/* Error notification node */}
         {error && (
-          <span className="text-destructive animate-in fade-in text-[10px] font-medium tracking-tight duration-200">
+          <span className="text-destructive animate-in fade-in text-[12px] font-medium tracking-tight duration-200">
             {error}
           </span>
         )}

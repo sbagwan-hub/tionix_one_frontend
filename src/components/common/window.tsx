@@ -3,6 +3,8 @@ import { cn } from '@/lib/utils';
 import { Minus, X, Maximize2, Minimize2 } from 'lucide-react';
 import Toolbar, { Action } from '@/components/shared/toolbar';
 import { useWindowStore } from '@/stores/window-store';
+import Image from 'next/image';
+import { LOCAL_IMAGE } from '@/constants/images.constant';
 
 export interface WindowProps {
   /** Unique identifier for the window to track state globally */
@@ -203,11 +205,11 @@ export const Window: React.FC<WindowProps> = ({
       onMouseDown={bringToFront}
       onTouchStart={bringToFront}
       className={cn(
-        // Base transitions and styling
-        'border-foreground/30 ring-border/30 bg-background/90 pointer-events-auto flex flex-col overflow-hidden rounded-sm border shadow-2xl ring-1 backdrop-blur-md',
+        // High contrast container with premium glassmorphism and shadow depth
+        'border-border/80 bg-card/98 pointer-events-auto relative flex flex-col overflow-hidden rounded-xl border shadow-[0_20px_50px_rgba(0,0,0,0.22)] ring-1 ring-black/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-950/98 dark:shadow-[0_30px_70px_rgba(0,0,0,0.55)] dark:ring-white/10',
         dragging
-          ? 'cursor-grabbing shadow-2xl select-none'
-          : 'shadow-lg transition-shadow duration-300 hover:shadow-xl',
+          ? 'scale-[1.002] cursor-grabbing shadow-[0_30px_70px_rgba(0,0,0,0.3)] select-none'
+          : 'transition-all duration-200 hover:shadow-[0_24px_55px_rgba(0,0,0,0.28)]',
         // Maximize states
         isMaximized
           ? 'fixed inset-0 z-50 h-screen w-screen !transform-none rounded-none'
@@ -222,58 +224,69 @@ export const Window: React.FC<WindowProps> = ({
         onPointerUp={handlePointerUp}
         onDoubleClick={handleHeaderDoubleClick}
         className={cn(
-          'border-border/60 bg-muted/50 flex items-center justify-between border-b px-4 py-3 select-none',
+          'border-border/60 bg-muted flex items-center justify-between border-b px-4 py-2.5 select-none dark:bg-zinc-900/90',
           isDraggable && !isMaximized ? 'cursor-grab' : '',
           headerClassName,
         )}
       >
-        <div className="flex min-w-0 items-center space-x-2.5 rtl:space-x-reverse">
-          {/* macOS-style Dots (Enhanced size and visibility) */}
-          <div className="mr-2.5 flex items-center space-x-2 rtl:mr-0 rtl:ml-2.5">
-            {onClose && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClose();
-                }}
-                className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/20 text-rose-600 transition-all duration-200 hover:bg-rose-500 hover:text-white focus:outline-none dark:text-rose-400"
-                title="Close"
-              >
-                <X className="h-2.5 w-2.5 stroke-[2.5]" />
-              </button>
-            )}
-            {isMinimizable && !isMinimized && (
-              <button
-                onClick={handleMinimize}
-                className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/20 text-amber-600 transition-all duration-200 hover:bg-amber-500 hover:text-white focus:outline-none dark:text-amber-400"
-                title="Minimize"
-              >
-                <Minus className="h-2.5 w-2.5 stroke-[2.5]" />
-              </button>
-            )}
-            {(isMaximizable || isMinimized) && (
-              <button
-                onClick={handleMaximize}
-                className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-600 transition-all duration-200 hover:bg-emerald-500 hover:text-white focus:outline-none dark:text-emerald-400"
-                title={isMinimized ? 'Restore' : isMaximized ? 'Restore' : 'Maximize'}
-              >
-                {isMaximized || isMinimized ? (
-                  <Minimize2 className="h-2.5 w-2.5 stroke-[2.5]" />
-                ) : (
-                  <Maximize2 className="h-2.5 w-2.5 stroke-[2.5]" />
-                )}
-              </button>
-            )}
+        {/* Title and Info on the Left */}
+        <div className="flex min-w-0 items-center space-x-1.5 rtl:space-x-reverse">
+          <div className="flex shrink-0 items-center">
+            <Image
+              src={LOCAL_IMAGE.APP_LOGO_TRANSPARENT}
+              alt="Tionix_Logo"
+              className="h-5.5 w-auto object-contain"
+            />
           </div>
-
-          {/* Icon and Title */}
-          <span className="text-foreground truncate text-sm font-semibold">{title}</span>
+          <span className="bg-border/60 h-3.5 w-px shrink-0" />
+          <span className="text-foreground truncate text-sm font-semibold tracking-tight">
+            {title}
+          </span>
         </div>
 
-        {/* Custom Actions / Extra buttons */}
-        {actions && (
-          <div className="ml-4 flex items-center space-x-2 rtl:space-x-reverse">{actions}</div>
-        )}
+        {/* Control Actions / Windows on the Right */}
+        <div className="flex items-center space-x-1 rtl:space-x-reverse">
+          {actions && (
+            <div className="mr-2 flex items-center space-x-2 rtl:mr-0 rtl:ml-2">{actions}</div>
+          )}
+
+          {isMinimizable && !isMinimized && (
+            <button
+              onClick={handleMinimize}
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-amber-100 text-amber-600 transition-all duration-200 hover:bg-amber-600 hover:text-white focus:outline-none dark:bg-amber-950/40 dark:text-amber-400 dark:hover:bg-amber-600"
+              title="Minimize"
+            >
+              <Minus className="h-3 w-3 stroke-[2.5]" />
+            </button>
+          )}
+
+          {(isMaximizable || isMinimized) && (
+            <button
+              onClick={handleMaximize}
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-emerald-100 text-emerald-600 transition-all duration-200 hover:bg-emerald-600 hover:text-white focus:outline-none dark:bg-emerald-950/40 dark:text-emerald-400 dark:hover:bg-emerald-600"
+              title={isMinimized ? 'Restore' : isMaximized ? 'Restore' : 'Maximize'}
+            >
+              {isMaximized || isMinimized ? (
+                <Minimize2 className="h-3 w-3 stroke-[2.5]" />
+              ) : (
+                <Maximize2 className="h-3 w-3 stroke-[2.5]" />
+              )}
+            </button>
+          )}
+
+          {onClose && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClose();
+              }}
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-rose-100 text-rose-600 transition-all duration-200 hover:bg-rose-600 hover:text-white focus:outline-none dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-600"
+              title="Close"
+            >
+              <X className="h-3 w-3 stroke-[2.5]" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Window Body / Content */}
@@ -298,7 +311,7 @@ export const Window: React.FC<WindowProps> = ({
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto p-5">{children}</div>
+        <div className="flex-1 overflow-y-auto p-3 shadow-none">{children}</div>
       </div>
     </div>
   );
