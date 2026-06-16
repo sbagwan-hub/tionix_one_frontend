@@ -98,10 +98,10 @@ export const IndividualList: React.FC<IndividualListProps> = ({
                 <TableRow
                   key={row.pk_ind_id}
                   onClick={() => onSelectIndividual(row)}
-                  className={`hover:bg-muted/30 cursor-pointer transition-colors ${
+                  className={`cursor-pointer transition-colors ${
                     selectedIndividual?.pk_ind_id === row.pk_ind_id
-                      ? 'bg-primary/10 border-l-primary border-l-2 font-semibold'
-                      : ''
+                      ? 'bg-primary/10 hover:bg-primary/10 border-l-primary text-primary border-l-2'
+                      : 'hover:bg-muted/30'
                   }`}
                 >
                   <TableCell className="px-4 py-2 font-mono">{row.pk_ind_id}</TableCell>

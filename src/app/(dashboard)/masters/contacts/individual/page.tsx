@@ -100,10 +100,14 @@ export default function IndividualContactsPage() {
     postfix: '',
   });
   const handleSelectIndividual = (ind: IndividualRecord) => {
-    setSelectedInd(ind);
-    setFormData(ind);
-    setIsEditMode(false);
-    setIsAdding(false);
+    if (selectedInd && selectedInd.pk_ind_id === ind.pk_ind_id) {
+      handleCancel();
+    } else {
+      setSelectedInd(ind);
+      setFormData(ind);
+      setIsEditMode(false);
+      setIsAdding(false);
+    }
   };
 
   const handleInputChange = (field: string, value: any) => {
