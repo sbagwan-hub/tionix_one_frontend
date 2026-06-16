@@ -29,21 +29,6 @@ export const NAV_MENUS: NavMenu[] = [
       },
       { separator: true },
       {
-        key: 'changeServer',
-        icon: 'Server',
-        action: () => {
-          console.log('Change server');
-        },
-      },
-      {
-        key: 'backup',
-        icon: 'Database',
-        action: () => {
-          console.log('Backup started');
-        },
-      },
-      { separator: true },
-      {
         key: 'exit',
         shortcut: '⌥ F4',
         icon: 'LogOut',
@@ -187,17 +172,6 @@ export const NAV_MENUS: NavMenu[] = [
         key: 'importExport',
         href: '/import-export',
         icon: 'FileUpDown',
-      },
-    ],
-  },
-  {
-    key: 'help',
-    items: [
-      { key: 'documentation', href: '/documentation', icon: 'BookOpen' },
-      {
-        key: 'about',
-        icon: 'Info',
-        action: () => console.log('About app'),
       },
     ],
   },

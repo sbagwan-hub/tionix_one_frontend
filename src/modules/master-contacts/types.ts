@@ -164,11 +164,19 @@ export type IndividualDto = z.infer<typeof individualSchema>;
 
 export interface IndividualRecord extends IndividualDto {
   title?: string;
+  title_name?: string | null;
   qualification?: string;
+  qualification_name?: string | null;
   organization?: string;
+  organisation_name?: string | null;
   department?: string;
+  department_name?: string | null;
   designation?: string;
+  designation_name?: string | null;
   city?: string;
+  city_name?: string | null;
   state?: string;
+  state_name?: string | null;
   country?: string;
+  country_name?: string | null;
 }

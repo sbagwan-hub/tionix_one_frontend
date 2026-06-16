@@ -72,6 +72,7 @@ export const IndividualList: React.FC<IndividualListProps> = ({
               <TableHead className="px-4 py-2.5">Individual</TableHead>
               <TableHead className="px-4 py-2.5">Postfix</TableHead>
               <TableHead className="px-4 py-2.5">Qualification</TableHead>
+              <TableHead className="px-4 py-2.5">Department</TableHead>
               <TableHead className="px-4 py-2.5">Date of Birth</TableHead>
               <TableHead className="px-4 py-2.5">Gender</TableHead>
               <TableHead className="px-4 py-2.5">Marital Status</TableHead>
@@ -80,7 +81,7 @@ export const IndividualList: React.FC<IndividualListProps> = ({
           </TableHeader>
           <TableBody className="text-xs">
             {pageData.map((row) => {
-              const fullName = `${row.first_name} ${row.middle_name || ''} ${row.surname}`;
+              const fullName = `${row.title_name ? row.title_name + ' ' : ''}${row.first_name} ${row.middle_name ? row.middle_name + ' ' : ''}${row.surname}`;
               const genderStr =
                 typeof row.gender === 'boolean'
                   ? row.gender
@@ -107,7 +108,8 @@ export const IndividualList: React.FC<IndividualListProps> = ({
                   <TableCell className="px-4 py-2 font-mono">{row.fk_com_id}</TableCell>
                   <TableCell className="px-4 py-2">{fullName}</TableCell>
                   <TableCell className="px-4 py-2">{row.postfix || '-'}</TableCell>
-                  <TableCell className="px-4 py-2">{row.qualification || '-'}</TableCell>
+                  <TableCell className="px-4 py-2">{row.qualification_name || '-'}</TableCell>
+                  <TableCell className="px-4 py-2">{row.department_name || '-'}</TableCell>
                   <TableCell className="px-4 py-2">
                     {row.dob ? new Date(row.dob).toLocaleDateString() : '-'}
                   </TableCell>
@@ -119,13 +121,13 @@ export const IndividualList: React.FC<IndividualListProps> = ({
                       ? maritalStatusStr.charAt(0).toUpperCase() + maritalStatusStr.slice(1)
                       : '-'}
                   </TableCell>
-                  <TableCell className="px-4 py-2">{row.organization || '-'}</TableCell>
+                  <TableCell className="px-4 py-2">{row.organisation_name || '-'}</TableCell>
                 </TableRow>
               );
             })}
             {pageData.length === 0 && (
               <TableRow>
-                <TableCell colSpan={9} className="text-muted-foreground h-40 text-center">
+                <TableCell colSpan={10} className="text-muted-foreground h-40 text-center">
                   {isLoading ? 'Loading...' : 'No records found.'}
                 </TableCell>
               </TableRow>

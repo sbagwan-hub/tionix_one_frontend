@@ -99,11 +99,9 @@ export default function IndividualContactsPage() {
     fk_ctry_id: null,
     postfix: '',
   });
-
   const handleSelectIndividual = (ind: IndividualRecord) => {
     setSelectedInd(ind);
     setFormData(ind);
-    setActiveTab('individual');
     setIsEditMode(false);
     setIsAdding(false);
   };
@@ -113,39 +111,37 @@ export default function IndividualContactsPage() {
   };
 
   const handleCancel = () => {
-    if (selectedInd) {
-      setFormData(selectedInd);
-    } else {
-      setFormData({
-        pk_ind_id: undefined,
-        fk_com_id: '',
-        fk_tit_id: null,
-        first_name: '',
-        middle_name: '',
-        surname: '',
-        dob: null,
-        photo: null,
-        fk_qual_id: null,
-        gender: 'male',
-        marital_status: 'single',
-        fk_org_id: null,
-        fk_dep_id: null,
-        fk_deg_id: null,
-        fk_spo_id: null,
-        anniversary: null,
-        ext: '',
-        address: '',
-        fk_city_id: null,
-        region: '',
-        pincode: '',
-        fk_state_id: null,
-        fk_ctry_id: null,
-        postfix: '',
-      });
-    }
+    setSelectedInd(null);
+    setFormData({
+      pk_ind_id: undefined,
+      fk_com_id: '',
+      fk_tit_id: null,
+      first_name: '',
+      middle_name: '',
+      surname: '',
+      dob: null,
+      photo: null,
+      fk_qual_id: null,
+      gender: 'male',
+      marital_status: 'single',
+      fk_org_id: null,
+      fk_dep_id: null,
+      fk_deg_id: null,
+      fk_spo_id: null,
+      anniversary: null,
+      ext: '',
+      address: '',
+      fk_city_id: null,
+      region: '',
+      pincode: '',
+      fk_state_id: null,
+      fk_ctry_id: null,
+      postfix: '',
+    });
     setIsEditMode(false);
     setIsAdding(false);
   };
+
   const handleAdd = () => {
     setFormData({
       pk_ind_id: undefined,
@@ -186,8 +182,8 @@ export default function IndividualContactsPage() {
     }
     setIsEditMode(true);
     setIsAdding(false);
+    setActiveTab('individual');
   };
-
   const handleSave = () => {
     if (!formData.first_name.trim() || !formData.surname.trim()) {
       toast.error('First Name and Surname are required fields.');
@@ -228,12 +224,9 @@ export default function IndividualContactsPage() {
       const { pk_ind_id, ...rest } = formData;
       const payload = sanitizePayload(rest as any);
       createInd.mutate(payload as any, {
-        onSuccess: (data) => {
-          toast.success('Individual contact created successfully!');
-          handleSelectIndividual(data);
-        },
-        onError: () => {
-          toast.error('Failed to create individual contact.');
+        onSuccess: () => {
+          setSelectedInd(null);
+          handleCancel();
         },
       });
     } else if (isEditMode && selectedInd) {
@@ -241,12 +234,9 @@ export default function IndividualContactsPage() {
       updateInd.mutate(
         { id: String(selectedInd.pk_ind_id), data: payload as any },
         {
-          onSuccess: (data) => {
-            toast.success('Individual contact updated successfully!');
-            handleSelectIndividual(data);
-          },
-          onError: () => {
-            toast.error('Failed to update individual contact.');
+          onSuccess: () => {
+            setSelectedInd(null);
+            handleCancel();
           },
         },
       );
@@ -262,13 +252,9 @@ export default function IndividualContactsPage() {
     if (!selectedInd) return;
     removeInd.mutate(String(selectedInd.pk_ind_id), {
       onSuccess: () => {
-        toast.success('Individual contact deleted successfully.');
         setSelectedInd(null);
         handleCancel();
         setActiveTab('list');
-      },
-      onError: () => {
-        toast.error('Failed to delete individual contact.');
       },
     });
   };
@@ -290,7 +276,7 @@ export default function IndividualContactsPage() {
     },
     {
       icon: Trash2,
-      label: 'Del',
+      label: 'Delete',
       variant: 'danger',
       onClick: handleDelete,
       disabled: !selectedInd || isAdding || isEditMode,
