@@ -54,7 +54,6 @@ export interface WindowProps {
 export const Window: React.FC<WindowProps> = ({
   id,
   title,
-  icon,
   onClose,
   onMinimizeChange,
   onMaximizeChange,
@@ -268,7 +267,6 @@ export const Window: React.FC<WindowProps> = ({
           </div>
 
           {/* Icon and Title */}
-          {icon && <div className="text-foreground shrink-0">{icon}</div>}
           <span className="text-foreground truncate text-sm font-semibold">{title}</span>
         </div>
 

@@ -35,6 +35,8 @@ export default function IndividualContactsPage() {
   const [isEditMode, setIsEditMode] = React.useState(false);
   const [isAdding, setIsAdding] = React.useState(false);
   const [search, setSearch] = React.useState('');
+  const [page, setPage] = React.useState(1);
+  const [pageSize] = React.useState(15);
   const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
 
   // TanStack Query Hooks for Individual Contacts
@@ -43,7 +45,7 @@ export default function IndividualContactsPage() {
     create: createInd,
     update: updateInd,
     remove: removeInd,
-  } = useIndividual();
+  } = useIndividual({ page, limit: pageSize, search });
 
   // TanStack Query Hooks for Dropdown Lookups
   const { list: titlesList } = useMasterContacts('titles');
@@ -371,7 +373,11 @@ export default function IndividualContactsPage() {
 
           <TabsContent value="list" className="m-0 flex-1 overflow-y-auto p-6">
             <IndividualList
-              individuals={indList.data || []}
+              individuals={indList.data?.data || []}
+              totalRecords={indList.data?.meta?.total || 0}
+              currentPage={page}
+              onPageChange={setPage}
+              pageSize={pageSize}
               selectedIndividual={selectedInd}
               onSelectIndividual={handleSelectIndividual}
               search={search}

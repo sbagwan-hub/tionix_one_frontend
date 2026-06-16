@@ -21,6 +21,10 @@ interface IndividualListProps {
   onSearchChange: (val: string) => void;
   isLoading: boolean;
   t: (key: string) => string;
+  totalRecords: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  pageSize: number;
 }
 
 export const IndividualList: React.FC<IndividualListProps> = ({
@@ -31,22 +35,13 @@ export const IndividualList: React.FC<IndividualListProps> = ({
   onSearchChange,
   isLoading,
   t,
+  totalRecords,
+  currentPage,
+  onPageChange,
+  pageSize,
 }) => {
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 15;
-
-  const filtered = individuals.filter((ind) => {
-    const fullName = `${ind.first_name} ${ind.middle_name || ''} ${ind.surname}`.toLowerCase();
-    return (
-      fullName.includes(search.toLowerCase()) ||
-      String(ind.pk_ind_id).toLowerCase().includes(search.toLowerCase())
-    );
-  });
-
-  const totalItems = filtered.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const pageData = filtered.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(totalRecords / pageSize) || 1;
+  const pageData = individuals;
 
   return (
     <div className="space-y-4">
@@ -57,7 +52,7 @@ export const IndividualList: React.FC<IndividualListProps> = ({
           value={search}
           onChange={(val) => {
             onSearchChange(val);
-            setCurrentPage(1);
+            onPageChange(1);
           }}
           className="max-w-sm flex-1"
         />
@@ -143,9 +138,9 @@ export const IndividualList: React.FC<IndividualListProps> = ({
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            pageSize={itemsPerPage}
-            totalRecords={totalItems}
-            onPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalRecords={totalRecords}
+            onPageChange={onPageChange}
           />
         </div>
       </div>

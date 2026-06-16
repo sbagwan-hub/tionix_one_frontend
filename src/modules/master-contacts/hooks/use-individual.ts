@@ -2,13 +2,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { masterContactsApi } from '../services';
 import { IndividualDto, IndividualRecord } from '../types';
 
-export const useIndividual = () => {
+export const useIndividual = (params?: { page?: number; limit?: number; search?: string }) => {
   const queryClient = useQueryClient();
-  const queryKey = ['individual-contacts'];
+  const queryKey = ['individual-contacts', params];
 
   const listQuery = useQuery({
     queryKey,
-    queryFn: () => masterContactsApi.individuals.list(),
+    queryFn: () => masterContactsApi.individuals.list(params),
   });
 
   const createMutation = useMutation({

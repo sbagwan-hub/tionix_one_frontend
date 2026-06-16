@@ -294,9 +294,20 @@ export const masterContactsApi = {
     remove: async () => {},
   },
   individuals: {
-    list: async (): Promise<IndividualRecord[]> =>
-      (await axiosClient.get<{ data: IndividualRecord[] }>('/master/master-contacts/individuals'))
-        .data.data,
+    list: async (params?: {
+      page?: number;
+      limit?: number;
+      search?: string;
+    }): Promise<{
+      data: IndividualRecord[];
+      meta?: { total: number; page: number; limit: number };
+    }> =>
+      (
+        await axiosClient.get<{
+          data: IndividualRecord[];
+          meta?: { total: number; page: number; limit: number };
+        }>('/master/master-contacts/individuals', { params })
+      ).data,
     create: async (data: IndividualDto): Promise<IndividualRecord> =>
       (
         await axiosClient.post<{ data: IndividualRecord }>(
