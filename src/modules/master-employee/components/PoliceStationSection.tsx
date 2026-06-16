@@ -16,11 +16,11 @@ export const PoliceStationSection: React.FC<SectionProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="flex flex-col gap-4 h-full justify-between">
+    <div className="flex flex-col gap-4 h-full">
       <h3 className="text-sm font-bold uppercase tracking-wider text-brand border-b border-border/20 pb-1.5">
         Nearest Police Station
       </h3>
-      <div className="flex flex-col gap-3.5 flex-1 justify-between mt-2">
+      <div className="flex flex-col gap-3.5 mt-2">
         <FormInput
           label="Station Name"
           value={formData.police || ''}

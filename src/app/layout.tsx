@@ -5,6 +5,7 @@ import './globals.css';
 import QueryProviders from '@/providers/query-providers';
 import { LocaleUpdater } from '@/components/shared/locale-updater';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { FontSizeProvider } from '@/providers/font-size-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { LayoutWrapper } from '@/components/layout/layout-wrapper';
 
@@ -36,11 +37,13 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground min-h-screen overflow-hidden">
         <ThemeProvider>
-          <QueryProviders>
-            <LocaleUpdater />
-            <LayoutWrapper>{children}</LayoutWrapper>
-            <Toaster position="top-right" />
-          </QueryProviders>
+          <FontSizeProvider>
+            <QueryProviders>
+              <LocaleUpdater />
+              <LayoutWrapper>{children}</LayoutWrapper>
+              <Toaster position="top-right" />
+            </QueryProviders>
+          </FontSizeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -25,7 +25,7 @@ export const MasterEmployeeForm: React.FC<MasterEmployeeFormProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="w-full flex flex-col gap-4 pb-4 font-sans">
+    <div className="w-full flex flex-col gap-4 pb-4 font-sans h-[calc(100vh-270px)] overflow-y-auto pr-1 text-[14px] [&_label]:text-[13px] [&_label]:!normal-case [&_label]:!tracking-normal [&_input]:text-[14px] [&_textarea]:text-[14px] [&_button]:text-[14px] [&_select]:text-[14px] [&_h3]:text-[15.5px] [&_h4]:text-[13.5px]">
       {/* Card 1: Profile, Work & Accounts */}
       <div className="border border-border/40 bg-card/25 p-4 rounded-sm flex flex-col gap-2 shadow-sm">
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">

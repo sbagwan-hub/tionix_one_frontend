@@ -6,9 +6,7 @@ import { MasterEmployeePanel } from '@/modules/master-employee/components/Master
 
 export default function EmployeesPage() {
   return (
-    <div className="p-6 flex flex-col gap-6 h-full">
-
-
+    <div className="px-4 py-2 flex flex-col gap-3 h-full">
       <MasterEmployeePanel />
     </div>
   );

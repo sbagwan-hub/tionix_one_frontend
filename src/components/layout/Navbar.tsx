@@ -12,6 +12,7 @@ import { ThemeSwitcher } from '../shared/theme-switcher';
 import { NavbarMenu, RenderMenuItems } from '../shared/nested-dropdown-menu';
 import { Menu, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth-store';
+import { useFontSize } from '@/providers/font-size-provider';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +30,7 @@ function Navbar() {
   const mounted = useMounted();
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuthStore();
+  const { fontSize, increaseFontSize, decreaseFontSize } = useFontSize();
 
   return (
     <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5 select-none">
@@ -125,6 +127,34 @@ function Navbar() {
                   <div className="flex items-center justify-between px-2 py-1.5">
                     <span className="text-muted-foreground text-xs font-medium">Theme</span>
                     <ThemeSwitcher />
+                  </div>
+                  <div className="flex items-center justify-between px-2 py-1.5">
+                    <span className="text-muted-foreground text-xs font-medium">Font Size</span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          decreaseFontSize();
+                        }}
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border border-border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        title="Decrease Font Size"
+                      >
+                        A-
+                      </button>
+                      <span className="text-[11px] font-bold min-w-8 text-center">{fontSize}px</span>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          increaseFontSize();
+                        }}
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border border-border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        title="Increase Font Size"
+                      >
+                        A+
+                      </button>
+                    </div>
                   </div>
                   <DropdownMenuSeparator className="bg-border/60 my-1" />
                   <DropdownMenuItem

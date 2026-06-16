@@ -111,7 +111,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('wp', val)}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -154,7 +154,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('blood_grp', val === 'none' ? '' : val)}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>

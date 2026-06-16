@@ -3,7 +3,7 @@ export interface Book {
   book_name: string;
   active: boolean;
   file_name: string;
-  database_nar: string;
+  database_name: string;
   product_id: string;
   parent_id: string;
   add_path: string;

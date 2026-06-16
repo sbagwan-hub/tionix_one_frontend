@@ -27,8 +27,8 @@ export interface EmployeeRecord {
   emp_code: string;
   employee: string;
   doj: string;
-  male: boolean;
-  married: boolean;
+  male: string;
+  married: string;
   p_address: string;
   n_address: string;
   account_no: string;

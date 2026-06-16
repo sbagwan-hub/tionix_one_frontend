@@ -45,7 +45,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_st_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -67,7 +67,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_rg_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -92,7 +92,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_cs_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -157,7 +157,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_r_emp_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Employee" />
               </SelectTrigger>
               <SelectContent>
@@ -180,7 +180,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_w1_emp_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Witness 1" />
               </SelectTrigger>
               <SelectContent>
@@ -199,7 +199,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_w2_emp_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Witness 2" />
               </SelectTrigger>
               <SelectContent>

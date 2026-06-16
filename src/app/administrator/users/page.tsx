@@ -157,6 +157,16 @@ export default function AdministratorUsersPage() {
       return;
     }
 
+    if (!selectedQuestion) {
+      toast.error(`${t('requiredField')}: ${t('question')}`);
+      return;
+    }
+
+    if (!formData.answer || !formData.answer.trim()) {
+      toast.error(`${t('requiredField')}: ${t('answer')}`);
+      return;
+    }
+
     const matchedQuestion = securityQuestions.find((sq) => sq.questions === selectedQuestion);
     const payload: any = {
       username: formData.username,

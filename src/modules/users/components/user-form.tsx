@@ -53,7 +53,7 @@ export const UserForm: React.FC<UserFormProps> = ({
     <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
       {/* Username */}
       <FormInput
-        label={t('username')}
+        label={t('username') + ' *'}
         icon={UserIcon}
         value={formData.username}
         onChange={(e) => onInputChange('username', e.target.value)}
@@ -65,7 +65,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       {/* Password */}
       <div className="relative">
         <FormInput
-          label={t('password')}
+          label={t('password') + (isEditMode ? '' : ' *')}
           icon={Lock}
           type={showPassword ? 'text' : 'password'}
           value={formData.password || ''}
@@ -91,7 +91,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       {/* Security Question */}
       <div className="flex flex-col gap-1.5">
         <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-          {t('question')}
+          {t('question') + ' *'}
         </Label>
         <div className="relative">
           <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
@@ -107,7 +107,7 @@ export const UserForm: React.FC<UserFormProps> = ({
             <SelectContent>
               {securityQuestions.map((sq) => (
                 <SelectItem key={sq.pk_question_id} value={sq.questions}>
-                  {sq.questions}
+                   {sq.questions}
                 </SelectItem>
               ))}
               {securityQuestions.length === 0 && (
@@ -122,7 +122,7 @@ export const UserForm: React.FC<UserFormProps> = ({
 
       {/* Answer */}
       <FormInput
-        label={t('answer')}
+        label={t('answer') + ' *'}
         icon={HelpCircle}
         value={formData.answer || ''}
         onChange={(e) => onInputChange('answer', e.target.value)}

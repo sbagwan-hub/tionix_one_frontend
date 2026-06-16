@@ -79,7 +79,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
                 onValueChange={(val) => onInputChange('fk_qual_id', val === 'none' ? null : parseInt(val, 10))}
                 disabled={disabled}
               >
-                <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm flex-1">
+                <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full flex-1">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
@@ -103,63 +103,51 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Gender *
             </Label>
-            <div className="flex items-center gap-4 py-1.5">
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="radio"
-                  name="male"
-                  checked={formData.male === true}
-                  onChange={() => onInputChange('male', true)}
-                  className="text-brand accent-brand h-4 w-4"
-                  disabled={disabled}
-                />
-                Male
-              </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="radio"
-                  name="male"
-                  checked={formData.male === false}
-                  onChange={() => onInputChange('male', false)}
-                  className="text-brand accent-brand h-4 w-4"
-                  disabled={disabled}
-                />
-                Female
-              </label>
-            </div>
+            <Select
+              value={formData.male || 'Male'}
+              onValueChange={(val) => onInputChange('male', val)}
+              disabled={disabled}
+            >
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                <SelectValue placeholder="Select Gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Male">Male</SelectItem>
+                <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="LGBT">LGBT</SelectItem>
+                <SelectItem value="Others">Others</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Marital Status *
             </Label>
-            <div className="flex items-center gap-4 py-1.5">
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="radio"
-                  name="married"
-                  checked={formData.married === true}
-                  onChange={() => onInputChange('married', true)}
-                  className="text-brand accent-brand h-4 w-4"
-                  disabled={disabled}
-                />
-                Married
-              </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input
-                  type="radio"
-                  name="married"
-                  checked={formData.married === false}
-                  onChange={() => {
-                    onInputChange('married', false);
-                    onInputChange('anni', null);
-                  }}
-                  className="text-brand accent-brand h-4 w-4"
-                  disabled={disabled}
-                />
-                Unmarried
-              </label>
-            </div>
+            <Select
+              value={formData.married || 'Single'}
+              onValueChange={(val) => {
+                onInputChange('married', val);
+                if (!['Married', 'Engaged', 'Livein'].includes(val)) {
+                  onInputChange('anni', null);
+                }
+              }}
+              disabled={disabled}
+            >
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                <SelectValue placeholder="Select Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Single">Single</SelectItem>
+                <SelectItem value="Married">Married</SelectItem>
+                <SelectItem value="Divorced">Divorced</SelectItem>
+                <SelectItem value="Widowed">Widowed</SelectItem>
+                <SelectItem value="Separated">Separated</SelectItem>
+                <SelectItem value="Engaged">Engaged</SelectItem>
+                <SelectItem value="Livein">Livein</SelectItem>
+                <SelectItem value="Others">Others</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -170,7 +158,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
             value={formData.anni ? formData.anni.slice(0, 10) : ''}
             onChange={(e) => onInputChange('anni', e.target.value)}
             className="h-9 text-sm rounded-sm"
-            disabled={disabled || !formData.married}
+            disabled={disabled || !['Married', 'Engaged', 'Livein'].includes(formData.married || '')}
           />
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
@@ -181,7 +169,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('ext', val === 'none' ? '' : val)}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Responsibility" />
               </SelectTrigger>
               <SelectContent>
@@ -205,7 +193,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_dep_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Department" />
               </SelectTrigger>
               <SelectContent>
@@ -228,7 +216,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_deg_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Designation" />
               </SelectTrigger>
               <SelectContent>

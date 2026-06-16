@@ -72,7 +72,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_acct_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Cash Ledger" />
               </SelectTrigger>
               <SelectContent>
@@ -132,7 +132,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_bnk_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Bank" />
               </SelectTrigger>
               <SelectContent>

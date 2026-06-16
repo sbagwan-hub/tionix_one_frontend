@@ -64,7 +64,7 @@ export const ReferencesSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_p1_des_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -119,7 +119,7 @@ export const ReferencesSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('fk_p2_des_id', val === 'none' ? null : parseInt(val, 10))}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm">
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>

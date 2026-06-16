@@ -103,7 +103,7 @@ export const FamilyRelativesSection: React.FC<SectionProps> = ({
                     onValueChange={(val) => handleUpdateRelative(relative.id, 'relationship', val)}
                     disabled={disabled}
                   >
-                    <SelectTrigger className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background">
+                    <SelectTrigger className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background w-full">
                       <SelectValue placeholder="Relationship" />
                     </SelectTrigger>
                     <SelectContent>
@@ -121,7 +121,7 @@ export const FamilyRelativesSection: React.FC<SectionProps> = ({
                     onValueChange={(val) => handleUpdateRelative(relative.id, 'marital_status', val)}
                     disabled={disabled}
                   >
-                    <SelectTrigger className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background">
+                    <SelectTrigger className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
