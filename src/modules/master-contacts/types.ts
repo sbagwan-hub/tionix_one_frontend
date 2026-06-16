@@ -117,7 +117,7 @@ export const regionSchema = z.object({
 export type RegionDto = z.infer<typeof regionSchema>;
 
 export const individualSchema = z.object({
-  pk_ind_id: z.union([z.number(), z.string()]).optional(),
+  pk_ind_id: z.number().int().optional(),
   fk_com_id: z.union([z.number(), z.string()]).default(''),
   fk_tit_id: z.number().nullable().optional(),
   first_name: z.string().min(1, 'First name is required').max(50),

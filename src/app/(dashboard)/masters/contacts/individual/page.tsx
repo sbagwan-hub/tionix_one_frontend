@@ -68,7 +68,7 @@ export default function IndividualContactsPage() {
   const maritalStatuses = maritalStatusesList.data || [];
 
   const [formData, setFormData] = React.useState<IndividualDto>({
-    pk_ind_id: '',
+    pk_ind_id: undefined,
     fk_com_id: '',
     fk_tit_id: null,
     first_name: '',
@@ -111,7 +111,7 @@ export default function IndividualContactsPage() {
       setFormData(selectedInd);
     } else {
       setFormData({
-        pk_ind_id: '',
+        pk_ind_id: undefined,
         fk_com_id: '',
         fk_tit_id: null,
         first_name: '',
@@ -140,12 +140,9 @@ export default function IndividualContactsPage() {
     setIsEditMode(false);
     setIsAdding(false);
   };
-
   const handleAdd = () => {
-    // Generate a temporary 12 character code or leave it blank for database generation
-    const tempId = `I${String(Date.now()).substring(2, 13)}`;
     setFormData({
-      pk_ind_id: tempId,
+      pk_ind_id: undefined,
       fk_com_id: '',
       fk_tit_id: null,
       first_name: '',
@@ -243,7 +240,7 @@ export default function IndividualContactsPage() {
 
   const handleConfirmDelete = () => {
     if (!selectedInd) return;
-    removeInd.mutate(selectedInd.pk_ind_id, {
+    removeInd.mutate(String(selectedInd.pk_ind_id), {
       onSuccess: () => {
         toast.success('Individual contact deleted successfully.');
         setSelectedInd(null);
