@@ -44,8 +44,8 @@ export const ContactDetailsSection: React.FC<ContactDetailsSectionProps> = ({
   return (
     <div className="border-border/80 bg-background/50 space-y-2.5 rounded-sm border p-3.5">
       <div className="flex items-center justify-between">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
-          Phone, Email, Mobile details
+        <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+          Phone, Email, Mobile, Website, Fax
         </Label>
         <Button
           variant="ghost"

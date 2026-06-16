@@ -19,7 +19,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 }) => {
   return (
     <div className="border-border/80 bg-background/50 space-y-2.5 rounded-sm border p-3">
-      <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+      <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
         S Friend, Business, Associate, Relative
       </Label>
       <div className="grid min-h-[180px] grid-cols-2 gap-2 overflow-y-auto pr-1">

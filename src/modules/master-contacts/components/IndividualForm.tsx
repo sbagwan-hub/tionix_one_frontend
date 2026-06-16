@@ -51,7 +51,6 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
     'Account',
     'Advertise',
     'Aluminium',
-    'Associate',
     'Bank',
   ];
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);

@@ -58,7 +58,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
             id={inputId}
             disabled={disabled}
             className={cn(
-              'bg-background border-border/80 focus-visible:ring-primary focus-visible:border-primary h-9 rounded-lg text-xs font-medium shadow-sm transition-all focus-visible:ring-1 focus-visible:outline-none',
+              'bg-background border-border/80 focus-visible:ring-primary focus-visible:border-primary h-9 rounded-lg text-xs font-medium transition-all focus-visible:ring-1 focus-visible:outline-none',
               Icon ? 'pr-3 pl-9' : 'px-3',
               error &&
                 'border-destructive focus:border-destructive focus:ring-destructive/30 bg-destructive/5 dark:bg-destructive/10',
