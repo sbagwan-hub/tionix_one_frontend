@@ -295,7 +295,7 @@ export default function IndividualContactsPage() {
       onClick: handleDelete,
       disabled: !selectedInd || isAdding || isEditMode,
     },
-    { icon: RotateCcw, label: 'Undo', variant: 'outline', onClick: handleCancel },
+    { icon: RotateCcw, label: 'Cancel', variant: 'outline', onClick: handleCancel },
     {
       icon: Save,
       label: 'Save',
