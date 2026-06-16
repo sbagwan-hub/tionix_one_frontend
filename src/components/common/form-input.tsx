@@ -16,23 +16,6 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ label, error, icon: Icon, className, id, disabled, containerClassName, ...props }, ref) => {
     const inputId = id ?? 'form-input';
 
-    // Helper to format text labels and colorize asterisks dynamically
-    const renderLabelContent = (node: React.ReactNode) => {
-      if (typeof node === 'string' && node.includes('*')) {
-        const parts = node.split(/(\*)/);
-        return parts.map((part, i) =>
-          part === '*' ? (
-            <span key={i} className="text-destructive ml-0.5 font-medium" aria-hidden="true">
-              *
-            </span>
-          ) : (
-            part
-          ),
-        );
-      }
-      return node;
-    };
-
     return (
       <div className={cn('flex w-full flex-col gap-1.5', containerClassName)}>
         {/* Label block */}
@@ -41,7 +24,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
             htmlFor={inputId}
             className="text-foreground text-[12px] font-semibold tracking-wider"
           >
-            {renderLabelContent(label)}
+            {label}
           </Label>
         )}
 

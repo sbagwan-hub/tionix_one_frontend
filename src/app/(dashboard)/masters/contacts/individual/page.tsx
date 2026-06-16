@@ -16,6 +16,7 @@ import {
   Download,
   HelpCircle as Help,
   LogOut,
+  Eye,
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
 import { DeleteDialog } from '@/components/common/delete-dialog';
@@ -179,6 +180,16 @@ export default function IndividualContactsPage() {
     setActiveTab('individual');
   };
 
+  const handleView = () => {
+    if (!selectedInd) {
+      toast.error('Please select an individual record first.');
+      return;
+    }
+    setIsEditMode(false);
+    setIsAdding(false);
+    setActiveTab('individual');
+  };
+
   const handleEdit = () => {
     if (!selectedInd) {
       toast.error('Please select an individual record first.');
@@ -270,6 +281,13 @@ export default function IndividualContactsPage() {
       variant: 'primary',
       onClick: handleAdd,
       disabled: isAdding || isEditMode,
+    },
+    {
+      icon: Eye,
+      label: 'View',
+      variant: 'secondary',
+      onClick: handleView,
+      disabled: !selectedInd || isAdding || isEditMode,
     },
     {
       icon: Edit,
