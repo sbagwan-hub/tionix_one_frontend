@@ -123,7 +123,24 @@ export const individualSchema = z.object({
   first_name: z.string().min(1, 'First name is required').max(50),
   middle_name: z.string().max(40).default(''),
   surname: z.string().min(1, 'Surname is required').max(25),
-  dob: z.string().nullable().optional(),
+  dob: z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const birthDate = new Date(val);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age >= 18;
+      },
+      { message: 'Individual must be at least 18 years old' },
+    ),
   photo: z.string().nullable().optional(),
   fk_qual_id: z.number().nullable().optional(),
   gender: z.string().default('male'),
@@ -132,7 +149,7 @@ export const individualSchema = z.object({
   fk_dep_id: z.number().nullable().optional(),
   fk_deg_id: z.number().nullable().optional(),
   fk_spo_id: z.union([z.number(), z.string()]).nullable().optional(),
-  anni: z.string().nullable().optional(),
+  anniversary: z.string().nullable().optional(),
   ext: z.string().max(10).nullable().optional(),
   address: z.string().max(150).nullable().optional(),
   fk_city_id: z.number().nullable().optional(),

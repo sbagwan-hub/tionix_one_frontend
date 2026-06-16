@@ -14,6 +14,7 @@ import { User, Users, Heart, Calendar, GraduationCap, ChevronDown } from 'lucide
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarPicker } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 import { IndividualDto } from '../../types';
 
 interface PersonalInfoSectionProps {
@@ -23,6 +24,7 @@ interface PersonalInfoSectionProps {
   qualifications: any[];
   genders: any[];
   maritalStatuses: any[];
+  individuals: any[];
   disabled?: boolean;
   isRtl?: boolean;
 }
@@ -34,9 +36,13 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
   qualifications,
   genders,
   maritalStatuses,
+  individuals,
   disabled = false,
   isRtl = false,
 }) => {
+  const spouseOptions = React.useMemo(() => {
+    return (individuals || []).filter((ind) => ind.pk_ind_id !== formData.pk_ind_id);
+  }, [individuals, formData.pk_ind_id]);
   return (
     <div className="border-border/80 bg-background/50 space-y-4 rounded-sm border p-4">
       <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
@@ -145,6 +151,19 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
                   mode="single"
                   selected={formData.dob ? new Date(formData.dob) : undefined}
                   onSelect={(date) => {
+                    if (date) {
+                      const today = new Date();
+                      let age = today.getFullYear() - date.getFullYear();
+                      const m = today.getMonth() - date.getMonth();
+                      if (m < 0 || (m === 0 && today.getDate() < date.getDate())) {
+                        age--;
+                      }
+                      if (age < 18) {
+                        toast.error('Individual must be at least 18 years old.');
+                        onInputChange('dob', null);
+                        return;
+                      }
+                    }
                     onInputChange('dob', date ? format(date, 'yyyy-MM-dd') : null);
                   }}
                   captionLayout="dropdown"
@@ -245,6 +264,42 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
                     {m.name}
                   </SelectItem>
                 ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Spouse */}
+        <div className="flex flex-col gap-1.5">
+          <Label className="text-foreground text-[10px] font-semibold tracking-wider">Spouse</Label>
+          <div className="relative">
+            <div className="text-muted-foreground pointer-events-none absolute top-1/2 z-10 flex -translate-y-1/2 items-center px-3">
+              <User className="h-4 w-4" />
+            </div>
+            <Select
+              value={formData.fk_spo_id ? String(formData.fk_spo_id) : 'none'}
+              onValueChange={(val) =>
+                onInputChange('fk_spo_id', val === 'none' ? null : Number(val))
+              }
+              disabled={disabled}
+            >
+              <SelectTrigger
+                className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-3' : 'pr-3 pl-9'}`}
+              >
+                <SelectValue placeholder="Select Spouse" />
+              </SelectTrigger>
+              <SelectContent position="popper" sideOffset={4}>
+                <SelectItem value="none">None</SelectItem>
+                {spouseOptions.map((ind) => {
+                  const fullName = `${ind.first_name} ${ind.middle_name || ''} ${ind.surname}`
+                    .trim()
+                    .replace(/\s+/g, ' ');
+                  return (
+                    <SelectItem key={ind.pk_ind_id} value={String(ind.pk_ind_id)}>
+                      {fullName}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </div>

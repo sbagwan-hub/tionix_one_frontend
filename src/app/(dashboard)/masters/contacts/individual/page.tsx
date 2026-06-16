@@ -47,6 +47,9 @@ export default function IndividualContactsPage() {
     remove: removeInd,
   } = useIndividual({ page, limit: pageSize, search });
 
+  const { list: allIndividualsList } = useIndividual({ page: 1, limit: 1000 });
+  const individuals = allIndividualsList.data?.data || [];
+
   // TanStack Query Hooks for Dropdown Lookups
   const { list: titlesList } = useMasterContacts('titles');
   const { list: qualList } = useMasterContacts('qualifications');
@@ -86,7 +89,7 @@ export default function IndividualContactsPage() {
     fk_dep_id: null,
     fk_deg_id: null,
     fk_spo_id: null,
-    anni: null,
+    anniversary: null,
     ext: '',
     address: '',
     fk_city_id: null,
@@ -129,7 +132,7 @@ export default function IndividualContactsPage() {
         fk_dep_id: null,
         fk_deg_id: null,
         fk_spo_id: null,
-        anni: null,
+        anniversary: null,
         ext: '',
         address: '',
         fk_city_id: null,
@@ -160,7 +163,7 @@ export default function IndividualContactsPage() {
       fk_dep_id: null,
       fk_deg_id: null,
       fk_spo_id: null,
-      anni: null,
+      anniversary: null,
       ext: '',
       address: '',
       fk_city_id: null,
@@ -189,6 +192,20 @@ export default function IndividualContactsPage() {
     if (!formData.first_name.trim() || !formData.surname.trim()) {
       toast.error('First Name and Surname are required fields.');
       return;
+    }
+
+    if (formData.dob) {
+      const birthDate = new Date(formData.dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 18) {
+        toast.error('Individual must be at least 18 years old.');
+        return;
+      }
     }
 
     const sanitizePayload = (data: IndividualDto) => {
@@ -367,6 +384,7 @@ export default function IndividualContactsPage() {
               countries={countries}
               genders={genders}
               maritalStatuses={maritalStatuses}
+              individuals={individuals}
               disabled={!isAdding && !isEditMode}
             />
           </TabsContent>

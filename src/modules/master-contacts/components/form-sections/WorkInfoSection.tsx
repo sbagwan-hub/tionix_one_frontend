@@ -154,10 +154,12 @@ export const WorkInfoSection: React.FC<WorkInfoSectionProps> = ({
                 <button
                   type="button"
                   disabled={disabled}
-                  className={`border-border bg-background/50 hover:bg-accent hover:text-accent-foreground focus:bg-background flex h-9 w-full cursor-pointer items-center justify-between rounded-sm border text-xs transition-all ${isRtl ? 'pr-9 pl-3 text-right' : 'pr-3 pl-9 text-left'} ${!formData.anni ? 'text-muted-foreground' : ''}`}
+                  className={`border-border bg-background/50 hover:bg-accent hover:text-accent-foreground focus:bg-background flex h-9 w-full cursor-pointer items-center justify-between rounded-sm border text-xs transition-all ${isRtl ? 'pr-9 pl-3 text-right' : 'pr-3 pl-9 text-left'} ${!formData.anniversary ? 'text-muted-foreground' : ''}`}
                 >
                   <span>
-                    {formData.anni ? format(new Date(formData.anni), 'PPP') : 'Pick Anniversary'}
+                    {formData.anniversary
+                      ? format(new Date(formData.anniversary), 'PPP')
+                      : 'Pick Anniversary'}
                   </span>
                   <ChevronDown className="h-4 w-4 opacity-50" />
                 </button>
@@ -165,9 +167,9 @@ export const WorkInfoSection: React.FC<WorkInfoSectionProps> = ({
               <PopoverContent className="w-auto p-0" align="start">
                 <CalendarPicker
                   mode="single"
-                  selected={formData.anni ? new Date(formData.anni) : undefined}
+                  selected={formData.anniversary ? new Date(formData.anniversary) : undefined}
                   onSelect={(date) => {
-                    onInputChange('anni', date ? format(date, 'yyyy-MM-dd') : null);
+                    onInputChange('anniversary', date ? format(date, 'yyyy-MM-dd') : null);
                   }}
                   captionLayout="dropdown"
                   startMonth={new Date(1900, 0)}
