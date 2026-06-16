@@ -86,6 +86,18 @@ export const IndividualList: React.FC<IndividualListProps> = ({
           <TableBody className="text-xs">
             {pageData.map((row) => {
               const fullName = `${row.first_name} ${row.middle_name || ''} ${row.surname}`;
+              const genderStr =
+                typeof row.gender === 'boolean'
+                  ? row.gender
+                    ? 'male'
+                    : 'female'
+                  : String(row.gender || '');
+              const maritalStatusStr =
+                typeof row.marital_status === 'boolean'
+                  ? row.marital_status
+                    ? 'married'
+                    : 'single'
+                  : String(row.marital_status || '');
               return (
                 <TableRow
                   key={row.pk_ind_id}
@@ -104,9 +116,13 @@ export const IndividualList: React.FC<IndividualListProps> = ({
                   <TableCell className="px-4 py-2">
                     {row.dob ? new Date(row.dob).toLocaleDateString() : '-'}
                   </TableCell>
-                  <TableCell className="px-4 py-2">{row.male ? 'Male' : 'Female'}</TableCell>
                   <TableCell className="px-4 py-2">
-                    {row.married ? 'Married' : 'Unmarried'}
+                    {genderStr ? genderStr.charAt(0).toUpperCase() + genderStr.slice(1) : '-'}
+                  </TableCell>
+                  <TableCell className="px-4 py-2">
+                    {maritalStatusStr
+                      ? maritalStatusStr.charAt(0).toUpperCase() + maritalStatusStr.slice(1)
+                      : '-'}
                   </TableCell>
                   <TableCell className="px-4 py-2">{row.organization || '-'}</TableCell>
                 </TableRow>

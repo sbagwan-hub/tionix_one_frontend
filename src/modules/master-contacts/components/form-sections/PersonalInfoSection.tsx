@@ -200,8 +200,8 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
               <Users className="h-4 w-4" />
             </div>
             <Select
-              value={formData.male ? 'male' : 'female'}
-              onValueChange={(val) => onInputChange('male', val === 'male')}
+              value={formData.gender || 'male'}
+              onValueChange={(val) => onInputChange('gender', val)}
               disabled={disabled}
             >
               <SelectTrigger
@@ -230,8 +230,8 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
               <Heart className="h-4 w-4" />
             </div>
             <Select
-              value={formData.married ? 'married' : 'single'}
-              onValueChange={(val) => onInputChange('married', val === 'married')}
+              value={formData.marital_status || 'single'}
+              onValueChange={(val) => onInputChange('marital_status', val)}
               disabled={disabled}
             >
               <SelectTrigger

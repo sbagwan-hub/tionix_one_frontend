@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
 import { DeleteDialog } from '@/components/common/delete-dialog';
+import { Chip } from '@/components/common/chip';
 import { useMasterContacts } from '@/modules/master-contacts/hooks/useMasterContacts';
 import { useIndividual } from '@/modules/master-contacts/hooks/use-individual';
 import { IndividualForm } from '@/modules/master-contacts/components/IndividualForm';
@@ -77,8 +78,8 @@ export default function IndividualContactsPage() {
     dob: null,
     photo: null,
     fk_qual_id: null,
-    male: true,
-    married: false,
+    gender: 'male',
+    marital_status: 'single',
     fk_org_id: null,
     fk_dep_id: null,
     fk_deg_id: null,
@@ -120,8 +121,8 @@ export default function IndividualContactsPage() {
         dob: null,
         photo: null,
         fk_qual_id: null,
-        male: true,
-        married: false,
+        gender: 'male',
+        marital_status: 'single',
         fk_org_id: null,
         fk_dep_id: null,
         fk_deg_id: null,
@@ -151,8 +152,8 @@ export default function IndividualContactsPage() {
       dob: null,
       photo: null,
       fk_qual_id: null,
-      male: true,
-      married: false,
+      gender: 'male',
+      marital_status: 'single',
       fk_org_id: null,
       fk_dep_id: null,
       fk_deg_id: null,
@@ -327,19 +328,25 @@ export default function IndividualContactsPage() {
                 List
               </TabsTrigger>
             </TabsList>
-            <div className="text-xs font-semibold">
-              {isAdding && (
-                <span className="animate-pulse text-emerald-500">Adding New Contact</span>
+            <div className="flex items-center gap-2">
+              {(createInd.isPending || updateInd.isPending) && (
+                <Chip label="Saving..." variant="primary" pulse />
               )}
-              {isEditMode && selectedInd && (
-                <span className="text-amber-500">
-                  Editing: {selectedInd.first_name} {selectedInd.surname}
-                </span>
+              {isAdding && !(createInd.isPending || updateInd.isPending) && (
+                <Chip label="Adding New Contact" variant="primary" pulse />
+              )}
+              {isEditMode && selectedInd && !(createInd.isPending || updateInd.isPending) && (
+                <Chip
+                  label={`Editing: ${selectedInd.first_name} ${selectedInd.surname}`}
+                  variant="primary"
+                  pulse
+                />
               )}
               {!isAdding && !isEditMode && selectedInd && (
-                <span className="text-foreground">
-                  Viewing: {selectedInd.first_name} {selectedInd.surname}
-                </span>
+                <Chip
+                  label={`Viewing: ${selectedInd.first_name} ${selectedInd.surname}`}
+                  variant="neutral"
+                />
               )}
             </div>
           </div>
