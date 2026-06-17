@@ -26,7 +26,7 @@ interface DataTableProps<T> {
   isLoading?: boolean;
   emptyMessage?: string;
   onRowClick?: (row: T, index: number) => void;
-  rowClassName?: string;
+  rowClassName?: string | ((row: T, index: number) => string);
   className?: string;
 }
 
@@ -36,7 +36,7 @@ export function DataTable<T>({
   isLoading = false,
   emptyMessage = 'No results found.',
   onRowClick,
-  rowClassName = '',
+  rowClassName,
   className = '',
 }: DataTableProps<T>) {
   return (
@@ -93,7 +93,7 @@ export function DataTable<T>({
                 className={cn(
                   'border-border/20 hover:bg-muted/10 border-b transition-colors',
                   { 'cursor-pointer': !!onRowClick },
-                  rowClassName,
+                  typeof rowClassName === 'function' ? rowClassName(row, rowIndex) : rowClassName,
                 )}
               >
                 {columns.map((col) => (

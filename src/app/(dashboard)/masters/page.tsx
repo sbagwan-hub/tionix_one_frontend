@@ -238,9 +238,8 @@ export default function MastersPage() {
               {menuItems.map((item, index) => (
                 <button
                   key={item}
-                  className={`hover:text-brand font-medium transition-colors ${
-                    index === 1 ? 'text-brand border-brand border-b pb-1' : 'text-muted-foreground'
-                  }`}
+                  className={`hover:text-brand font-medium transition-colors ${index === 1 ? 'text-brand border-brand border-b pb-1' : 'text-muted-foreground'
+                    }`}
                 >
                   {item}
                 </button>
@@ -269,6 +268,13 @@ export default function MastersPage() {
                 icon={<Users className="h-6 w-6" />}
                 href="/masters/users"
                 count={156}
+              />
+              <MasterCard
+                title="Employee"
+                description="Manage employee profiles, contact details, bank accounts, and credentials"
+                icon={<Users className="h-6 w-6" />}
+                href="/masters/employees"
+                count={1}
               />
               <MasterCard
                 title={t.companies}
