@@ -3,9 +3,11 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Trash2, Upload, Eye, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, Upload, Eye, RefreshCw, Loader2 } from 'lucide-react';
 import { DatePicker } from '@/components/common/date-picker';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { uploadFileToMinio } from '@/lib/s3';
+import { toast } from 'sonner';
 
 interface DocumentsSectionProps {
   documents: any[];
@@ -19,6 +21,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
   disabled = false,
 }) => {
   const fileInputRefs = React.useRef<{ [key: number]: HTMLInputElement | null }>({});
+  const [uploadingIndexes, setUploadingIndexes] = React.useState<{ [key: number]: boolean }>({});
 
   const addDocumentRow = () => {
     onInputChange('documents', [...documents, { doc_name: '', file_path: '', valid_until: '' }]);
@@ -41,16 +44,26 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
     onInputChange('documents', updated);
   };
 
-  const handleFileChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      updateDocumentRow(index, 'file_path', file.name);
+      setUploadingIndexes((prev) => ({ ...prev, [index]: true }));
+      try {
+        const fileUrl = await uploadFileToMinio(file, 'documents');
+        updateDocumentRow(index, 'file_path', fileUrl);
+        toast.success(`Uploaded: ${file.name}`);
+      } catch (err: any) {
+        console.error(err);
+        toast.error(`Failed to upload ${file.name}. Please check your MinIO connection.`);
+      } finally {
+        setUploadingIndexes((prev) => ({ ...prev, [index]: false }));
+      }
     }
   };
 
   const handleViewFile = (filePath: string) => {
     if (filePath) {
-      alert(`Opening document: ${filePath}`);
+      window.open(filePath, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -95,7 +108,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
                 placeholder="Doc Description (e.g. Passport)"
                 value={d.doc_name || ''}
                 onChange={(e) => updateDocumentRow(index, 'doc_name', e.target.value)}
-                disabled={disabled}
+                disabled={disabled || uploadingIndexes[index]}
                 className="bg-background h-8 min-w-0 flex-1 text-[11px]"
               />
 
@@ -108,6 +121,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
                       variant="outline"
                       size="icon"
                       onClick={() => handleViewFile(d.file_path)}
+                      disabled={disabled || uploadingIndexes[index]}
                       className="text-primary hover:bg-primary/10 h-8 w-8 shrink-0 rounded-sm"
                     >
                       <Eye className="h-4 w-4" />
@@ -120,34 +134,46 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
               )}
 
               {/* Upload/Change Button */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => fileInputRefs.current[index]?.click()}
-                    disabled={disabled}
-                    className="border-input bg-background text-muted-foreground hover:text-foreground hover:bg-muted h-8 w-8 shrink-0 rounded-sm"
-                  >
-                    {d.file_path ? (
-                      <RefreshCw className="h-4 w-4" />
-                    ) : (
-                      <Upload className="h-4 w-4" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="px-2 py-1 text-[10px]">
-                  {d.file_path ? 'Replace File' : 'Upload File'}
-                </TooltipContent>
-              </Tooltip>
+              {uploadingIndexes[index] ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  disabled
+                  className="border-input bg-background h-8 w-8 shrink-0 rounded-sm"
+                >
+                  <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />
+                </Button>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => fileInputRefs.current[index]?.click()}
+                      disabled={disabled}
+                      className="border-input bg-background text-muted-foreground hover:text-foreground hover:bg-muted h-8 w-8 shrink-0 rounded-sm"
+                    >
+                      {d.file_path ? (
+                        <RefreshCw className="h-4 w-4" />
+                      ) : (
+                        <Upload className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="px-2 py-1 text-[10px]">
+                    {d.file_path ? 'Replace File' : 'Upload File'}
+                  </TooltipContent>
+                </Tooltip>
+              )}
 
               {/* Validity Datepicker */}
               <div className="w-36 shrink-0">
                 <DatePicker
                   value={d.valid_until ? d.valid_until.slice(0, 10) : ''}
                   onChange={(val) => updateDocumentRow(index, 'valid_until', val)}
-                  disabled={disabled}
+                  disabled={disabled || uploadingIndexes[index]}
                   placeholder="Valid Until"
                   triggerClassName="h-8 bg-background"
                 />
@@ -161,7 +187,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
                     size="icon"
                     type="button"
                     onClick={() => removeDocumentRow(index)}
-                    disabled={disabled}
+                    disabled={disabled || uploadingIndexes[index]}
                     className="text-destructive hover:bg-destructive/10 h-8 w-8 shrink-0 rounded-sm"
                   >
                     <Trash2 className="h-4 w-4" />
