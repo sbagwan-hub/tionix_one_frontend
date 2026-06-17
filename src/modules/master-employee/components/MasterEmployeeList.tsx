@@ -12,6 +12,7 @@ interface MasterEmployeeListProps {
   employees: EmployeeRecord[];
   selectedEmployee: EmployeeRecord | null;
   onSelectEmployee: (emp: EmployeeRecord) => void;
+  onRowDoubleClick?: (emp: EmployeeRecord) => void;
   search: string;
   onSearchChange: (val: string) => void;
   isLoading?: boolean;
@@ -21,6 +22,7 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
   employees,
   selectedEmployee,
   onSelectEmployee,
+  onRowDoubleClick,
   search,
   onSearchChange,
   isLoading = false,
@@ -64,20 +66,6 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
       label: 'Designation',
       render: (val: any) => getDesigName(val),
     },
-    {
-      key: 'last_status',
-      label: 'Status',
-      render: (val: string) => {
-        const statusVal = val || 'Active';
-        const isSuccess = statusVal === 'Active' || statusVal === 'Added';
-        return (
-          <Chip
-            label={statusVal}
-            variant={isSuccess ? 'success' : 'error'}
-          />
-        );
-      },
-    },
   ];
 
   return (
@@ -100,6 +88,7 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
           columns={columns}
           isLoading={isLoading}
           onRowClick={(row) => onSelectEmployee(row)}
+          onRowDoubleClick={(row) => onRowDoubleClick && onRowDoubleClick(row)}
           rowClassName={(row) => selectedEmployee?.pk_emp_id === row.pk_emp_id ? 'bg-brand/10 hover:bg-brand/15' : ''}
           className="border border-border/40 rounded-sm"
         />
