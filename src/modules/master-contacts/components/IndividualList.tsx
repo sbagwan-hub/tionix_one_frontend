@@ -17,6 +17,7 @@ interface IndividualListProps {
   individuals: IndividualRecord[];
   selectedIndividual: IndividualRecord | null;
   onSelectIndividual: (ind: IndividualRecord) => void;
+  onDoubleClickIndividual?: (ind: IndividualRecord) => void;
   search: string;
   onSearchChange: (val: string) => void;
   isLoading: boolean;
@@ -31,6 +32,7 @@ export const IndividualList: React.FC<IndividualListProps> = ({
   individuals,
   selectedIndividual,
   onSelectIndividual,
+  onDoubleClickIndividual,
   search,
   onSearchChange,
   isLoading,
@@ -98,6 +100,7 @@ export const IndividualList: React.FC<IndividualListProps> = ({
                 <TableRow
                   key={row.pk_ind_id}
                   onClick={() => onSelectIndividual(row)}
+                  onDoubleClick={() => onDoubleClickIndividual?.(row)}
                   className={`cursor-pointer transition-colors ${
                     selectedIndividual?.pk_ind_id === row.pk_ind_id
                       ? 'bg-primary/10 hover:bg-primary/10 border-l-primary text-primary border-l-2'

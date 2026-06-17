@@ -67,23 +67,32 @@ function PermissionGridInner<T extends Record<string, any>>({
   };
 
   return (
-    <div className="max-h-full overflow-auto">
+    <div className="w-full">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        [data-slot="table-container"] {
+          overflow: visible !important;
+        }
+      `,
+        }}
+      />
       <Table className="min-w-full border-separate border-spacing-0 text-left">
         <TableHeader>
-          <TableRow className="border-border bg-muted/50 dark:bg-muted/20 sticky top-0 z-10 border-b">
-            <TableHead className="bg-card text-muted-foreground w-2/5 p-3 text-left text-xs font-semibold tracking-[0.14em] uppercase">
+          <TableRow className="border-border bg-muted/50 dark:bg-muted/20 border-b">
+            <TableHead className="bg-card text-muted-foreground sticky top-0 z-10 w-2/5 p-3 text-left text-xs font-semibold tracking-[0.14em] uppercase">
               {isReport ? 'Report Form Title' : 'Form Title / Functional Module'}
             </TableHead>
             {cols.map((col) => (
               <TableHead
                 key={col}
-                className="bg-card text-muted-foreground p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase"
+                className="bg-card text-muted-foreground sticky top-0 z-10 p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase"
               >
                 {colLabels[col] || col}
               </TableHead>
             ))}
             {hasAuth && (
-              <TableHead className="bg-card text-muted-foreground p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase">
+              <TableHead className="bg-card text-muted-foreground sticky top-0 z-10 p-3 text-center text-xs font-semibold tracking-[0.14em] uppercase">
                 Auth
               </TableHead>
             )}

@@ -183,7 +183,8 @@ export const masterContactsApi = {
     list: async () =>
       (
         await axiosClient.get<{ data: any[] }>(
-          '/master/master-contacts/address/organizations/dropdown',
+          '/master/master-contacts/individuals/common/dropdown',
+          { params: { type: 'O' } },
         )
       ).data.data,
     create: async () => ({}) as any,
