@@ -283,13 +283,6 @@ export default function IndividualContactsPage() {
       disabled: isAdding || isEditMode,
     },
     {
-      icon: Eye,
-      label: 'View',
-      variant: 'secondary',
-      onClick: handleView,
-      disabled: !selectedInd || isAdding || isEditMode,
-    },
-    {
       icon: Edit,
       label: 'Edit',
       variant: 'secondary',
@@ -406,6 +399,13 @@ export default function IndividualContactsPage() {
               pageSize={pageSize}
               selectedIndividual={selectedInd}
               onSelectIndividual={handleSelectIndividual}
+              onDoubleClickIndividual={(ind) => {
+                setSelectedInd(ind);
+                setFormData(ind);
+                setIsEditMode(false);
+                setIsAdding(false);
+                setActiveTab('individual');
+              }}
               search={search}
               onSearchChange={setSearch}
               isLoading={indList.isLoading}
