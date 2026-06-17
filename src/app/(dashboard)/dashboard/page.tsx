@@ -6,9 +6,9 @@ import { CheckCircle } from 'lucide-react';
 
 export default function Dashboard() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-neutral-100/50 p-6 dark:bg-neutral-950/50">
-      <div className="flex max-w-2xl flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-        <h2 className="mb-2 text-lg font-semibold text-neutral-900 dark:text-neutral-50">
+    <main className="bg-background relative min-h-screen overflow-hidden p-6">
+      <div className="border-border bg-card flex max-w-2xl flex-col gap-4 rounded-xl border p-6 shadow-sm">
+        <h2 className="text-foreground mb-2 text-lg font-semibold">
           Custom Sonner Notification Test Center
         </h2>
 
@@ -20,12 +20,10 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 p-1">
                   <CheckCircle className="h-5 w-5 shrink-0 text-green-500" />
                   <div className="flex flex-col text-left">
-                    <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+                    <span className="text-foreground text-sm font-semibold">
                       Payment successful
                     </span>
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                      Transaction ID: 78912364
-                    </span>
+                    <span className="text-muted-foreground text-xs">Transaction ID: 78912364</span>
                   </div>
                 </div>,
               );

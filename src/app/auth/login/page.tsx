@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth-store';
 import { useBooks } from '@/modules/auth/hooks/use-books';
+import axiosClient, { extractAxiosErrorMessage } from '@/lib/axios';
+import { userRightApi } from '@/modules/user-right/services';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -28,12 +30,12 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { hrmsRadiusClassName } from '@/modules/hrms/components/hrms-styles';
+import { clonePageVaryPathWithNewSearchParams } from 'next/dist/client/components/segment-cache/vary-path';
 
 // Fallback translations matching i18next languages in the app (en, ar, hi)
 const LOCALES = {
   en: {
-    welcomeBack: 'Welcome Back',
-    signInToText: 'Sign in to your Tionix One console to manage your enterprise operations.',
+    companyName: 'Tionix One',
     usernameOrEmail: 'Username or Email',
     password: 'Password',
     book: 'Business Book',
@@ -43,8 +45,7 @@ const LOCALES = {
     signIn: 'Sign In',
     signingIn: 'Signing In...',
     licenseTitle: 'Licensed Environment',
-    licenseText:
-      'This server is registered and authorized for corporate operations by Falcon Material Handling FZ LLC.',
+    licenseText: 'Powered by Tionix Solutions Pvt Ltd',
     systemStatus: 'System Status: Online',
     usernamePlaceholder: 'Enter username or email',
     passwordPlaceholder: 'Enter your password',
@@ -52,12 +53,9 @@ const LOCALES = {
     invalidUser: 'Username or email is required',
     invalidPass: 'Password must be at least 4 characters',
     invalidBook: 'Please select a book name',
-    unauthorizedAccessWarning:
-      'Authorized access only. All connection attempts, sessions, and activity logs are tracked for security audits.',
   },
   ar: {
-    welcomeBack: 'مرحباً بعودتك',
-    signInToText: 'قم بتسجيل الدخول إلى وحدة تحكم Tionix One لإدارة عمليات مؤسستك.',
+    companyName: 'Tionix One',
     usernameOrEmail: 'اسم المستخدم أو البريد الإلكتروني',
     password: 'كلمة المرور',
     book: 'الدفتر التجاري',
@@ -67,8 +65,7 @@ const LOCALES = {
     signIn: 'تسجيل الدخول',
     signingIn: 'جاري تسجيل الدخول...',
     licenseTitle: 'البيئة المرخصة',
-    licenseText:
-      'هذا الخادم مسجل ومصرح به للعمليات المؤسسية من قبل شركة فالكون للمناولة المادية ش.م.ح.',
+    licenseText: 'Powered by Tionix Solutions Pvt Ltd',
     systemStatus: 'حالة النظام: متصل',
     usernamePlaceholder: 'أدخل اسم المستخدم أو البريد الإلكتروني',
     passwordPlaceholder: 'أدخل كلمة المرور الخاصة بك',
@@ -76,12 +73,9 @@ const LOCALES = {
     invalidUser: 'اسم المستخدم أو البريد الإلكتروني مطلوب',
     invalidPass: 'يجب أن تتكون كلمة المرور من 4 أحرف على الأقل',
     invalidBook: 'يرجى اختيار اسم الدفتر',
-    unauthorizedAccessWarning:
-      'الدخول المصرح به فقط. يتم تتبع جميع محاولات الاتصال والجلسات وسجلات النشاط لتدقيق الأمن.',
   },
   hi: {
-    welcomeBack: 'वापसी पर स्वागत है',
-    signInToText: 'अपने उद्यम संचालन को प्रबंधित करने के लिए टियोनिक्स वन कंसोल में साइन इन करें।',
+    companyName: 'Tionix One',
     usernameOrEmail: 'उपयोगकर्ता नाम या ईमेल',
     password: 'पासवर्ड',
     book: 'व्यापार बही (Book)',
@@ -91,8 +85,7 @@ const LOCALES = {
     signIn: 'साइन इन करें',
     signingIn: 'साइन इन हो रहा है...',
     licenseTitle: 'लाइसेंस प्राप्त पर्यावरण',
-    licenseText:
-      'यह सर्वर फाल्कन मटेरियल हैंडलिंग एफजेड एलएलसी द्वारा कॉर्पोरेट संचालन के लिए पंजीकृत और अधिकृत है।',
+    licenseText: 'Powered by Tionix Solutions Pvt Ltd',
     systemStatus: 'सिस्टम स्थिति: ऑनलाइन',
     usernamePlaceholder: 'अपना उपयोगकर्ता नाम या ईमेल दर्ज करें',
     passwordPlaceholder: 'अपना पासवर्ड दर्ज करें',
@@ -100,8 +93,6 @@ const LOCALES = {
     invalidUser: 'उपयोगकर्ता नाम या ईमेल आवश्यक है',
     invalidPass: 'पासवर्ड कम से कम 4 अक्षरों का होना चाहिए',
     invalidBook: 'कृपया बही का चयन करें',
-    unauthorizedAccessWarning:
-      'केवल अधिकृत पहुँच। सुरक्षा ऑडिट के लिए सभी कनेक्शन प्रयासों, सत्रों और गतिविधि लॉग को ट्रैक किया जाता है।',
   },
 };
 
@@ -115,7 +106,7 @@ export default function LoginPage() {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [bookName, setBookName] = React.useState('');
-  
+
   // Fetch books from API
   const { data: booksResponse, isLoading: isLoadingBooks } = useBooks();
   const booksList = booksResponse?.data || [];
@@ -151,40 +142,56 @@ export default function LoginPage() {
     if (!handleValidation()) return;
 
     setIsLoading(true);
-    
+
     try {
-      // Simulate server communication latency
-      await new Promise(resolve => setTimeout(resolve, 1200));
-      
-      // Create user object for auth store
-      const user = {
-        id: '1',
-        username: username,
-        email: username.includes('@') ? username : `${username}@tionix.com`,
-        role: 'admin'
-      };
-      
-      const token = 'tionix_dummy_access_token';
-      
-      // Update auth store (this will also set localStorage)
-      login(user, token);
-      
-      // Set cookie for Next.js middleware to read
-      document.cookie = `access_token=${token}; path=/; max-age=86400`;
-      
-      // Store selected book
+      const response = await axiosClient.post('/auth/login', {
+        username,
+        password,
+        book_name: bookName,
+      });
+
+      const { access_token, refresh_token, user, role } = response.data.data;
+
+      // Save tokens first so axiosClient interceptors pick it up for the subsequent API request
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
       localStorage.setItem('selected_book', bookName);
-      
+
+      // Set cookie for Next.js middleware to read
+      document.cookie = `access_token=${access_token}; path=/; max-age=86400; SameSite=Lax`;
+
+      let userRights = null;
+      try {
+        userRights = await userRightApi.getMyUserRights();
+      } catch (err) {
+        console.error('Failed to load user rights during login:', err);
+      }
+
+      // Update auth store
+      login(
+        {
+          id: String(user.pk_user_id || user.id),
+          username: user.username,
+          email: user.email || `${user.username}@tionix.com`,
+          role: role,
+        },
+        access_token,
+        userRights,
+      );
+
       setIsLoading(false);
       setLoginSuccess(true);
-      
-      // Use Next.js router for proper navigation
+
+      // Redirect to dashboard
       setTimeout(() => {
         router.push('/dashboard');
       }, 800);
-      
-    } catch (error) {
+    } catch (error: any) {
       setIsLoading(false);
+      const errorMessage = extractAxiosErrorMessage(error);
+      setErrors({
+        username: errorMessage,
+      });
       console.error('Login error:', error);
     }
   };
@@ -201,18 +208,9 @@ export default function LoginPage() {
 
         <div className="relative z-10 mx-auto flex w-full flex-col gap-5">
           <div className="mb-2 flex flex-col items-center gap-1.5 text-center">
-            <div className="flex items-center gap-2">
-              <span className="text-brand border-brand/20 bg-brand/10 text-xxs rounded border px-2 py-0.5 font-mono font-semibold tracking-wider uppercase">
-                Tionix One
-              </span>
-              <span className="bg-muted text-muted-foreground border-border/50 scale-90 rounded border px-1.5 py-0.5 font-mono text-[9px] tracking-tight">
-                v2026.01
-              </span>
-            </div>
             <h3 className="text-foreground mt-2 text-xl font-bold tracking-tight">
-              {t.welcomeBack}
+              {bookName || t.companyName}
             </h3>
-            <p className="text-muted-foreground max-w-xs text-xs">{t.signInToText}</p>
           </div>
 
           {/* Error notifications */}
@@ -285,9 +283,8 @@ export default function LoginPage() {
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShowPassword(!showPassword)}
-                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
-                  isRtl ? 'left-3' : 'right-3'
-                }`}
+                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${isRtl ? 'left-3' : 'right-3'
+                  }`}
                 style={{
                   top: errors.password ? 'calc(50% - 9px)' : '50%',
                   transform: 'translateY(-10%)',
@@ -319,22 +316,27 @@ export default function LoginPage() {
                 >
                   <SelectTrigger
                     id="book"
-                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
-                      isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                    } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
+                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                      } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
-                    <SelectValue placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder} defaultValue="FALCON MATERIAL HANDLING FZ LLC" />
+                    <SelectValue
+                      placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder}
+                      defaultValue="FALCON MATERIAL HANDLING FZ LLC"
+                    />
                   </SelectTrigger>
-                  <SelectContent className="border-border bg-popover rounded-sm border p-0 shadow-md"
-                    position='popper'
+                  <SelectContent
+                    className="border-border bg-popover rounded-sm border p-0 shadow-md"
+                    position="popper"
                   >
                     {booksList.map((b) => (
-                      <SelectItem key={b.pk_book_id.trim()} value={b.book_name}>
+                      <SelectItem key={String(b.pk_book_id)} value={b.book_name}>
                         {b.book_name}
                       </SelectItem>
                     ))}
                     {booksList.length === 0 && !isLoadingBooks && (
-                       <SelectItem value="none" disabled>No books available</SelectItem>
+                      <SelectItem value="none" disabled>
+                        No books available
+                      </SelectItem>
                     )}
                   </SelectContent>
                 </Select>
@@ -384,9 +386,7 @@ export default function LoginPage() {
 
           <div className="border-border/30 border-t pt-4 text-center">
             <p className="text-muted-foreground/60 text-[9px] leading-relaxed">{t.licenseText}</p>
-            <p className="text-muted-foreground/40 mt-1 text-[9px] leading-relaxed">
-              {t.unauthorizedAccessWarning}
-            </p>
+            <p className="text-muted-foreground/40 mt-1 text-[9px] leading-relaxed"></p>
           </div>
         </div>
       </div>

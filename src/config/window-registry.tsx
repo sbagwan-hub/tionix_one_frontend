@@ -22,6 +22,16 @@ import { RelationshipWindow } from '@/modules/master-contacts/components/Relatio
 import { TitleWindow } from '@/modules/master-contacts/components/TitleWindow';
 import { CityWindow } from '@/modules/master-contacts/components/CityWindow';
 import { AddressWindow } from '@/modules/master-contacts/components/AddressWindow';
+import { ModeOfContactWindow } from '@/modules/master-contacts/components/ModeOfContactWindow';
+import { StateWindow } from '@/modules/master-contacts/components/StateWindow';
+import { RegionWindow } from '@/modules/master-contacts/components/RegionWindow';
+
+import { SkintoneWindow } from '@/modules/master-salary/components/SkintoneWindow';
+import { CasteWindow } from '@/modules/master-salary/components/CasteWindow';
+import { ReligionWindow } from '@/modules/master-salary/components/ReligionWindow';
+import { ScheduleTypeWindow } from '@/modules/master-salary/components/ScheduleTypeWindow';
+import { NatureOfWorkWindow } from '@/modules/master-salary/components/NatureOfWorkWindow';
+import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSectionWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -87,5 +97,79 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-48 left-64 w-full max-w-2xl',
     component: AddressWindow,
+  },
+
+  // Salary Setup Windows
+  'salary-skintone': {
+    id: 'salary-skintone',
+    title: 'Skintones',
+    icon: <Settings className="h-4 w-4 text-emerald-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-2xl',
+    component: SkintoneWindow,
+  },
+  'salary-caste': {
+    id: 'salary-caste',
+    title: 'Castes/sub-caste',
+    icon: <Settings className="h-4 w-4 text-orange-500" />,
+    isMinimizable: true,
+    className: 'absolute top-24 left-16 w-full max-w-2xl',
+    component: CasteWindow,
+  },
+  'salary-religion': {
+    id: 'salary-religion',
+    title: 'Religions',
+    icon: <Settings className="h-4 w-4 text-amber-500" />,
+    isMinimizable: true,
+    className: 'absolute top-28 left-24 w-full max-w-2xl',
+    component: ReligionWindow,
+  },
+  'salary-schedule-type': {
+    id: 'salary-schedule-type',
+    title: 'Schedule Types',
+    icon: <Settings className="h-4 w-4 text-cyan-500" />,
+    isMinimizable: true,
+    className: 'absolute top-32 left-32 w-full max-w-2xl',
+    component: ScheduleTypeWindow,
+  },
+  'salary-nature-of-work': {
+    id: 'salary-nature-of-work',
+    title: 'Nature of Work',
+    icon: <Settings className="h-4 w-4 text-violet-500" />,
+    isMinimizable: true,
+    className: 'absolute top-36 left-40 w-full max-w-2xl',
+    component: NatureOfWorkWindow,
+  },
+  'salary-sal-it-section': {
+    id: 'salary-sal-it-section',
+    title: 'Income Tax Sections',
+    icon: <Settings className="h-4 w-4 text-rose-500" />,
+    isMinimizable: true,
+    className: 'absolute top-40 left-48 w-full max-w-2xl',
+    component: SalItSectionWindow,
+  },
+  'contacts-mode-of-contact': {
+    id: 'contacts-mode-of-contact',
+    title: 'Modes of Contact',
+    icon: <Settings className="h-4 w-4 text-violet-500" />,
+    isMinimizable: true,
+    className: 'absolute top-52 left-72 w-full max-w-2xl',
+    component: ModeOfContactWindow,
+  },
+  'contacts-state': {
+    id: 'contacts-state',
+    title: 'States',
+    icon: <Settings className="h-4 w-4 text-indigo-500" />,
+    isMinimizable: true,
+    className: 'absolute top-56 left-80 w-full max-w-2xl',
+    component: StateWindow,
+  },
+  'contacts-region': {
+    id: 'contacts-region',
+    title: 'Area\\Region\\Shipping Location',
+    icon: <Settings className="h-4 w-4 text-orange-500" />,
+    isMinimizable: true,
+    className: 'absolute top-60 left-88 w-full max-w-2xl',
+    component: RegionWindow,
   },
 };

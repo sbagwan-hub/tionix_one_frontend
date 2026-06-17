@@ -1,16 +1,27 @@
 import { toast as baseToast } from 'sonner';
-import { CheckCircle, AlertCircle, Info, AlertTriangle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle2, AlertOctagon, Info, AlertTriangle, Loader2, X } from 'lucide-react';
 import React from 'react';
 
 // Wrapper options
 type ToastOptions = {
   description?: React.ReactNode;
   duration?: number;
+  id?: string | number;
 };
+
+// Base close button component
+const CloseButton = ({ id }: { id: string | number }) => (
+  <button
+    onClick={() => baseToast.dismiss(id)}
+    className="text-muted-foreground/50 hover:text-foreground hover:bg-muted/80 shrink-0 rounded-md p-1 transition-all duration-150"
+    aria-label="Close toast"
+  >
+    <X className="h-3.5 w-3.5" />
+  </button>
+);
 
 // Base / default / custom toast
 export const toast = (message: React.ReactNode | string, options?: ToastOptions) => {
-  // If it's a direct React component, let sonner render it
   if (React.isValidElement(message)) {
     const { description, ...baseOptions } = options || {};
     return baseToast(message, baseOptions);
@@ -18,20 +29,20 @@ export const toast = (message: React.ReactNode | string, options?: ToastOptions)
 
   const { description, ...baseOptions } = options || {};
 
-  // Render a custom layout by default
   return baseToast.custom(
     (id) => (
-      <div className="bg-popover/95 border-border flex w-full max-w-sm items-start gap-3 rounded-xl border p-4 shadow-lg backdrop-blur-md transition-all duration-300">
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground text-sm font-medium">{message}</span>
-          {description && <span className="text-muted-foreground mt-1 text-xs">{description}</span>}
+      <div className="bg-popover border-border/60 flex w-full max-w-sm items-start gap-3 rounded-lg border p-3.5 shadow-md transition-all duration-200 hover:shadow-lg">
+        <div className="flex flex-1 flex-col justify-center">
+          <span className="text-foreground text-xs leading-snug font-medium tracking-tight">
+            {message}
+          </span>
+          {description && (
+            <span className="text-muted-foreground/80 mt-0.5 text-[11px] leading-relaxed">
+              {description}
+            </span>
+          )}
         </div>
-        <button
-          onClick={() => baseToast.dismiss(id)}
-          className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-        >
-          Dismiss
-        </button>
+        <CloseButton id={id} />
       </div>
     ),
     baseOptions,
@@ -43,18 +54,19 @@ toast.success = (message: string, options?: ToastOptions) => {
   const { description, ...baseOptions } = options || {};
   return baseToast.custom(
     (id) => (
-      <div className="bg-popover/95 flex w-full max-w-sm items-start gap-3 rounded-xl border border-emerald-500/30 p-4 shadow-lg backdrop-blur-md transition-all duration-300">
-        <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground text-sm font-semibold">{message}</span>
-          {description && <span className="text-muted-foreground mt-1 text-xs">{description}</span>}
+      <div className="bg-popover border-border/60 flex w-full max-w-sm items-start gap-3 rounded-lg border p-3.5 shadow-md transition-all duration-200 hover:shadow-lg">
+        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+        <div className="flex flex-1 flex-col justify-center">
+          <span className="text-foreground text-xs leading-snug font-semibold tracking-tight">
+            {message}
+          </span>
+          {description && (
+            <span className="text-muted-foreground/80 mt-0.5 text-[11px] leading-relaxed">
+              {description}
+            </span>
+          )}
         </div>
-        <button
-          onClick={() => baseToast.dismiss(id)}
-          className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-        >
-          Dismiss
-        </button>
+        <CloseButton id={id} />
       </div>
     ),
     baseOptions,
@@ -66,18 +78,19 @@ toast.error = (message: string, options?: ToastOptions) => {
   const { description, ...baseOptions } = options || {};
   return baseToast.custom(
     (id) => (
-      <div className="bg-popover/95 border-destructive/30 flex w-full max-w-sm items-start gap-3 rounded-xl border p-4 shadow-lg backdrop-blur-md transition-all duration-300">
-        <XCircle className="text-destructive mt-0.5 h-5 w-5 shrink-0" />
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground text-sm font-semibold">{message}</span>
-          {description && <span className="text-muted-foreground mt-1 text-xs">{description}</span>}
+      <div className="bg-popover border-border/60 flex w-full max-w-sm items-start gap-3 rounded-lg border p-3.5 shadow-md transition-all duration-200 hover:shadow-lg">
+        <AlertOctagon className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
+        <div className="flex flex-1 flex-col justify-center">
+          <span className="text-foreground text-xs leading-snug font-semibold tracking-tight">
+            {message}
+          </span>
+          {description && (
+            <span className="text-muted-foreground/80 mt-0.5 text-[11px] leading-relaxed">
+              {description}
+            </span>
+          )}
         </div>
-        <button
-          onClick={() => baseToast.dismiss(id)}
-          className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-        >
-          Dismiss
-        </button>
+        <CloseButton id={id} />
       </div>
     ),
     baseOptions,
@@ -89,18 +102,19 @@ toast.info = (message: string, options?: ToastOptions) => {
   const { description, ...baseOptions } = options || {};
   return baseToast.custom(
     (id) => (
-      <div className="bg-popover/95 flex w-full max-w-sm items-start gap-3 rounded-xl border border-blue-500/30 p-4 shadow-lg backdrop-blur-md transition-all duration-300">
-        <Info className="mt-0.5 h-5 w-5 shrink-0 text-blue-500" />
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground text-sm font-semibold">{message}</span>
-          {description && <span className="text-muted-foreground mt-1 text-xs">{description}</span>}
+      <div className="bg-popover border-border/60 flex w-full max-w-sm items-start gap-3 rounded-lg border p-3.5 shadow-md transition-all duration-200 hover:shadow-lg">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+        <div className="flex flex-1 flex-col justify-center">
+          <span className="text-foreground text-xs leading-snug font-semibold tracking-tight">
+            {message}
+          </span>
+          {description && (
+            <span className="text-muted-foreground/80 mt-0.5 text-[11px] leading-relaxed">
+              {description}
+            </span>
+          )}
         </div>
-        <button
-          onClick={() => baseToast.dismiss(id)}
-          className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-        >
-          Dismiss
-        </button>
+        <CloseButton id={id} />
       </div>
     ),
     baseOptions,
@@ -112,18 +126,19 @@ toast.warning = (message: string, options?: ToastOptions) => {
   const { description, ...baseOptions } = options || {};
   return baseToast.custom(
     (id) => (
-      <div className="bg-popover/95 flex w-full max-w-sm items-start gap-3 rounded-xl border border-amber-500/30 p-4 shadow-lg backdrop-blur-md transition-all duration-300">
-        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground text-sm font-semibold">{message}</span>
-          {description && <span className="text-muted-foreground mt-1 text-xs">{description}</span>}
+      <div className="bg-popover border-border/60 flex w-full max-w-sm items-start gap-3 rounded-lg border p-3.5 shadow-md transition-all duration-200 hover:shadow-lg">
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+        <div className="flex flex-1 flex-col justify-center">
+          <span className="text-foreground text-xs leading-snug font-semibold tracking-tight">
+            {message}
+          </span>
+          {description && (
+            <span className="text-muted-foreground/80 mt-0.5 text-[11px] leading-relaxed">
+              {description}
+            </span>
+          )}
         </div>
-        <button
-          onClick={() => baseToast.dismiss(id)}
-          className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-        >
-          Dismiss
-        </button>
+        <CloseButton id={id} />
       </div>
     ),
     baseOptions,
@@ -135,11 +150,17 @@ toast.loading = (message: string, options?: ToastOptions) => {
   const { description, ...baseOptions } = options || {};
   return baseToast.custom(
     (id) => (
-      <div className="bg-popover/95 border-border flex w-full max-w-sm items-start gap-3 rounded-xl border p-4 shadow-lg backdrop-blur-md transition-all duration-300">
-        <Loader2 className="text-muted-foreground mt-0.5 h-5 w-5 shrink-0 animate-spin" />
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground text-sm font-semibold">{message}</span>
-          {description && <span className="text-muted-foreground mt-1 text-xs">{description}</span>}
+      <div className="bg-popover border-border/60 flex w-full max-w-sm items-start gap-3 rounded-lg border p-3.5 shadow-md">
+        <Loader2 className="text-primary mt-0.5 h-4 w-4 shrink-0 animate-spin" />
+        <div className="flex flex-1 flex-col justify-center">
+          <span className="text-foreground text-xs leading-snug font-semibold tracking-tight">
+            {message}
+          </span>
+          {description && (
+            <span className="text-muted-foreground/80 mt-0.5 text-[11px] leading-relaxed">
+              {description}
+            </span>
+          )}
         </div>
       </div>
     ),

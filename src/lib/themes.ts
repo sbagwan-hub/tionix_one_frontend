@@ -4,7 +4,9 @@ export type ThemeName =
   | 'orange-light'
   | 'orange-dark'
   | 'emerald-teal-light'
-  | 'emerald-teal-dark';
+  | 'emerald-teal-dark'
+  | 'purblue-light'
+  | 'purblue-dark';
 
 export const themes: Record<ThemeName, { name: string; colors: Record<string, string> }> = {
   light: {
@@ -163,6 +165,58 @@ export const themes: Record<ThemeName, { name: string; colors: Record<string, st
       'brand-muted': 'oklch(0.269 0 0)',
     },
   },
+  'purblue-light': {
+    name: 'Purblue',
+    colors: {
+      background: 'oklch(1 0 0)',
+      foreground: 'oklch(0.145 0 0)',
+      card: 'oklch(1 0 0)',
+      'card-foreground': 'oklch(0.145 0 0)',
+      popover: 'oklch(1 0 0)',
+      'popover-foreground': 'oklch(0.145 0 0)',
+      primary: 'oklch(0.56 0.23 280)',
+      'primary-foreground': 'oklch(0.98 0.01 280)',
+      secondary: '#f5f3ff',
+      'secondary-foreground': '#6d28d9',
+      muted: 'oklch(0.97 0 0)',
+      'muted-foreground': 'oklch(0.556 0 0)',
+      accent: 'oklch(0.97 0 0)',
+      'accent-foreground': 'oklch(0.205 0 0)',
+      destructive: 'oklch(0.577 0.245 27.325)',
+      'destructive-foreground': 'oklch(1 0 0)',
+      border: 'oklch(0.922 0 0)',
+      input: 'oklch(0.922 0 0)',
+      ring: 'oklch(0.708 0 0)',
+      brand: 'oklch(0.56 0.23 280)',
+      'brand-muted': 'oklch(0.97 0 0)',
+    },
+  },
+  'purblue-dark': {
+    name: 'Purblue Dark',
+    colors: {
+      background: 'oklch(0.145 0 0)',
+      foreground: 'oklch(0.985 0 0)',
+      card: 'oklch(0.205 0 0)',
+      'card-foreground': 'oklch(0.985 0 0)',
+      popover: 'oklch(0.205 0 0)',
+      'popover-foreground': 'oklch(0.985 0 0)',
+      primary: 'oklch(0.56 0.23 280)',
+      'primary-foreground': 'oklch(0.98 0.01 280)',
+      secondary: '#2e1065',
+      'secondary-foreground': '#ddd6fe',
+      muted: 'oklch(0.269 0 0)',
+      'muted-foreground': 'oklch(0.708 0 0)',
+      accent: 'oklch(0.269 0 0)',
+      'accent-foreground': 'oklch(0.985 0 0)',
+      destructive: 'oklch(0.704 0.191 22.216)',
+      'destructive-foreground': 'oklch(0.985 0 0)',
+      border: 'oklch(1 0 0 / 10%)',
+      input: 'oklch(1 0 0 / 15%)',
+      ring: 'oklch(0.556 0 0)',
+      brand: 'oklch(0.56 0.23 280)',
+      'brand-muted': 'oklch(0.269 0 0)',
+    },
+  },
 };
 
 export const themeList: ThemeName[] = [
@@ -172,4 +226,6 @@ export const themeList: ThemeName[] = [
   'orange-dark',
   'emerald-teal-light',
   'emerald-teal-dark',
+  'purblue-light',
+  'purblue-dark',
 ];

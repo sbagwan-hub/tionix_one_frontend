@@ -30,6 +30,12 @@ export const menuItems: MenuItem[] = [
         permissions: ['user:read'],
       },
       {
+        id: 'employees',
+        label: 'Employees',
+        href: '/masters/employees',
+        permissions: ['employee:read'],
+      },
+      {
         id: 'companies',
         label: 'Companies',
         href: '/masters/companies',

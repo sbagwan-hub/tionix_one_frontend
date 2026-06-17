@@ -35,6 +35,12 @@
   "productCategory": "فئة المنتج (Product Category)",
   "department": "القسم (Department)",
   "designation": "المسمى الوظيفي (Designation)",
+  "modeOfContact": "طريقة الاتصال (Mode of Contact)",
+  "state": "الولاية",
+  "modeOf": "طريقة",
+  "region": "المنطقة",
+  "individual": "فردي",
+  "individuals": "أفراد",
 
   "theme": "الثيم",
   "preferences": "التفضيلات",

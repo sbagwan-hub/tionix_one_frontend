@@ -70,29 +70,49 @@ function ListItemRow({ item, isSelected, isEven, onClick }: ListItemRowProps) {
     <div
       onClick={onClick}
       className={cn(
-        'group border-border/30 flex h-8 cursor-pointer items-center justify-between gap-2 border-b px-3 transition-colors',
-        !isSelected && isEven && 'bg-muted/10',
+        'group border-border/20 flex h-9 cursor-pointer items-center justify-between gap-2 border-b px-3 transition-all duration-200',
+        !isSelected && isEven && 'bg-muted/5',
         !isSelected && !isEven && 'bg-transparent',
-        'hover:bg-muted/40',
+        'hover:bg-muted/20 hover:pl-5',
         isSelected &&
-          'border-b-blue-500/20 bg-blue-500/10 font-medium text-blue-600 dark:text-blue-400',
+          'border-b-primary/20 bg-primary/5 dark:bg-primary/10 text-primary border-l-primary border-l-2 pl-5 font-medium',
       )}
     >
-      <div className="flex min-w-0 items-center gap-2">
+      <div className="flex min-w-0 items-center gap-2.5">
         <div
           className={cn(
-            'h-1.5 w-1.5 shrink-0 rounded-full',
-            isSelected ? 'bg-blue-500' : 'group-hover:bg-foreground/30 bg-transparent',
+            'h-1.5 w-1.5 shrink-0 rounded-full transition-all duration-200',
+            isSelected ? 'bg-primary scale-125' : 'group-hover:bg-foreground/30 bg-transparent',
           )}
         />
         <span
           className={cn(
-            'truncate text-xs tracking-tight',
-            isSelected ? 'font-semibold text-blue-600 dark:text-blue-400' : 'text-foreground',
+            'truncate text-xs tracking-tight transition-colors duration-200',
+            isSelected
+              ? 'text-primary font-semibold'
+              : 'text-foreground/80 group-hover:text-foreground',
           )}
         >
           {item.label}
         </span>
+      </div>
+
+      {/* Subtle chevron arrow on the right side */}
+      <div
+        className={cn(
+          'text-muted-foreground/30 opacity-0 transition-all duration-200 group-hover:opacity-100',
+          isSelected && 'text-primary/70 opacity-100',
+        )}
+      >
+        <svg
+          className="h-3.5 w-3.5 transform transition-transform group-hover:translate-x-0.5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
       </div>
     </div>
   );
@@ -228,52 +248,51 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
         <Toolbar
           title={toolbarTitle}
           actions={toolbarActions}
-          className="border-foreground/15 bg-card mb-0 shrink-0 rounded-sm"
+          className="border-foreground/15 bg-card mb-0 shrink-0"
         />
 
         {/* ── Redesigned Interior Area ── */}
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="border-border/60 bg-card flex min-h-0 flex-1 flex-col overflow-hidden rounded-sm border shadow-sm dark:bg-zinc-900/10"
+          className="bg-card border-border/60 flex min-h-0 flex-1 flex-col overflow-hidden rounded-sm border shadow-md dark:bg-zinc-900/5"
         >
-          {/* Segmented Sub-Header Selection instead of full width matrix grids */}
-          <div className="bg-muted/20 border-border/40 flex h-12 shrink-0 items-center justify-between border-b px-2">
-            <TabsList className="bg-primary/15 flex h-auto w-auto items-center gap-1 rounded-none p-0">
-              <TabsTrigger
-                value="title"
-                className={cn(
-                  'text-foreground flex h-8 cursor-pointer items-center gap-1.5 rounded-sm border border-transparent px-2.5 text-[11px] font-medium tracking-tight transition-all',
-                  'hover:text-foreground data-[state=active]:border-border/50 data-[state=active]:text-background data-[state=active]:bg-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-zinc-900',
-                )}
-              >
-                <FileText className="h-3 w-3 shrink-0 opacity-70" />
-                {titleTabLabel}
-              </TabsTrigger>
-              <TabsTrigger
-                value="list"
-                className={cn(
-                  'text-foreground flex h-8 cursor-pointer items-center gap-1.5 rounded-sm border border-transparent px-2.5 text-[11px] font-medium tracking-tight transition-all',
-                  'hover:text-foreground data-[state=active]:border-border/50 data-[state=active]:text-background data-[state=active]:bg-primary data-[state=active]:shadow-none dark:data-[state=active]:bg-zinc-900',
-                )}
-              >
-                <List className="h-3 w-3 shrink-0 opacity-70" />
-                {listTabLabel}
-                {items.length > 0 && (
-                  <span className="bg-muted text-foreground border-border/40 ml-1 inline-flex h-3.5 min-w-3.5 items-center justify-center rounded border px-1 font-mono text-[9px]">
-                    {items.length}
-                  </span>
-                )}
-              </TabsTrigger>
-            </TabsList>
+          {/* Modernized Inline-Segmented Sub-Header Navigation */}
+          <div className="border-border/30 bg-muted/15 border-b p-1">
+            <div className="relative w-[40%]">
+              <TabsList className="border-border/10 relative flex h-auto w-full list-none rounded-sm border bg-slate-100 p-1 select-none dark:bg-zinc-900/60">
+                <TabsTrigger
+                  value="title"
+                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-0 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
+                >
+                  <FileText className="h-3.5 w-3.5 shrink-0 opacity-70" />
+                  <span>{titleTabLabel}</span>
+                </TabsTrigger>
+
+                <TabsTrigger
+                  value="list"
+                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-0 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
+                >
+                  <List className="h-3.5 w-3.5 shrink-0 opacity-70" />
+                  <span>{listTabLabel}</span>
+                  {items.length > 0 && (
+                    <span className="bg-primary/10 text-primary border-primary/10 ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border px-1 font-mono text-[9px] font-bold">
+                      {items.length}
+                    </span>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+            </div>
           </div>
 
-          {/* ── Redesigned Title Tab Area ── */}
+          {/* Redesigned Title Form Area Content Layer */}
           <TabsContent
             value="title"
-            className="mt-0 flex-1 overflow-y-auto bg-white/50 p-6 data-[state=inactive]:hidden dark:bg-zinc-950/20"
+            className={cn(
+              'bg-card mt-0 flex-1 overflow-y-auto p-4 transition-all focus-visible:ring-0 focus-visible:outline-none',
+            )}
           >
-            <div className="w-full max-w-full">
+            <div className="w-full">
               {formContent ? (
                 formContent
               ) : (
@@ -283,35 +302,50 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
                   value={internalValue}
                   onChange={handleInputChange}
                   placeholder={placeholder}
-                  className="bg-background border-border/60 rounded-sm shadow-none"
+                  className="bg-background border-border/80 focus-visible:ring-primary rounded-md"
                 />
               )}
             </div>
           </TabsContent>
 
-          {/* ── Redesigned List Tab Area ── */}
+          {/* Redesigned Directory Directory List Content Area */}
           <TabsContent
             value="list"
-            className="mt-0 flex-1 overflow-y-auto bg-white/50 data-[state=inactive]:hidden dark:bg-zinc-950/20"
+            className="bg-card mt-0 flex-1 overflow-y-auto focus-visible:ring-0 focus-visible:outline-none"
           >
             {items?.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center gap-1 p-4 text-center">
-                <p className="text-foreground text-xs font-semibold">No structural entries</p>
-                <p className="text-foreground text-[11px]">
-                  Click Add on the editor window to configure one.
-                </p>
+              <div className="flex h-full min-h-[180px] flex-col items-center justify-center gap-2 p-6 text-center select-none">
+                <div className="bg-muted border-border/40 rounded-full border p-3">
+                  <List className="text-muted-foreground/60 h-5 w-5" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-foreground/90 text-sm font-semibold">No structural entries</p>
+                  <p className="text-muted-foreground mx-auto max-w-xs text-xs leading-normal">
+                    Click &quot;Add New&quot; or toggle the editor task block above to configure
+                    your system master rules parameters.
+                  </p>
+                </div>
               </div>
             ) : (
               <div className="flex flex-col">
-                {items?.map((item, index) => (
-                  <ListItemRow
-                    key={item.id}
-                    item={item}
-                    isSelected={selectedItemId === item.id}
-                    isEven={index % 2 === 0}
-                    onClick={() => setSelectedItemId(item.id)}
-                  />
-                ))}
+                {/* Table Column Visual Anchor Header */}
+                <div className="bg-muted/40 border-border/40 text-muted-foreground/90 flex h-8 items-center justify-between border-b px-4 text-[10px] font-bold tracking-wider uppercase">
+                  <span>Configuration Record Identifier</span>
+                  <span className="text-right">Action Target</span>
+                </div>
+
+                {/* Interactive Data List Rows Stack */}
+                <div className="divide-border/10 flex flex-col divide-y">
+                  {items.map((item, index) => (
+                    <ListItemRow
+                      key={item.id}
+                      item={item}
+                      isSelected={selectedItemId === item.id}
+                      isEven={index % 2 === 0}
+                      onClick={() => setSelectedItemId(item.id)}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </TabsContent>

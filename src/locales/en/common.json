@@ -38,7 +38,13 @@
   "titles": "Titles",
   "city": "Cities",
   "address": "Addresses",
+  "modeOfContact": "Mode of Contact",
+  "state": "State",
+  "modeOf": "Mode of",
+  "region": "Region",
   "Contacts": "Contacts",
+  "individual": "Individual",
+  "individuals": "Individuals",
 
   "theme": "Theme",
   "preferences": "Preferences",

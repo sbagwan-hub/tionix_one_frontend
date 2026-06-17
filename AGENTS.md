@@ -108,6 +108,25 @@ To maintain perfect alignment with the backend and PostgreSQL database columns:
 - **Primary Keys**: Always use `pk_user_id` (fully lowercase snake_case). Do not use camelCase `pkUserid` or `pkUserId`.
 - **Properties/Variables Matching Database Columns**: Ensure that all frontend module types and variable property names exactly match their database column counterparts (e.g., `fk_set_id`, `fk_prod_id`, `id`, `form`, `rights`). Avoid converting database property names to camelCase on the frontend.
 
+### F. Code Splitting & File Length Limits
+
+To maintain codebase readability, testability, and maintainability:
+
+- **Max File Length**: Any component or file exceeding **300-400 lines** of code MUST be split into smaller, focused sub-components or utility modules.
+- **Form Splitting**: For complex forms, split logical form sections (e.g. General Profile, Contacts, Work Details, Login Security, Demographics, Family Relatives, Licenses/Certificates) into separate component files inside the module's `components/` directory. Pass form state and change handlers down as standard props.
+
+### G. Responsive Layout Guidelines
+
+To support a variety of viewports (desktops, tablets, and mobile devices):
+
+- **Dynamic Collapsing**: Hide non-essential layout decorations (e.g. system status, operator labels) and secondary controls on smaller viewports using Tailwind's responsive class prefixes (e.g., `hidden sm:block`, `hidden md:flex`).
+- **Mobile Navigation**: Navigation links, menus, and advanced selection dropdowns in headers/navbars must fall back to a clean mobile menu (such as a hamburger trigger or collapsible list) on touch/small screens.
+- **Viewport Scaling**: Elements should adapt seamlessly using flexible grid/flex dimensions instead of hardcoded layouts.
+
+### H. Backward Compatibility
+
+- **Regression Prevention**: Never alter or delete existing properties, component props, styling themes, state variables, or function signatures unless explicitly required. Ensure all modifications remain fully backward-compatible to avoid breaking existing working functionality in other parts of the application.
+
 ---
 
 ## 4. Codebase Analysis & Recommendations for Improvement
@@ -144,3 +163,35 @@ After auditing the current frontend codebase, here are key analysis points and r
 - **Status**: Enhancement.
 - **Issue**: Password toggling eye buttons in forms are manually positioned using relative/absolute alignments and top offsets (e.g., `style={{ top: 'calc(50% + 8px)' }}`).
 - **Recommendation**: Add a `showPasswordToggle` boolean prop inside `FormInput` (`src/components/common/form-input.tsx`) to encapsulate this layout automatically.
+
+---
+
+## 5. Security, Quality, and Compliance Requirements
+
+To ensure enterprise-readiness, the application follows strict criteria covering security, data protection, recovery, and exit readiness:
+
+### A. Security & Compliance
+
+- **ISO/IEC 27001 Compliance**: Operations, asset management, and risk treatment plans must align with ISO 27001 guidelines.
+- **SOC 2 Type II Certification**: Ensure systems maintain continuous compliance audits regarding Security, Availability, and Confidentiality.
+- **GDPR Compliance**: Support user privacy protection, consent management, and data deletion requests (right to be forgotten).
+- **Internal Security Policy Documentation**: Follow established internal security procedures, encryption, and password policies.
+- **Access Control Mechanisms**: Restrict resource access using role-based or permission-based validation before handling critical APIs.
+- **Audit Logs Capability**: Maintain secure, immutable logs tracking write, update, and delete actions for accountability.
+
+### B. Business Continuity & Disaster Recovery
+
+- **ISO 22301 Compliance**: Structural alignment with international business continuity management systems.
+- **Defined RPO and RTO**: Support defined Recovery Point Objectives (RPO) and Recovery Time Objectives (RTO).
+- **Backup Frequency and Storage Location**: Manage database backups systematically, replicating to designated secure offsite/cloud locations.
+
+### C. Quality Assurance
+
+- **ISO 9001 Compliance**: Maintain process consistency, code reviews, and testing to ensure software quality.
+
+### D. Data Portability & Vendor Lock-In Prevention
+
+- **Source Code Escrow Agreement**: Establish code escrow options where applicable.
+- **Data Export in Standard Formats (SQL/CSV/XML)**: Support data exports in open, widely accepted formats.
+- **Transition Assistance and Full Database Backup Access**: Provide tools and raw access for smooth transition offboarding.
+- **Avoidance of Proprietary Encrypted Formats without Keys**: Never lock client data behind custom encryption keys or unreadable structures.
