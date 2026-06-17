@@ -102,6 +102,7 @@ export default function IndividualContactsPage() {
     fk_ctry_id: null,
     postfix: '',
     categoryIds: [],
+    contacts: [],
   });
   const handleSelectIndividual = (ind: IndividualRecord) => {
     if (selectedInd && selectedInd.pk_ind_id === ind.pk_ind_id) {
@@ -146,6 +147,7 @@ export default function IndividualContactsPage() {
       fk_ctry_id: null,
       postfix: '',
       categoryIds: [],
+      contacts: [],
     });
     setIsEditMode(false);
     setIsAdding(false);
@@ -178,6 +180,7 @@ export default function IndividualContactsPage() {
       fk_ctry_id: null,
       postfix: '',
       categoryIds: [],
+      contacts: [],
     });
     setIsAdding(true);
     setIsEditMode(false);

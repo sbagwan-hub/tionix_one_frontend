@@ -98,7 +98,14 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
           disabled={disabled}
         />
         <PhotoSection photo={formData.photo} onInputChange={onInputChange} disabled={disabled} />
-        <ContactDetailsSection disabled={disabled} />
+        <ContactDetailsSection
+          contacts={formData.contacts || []}
+          onInputChange={onInputChange}
+          disabled={disabled}
+          defaultDepartment={
+            departments.find((d: any) => d.pk_dep_id === formData.fk_dep_id)?.department || ''
+          }
+        />
       </div>
     </div>
   );

@@ -159,6 +159,18 @@ export const individualSchema = z.object({
   fk_ctry_id: z.number().nullable().optional(),
   postfix: z.string().max(25).nullable().optional(),
   categoryIds: z.array(z.number()).optional().default([]),
+  contacts: z
+    .array(
+      z.object({
+        pk_contact_id: z.number().optional(),
+        fk_moc_id: z.number(),
+        contact: z.string().min(1, 'Contact detail is required'),
+        ext: z.string().optional().default(''),
+        department: z.string().optional().default(''),
+      }),
+    )
+    .optional()
+    .default([]),
 });
 
 export type IndividualDto = z.infer<typeof individualSchema>;
