@@ -29,21 +29,6 @@ export const NAV_MENUS: NavMenu[] = [
       },
       { separator: true },
       {
-        key: 'changeServer',
-        icon: 'Server',
-        action: () => {
-          console.log('Change server');
-        },
-      },
-      {
-        key: 'backup',
-        icon: 'Database',
-        action: () => {
-          console.log('Backup started');
-        },
-      },
-      { separator: true },
-      {
         key: 'exit',
         shortcut: '⌥ F4',
         icon: 'LogOut',
@@ -62,6 +47,11 @@ export const NAV_MENUS: NavMenu[] = [
         key: 'Contacts',
         icon: 'User',
         children: [
+          {
+            key: 'individual',
+            icon: 'UserCheck',
+            href: '/masters/contacts/individual',
+          },
           {
             key: 'titles',
             icon: 'User',
@@ -98,9 +88,24 @@ export const NAV_MENUS: NavMenu[] = [
             action: () => useWindowStore.getState().openWindow('contacts-city'),
           },
           {
+            key: 'state',
+            icon: 'Map',
+            action: () => useWindowStore.getState().openWindow('contacts-state'),
+          },
+          {
+            key: 'region',
+            icon: 'Locate',
+            action: () => useWindowStore.getState().openWindow('contacts-region'),
+          },
+          {
             key: 'address',
             icon: 'Home',
             action: () => useWindowStore.getState().openWindow('contacts-address'),
+          },
+          {
+            key: 'modeOfContact',
+            icon: 'Settings',
+            action: () => useWindowStore.getState().openWindow('contacts-mode-of-contact'),
           },
         ],
       },
@@ -167,17 +172,6 @@ export const NAV_MENUS: NavMenu[] = [
         key: 'importExport',
         href: '/import-export',
         icon: 'FileUpDown',
-      },
-    ],
-  },
-  {
-    key: 'help',
-    items: [
-      { key: 'documentation', href: '/documentation', icon: 'BookOpen' },
-      {
-        key: 'about',
-        icon: 'Info',
-        action: () => console.log('About app'),
       },
     ],
   },

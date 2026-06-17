@@ -39,7 +39,6 @@ export function GlobalWindows() {
               key={id}
               id={id}
               title={config.title}
-              icon={config.icon}
               onClose={() => closeWindow(id)}
               isMinimizable={config.isMinimizable}
               isMaximizable={config.isMaximizable}
