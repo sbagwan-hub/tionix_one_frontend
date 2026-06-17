@@ -8,6 +8,7 @@ import { AddressSection } from './form-sections/AddressSection';
 import { CategoriesSection } from './form-sections/CategoriesSection';
 import { PhotoSection } from './form-sections/PhotoSection';
 import { ContactDetailsSection } from './form-sections/ContactDetailsSection';
+import { DocumentsSection } from './form-sections/DocumentsSection';
 
 interface IndividualFormProps {
   formData: IndividualDto;
@@ -105,6 +106,11 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
           defaultDepartment={
             departments.find((d: any) => d.pk_dep_id === formData.fk_dep_id)?.department || ''
           }
+        />
+        <DocumentsSection
+          documents={formData.documents || []}
+          onInputChange={onInputChange}
+          disabled={disabled}
         />
       </div>
     </div>

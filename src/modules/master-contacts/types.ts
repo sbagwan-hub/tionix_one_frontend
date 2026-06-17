@@ -171,6 +171,17 @@ export const individualSchema = z.object({
     )
     .optional()
     .default([]),
+  documents: z
+    .array(
+      z.object({
+        pk_doc_id: z.number().optional(),
+        doc_name: z.string().min(1, 'Document description is required'),
+        file_path: z.string().min(1, 'File is required'),
+        valid_until: z.string().nullable().optional(),
+      }),
+    )
+    .optional()
+    .default([]),
 });
 
 export type IndividualDto = z.infer<typeof individualSchema>;

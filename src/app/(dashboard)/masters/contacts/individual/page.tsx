@@ -103,6 +103,7 @@ export default function IndividualContactsPage() {
     postfix: '',
     categoryIds: [],
     contacts: [],
+    documents: [],
   });
   const handleSelectIndividual = (ind: IndividualRecord) => {
     if (selectedInd && selectedInd.pk_ind_id === ind.pk_ind_id) {
@@ -148,6 +149,7 @@ export default function IndividualContactsPage() {
       postfix: '',
       categoryIds: [],
       contacts: [],
+      documents: [],
     });
     setIsEditMode(false);
     setIsAdding(false);
@@ -181,6 +183,7 @@ export default function IndividualContactsPage() {
       postfix: '',
       categoryIds: [],
       contacts: [],
+      documents: [],
     });
     setIsAdding(true);
     setIsEditMode(false);
