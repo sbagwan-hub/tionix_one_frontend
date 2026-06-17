@@ -32,6 +32,7 @@ import { UserRecord } from '@/modules/users/types';
 import { usersApi } from '@/modules/users/services';
 import { UserForm } from '@/modules/users/components/user-form';
 import { UserList } from '@/modules/users/components/user-list';
+import { DeleteDialog } from '@/components/common/delete-dialog';
 
 export default function AdministratorUsersPage() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export default function AdministratorUsersPage() {
   const [selectedUser, setSelectedUser] = React.useState<UserRecord | null>(null);
   const [isEditMode, setIsEditMode] = React.useState(false);
   const [isAdding, setIsAdding] = React.useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
 
   // Pagination & Filtering state
   const [search, setSearch] = React.useState('');
@@ -229,10 +231,12 @@ export default function AdministratorUsersPage() {
       toast.error('Please select a user to delete');
       return;
     }
+    setIsConfirmOpen(true);
+  };
 
-    if (confirm(`Are you sure you want to delete user "${selectedUser.username}"?`)) {
-      deleteUserMutation.mutate(selectedUser.pk_user_id);
-    }
+  const handleConfirmDelete = () => {
+    if (!selectedUser) return;
+    deleteUserMutation.mutate(selectedUser.pk_user_id);
   };
 
   const handleExport = async () => {
@@ -277,6 +281,7 @@ export default function AdministratorUsersPage() {
       {/* ── Action Toolbar ── */}
       <div className="mt-2 w-full">
         <Toolbar
+          title={t('user')}
           actions={[
             {
               icon: Plus,
@@ -328,7 +333,7 @@ export default function AdministratorUsersPage() {
           <div className="flex flex-wrap items-center justify-between gap-2 px-6 pt-4">
             <TabsList className="h-8 rounded-sm p-0.5">
               <TabsTrigger value="user" className="h-full rounded-[2px] px-5 text-xs">
-                {t('user')}
+                {t('User')}
               </TabsTrigger>
               <TabsTrigger value="list" className="h-full rounded-[2px] px-5 text-xs">
                 {t('userList')}
@@ -447,6 +452,16 @@ export default function AdministratorUsersPage() {
           </p>
         </div>
       </div>
+
+      <DeleteDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        description="Are you sure you want to permanently delete this user account? This action cannot be undone."
+        itemName={selectedUser ? selectedUser.username : ''}
+        isDeleting={deleteUserMutation.isPending}
+      />
     </div>
   );
 }

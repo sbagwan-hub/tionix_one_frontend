@@ -35,6 +35,12 @@
   "productCategory": "उत्पाद श्रेणी (Product Category)",
   "department": "विभाग (Department)",
   "designation": "पद (Designation)",
+  "modeOfContact": "संपर्क का माध्यम (Mode of Contact)",
+  "state": "राज्य",
+  "modeOf": "का माध्यम",
+  "region": "क्षेत्र",
+  "individual": "व्यक्तिगत",
+  "individuals": "व्यक्तियों",
 
   "theme": "थीम",
   "preferences": "पसंद",

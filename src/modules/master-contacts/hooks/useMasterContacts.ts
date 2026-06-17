@@ -9,6 +9,10 @@ import {
   TitleDto,
   CityDto,
   AddressDto,
+  ModeOfContactDto,
+  ModeOfContactTypeDto,
+  StateDto,
+  RegionDto,
 } from '../types';
 
 type ResourceTypeMap = {
@@ -23,9 +27,17 @@ type ResourceTypeMap = {
   organizationsDropdown: any;
   countryDropdown: any;
   stateDropdown: any;
+  modeOfContact: ModeOfContactDto;
+  mocTypesDropdown: ModeOfContactTypeDto;
+  state: StateDto;
+  region: RegionDto;
+  genders: any;
+  maritalStatuses: any;
 };
 
-export const useMasterContacts = <T extends keyof typeof masterContactsApi>(resource: T) => {
+export const useMasterContacts = <T extends Exclude<keyof typeof masterContactsApi, 'individuals'>>(
+  resource: T,
+) => {
   const queryClient = useQueryClient();
   type DTO = ResourceTypeMap[T];
 

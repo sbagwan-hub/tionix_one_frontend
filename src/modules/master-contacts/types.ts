@@ -73,3 +73,110 @@ export const addressSchema = z.object({
   sys_defined: z.boolean().default(false),
 });
 export type AddressDto = z.infer<typeof addressSchema>;
+
+export const modeOfContactSchema = z.object({
+  pk_moc_id: z.number().int().positive().optional(),
+  moc: z.string().min(1, 'Mode of Contact name is required').max(25),
+  fk_mt_id: z.coerce.number().int().positive('Mode of Contact Type is required'),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  last_status: z.string().optional(),
+  mode: z.string().optional(),
+  username: z.string().optional(),
+});
+export type ModeOfContactDto = z.infer<typeof modeOfContactSchema>;
+
+export interface ModeOfContactTypeDto {
+  pk_mt_id: number;
+  mode: string;
+}
+
+export const stateSchema = z.object({
+  pk_state_id: z.number().int().positive().optional(),
+  state: z.string().min(1, 'State name is required').max(30),
+  fk_ctry_id: z.coerce.number().int().positive('Country is required'),
+  state_code: z.string().max(10).default(''),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  last_status: z.string().optional(),
+  country: z.string().optional(),
+  username: z.string().optional(),
+});
+export type StateDto = z.infer<typeof stateSchema>;
+
+export const regionSchema = z.object({
+  pk_reg_id: z.number().int().positive().optional(),
+  region: z.string().min(1, 'Area/Region/Shipping Location name is required').max(30),
+  rate1: z.coerce.number().min(0, 'Trip Rate must be a positive number'),
+  rate2: z.coerce.number().min(0, 'Extra Charges must be a positive number'),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  last_status: z.string().optional(),
+  username: z.string().optional(),
+});
+export type RegionDto = z.infer<typeof regionSchema>;
+
+export const individualSchema = z.object({
+  pk_ind_id: z.number().int().optional(),
+  fk_com_id: z.union([z.number(), z.string()]).default(''),
+  fk_tit_id: z.number().nullable().optional(),
+  first_name: z.string().min(1, 'First name is required').max(50),
+  middle_name: z.string().max(40).default(''),
+  surname: z.string().min(1, 'Surname is required').max(25),
+  dob: z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const birthDate = new Date(val);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age >= 18;
+      },
+      { message: 'Individual must be at least 18 years old' },
+    ),
+  photo: z.string().nullable().optional(),
+  fk_qual_id: z.number().nullable().optional(),
+  gender: z.string().default('male'),
+  marital_status: z.string().default('single'),
+  fk_org_id: z.number().nullable().optional(),
+  fk_dep_id: z.number().nullable().optional(),
+  fk_deg_id: z.number().nullable().optional(),
+  fk_spo_id: z.union([z.number(), z.string()]).nullable().optional(),
+  anniversary: z.string().nullable().optional(),
+  ext: z.string().max(10).nullable().optional(),
+  address: z.string().max(150).nullable().optional(),
+  fk_city_id: z.number().nullable().optional(),
+  region: z.string().max(50).nullable().optional(),
+  pincode: z.string().max(10).nullable().optional(),
+  fk_state_id: z.number().nullable().optional(),
+  fk_ctry_id: z.number().nullable().optional(),
+  postfix: z.string().max(25).nullable().optional(),
+});
+
+export type IndividualDto = z.infer<typeof individualSchema>;
+
+export interface IndividualRecord extends IndividualDto {
+  title?: string;
+  title_name?: string | null;
+  qualification?: string;
+  qualification_name?: string | null;
+  organization?: string;
+  organisation_name?: string | null;
+  department?: string;
+  department_name?: string | null;
+  designation?: string;
+  designation_name?: string | null;
+  city?: string;
+  city_name?: string | null;
+  state?: string;
+  state_name?: string | null;
+  country?: string;
+  country_name?: string | null;
+}
