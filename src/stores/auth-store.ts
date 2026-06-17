@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import { UserRightsOut } from '@/modules/user-right/types';
+
 // Cookie utility functions
 const setCookie = (name: string, value: string, days: number = 7) => {
   const expires = new Date();
@@ -33,9 +35,11 @@ export interface User {
 export interface AuthState {
   user: User | null;
   token: string | null;
+  userRights: UserRightsOut | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (user: User, token: string) => void;
+  login: (user: User, token: string, userRights?: UserRightsOut | null) => void;
+  setUserRights: (userRights: UserRightsOut | null) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
   initialize: () => void;
@@ -46,23 +50,30 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       token: null,
+      userRights: null,
       isAuthenticated: false,
       isLoading: false,
 
-      login: (user, token) => {
+      login: (user, token, userRights = null) => {
         set({
           user,
           token,
+          userRights,
           isAuthenticated: true,
           isLoading: false,
         });
         setCookie('access_token', token);
       },
 
+      setUserRights: (userRights) => {
+        set({ userRights });
+      },
+
       logout: () => {
         set({
           user: null,
           token: null,
+          userRights: null,
           isAuthenticated: false,
           isLoading: false,
         });
@@ -96,6 +107,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
+        userRights: state.userRights,
         isAuthenticated: state.isAuthenticated,
       }),
     },

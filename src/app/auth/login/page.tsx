@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth-store';
 import { useBooks } from '@/modules/auth/hooks/use-books';
 import axiosClient, { extractAxiosErrorMessage } from '@/lib/axios';
+import { userRightApi } from '@/modules/user-right/services';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -151,6 +152,21 @@ export default function LoginPage() {
 
       const { access_token, refresh_token, user, role } = response.data.data;
 
+      // Save tokens first so axiosClient interceptors pick it up for the subsequent API request
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+      localStorage.setItem('selected_book', bookName);
+
+      // Set cookie for Next.js middleware to read
+      document.cookie = `access_token=${access_token}; path=/; max-age=86400; SameSite=Lax`;
+
+      let userRights = null;
+      try {
+        userRights = await userRightApi.getMyUserRights();
+      } catch (err) {
+        console.error('Failed to load user rights during login:', err);
+      }
+
       // Update auth store
       login(
         {
@@ -160,15 +176,8 @@ export default function LoginPage() {
           role: role,
         },
         access_token,
+        userRights,
       );
-
-      // Save refresh token to localStorage so axios can handle token refresh
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
-      localStorage.setItem('selected_book', bookName);
-
-      // Set cookie for Next.js middleware to read
-      document.cookie = `access_token=${access_token}; path=/; max-age=86400; SameSite=Lax`;
 
       setIsLoading(false);
       setLoginSuccess(true);
@@ -274,8 +283,9 @@ export default function LoginPage() {
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShowPassword(!showPassword)}
-                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${isRtl ? 'left-3' : 'right-3'
-                  }`}
+                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
+                  isRtl ? 'left-3' : 'right-3'
+                }`}
                 style={{
                   top: errors.password ? 'calc(50% - 9px)' : '50%',
                   transform: 'translateY(-10%)',
@@ -307,8 +317,9 @@ export default function LoginPage() {
                 >
                   <SelectTrigger
                     id="book"
-                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                      } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
+                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
+                      isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                    } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
                     <SelectValue
                       placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder}
@@ -377,8 +388,7 @@ export default function LoginPage() {
 
           <div className="border-border/30 border-t pt-4 text-center">
             <p className="text-muted-foreground/60 text-[9px] leading-relaxed">{t.licenseText}</p>
-            <p className="text-muted-foreground/40 mt-1 text-[9px] leading-relaxed">
-            </p>
+            <p className="text-muted-foreground/40 mt-1 text-[9px] leading-relaxed"></p>
           </div>
         </div>
       </div>
