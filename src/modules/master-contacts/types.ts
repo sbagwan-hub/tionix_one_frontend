@@ -158,6 +158,7 @@ export const individualSchema = z.object({
   fk_state_id: z.number().nullable().optional(),
   fk_ctry_id: z.number().nullable().optional(),
   postfix: z.string().max(25).nullable().optional(),
+  categoryIds: z.array(z.number()).optional().default([]),
 });
 
 export type IndividualDto = z.infer<typeof individualSchema>;
