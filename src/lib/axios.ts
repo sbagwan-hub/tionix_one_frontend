@@ -94,6 +94,12 @@ export const extractAxiosErrorMessage = (error: unknown) => {
   if (axios.isAxiosError(error)) {
     const data = getBackendResponseData(error.response?.data);
     const details = data.error?.details;
+    if (details && typeof details === 'object') {
+      const errObj = details as Record<string, any>;
+      if (Array.isArray(errObj.errors)) {
+        return errObj.errors.map((e: any) => `${e.field}: ${e.message}`).join('\n');
+      }
+    }
     if (typeof details === 'string' && details.trim()) return details;
     if (data.message) return data.message;
     if (error.message) return error.message;

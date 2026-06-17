@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Plus, Trash2 } from 'lucide-react';
 import { EmployeeRecord, ContactDetail } from '../types';
+import { DatePicker } from '@/components/common/date-picker';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -55,12 +56,10 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
       </h3>
       <div className="flex flex-col gap-3.5 flex-1">
         <div className="grid grid-cols-2 gap-3">
-          <FormInput
+          <DatePicker
             label="Joining Date *"
-            type="date"
             value={formData.doj ? formData.doj.slice(0, 10) : ''}
-            onChange={(e) => onInputChange('doj', e.target.value)}
-            className="h-9 text-sm rounded-sm"
+            onChange={(val) => onInputChange('doj', val)}
             disabled={disabled}
           />
           <div className="flex flex-col gap-1">
@@ -75,7 +74,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Cash Ledger" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 <SelectItem value="1">Cash Account (Main)</SelectItem>
                 <SelectItem value="2">Petty Cash</SelectItem>
@@ -107,10 +106,11 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
           <FormInput
             label="PAN No."
             value={formData.pan_no || ''}
-            onChange={(e) => onInputChange('pan_no', e.target.value)}
+            onChange={(e) => onInputChange('pan_no', e.target.value.toUpperCase())}
             placeholder="PAN Card ID"
             className="h-9 text-sm rounded-sm"
             disabled={disabled}
+            maxLength={10}
           />
           <FormInput
             label="Short Address"
@@ -135,7 +135,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Bank" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 <SelectItem value="1">State Bank of India</SelectItem>
                 <SelectItem value="2">HDFC Bank</SelectItem>
@@ -202,7 +202,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
                   <SelectTrigger className="bg-background/50 h-9 w-28 rounded-sm text-sm">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectItem value="Phone">Phone</SelectItem>
                     <SelectItem value="Fax">Fax</SelectItem>
                     <SelectItem value="E-Mail">E-Mail</SelectItem>

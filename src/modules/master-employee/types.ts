@@ -18,8 +18,9 @@ export interface RelativeDetail {
 export interface LicenseDetail {
   id: string;
   certificate_name: string;
-  has_original: boolean;
+  has_original?: boolean;
   valid_until?: string;
+  fk_dt_id?: number;
 }
 
 export interface EmployeeRecord {
@@ -27,8 +28,8 @@ export interface EmployeeRecord {
   emp_code: string;
   employee: string;
   doj: string;
-  male: string;
-  married: string;
+  gender: string;
+  martial_status: string;
   p_address: string;
   n_address: string;
   account_no: string;

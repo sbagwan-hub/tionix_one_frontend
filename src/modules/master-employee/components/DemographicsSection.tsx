@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useMasterSalary } from '@/modules/master-salary/hooks/useMasterSalary';
+import { useMasterEmployee } from '../hooks/useMasterEmployee';
 import { EmployeeRecord } from '../types';
 
 interface SectionProps {
@@ -28,6 +29,8 @@ export const DemographicsSection: React.FC<SectionProps> = ({
   const skintonesQuery = useMasterSalary('skintones');
   const castesQuery = useMasterSalary('castes');
   const religionsQuery = useMasterSalary('religions');
+  const employeesQuery = useMasterEmployee();
+  const employees = employeesQuery.list.data?.data || [];
 
   return (
     <div className="flex flex-col gap-4 h-full justify-between">
@@ -48,11 +51,11 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 {(skintonesQuery.list.data || []).map((sk: any) => (
                   <SelectItem key={sk.pk_st_id} value={String(sk.pk_st_id)}>
-                    {sk.skintone}
+                    {sk.colour}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -70,7 +73,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 {(religionsQuery.list.data || []).map((rl: any) => (
                   <SelectItem key={rl.pk_rg_id} value={String(rl.pk_rg_id)}>
@@ -95,7 +98,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 {(castesQuery.list.data || []).map((cs: any) => (
                   <SelectItem key={cs.pk_cs_id} value={String(cs.pk_cs_id)}>
@@ -160,11 +163,13 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Employee" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
-                <SelectItem value="1">Vijay Kumar</SelectItem>
-                <SelectItem value="2">Ananya Sharma</SelectItem>
-                <SelectItem value="3">Rahul Verma</SelectItem>
+                {employees.map((emp) => (
+                  <SelectItem key={emp.pk_emp_id} value={String(emp.pk_emp_id)}>
+                    {emp.employee}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -183,10 +188,13 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Witness 1" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
-                <SelectItem value="10">Ramesh Shah</SelectItem>
-                <SelectItem value="11">Riya Sen</SelectItem>
+                {employees.map((emp) => (
+                  <SelectItem key={emp.pk_emp_id} value={String(emp.pk_emp_id)}>
+                    {emp.employee}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -202,10 +210,13 @@ export const DemographicsSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Witness 2" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
-                <SelectItem value="10">Ramesh Shah</SelectItem>
-                <SelectItem value="11">Riya Sen</SelectItem>
+                {employees.map((emp) => (
+                  <SelectItem key={emp.pk_emp_id} value={String(emp.pk_emp_id)}>
+                    {emp.employee}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

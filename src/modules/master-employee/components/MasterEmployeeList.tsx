@@ -6,6 +6,7 @@ import { SearchBox } from '@/components/common/search-box';
 import { Button } from '@/components/ui/button';
 import { EmployeeRecord } from '../types';
 import { useMasterContacts } from '@/modules/master-contacts/hooks/useMasterContacts';
+import { Chip } from '@/components/common/chip';
 
 interface MasterEmployeeListProps {
   employees: EmployeeRecord[];
@@ -66,30 +67,14 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
     {
       key: 'last_status',
       label: 'Status',
-      render: (val: string) => (
-        <span
-          className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${
-            val === 'Active' ? 'bg-green-500/15 text-green-500' : 'bg-red-500/15 text-red-500'
-          }`}
-        >
-          {val || 'Active'}
-        </span>
-      ),
-    },
-    {
-      key: 'select',
-      label: 'Select',
-      render: (_: any, row: EmployeeRecord) => {
-        const isSelected = selectedEmployee?.pk_emp_id === row.pk_emp_id;
+      render: (val: string) => {
+        const statusVal = val || 'Active';
+        const isSuccess = statusVal === 'Active' || statusVal === 'Added';
         return (
-          <Button
-            variant={isSelected ? 'default' : 'outline'}
-            size="sm"
-            className="h-7 text-xs rounded-sm transition-all"
-            onClick={() => onSelectEmployee(row)}
-          >
-            {isSelected ? 'Selected' : 'Select'}
-          </Button>
+          <Chip
+            label={statusVal}
+            variant={isSuccess ? 'success' : 'error'}
+          />
         );
       },
     },
@@ -114,6 +99,8 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
           data={employees}
           columns={columns}
           isLoading={isLoading}
+          onRowClick={(row) => onSelectEmployee(row)}
+          rowClassName={(row) => selectedEmployee?.pk_emp_id === row.pk_emp_id ? 'bg-brand/10 hover:bg-brand/15' : ''}
           className="border border-border/40 rounded-sm"
         />
       </div>

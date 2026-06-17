@@ -12,6 +12,9 @@ import {
 } from '@/components/ui/select';
 import { useMasterContacts } from '@/modules/master-contacts/hooks/useMasterContacts';
 import { EmployeeRecord } from '../types';
+import { useWindowStore } from '@/stores/window-store';
+import { Button } from '@/components/ui/button';
+import { Paperclip } from 'lucide-react';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -25,6 +28,7 @@ export const ReferencesSection: React.FC<SectionProps> = ({
   disabled = false,
 }) => {
   const designationsQuery = useMasterContacts('designations');
+  const openWindow = useWindowStore((state) => state.openWindow);
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -59,23 +63,37 @@ export const ReferencesSection: React.FC<SectionProps> = ({
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Designation
             </Label>
-            <Select
-              value={formData.fk_p1_des_id ? String(formData.fk_p1_des_id) : 'none'}
-              onValueChange={(val) => onInputChange('fk_p1_des_id', val === 'none' ? null : parseInt(val, 10))}
-              disabled={disabled}
-            >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {(designationsQuery.list.data || []).map((dg: any) => (
-                  <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
-                    {dg.designation}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-1.5">
+              <div className="flex-1 min-w-0">
+                <Select
+                  value={formData.fk_p1_des_id ? String(formData.fk_p1_des_id) : 'none'}
+                  onValueChange={(val) => onInputChange('fk_p1_des_id', val === 'none' ? null : parseInt(val, 10))}
+                  disabled={disabled}
+                >
+                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="none">None</SelectItem>
+                    {(designationsQuery.list.data || []).map((dg: any) => (
+                      <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
+                        {dg.designation}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 rounded-sm shrink-0"
+                disabled={disabled}
+                onClick={() => openWindow('contacts-designation')}
+                type="button"
+              >
+                <Paperclip className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </div>
           </div>
           <FormInput
             label="Address"
@@ -114,23 +132,37 @@ export const ReferencesSection: React.FC<SectionProps> = ({
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Designation
             </Label>
-            <Select
-              value={formData.fk_p2_des_id ? String(formData.fk_p2_des_id) : 'none'}
-              onValueChange={(val) => onInputChange('fk_p2_des_id', val === 'none' ? null : parseInt(val, 10))}
-              disabled={disabled}
-            >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {(designationsQuery.list.data || []).map((dg: any) => (
-                  <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
-                    {dg.designation}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-1.5">
+              <div className="flex-1 min-w-0">
+                <Select
+                  value={formData.fk_p2_des_id ? String(formData.fk_p2_des_id) : 'none'}
+                  onValueChange={(val) => onInputChange('fk_p2_des_id', val === 'none' ? null : parseInt(val, 10))}
+                  disabled={disabled}
+                >
+                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="none">None</SelectItem>
+                    {(designationsQuery.list.data || []).map((dg: any) => (
+                      <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
+                        {dg.designation}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 rounded-sm shrink-0"
+                disabled={disabled}
+                onClick={() => openWindow('contacts-designation')}
+                type="button"
+              >
+                <Paperclip className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </div>
           </div>
           <FormInput
             label="Address"

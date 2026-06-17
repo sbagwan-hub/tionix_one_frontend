@@ -18,18 +18,20 @@ import {
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
 import { toast } from 'sonner';
-import { useMasterEmployee } from '../hooks/useMasterEmployee';
+import { useMasterEmployee, useNextEmpCode } from '../hooks/useMasterEmployee';
+import { masterEmployeeApi } from '../services';
 import { EmployeeRecord } from '../types';
 import { MasterEmployeeForm } from './MasterEmployeeForm';
 import { MasterEmployeeList } from './MasterEmployeeList';
+import { Chip } from '@/components/common/chip';
 
 const getDefaultForm = (): Partial<EmployeeRecord> => ({
   emp_code: '',
   employee: '',
   doj: new Date().toISOString().slice(0, 10),
   dob: '',
-  male: 'Male',
-  married: 'Single',
+  gender: 'Male',
+  martial_status: 'Single',
   p_address: '',
   n_address: '',
   account_no: '',
@@ -78,7 +80,7 @@ const getDefaultForm = (): Partial<EmployeeRecord> => ({
   fk_r_emp_id: null,
   fk_p1_des_id: null,
   fk_p2_des_id: null,
-  fk_acct_id: null,
+  fk_acct_id: 1,
   experience: '',
   ext: '',
   rtgs: '',
@@ -99,6 +101,8 @@ export const MasterEmployeePanel: React.FC = () => {
   const { list, create, update, remove } = useMasterEmployee({
     employee: search || undefined,
   });
+
+  const nextCodeQuery = useNextEmpCode(false);
 
   const employees = list.data?.data || [];
   const isLoading = list.isLoading;
@@ -133,6 +137,43 @@ export const MasterEmployeePanel: React.FC = () => {
       toast.error('Login credentials (Username, Password, Answer) are required.');
       return;
     }
+    if (formData.dob) {
+      const dobDate = new Date(formData.dob);
+      const today = new Date();
+      let age = today.getFullYear() - dobDate.getFullYear();
+      const m = today.getMonth() - dobDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
+        age--;
+      }
+      if (age < 18) {
+        toast.error('Employee must be at least 18 years old.');
+        return;
+      }
+    }
+    if (formData.password && (formData.password.length < 4 || formData.password.length > 10)) {
+      toast.error('Password must be between 4 and 10 characters.');
+      return;
+    }
+    if (formData.pan_no && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.pan_no)) {
+      toast.error('Invalid PAN card format (e.g. ABCDE1234F).');
+      return;
+    }
+    if (formData.aadhar && !/^[0-9]{12}$/.test(formData.aadhar)) {
+      toast.error('Aadhar card must be exactly 12 digits.');
+      return;
+    }
+    if (formData.cont_police && !/^\+?[0-9]{10,15}$/.test(formData.cont_police)) {
+      toast.error('Invalid police contact number.');
+      return;
+    }
+    if (formData.p1_contact && !/^\+?[0-9]{10,15}$/.test(formData.p1_contact)) {
+      toast.error('Invalid primary reference contact number.');
+      return;
+    }
+    if (formData.p2_contact && !/^\+?[0-9]{10,15}$/.test(formData.p2_contact)) {
+      toast.error('Invalid secondary reference contact number.');
+      return;
+    }
 
     const payload = {
       ...formData,
@@ -144,46 +185,52 @@ export const MasterEmployeePanel: React.FC = () => {
         { id: selectedEmployee.pk_emp_id, data: payload },
         {
           onSuccess: () => {
-            toast.success('Employee updated successfully!');
             handleCancel();
             setActiveTab('list');
-          },
-          onError: (err) => {
-            toast.error(err.message || 'Failed to update employee');
           },
         },
       );
     } else {
       create.mutate(payload, {
         onSuccess: () => {
-          toast.success('Employee created successfully!');
           handleCancel();
           setActiveTab('list');
-        },
-        onError: (err) => {
-          toast.error(err.message || 'Failed to create employee');
         },
       });
     }
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     setFormData(getDefaultForm());
     setIsEditMode(false);
     setIsAdding(true);
     setSelectedEmployee(null);
     setActiveTab('employee');
+
+    try {
+      const res = await nextCodeQuery.refetch();
+      if (res.data) {
+        setFormData((prev) => ({ ...prev, emp_code: res.data }));
+      }
+    } catch (err) {
+      console.error('Failed to pre-fetch next employee code:', err);
+    }
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (!selectedEmployee) {
       toast.error('Please select an employee from the list first');
       return;
     }
-    setFormData({ ...selectedEmployee });
-    setIsEditMode(true);
-    setIsAdding(false);
-    setActiveTab('employee');
+    try {
+      const fullDetails = await masterEmployeeApi.get(selectedEmployee.pk_emp_id);
+      setFormData({ ...fullDetails });
+      setIsEditMode(true);
+      setIsAdding(false);
+      setActiveTab('employee');
+    } catch (err) {
+      toast.error('Failed to load employee details');
+    }
   };
 
   const handleDelete = () => {
@@ -195,7 +242,6 @@ export const MasterEmployeePanel: React.FC = () => {
     if (confirm(`Are you sure you want to delete employee "${selectedEmployee.employee}"?`)) {
       remove.mutate(selectedEmployee.pk_emp_id, {
         onSuccess: () => {
-          toast.success('Employee deleted successfully!');
           setSelectedEmployee(null);
         },
       });
@@ -281,7 +327,7 @@ export const MasterEmployeePanel: React.FC = () => {
         />
       </div>
 
-      <div className="border-border/60 bg-card text-card-foreground relative flex w-full flex-col rounded-sm border shadow-md">
+      <div className="border-border/60 bg-card text-card-foreground relative flex w-full flex-col rounded-sm border">
         {/* Premium Background Glows */}
         <div className="absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial from-brand/10 to-transparent opacity-20 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-40 -right-40 h-[300px] w-[300px] rounded-full bg-radial from-brand/10 to-transparent opacity-20 blur-3xl pointer-events-none" />
@@ -302,20 +348,13 @@ export const MasterEmployeePanel: React.FC = () => {
             {activeTab === 'employee' && (
               <div className="flex items-center gap-1.5 text-xs font-medium">
                 {isAdding && (
-                  <span className="bg-primary/10 text-primary border-primary/20 animate-pulse rounded-full border px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">
-                    Adding New Employee
-                  </span>
+                  <Chip label="Adding New Employee" variant="primary" pulse />
                 )}
                 {isEditMode && selectedEmployee && (
-                  <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2.5 py-0.5 font-mono text-[10px] tracking-wider text-yellow-500 uppercase">
-                    Editing Employee:{' '}
-                    <span className="text-foreground font-semibold">{selectedEmployee.employee}</span>
-                  </span>
+                  <Chip label={`Editing Employee: ${selectedEmployee.employee}`} variant="warning" />
                 )}
                 {!isAdding && !isEditMode && (
-                  <span className="bg-muted text-muted-foreground border-border/50 rounded-full border px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">
-                    Viewing Record
-                  </span>
+                  <Chip label="Viewing Record" variant="neutral" />
                 )}
               </div>
             )}
@@ -323,33 +362,7 @@ export const MasterEmployeePanel: React.FC = () => {
 
           {/* Form tab */}
           <TabsContent value="employee" className="m-0 px-6 pt-4 pb-6 w-full">
-            <div className="mb-4 shrink-0">
-              {isAdding ? (
-                <div className="flex items-center gap-3 rounded-sm border border-emerald-500/20 bg-emerald-500/5 px-4 py-3 text-xs text-emerald-600 dark:text-emerald-400">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                  </span>
-                  <div>
-                    <span className="font-semibold">Create Mode:</span> Fill in the employee master parameters. Click <span className="font-semibold">Save</span> in the toolbar to commit.
-                  </div>
-                </div>
-              ) : isEditMode && selectedEmployee ? (
-                <div className="flex items-center gap-3 rounded-sm border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-xs text-amber-600 dark:text-amber-400">
-                  <Edit className="h-4 w-4 animate-pulse text-amber-500" />
-                  <div>
-                    <span className="font-semibold">Editing Mode:</span> Modifying details for {selectedEmployee.employee}. Click <span className="font-semibold">Save</span> to submit, or <span className="font-semibold">Cancel</span> to discard.
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3 rounded-sm border border-blue-500/20 bg-blue-500/5 px-4 py-3 text-xs text-blue-600 dark:text-blue-400">
-                  <Info className="h-4 w-4 text-blue-500" />
-                  <div>
-                    <span className="font-semibold">Read Only Mode:</span> Form is currently read-only. Select an employee and click <span className="font-semibold">Edit</span> or click <span className="font-semibold">Add</span> to register a new employee.
-                  </div>
-                </div>
-              )}
-            </div>
+
 
             <MasterEmployeeForm
               formData={formData}

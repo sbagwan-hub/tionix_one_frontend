@@ -40,10 +40,14 @@ export const PoliceStationSection: React.FC<SectionProps> = ({
         <FormInput
           label="Station Contact"
           value={formData.cont_police || ''}
-          onChange={(e) => onInputChange('cont_police', e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value.replace(/[^\d+]/g, '');
+            onInputChange('cont_police', val);
+          }}
           placeholder="Contact No."
           className="h-9 text-sm rounded-sm"
           disabled={disabled}
+          maxLength={25}
         />
       </div>
     </div>

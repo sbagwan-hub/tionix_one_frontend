@@ -1,137 +1,148 @@
 import axiosClient from '@/lib/axios';
 import { EmployeeRecord, EmployeeFilterParams } from './types';
 
-// Mock DB helper
-const LOCAL_STORAGE_KEY = 'master_employees_data';
-
-const getLocalEmployees = (): EmployeeRecord[] => {
-  if (typeof window === 'undefined') return [];
-  const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (!saved) {
-    // Initial sample data
-    const initial: EmployeeRecord[] = [
-      {
-        pk_emp_id: 1,
-        emp_code: 'EMP001',
-        fk_tit_id: 1,
-        employee: 'Vijay Kumar',
-        doj: '2026-01-15',
-        dob: '1990-05-10',
-        male: 'Male',
-        married: 'Married',
-        p_address: 'Flat 402, Shiv Towers, Mumbai',
-        n_address: 'Village Post Office, Rajasthan',
-        fk_dep_id: 1,
-        fk_deg_id: 1,
-        account_no: '987654321098',
-        pf_no: 'MH/12345/67890',
-        esic_no: '31234567890001001',
-        pan_no: 'ABCDE1234F',
-        blood_grp: 'O+',
-        wp: 'Head Office',
-        aadhar: '123456789012',
-        username: 'vijay.k',
-        question: 'What is your favorite food?',
-        answer: 'Biryani',
-        messaging: true,
-        geolocation: true,
-        type: 'Office Staff',
-        att_type: true,
-        police: 'Mulund Police Station',
-        add_police: 'Mulund West, Mumbai',
-        cont_police: '022-25641234',
-        personality1: 'Ramesh Shah',
-        p1_address: 'Mulund, Mumbai',
-        p1_contact: '9820098200',
-        personality2: 'Suresh Patil',
-        p2_address: 'Thane',
-        p2_contact: '9819998199',
-        sb: true,
-        rtgs: 'HDFC0000085',
-        s_address: 'Mulund, Mumbai',
-        fk_acct_id: 1,
-        inform_pf: false,
-        inform_esic: false,
-        last_status: 'Active',
-        date_time_stamp: new Date().toISOString(),
-        contacts: [
-          { id: '1', type: 'Phone', detail: '9876543210' },
-          { id: '2', type: 'E-Mail', detail: 'vijay.k@tionix.com' }
-        ],
-        relatives: [
-          { id: '1', relative_name: 'Sita Kumar', relationship: 'Spouse', marital_status: 'Married', dob: '1993-08-12', qualification: 'Graduate', occupation: 'Homemaker' }
-        ],
-        licenses: [
-          { id: '1', certificate_name: 'Driving License', has_original: true, valid_until: '2035-12-31' }
-        ]
-      }
-    ];
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initial));
-    return initial;
-  }
-  try {
-    return JSON.parse(saved);
-  } catch {
-    return [];
-  }
+const mapContactToBackend = (contacts?: any[]) => {
+  if (!contacts) return [];
+  return contacts.map((c, index) => ({
+    fk_moc_id: c.type || 'Phone',
+    contact: c.detail || '',
+    ext: c.ext || '',
+    sr_no: c.sr_no ?? (index + 1),
+  }));
 };
 
-const saveLocalEmployees = (list: EmployeeRecord[]) => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list));
-  }
+const mapContactToFrontend = (contacts?: any[]) => {
+  if (!contacts) return [];
+  return contacts.map((c, index) => ({
+    id: String(c.sr_no || index),
+    type: c.fk_moc_id || 'Phone',
+    detail: c.contact || '',
+    ext: c.ext || '',
+    sr_no: c.sr_no ?? (index + 1),
+  }));
+};
+
+const mapDocumentsToBackend = (licenses?: any[]) => {
+  if (!licenses) return [];
+  return licenses.map((l) => ({
+    fk_dt_id: l.fk_dt_id ? Number(l.fk_dt_id) : 1,
+    doc_file: l.certificate_name || '',
+    valid_until: l.valid_until || null,
+  }));
+};
+
+const mapDocumentsToFrontend = (documents?: any[]) => {
+  if (!documents) return [];
+  return documents.map((d, index) => ({
+    id: String(index + 1),
+    fk_dt_id: d.fk_dt_id,
+    certificate_name: d.doc_file || '',
+    has_original: false,
+    valid_until: d.valid_until || '',
+  }));
 };
 
 export const masterEmployeeApi = {
   list: async (params?: EmployeeFilterParams): Promise<{ data: EmployeeRecord[]; total: number }> => {
-    // Return local database or simulate api
-    let list = getLocalEmployees();
+    const response = await axiosClient.get<{
+      success: boolean;
+      message: string;
+      data: {
+        data: EmployeeRecord[];
+        total: number;
+        page: number;
+        pageSize: number;
+      };
+    }>('/master-employee', { params });
 
-    if (params?.employee) {
-      const q = params.employee.toLowerCase();
-      list = list.filter((emp) => emp.employee.toLowerCase().includes(q));
-    }
-    if (params?.emp_code) {
-      const q = params.emp_code.toLowerCase();
-      list = list.filter((emp) => emp.emp_code.toLowerCase().includes(q));
-    }
+    const mappedData = (response.data.data.data || []).map((emp) => ({
+      ...emp,
+      contacts: mapContactToFrontend(emp.contacts),
+      licenses: mapDocumentsToFrontend((emp as any).documents),
+    }));
 
     return {
-      data: list,
-      total: list.length,
+      data: mappedData,
+      total: response.data.data.total,
+    };
+  },
+
+  get: async (id: number): Promise<EmployeeRecord> => {
+    const response = await axiosClient.get<{
+      success: boolean;
+      message: string;
+      data: EmployeeRecord & { documents?: any[] };
+    }>(`/master-employee/${id}`);
+
+    const emp = response.data.data;
+    return {
+      ...emp,
+      contacts: mapContactToFrontend(emp.contacts),
+      licenses: mapDocumentsToFrontend(emp.documents),
     };
   },
 
   create: async (data: Omit<EmployeeRecord, 'pk_emp_id'>): Promise<EmployeeRecord> => {
-    const list = getLocalEmployees();
-    const newId = list.length > 0 ? Math.max(...list.map((e) => e.pk_emp_id)) + 1 : 1;
-    const newRecord: EmployeeRecord = {
-      ...data,
-      pk_emp_id: newId,
-      date_time_stamp: new Date().toISOString(),
+    const { licenses, ...rest } = data;
+    const payload = {
+      ...rest,
+      contacts: mapContactToBackend(data.contacts),
+      documents: mapDocumentsToBackend(licenses),
     };
-    list.push(newRecord);
-    saveLocalEmployees(list);
-    return newRecord;
+    const response = await axiosClient.post<{
+      success: boolean;
+      message: string;
+      data: EmployeeRecord & { documents?: any[] };
+    }>('/master-employee', payload);
+
+    const created = response.data.data;
+    return {
+      ...created,
+      contacts: mapContactToFrontend(created.contacts),
+      licenses: mapDocumentsToFrontend(created.documents),
+    };
   },
 
   update: async (id: number, data: Partial<EmployeeRecord>): Promise<EmployeeRecord> => {
-    const list = getLocalEmployees();
-    const idx = list.findIndex((e) => e.pk_emp_id === id);
-    if (idx === -1) throw new Error('Employee not found');
-    const updated = {
-      ...list[idx],
-      ...data,
-      date_time_stamp: new Date().toISOString(),
+    const { licenses, ...rest } = data;
+    const payload = {
+      ...rest,
+      contacts: data.contacts ? mapContactToBackend(data.contacts) : undefined,
+      documents: licenses ? mapDocumentsToBackend(licenses) : undefined,
     };
-    list[idx] = updated;
-    saveLocalEmployees(list);
-    return updated;
+    const response = await axiosClient.put<{
+      success: boolean;
+      message: string;
+      data: EmployeeRecord & { documents?: any[] };
+    }>(`/master-employee/${id}`, payload);
+
+    const updated = response.data.data;
+    return {
+      ...updated,
+      contacts: mapContactToFrontend(updated.contacts),
+      licenses: mapDocumentsToFrontend(updated.documents),
+    };
   },
 
   remove: async (id: number): Promise<void> => {
-    const list = getLocalEmployees();
-    const filtered = list.filter((e) => e.pk_emp_id !== id);
-    saveLocalEmployees(filtered);
+    await axiosClient.delete(`/master-employee/${id}`);
+  },
+
+  nextCode: async (): Promise<string> => {
+    const response = await axiosClient.get<{
+      success: boolean;
+      message: string;
+      data: { nextCode: string };
+    }>('/master-employee/next-code');
+    return response.data.data.nextCode;
+  },
+
+  documentTypes: async (): Promise<{ fk_dt_id: number; doc_file: string }[]> => {
+    const response = await axiosClient.get<{
+      success: boolean;
+      message: string;
+      data: { fk_dt_id: number; doc_file: string }[];
+    }>('/master-employee/document-types');
+    return response.data.data;
   },
 };

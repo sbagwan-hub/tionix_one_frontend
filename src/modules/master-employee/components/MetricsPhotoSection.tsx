@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { EmployeeRecord } from '../types';
+import { DatePicker } from '@/components/common/date-picker';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -101,6 +102,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
             placeholder="Aadhar No."
             className="h-9 text-sm rounded-sm"
             disabled={disabled}
+            maxLength={12}
           />
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
@@ -114,7 +116,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="Head Office">Head Office</SelectItem>
                 <SelectItem value="Warehouse A">Warehouse A</SelectItem>
                 <SelectItem value="Site Office">Site Office</SelectItem>
@@ -128,7 +130,10 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
             label="Height (cm)"
             type="number"
             value={formData.height || ''}
-            onChange={(e) => onInputChange('height', e.target.value ? parseFloat(e.target.value) : null)}
+            onChange={(e) => {
+              const val = e.target.value.replace(/[^0-9]/g, '');
+              onInputChange('height', val ? parseInt(val, 10) : null);
+            }}
             placeholder="cm"
             className="h-9 text-sm rounded-sm"
             disabled={disabled}
@@ -157,7 +162,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 <SelectItem value="A+">A+</SelectItem>
                 <SelectItem value="A-">A-</SelectItem>
@@ -170,12 +175,10 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               </SelectContent>
             </Select>
           </div>
-          <FormInput
+          <DatePicker
             label="Leaving Date"
-            type="date"
             value={formData.dol ? formData.dol.slice(0, 10) : ''}
-            onChange={(e) => onInputChange('dol', e.target.value)}
-            className="h-9 text-sm rounded-sm"
+            onChange={(val) => onInputChange('dol', val)}
             disabled={disabled}
           />
         </div>

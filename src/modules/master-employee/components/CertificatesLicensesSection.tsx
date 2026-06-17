@@ -3,9 +3,17 @@
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Plus, Trash2 } from 'lucide-react';
 import { EmployeeRecord, LicenseDetail } from '../types';
+import { useDocumentTypes } from '../hooks/useMasterEmployee';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { DatePicker } from '@/components/common/date-picker';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -19,12 +27,13 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
   disabled = false,
 }) => {
   const licenses = formData.licenses || [];
+  const { data: documentTypes = [] } = useDocumentTypes();
 
   const handleAddLicense = () => {
     const newLicense: LicenseDetail = {
       id: Date.now().toString(),
       certificate_name: '',
-      has_original: true,
+      fk_dt_id: undefined,
       valid_until: '',
     };
     onInputChange('licenses', [...licenses, newLicense]);
@@ -40,11 +49,26 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
     onInputChange('licenses', filtered);
   };
 
+  const handleDocumentTypeChange = (id: string, valStr: string) => {
+    const selected = documentTypes.find((d) => String(d.fk_dt_id) === valStr);
+    const updated = licenses.map((l) => {
+      if (l.id === id) {
+        return {
+          ...l,
+          fk_dt_id: selected ? selected.fk_dt_id : undefined,
+          certificate_name: selected ? selected.doc_file : '',
+        };
+      }
+      return l;
+    });
+    onInputChange('licenses', updated);
+  };
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <div className="flex items-center justify-between border-b border-border/10 pb-2">
         <h4 className="text-sm font-bold uppercase tracking-wider text-brand">
-          Certificates / Licenses Produced in Original
+          Certificates / Licenses Produced
         </h4>
         <Button
           type="button"
@@ -64,7 +88,6 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
           <thead>
             <tr className="border-b border-border/30 bg-muted/40 text-muted-foreground font-semibold">
               <th className="py-2.5 px-3">Certificate / License Description</th>
-              <th className="py-2.5 px-3 w-32">Original</th>
               <th className="py-2.5 px-3 w-40">Valid Until</th>
               <th className="py-2.5 px-3 text-center w-12">Action</th>
             </tr>
@@ -73,30 +96,28 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
             {licenses.map((license) => (
               <tr key={license.id} className="border-b border-border/10 hover:bg-muted/5">
                 <td className="py-1 px-1.5">
-                  <Input
-                    value={license.certificate_name}
-                    onChange={(e) => handleUpdateLicense(license.id, 'certificate_name', e.target.value)}
-                    className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background"
-                    placeholder="e.g. Degree certificate, passport, visa"
+                  <Select
+                    value={license.fk_dt_id ? String(license.fk_dt_id) : 'none'}
+                    onValueChange={(val) => handleDocumentTypeChange(license.id, val)}
                     disabled={disabled}
-                  />
-                </td>
-                <td className="py-1 px-3">
-                  <label className="flex items-center gap-2 cursor-pointer text-xs">
-                    <Checkbox
-                      checked={license.has_original}
-                      onCheckedChange={(val) => handleUpdateLicense(license.id, 'has_original', !!val)}
-                      disabled={disabled}
-                    />
-                    Yes
-                  </label>
+                  >
+                    <SelectTrigger className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background focus:ring-0 w-full">
+                      <SelectValue placeholder="Select Document Type" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      <SelectItem value="none">Select Document Type</SelectItem>
+                      {documentTypes.map((d) => (
+                        <SelectItem key={d.fk_dt_id} value={String(d.fk_dt_id)}>
+                          {d.doc_file}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </td>
                 <td className="py-1 px-1.5">
-                  <Input
-                    type="date"
+                  <DatePicker
                     value={license.valid_until ? license.valid_until.slice(0, 10) : ''}
-                    onChange={(e) => handleUpdateLicense(license.id, 'valid_until', e.target.value)}
-                    className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background"
+                    onChange={(val) => handleUpdateLicense(license.id, 'valid_until', val)}
                     disabled={disabled}
                   />
                 </td>
@@ -116,7 +137,7 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
             ))}
             {licenses.length === 0 && (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-muted-foreground text-sm bg-muted/5 h-full">
+                <td colSpan={3} className="text-center py-8 text-muted-foreground text-sm bg-muted/5 h-full">
                   <div className="flex items-center justify-center h-full w-full">
                     No certificates recorded. Click Add Certificate to record credentials.
                   </div>

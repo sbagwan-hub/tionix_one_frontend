@@ -12,9 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Paperclip } from 'lucide-react';
+import { Paperclip, Sparkles } from 'lucide-react';
 import { useMasterContacts } from '@/modules/master-contacts/hooks/useMasterContacts';
+import { useNextEmpCode } from '../hooks/useMasterEmployee';
+import { toast } from 'sonner';
 import { EmployeeRecord } from '../types';
+import { useWindowStore } from '@/stores/window-store';
+import { DatePicker } from '@/components/common/date-picker';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -30,6 +34,27 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
   const qualificationsQuery = useMasterContacts('qualifications');
   const departmentsQuery = useMasterContacts('departments');
   const designationsQuery = useMasterContacts('designations');
+  const openWindow = useWindowStore((state) => state.openWindow);
+
+  const nextCodeQuery = useNextEmpCode(false);
+
+  const maxDob = React.useMemo(() => {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 18);
+    return date.toISOString().split('T')[0];
+  }, []);
+
+  const handleGenerateCode = async () => {
+    try {
+      const res = await nextCodeQuery.refetch();
+      if (res.data) {
+        onInputChange('emp_code', res.data);
+        toast.success(`Generated code: ${res.data}`);
+      }
+    } catch (err) {
+      toast.error('Failed to generate code');
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -38,14 +63,31 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
       </h3>
       <div className="flex flex-col gap-3.5 flex-1 justify-between">
         <div className="grid grid-cols-3 gap-3">
-          <FormInput
-            label="Emp Code *"
-            value={formData.emp_code || ''}
-            onChange={(e) => onInputChange('emp_code', e.target.value)}
-            placeholder="e.g. 1"
-            className="h-9 text-sm rounded-sm col-span-1"
-            disabled={disabled}
-          />
+          <div className="flex flex-col gap-1 col-span-1">
+            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+              Emp Code *
+            </Label>
+            <div className="relative flex items-center w-full">
+              <Input
+                value={formData.emp_code || ''}
+                onChange={(e) => onInputChange('emp_code', e.target.value)}
+                placeholder="e.g. EMP001"
+                className="h-9 pr-9 text-sm rounded-sm w-full bg-background/50"
+                disabled={disabled}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1.5 h-6 w-6 rounded-sm text-brand hover:bg-brand/10 disabled:opacity-50"
+                disabled={disabled}
+                onClick={handleGenerateCode}
+                title="Auto-generate Code"
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </div>
           <div className="flex flex-col gap-1 col-span-2">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Full Name *
@@ -61,37 +103,50 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <FormInput
+          <DatePicker
             label="Date of Birth"
-            type="date"
             value={formData.dob ? formData.dob.slice(0, 10) : ''}
-            onChange={(e) => onInputChange('dob', e.target.value)}
-            className="h-9 text-sm rounded-sm"
+            onChange={(val) => onInputChange('dob', val)}
             disabled={disabled}
+            disabledDates={(date) => {
+              const eighteenYearsAgo = new Date();
+              eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+              eighteenYearsAgo.setHours(23, 59, 59, 999);
+              return date > eighteenYearsAgo;
+            }}
           />
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Qualification
             </Label>
             <div className="flex gap-1.5">
-              <Select
-                value={formData.fk_qual_id ? String(formData.fk_qual_id) : 'none'}
-                onValueChange={(val) => onInputChange('fk_qual_id', val === 'none' ? null : parseInt(val, 10))}
+              <div className="flex-1 min-w-0">
+                <Select
+                  value={formData.fk_qual_id ? String(formData.fk_qual_id) : 'none'}
+                  onValueChange={(val) => onInputChange('fk_qual_id', val === 'none' ? null : parseInt(val, 10))}
+                  disabled={disabled}
+                >
+                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="none">None</SelectItem>
+                    {(qualificationsQuery.list.data || []).map((q: any) => (
+                      <SelectItem key={q.pk_qua_id} value={String(q.pk_qua_id)}>
+                        {q.qualification}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 rounded-sm shrink-0"
                 disabled={disabled}
+                onClick={() => openWindow('contacts-qualification')}
+                type="button"
               >
-                <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full flex-1">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">None</SelectItem>
-                  {(qualificationsQuery.list.data || []).map((q: any) => (
-                    <SelectItem key={q.pk_qua_id} value={String(q.pk_qua_id)}>
-                      {q.qualification}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="icon" className="h-9 w-9 rounded-sm shrink-0" disabled={disabled}>
                 <Paperclip className="h-4 w-4 text-muted-foreground" />
               </Button>
             </div>
@@ -104,14 +159,14 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               Gender *
             </Label>
             <Select
-              value={formData.male || 'Male'}
-              onValueChange={(val) => onInputChange('male', val)}
+              value={formData.gender || 'Male'}
+              onValueChange={(val) => onInputChange('gender', val)}
               disabled={disabled}
             >
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Gender" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
                 <SelectItem value="LGBT">LGBT</SelectItem>
@@ -125,9 +180,9 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               Marital Status *
             </Label>
             <Select
-              value={formData.married || 'Single'}
+              value={formData.martial_status || 'Single'}
               onValueChange={(val) => {
-                onInputChange('married', val);
+                onInputChange('martial_status', val);
                 if (!['Married', 'Engaged', 'Livein'].includes(val)) {
                   onInputChange('anni', null);
                 }
@@ -137,7 +192,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Status" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="Single">Single</SelectItem>
                 <SelectItem value="Married">Married</SelectItem>
                 <SelectItem value="Divorced">Divorced</SelectItem>
@@ -152,13 +207,11 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <FormInput
+          <DatePicker
             label="Anniversary"
-            type="date"
             value={formData.anni ? formData.anni.slice(0, 10) : ''}
-            onChange={(e) => onInputChange('anni', e.target.value)}
-            className="h-9 text-sm rounded-sm"
-            disabled={disabled || !['Married', 'Engaged', 'Livein'].includes(formData.married || '')}
+            onChange={(val) => onInputChange('anni', val)}
+            disabled={disabled || !['Married', 'Engaged', 'Livein'].includes(formData.martial_status || '')}
           />
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
@@ -172,7 +225,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
                 <SelectValue placeholder="Select Responsibility" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value="none">None</SelectItem>
                 <SelectItem value="Manager">Manager</SelectItem>
                 <SelectItem value="Supervisor">Supervisor</SelectItem>
@@ -188,46 +241,74 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Department
             </Label>
-            <Select
-              value={formData.fk_dep_id ? String(formData.fk_dep_id) : 'none'}
-              onValueChange={(val) => onInputChange('fk_dep_id', val === 'none' ? null : parseInt(val, 10))}
-              disabled={disabled}
-            >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                <SelectValue placeholder="Select Department" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {(departmentsQuery.list.data || []).map((d: any) => (
-                  <SelectItem key={d.pk_dep_id} value={String(d.pk_dep_id)}>
-                    {d.department}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-1.5">
+              <div className="flex-1 min-w-0">
+                <Select
+                  value={formData.fk_dep_id ? String(formData.fk_dep_id) : 'none'}
+                  onValueChange={(val) => onInputChange('fk_dep_id', val === 'none' ? null : parseInt(val, 10))}
+                  disabled={disabled}
+                >
+                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                    <SelectValue placeholder="Select Department" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="none">None</SelectItem>
+                    {(departmentsQuery.list.data || []).map((d: any) => (
+                      <SelectItem key={d.pk_dep_id} value={String(d.pk_dep_id)}>
+                        {d.department}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 rounded-sm shrink-0"
+                disabled={disabled}
+                onClick={() => openWindow('contacts-department')}
+                type="button"
+              >
+                <Paperclip className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </div>
           </div>
 
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Designation
             </Label>
-            <Select
-              value={formData.fk_deg_id ? String(formData.fk_deg_id) : 'none'}
-              onValueChange={(val) => onInputChange('fk_deg_id', val === 'none' ? null : parseInt(val, 10))}
-              disabled={disabled}
-            >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                <SelectValue placeholder="Select Designation" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                {(designationsQuery.list.data || []).map((dg: any) => (
-                  <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
-                    {dg.designation}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-1.5">
+              <div className="flex-1 min-w-0">
+                <Select
+                  value={formData.fk_deg_id ? String(formData.fk_deg_id) : 'none'}
+                  onValueChange={(val) => onInputChange('fk_deg_id', val === 'none' ? null : parseInt(val, 10))}
+                  disabled={disabled}
+                >
+                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                    <SelectValue placeholder="Select Designation" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="none">None</SelectItem>
+                    {(designationsQuery.list.data || []).map((dg: any) => (
+                      <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
+                        {dg.designation}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 rounded-sm shrink-0"
+                disabled={disabled}
+                onClick={() => openWindow('contacts-designation')}
+                type="button"
+              >
+                <Paperclip className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </div>
           </div>
         </div>
 

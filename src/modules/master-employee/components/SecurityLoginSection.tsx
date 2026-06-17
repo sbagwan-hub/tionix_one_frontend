@@ -38,6 +38,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             placeholder="Login username"
             className="h-9 text-sm rounded-sm"
             disabled={disabled}
+            maxLength={15}
           />
           <FormInput
             label="Password *"
@@ -47,6 +48,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             className="h-9 text-sm rounded-sm"
             disabled={disabled}
             showPasswordToggle
+            maxLength={10}
           />
         </div>
 

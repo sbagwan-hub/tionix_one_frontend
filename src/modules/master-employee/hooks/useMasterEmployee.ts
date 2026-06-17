@@ -40,3 +40,19 @@ export const useMasterEmployee = (filters?: EmployeeFilterParams) => {
     remove: deleteMutation,
   };
 };
+
+export const useNextEmpCode = (enabled = false) => {
+  return useQuery({
+    queryKey: ['master-employee', 'next-code'],
+    queryFn: () => masterEmployeeApi.nextCode(),
+    enabled,
+  });
+};
+
+export const useDocumentTypes = () => {
+  return useQuery({
+    queryKey: ['master-employee', 'document-types'],
+    queryFn: () => masterEmployeeApi.documentTypes(),
+  });
+};
+
