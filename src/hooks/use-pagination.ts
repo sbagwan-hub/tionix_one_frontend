@@ -18,15 +18,6 @@ export function usePagination(options: UsePaginationOptions = {}) {
   const [page, setPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialPageSize);
 
-  const paginationState = useMemo<PaginationState>(
-    () => ({
-      page,
-      pageSize,
-      total,
-    }),
-    [page, pageSize, total],
-  );
-
   const totalPages = useMemo(() => {
     return Math.ceil(total / pageSize);
   }, [total, pageSize]);
