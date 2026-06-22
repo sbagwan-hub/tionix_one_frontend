@@ -35,7 +35,9 @@ type ResourceTypeMap = {
   maritalStatuses: any;
 };
 
-export const useMasterContacts = <T extends Exclude<keyof typeof masterContactsApi, 'individuals'>>(
+export const useMasterContacts = <
+  T extends Exclude<keyof typeof masterContactsApi, 'individuals' | 'organisations'>,
+>(
   resource: T,
 ) => {
   const queryClient = useQueryClient();
