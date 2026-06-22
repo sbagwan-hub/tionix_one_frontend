@@ -26,7 +26,7 @@ const mapDocumentsToBackend = (licenses?: any[]) => {
   if (!licenses) return [];
   return licenses.map((l) => ({
     fk_dt_id: l.fk_dt_id ? Number(l.fk_dt_id) : 1,
-    doc_file: l.certificate_name || '',
+    doc_file: l.doc_file || '',
     valid_until: l.valid_until || null,
   }));
 };
@@ -36,7 +36,8 @@ const mapDocumentsToFrontend = (documents?: any[]) => {
   return documents.map((d, index) => ({
     id: String(index + 1),
     fk_dt_id: d.fk_dt_id,
-    certificate_name: d.doc_file || '',
+    certificate_name: '',
+    doc_file: d.doc_file || '',
     has_original: false,
     valid_until: d.valid_until || '',
   }));
@@ -145,4 +146,57 @@ export const masterEmployeeApi = {
     }>('/master-employee/document-types');
     return response.data.data;
   },
+
+  uploadFile: async (fileData: string, fileName: string, type: 'emp' | 'indi'): Promise<{ url: string; fileName: string }> => {
+    const response = await axiosClient.post<{
+      success: boolean;
+      message: string;
+      data: { url: string; fileName: string };
+    }>('/master-employee/upload', { fileData, fileName, type });
+    return response.data.data;
+  },
 };
+
+export const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt'];
+
+export const ALLOWED_MIME_TYPES: Record<string, string[]> = {
+  'image/jpeg': ['jpg', 'jpeg'],
+  'image/jpg': ['jpg', 'jpeg'],
+  'image/png': ['png'],
+  'application/pdf': ['pdf'],
+  'text/plain': ['txt'],
+  'application/msword': ['doc'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['docx'],
+};
+
+export function validateClientFile(file: File): { valid: boolean; error?: string } {
+  const extension = file.name.split('.').pop()?.toLowerCase() || '';
+  if (!ALLOWED_EXTENSIONS.includes(extension)) {
+    return {
+      valid: false,
+      error: `Unsupported file extension .${extension}. Allowed: ${ALLOWED_EXTENSIONS.join(', ')}`,
+    };
+  }
+
+  const mimeType = file.type.toLowerCase();
+  const mappedExts = ALLOWED_MIME_TYPES[mimeType];
+  if (!mappedExts || !mappedExts.includes(extension)) {
+    return {
+      valid: false,
+      error: `File type mismatch or unsupported MIME type: ${file.type}`,
+    };
+  }
+
+  return { valid: true };
+}
+
+export function getFileUrl(path: string | null): string {
+  if (!path) return '';
+  if (path.startsWith('data:') || path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4100/api';
+  const serverBase = apiBase.replace('/api', '');
+  return `${serverBase}${path}`;
+}
+

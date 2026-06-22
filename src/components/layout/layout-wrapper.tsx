@@ -5,10 +5,17 @@ import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { GlobalWindows } from './global-windows';
+import { useAuthStore } from '@/stores/auth-store';
+import { useMyUserRights } from '@/modules/user-right/hooks/use-user-rights';
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuth = pathname?.startsWith('/auth/');
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  // Automatically fetch & sync user rights to store via custom query hook
+  useMyUserRights(isAuthenticated && !isAuth);
 
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden bg-background">

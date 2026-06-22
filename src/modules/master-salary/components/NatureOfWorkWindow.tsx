@@ -111,6 +111,8 @@ export const NatureOfWorkWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Nature of Work"
+      isEdit={editingId !== null}
     />
   );
 };

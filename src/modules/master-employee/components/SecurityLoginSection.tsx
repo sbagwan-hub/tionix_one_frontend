@@ -48,7 +48,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             className="h-9 text-sm rounded-sm"
             disabled={disabled}
             showPasswordToggle
-            maxLength={10}
+            maxLength={100}
           />
         </div>
 

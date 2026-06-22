@@ -126,4 +126,66 @@ export const masterSalaryApi = {
       ).data.data,
     remove: async (id: number) => axiosClient.delete(`/master-salary/sal-it-section/${id}`),
   },
+  shiftTimings: {
+    list: async (params?: Record<string, any>) =>
+      (await axiosClient.get<{ data: { rows: any[]; total: number; page: number; pageSize: number } }>('/master-salary/sal-shift-timing', { params })).data.data,
+    create: async (data: any) =>
+      (
+        await axiosClient.post<{ data: any }>(
+          '/master-salary/sal-shift-timing',
+          withUserId(data),
+        )
+      ).data.data,
+    update: async (id: number, data: Partial<any>) =>
+      (
+        await axiosClient.put<{ data: any }>(
+          `/master-salary/sal-shift-timing/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-salary/sal-shift-timing/${id}`),
+    export: async (params?: Record<string, any>) => {
+      const response = await axiosClient.get('/master-salary/sal-shift-timing/export', {
+        params,
+        responseType: 'blob',
+      });
+      return response.data;
+    },
+  },
+  workTimings: {
+    list: async (params?: Record<string, any>) =>
+      (
+        await axiosClient.get<{
+          data: { rows: any[]; total: number; page: number; page_size: number };
+        }>('/master-salary/sal-work-timing', { params })
+      ).data.data,
+    listByGroup: async (groupId: string) =>
+      (
+        await axiosClient.get<{ data: { rows: any[] } }>(
+          `/master-salary/sal-work-timing/group/${groupId}`,
+        )
+      ).data.data.rows,
+    create: async (data: any) =>
+      (
+        await axiosClient.post<{ data: { rows: any[] } }>(
+          '/master-salary/sal-work-timing',
+          withUserId(data),
+        )
+      ).data.data,
+    updateGroup: async (groupId: string, data: any) =>
+      (
+        await axiosClient.put<{ data: { rows: any[] } }>(
+          `/master-salary/sal-work-timing/group/${groupId}`,
+          withUserId(data),
+        )
+      ).data.data,
+    removeGroup: async (groupId: string) =>
+      (
+        await axiosClient.delete<{ data: { deleted: number } }>(
+          `/master-salary/sal-work-timing/group/${groupId}`,
+        )
+      ).data.data,
+    removeSingle: async (id: number) =>
+      (await axiosClient.delete(`/master-salary/sal-work-timing/${id}`)).data,
+  },
 };

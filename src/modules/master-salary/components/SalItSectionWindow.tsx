@@ -172,6 +172,8 @@ export const SalItSectionWindow: React.FC = () => {
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
       className='h-[360px]'
+      formName="Sections of Income Tax"
+      isEdit={editingId !== null}
     />
   );
 };

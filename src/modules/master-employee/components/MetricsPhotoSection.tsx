@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/select';
 import { EmployeeRecord } from '../types';
 import { DatePicker } from '@/components/common/date-picker';
+import { getFileUrl, validateClientFile, masterEmployeeApi } from '../services';
+import { toast } from 'sonner';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -42,7 +44,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               {formData.photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={formData.photo}
+                  src={getFileUrl(formData.photo)}
                   alt="Employee"
                   className="w-full h-full object-cover"
                 />
@@ -59,12 +61,28 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
                 accept="image/*"
                 className="hidden"
                 disabled={disabled}
-                onChange={(e) => {
+                onChange={async (e) => {
                   const file = e.target.files?.[0];
                   if (file) {
+                    const validation = validateClientFile(file);
+                    if (!validation.valid) {
+                      toast.error(validation.error || 'Invalid file');
+                      return;
+                    }
+
                     const reader = new FileReader();
-                    reader.onloadend = () => {
-                      onInputChange('photo', reader.result as string);
+                    reader.onloadend = async () => {
+                      try {
+                        const result = await masterEmployeeApi.uploadFile(
+                          reader.result as string,
+                          file.name,
+                          'emp'
+                        );
+                        onInputChange('photo', result.url);
+                        toast.success('Photo uploaded successfully');
+                      } catch (error) {
+                        toast.error('Failed to upload photo to server');
+                      }
                     };
                     reader.readAsDataURL(file);
                   }

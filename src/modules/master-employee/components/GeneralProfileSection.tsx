@@ -12,13 +12,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Paperclip, Sparkles } from 'lucide-react';
+import { Paperclip, Sparkles, UploadCloud, X, Eye } from 'lucide-react';
 import { useMasterContacts } from '@/modules/master-contacts/hooks/useMasterContacts';
 import { useNextEmpCode } from '../hooks/useMasterEmployee';
 import { toast } from 'sonner';
 import { EmployeeRecord } from '../types';
 import { useWindowStore } from '@/stores/window-store';
 import { DatePicker } from '@/components/common/date-picker';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { getFileUrl, validateClientFile, masterEmployeeApi } from '../services';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -139,16 +146,108 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
                   </SelectContent>
                 </Select>
               </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-sm shrink-0"
-                disabled={disabled}
-                onClick={() => openWindow('contacts-qualification')}
-                type="button"
-              >
-                <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </Button>
+              <div className="flex items-center gap-1 shrink-0">
+                <TooltipProvider>
+                  {formData.cv_copy ? (
+                    <div className="flex items-center gap-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 text-brand hover:bg-brand/10 rounded-sm cursor-pointer shrink-0"
+                            onClick={() => {
+                              try {
+                                const newWindow = window.open();
+                                if (newWindow) {
+                                  newWindow.document.write(
+                                    `<iframe src="${getFileUrl(formData.cv_copy ?? null)}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`
+                                  );
+                                }
+                              } catch (e) {
+                                toast.error('Failed to open document preview.');
+                              }
+                            }}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>View Document</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 text-destructive hover:bg-destructive/10 rounded-sm cursor-pointer shrink-0"
+                            onClick={() => {
+                              onInputChange('cv_copy', '');
+                              toast.success('Qualification document removed.');
+                            }}
+                            disabled={disabled}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Delete Document</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  ) : (
+                    <div>
+                      <input
+                        type="file"
+                        id="qualification-upload-input"
+                        className="hidden"
+                        disabled={disabled}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const validation = validateClientFile(file);
+                            if (!validation.valid) {
+                              toast.error(validation.error || 'Invalid file');
+                              return;
+                            }
+
+                            const reader = new FileReader();
+                            reader.onloadend = async () => {
+                              try {
+                                const result = await masterEmployeeApi.uploadFile(
+                                  reader.result as string,
+                                  file.name,
+                                  'emp'
+                                );
+                                onInputChange('cv_copy', result.url);
+                                toast.success(`${file.name} uploaded successfully.`);
+                              } catch (err) {
+                                toast.error('Failed to upload qualification document');
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                      />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            className="h-9 w-9 rounded-sm flex items-center justify-center cursor-pointer"
+                            disabled={disabled}
+                            onClick={() => document.getElementById('qualification-upload-input')?.click()}
+                          >
+                            <UploadCloud className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Attach Document</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  )}
+                </TooltipProvider>
+              </div>
             </div>
           </div>
         </div>
@@ -180,9 +279,9 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
               Marital Status *
             </Label>
             <Select
-              value={formData.martial_status || 'Single'}
+              value={formData.marital_status || 'Single'}
               onValueChange={(val) => {
-                onInputChange('martial_status', val);
+                onInputChange('marital_status', val);
                 if (!['Married', 'Engaged', 'Livein'].includes(val)) {
                   onInputChange('anni', null);
                 }
@@ -211,7 +310,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
             label="Anniversary"
             value={formData.anni ? formData.anni.slice(0, 10) : ''}
             onChange={(val) => onInputChange('anni', val)}
-            disabled={disabled || !['Married', 'Engaged', 'Livein'].includes(formData.martial_status || '')}
+            disabled={disabled || !['Married', 'Engaged', 'Livein'].includes(formData.marital_status || '')}
           />
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
@@ -241,74 +340,46 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Department
             </Label>
-            <div className="flex gap-1.5">
-              <div className="flex-1 min-w-0">
-                <Select
-                  value={formData.fk_dep_id ? String(formData.fk_dep_id) : 'none'}
-                  onValueChange={(val) => onInputChange('fk_dep_id', val === 'none' ? null : parseInt(val, 10))}
-                  disabled={disabled}
-                >
-                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                    <SelectValue placeholder="Select Department" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="none">None</SelectItem>
-                    {(departmentsQuery.list.data || []).map((d: any) => (
-                      <SelectItem key={d.pk_dep_id} value={String(d.pk_dep_id)}>
-                        {d.department}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-sm shrink-0"
-                disabled={disabled}
-                onClick={() => openWindow('contacts-department')}
-                type="button"
-              >
-                <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </div>
+            <Select
+              value={formData.fk_dep_id ? String(formData.fk_dep_id) : 'none'}
+              onValueChange={(val) => onInputChange('fk_dep_id', val === 'none' ? null : parseInt(val, 10))}
+              disabled={disabled}
+            >
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                <SelectValue placeholder="Select Department" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="none">None</SelectItem>
+                {(departmentsQuery.list.data || []).map((d: any) => (
+                  <SelectItem key={d.pk_dep_id} value={String(d.pk_dep_id)}>
+                    {d.department}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex flex-col gap-1">
             <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
               Designation
             </Label>
-            <div className="flex gap-1.5">
-              <div className="flex-1 min-w-0">
-                <Select
-                  value={formData.fk_deg_id ? String(formData.fk_deg_id) : 'none'}
-                  onValueChange={(val) => onInputChange('fk_deg_id', val === 'none' ? null : parseInt(val, 10))}
-                  disabled={disabled}
-                >
-                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                    <SelectValue placeholder="Select Designation" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="none">None</SelectItem>
-                    {(designationsQuery.list.data || []).map((dg: any) => (
-                      <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
-                        {dg.designation}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-sm shrink-0"
-                disabled={disabled}
-                onClick={() => openWindow('contacts-designation')}
-                type="button"
-              >
-                <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </div>
+            <Select
+              value={formData.fk_deg_id ? String(formData.fk_deg_id) : 'none'}
+              onValueChange={(val) => onInputChange('fk_deg_id', val === 'none' ? null : parseInt(val, 10))}
+              disabled={disabled}
+            >
+              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+                <SelectValue placeholder="Select Designation" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="none">None</SelectItem>
+                {(designationsQuery.list.data || []).map((dg: any) => (
+                  <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
+                    {dg.designation}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

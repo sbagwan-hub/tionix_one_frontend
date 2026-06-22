@@ -24,6 +24,7 @@ import { EmployeeRecord } from '../types';
 import { MasterEmployeeForm } from './MasterEmployeeForm';
 import { MasterEmployeeList } from './MasterEmployeeList';
 import { Chip } from '@/components/common/chip';
+import { useFormPermission } from '@/hooks/use-form-permission';
 
 const getDefaultForm = (): Partial<EmployeeRecord> => ({
   emp_code: '',
@@ -31,7 +32,7 @@ const getDefaultForm = (): Partial<EmployeeRecord> => ({
   doj: new Date().toISOString().slice(0, 10),
   dob: '',
   gender: 'Male',
-  martial_status: 'Single',
+  marital_status: 'Single',
   p_address: '',
   n_address: '',
   account_no: '',
@@ -92,6 +93,8 @@ export const MasterEmployeePanel: React.FC = () => {
   const lang = i18n.language || 'en';
   const isRtl = lang === 'ar';
 
+  const permissions = useFormPermission('Employee');
+
   const [activeTab, setActiveTab] = React.useState('employee');
   const [selectedEmployee, setSelectedEmployee] = React.useState<EmployeeRecord | null>(null);
   const [isEditMode, setIsEditMode] = React.useState(false);
@@ -129,12 +132,41 @@ export const MasterEmployeePanel: React.FC = () => {
       toast.error('Employee Name is required.');
       return;
     }
+    if (!formData.gender) {
+      toast.error('Gender is required.');
+      return;
+    }
+    if (!formData.marital_status) {
+      toast.error('Marital Status is required.');
+      return;
+    }
+    if (!formData.doj) {
+      toast.error('Joining Date is required.');
+      return;
+    }
+    if (!formData.contacts || formData.contacts.length === 0) {
+      toast.error('At least one contact detail is required.');
+      return;
+    }
+    const hasEmptyContact = formData.contacts.some(c => !c.detail || !c.detail.trim());
+    if (hasEmptyContact) {
+      toast.error('All contact details must have valid information.');
+      return;
+    }
     if (!formData.p_address || !formData.n_address) {
       toast.error('Both Resident and Native Addresses are required.');
       return;
     }
-    if (!formData.username || !formData.password || !formData.answer) {
-      toast.error('Login credentials (Username, Password, Answer) are required.');
+    if (!formData.username) {
+      toast.error('Username is required.');
+      return;
+    }
+    if (!formData.password) {
+      toast.error('Password is required.');
+      return;
+    }
+    if (!formData.answer) {
+      toast.error('Security Answer is required.');
       return;
     }
     if (formData.dob) {
@@ -150,7 +182,8 @@ export const MasterEmployeePanel: React.FC = () => {
         return;
       }
     }
-    if (formData.password && (formData.password.length < 4 || formData.password.length > 10)) {
+    const isBcrypt = formData.password ? /^\$2[ayb]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(formData.password) : false;
+    if (formData.password && !isBcrypt && (formData.password.length < 4 || formData.password.length > 10)) {
       toast.error('Password must be between 4 and 10 characters.');
       return;
     }
@@ -233,6 +266,19 @@ export const MasterEmployeePanel: React.FC = () => {
     }
   };
 
+  const handleRowDoubleClick = async (emp: EmployeeRecord) => {
+    setSelectedEmployee(emp);
+    try {
+      const fullDetails = await masterEmployeeApi.get(emp.pk_emp_id);
+      setFormData({ ...fullDetails });
+      setIsEditMode(false);
+      setIsAdding(false);
+      setActiveTab('employee');
+    } catch (err) {
+      toast.error('Failed to load employee details');
+    }
+  };
+
   const handleDelete = () => {
     if (!selectedEmployee) {
       toast.error('Please select an employee to delete');
@@ -288,21 +334,21 @@ export const MasterEmployeePanel: React.FC = () => {
               label: t('add'),
               variant: 'primary',
               onClick: handleAdd,
-              disabled: isAdding,
+              disabled: isAdding || !permissions.add,
             },
             {
               icon: Edit,
               label: t('edit'),
               variant: 'secondary',
               onClick: handleEdit,
-              disabled: !selectedEmployee || isAdding,
+              disabled: !selectedEmployee || isAdding || !permissions.edit,
             },
             {
               icon: Trash2,
               label: t('delete'),
               variant: 'danger',
               onClick: handleDelete,
-              disabled: !selectedEmployee || isAdding,
+              disabled: !selectedEmployee || isAdding || !permissions.delete,
             },
             { icon: RotateCcw, label: t('cancel'), variant: 'outline', onClick: handleCancel },
             {
@@ -310,13 +356,13 @@ export const MasterEmployeePanel: React.FC = () => {
               label: t('save'),
               variant: 'primary',
               onClick: handleSave,
-              disabled: !isFormValid || create.isPending || update.isPending,
+              disabled: !isFormValid || create.isPending || update.isPending || (isEditMode ? !permissions.edit : !permissions.add),
             },
           ]}
           utilities={[
             { icon: RefreshCw, title: t('refresh'), onClick: () => list.refetch() },
-            { icon: Printer, title: t('print'), onClick: () => window.print() },
-            { icon: Download, title: t('export'), onClick: handleExport },
+            { icon: Printer, title: t('print'), onClick: () => window.print(), disabled: !permissions.print },
+            { icon: Download, title: t('export'), onClick: handleExport, disabled: !permissions.export },
             {
               icon: Help,
               title: t('help'),
@@ -378,6 +424,7 @@ export const MasterEmployeePanel: React.FC = () => {
               employees={employees}
               selectedEmployee={selectedEmployee}
               onSelectEmployee={setSelectedEmployee}
+              onRowDoubleClick={handleRowDoubleClick}
               search={search}
               onSearchChange={setSearch}
               isLoading={isLoading}

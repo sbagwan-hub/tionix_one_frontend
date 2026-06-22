@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/common/form-input';
 import Toolbar from '@/components/shared/toolbar';
+import { useFormPermission } from '@/hooks/use-form-permission';
 
 // ─────────────────────────────────────────────────────────
 // Types
@@ -52,6 +53,16 @@ export interface WindowPanelProps {
   onCancelTab1?: () => void;
   /** Disable the save button explicitly */
   isSaveDisabled?: boolean;
+  /** Control permission to Add */
+  canAdd?: boolean;
+  /** Control permission to Edit */
+  canEdit?: boolean;
+  /** Control permission to Delete */
+  canDelete?: boolean;
+  /** Indicate if the form is currently in edit mode */
+  isEdit?: boolean;
+  /** Database Form Name to resolve permissions automatically */
+  formName?: string;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -142,6 +153,11 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
       isSaving,
       onCancelTab1,
       isSaveDisabled,
+      canAdd = true,
+      canEdit = true,
+      canDelete = true,
+      isEdit = false,
+      formName,
     },
     ref,
   ) => {
@@ -192,6 +208,13 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
       }
     };
 
+    const permissions = useFormPermission(formName || '');
+    
+    // Resolve permission states: use formName queries if provided, otherwise fallback to props
+    const resolvedCanAdd = formName ? permissions.add : canAdd;
+    const resolvedCanEdit = formName ? permissions.edit : canEdit;
+    const resolvedCanDelete = formName ? permissions.delete : canDelete;
+
     // The toolbar array structure matches your configuration, changing context per active tab
     const toolbarActions: any[] =
       activeTab === 'title'
@@ -202,7 +225,11 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
               type: formId ? 'submit' : 'button',
               form: formId,
               onClick: formId ? undefined : handleSave,
-              disabled: isSaving || isSaveDisabled || (!formId && !internalValue.trim()),
+              disabled:
+                isSaving ||
+                isSaveDisabled ||
+                (!formId && !internalValue.trim()) ||
+                (isEdit ? !resolvedCanEdit : !resolvedCanAdd),
               variant: 'primary',
             },
             {
@@ -217,20 +244,21 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
               label: 'Add',
               icon: Plus,
               onClick: handleTab2AddClick,
+              disabled: !resolvedCanAdd,
               variant: 'outline',
             },
             {
               label: 'Edit',
               icon: Pencil,
               onClick: handleTab2EditClick,
-              disabled: !selectedItemId,
+              disabled: !selectedItemId || !resolvedCanEdit,
               variant: 'outline',
             },
             {
               label: 'Delete',
               icon: Trash2,
               onClick: handleTab2DeleteClick,
-              disabled: !selectedItemId,
+              disabled: !selectedItemId || !resolvedCanDelete,
               variant: 'danger',
             },
             {
