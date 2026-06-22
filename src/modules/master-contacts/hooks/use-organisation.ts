@@ -13,18 +13,18 @@ export const useOrganisation = (params?: { page?: number; limit?: number; search
 
   const createMutation = useMutation({
     mutationFn: (data: OrganisationDto) => masterContactsApi.organisations.create(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['organisation-contacts'] }),
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<OrganisationDto> }) =>
       masterContactsApi.organisations.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['organisation-contacts'] }),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => masterContactsApi.organisations.remove(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['organisation-contacts'] }),
   });
 
   return {

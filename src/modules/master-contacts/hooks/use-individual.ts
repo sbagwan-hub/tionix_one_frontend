@@ -13,18 +13,18 @@ export const useIndividual = (params?: { page?: number; limit?: number; search?:
 
   const createMutation = useMutation({
     mutationFn: (data: IndividualDto) => masterContactsApi.individuals.create(data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['individual-contacts'] }),
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<IndividualDto> }) =>
       masterContactsApi.individuals.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['individual-contacts'] }),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => masterContactsApi.individuals.remove(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['individual-contacts'] }),
   });
 
   return {

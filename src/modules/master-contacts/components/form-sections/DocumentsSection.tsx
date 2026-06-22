@@ -13,12 +13,14 @@ interface DocumentsSectionProps {
   documents: any[];
   onInputChange: (field: string, value: any) => void;
   disabled?: boolean;
+  folderName?: string;
 }
 
 export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
   documents,
   onInputChange,
   disabled = false,
+  folderName = 'misellous',
 }) => {
   const fileInputRefs = React.useRef<{ [key: number]: HTMLInputElement | null }>({});
   const [uploadingIndexes, setUploadingIndexes] = React.useState<{ [key: number]: boolean }>({});
@@ -49,7 +51,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
     if (file) {
       setUploadingIndexes((prev) => ({ ...prev, [index]: true }));
       try {
-        const fileUrl = await uploadFileToMinio(file, 'documents');
+        const fileUrl = await uploadFileToMinio(file, folderName);
         updateDocumentRow(index, 'file_path', fileUrl);
         toast.success(`Uploaded: ${file.name}`);
       } catch (err: any) {

@@ -111,6 +111,7 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
           documents={formData.documents || []}
           onInputChange={onInputChange}
           disabled={disabled}
+          folderName="individual-docs"
         />
       </div>
     </div>
