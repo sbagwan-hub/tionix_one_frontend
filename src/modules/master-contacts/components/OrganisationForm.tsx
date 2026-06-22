@@ -96,11 +96,6 @@ export const OrganisationForm: React.FC<OrganisationFormProps> = ({
         id: String(ind.pk_ind_id),
         data: { fk_org_id: orgId },
       });
-      toast.success(
-        isChecked
-          ? `Associated ${ind.first_name} ${ind.surname} with this organisation.`
-          : `Removed association for ${ind.first_name} ${ind.surname}.`,
-      );
     } catch (e: any) {
       toast.error(`Failed to update association: ${e.message || 'Unknown error'}`);
     }
