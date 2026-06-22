@@ -29,8 +29,17 @@ function Navbar() {
   const { t, i18n } = useTranslation();
   const mounted = useMounted();
   const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user, logout, userRights } = useAuthStore();
   const { fontSize, increaseFontSize, decreaseFontSize } = useFontSize();
+
+  const isAdmin = userRights?.user?.sys_defined === true;
+
+  const menus = React.useMemo(() => {
+    if (isAdmin) {
+      return NAV_MENUS;
+    }
+    return NAV_MENUS.filter((menu) => menu.key !== 'administrator');
+  }, [isAdmin]);
 
   return (
     <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5 select-none">
@@ -51,7 +60,7 @@ function Navbar() {
 
         {/* Navigation Menus (Desktop only) */}
         <nav className="hidden min-w-0 items-center gap-0.5 lg:flex">
-          {NAV_MENUS.map((menu) => (
+          {menus.map((menu) => (
             <NavbarMenu key={menu.key} label={t(menu.key)} items={menu.items} />
           ))}
         </nav>
@@ -185,7 +194,7 @@ function Navbar() {
               align="end"
               className="border-border/80 bg-popover text-popover-foreground w-52 border p-1 shadow-md"
             >
-              {NAV_MENUS.map((menu) => (
+              {menus.map((menu) => (
                 <DropdownMenuSub key={menu.key}>
                   <DropdownMenuSubTrigger className="hover:bg-muted cursor-pointer px-2.5 py-1.5 text-xs font-semibold">
                     {t(menu.key)}

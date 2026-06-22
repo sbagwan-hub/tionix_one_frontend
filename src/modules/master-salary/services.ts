@@ -126,4 +126,30 @@ export const masterSalaryApi = {
       ).data.data,
     remove: async (id: number) => axiosClient.delete(`/master-salary/sal-it-section/${id}`),
   },
+  shiftTimings: {
+    list: async (params?: Record<string, any>) =>
+      (await axiosClient.get<{ data: { rows: any[]; total: number; page: number; pageSize: number } }>('/master-salary/sal-shift-timing', { params })).data.data,
+    create: async (data: any) =>
+      (
+        await axiosClient.post<{ data: any }>(
+          '/master-salary/sal-shift-timing',
+          withUserId(data),
+        )
+      ).data.data,
+    update: async (id: number, data: Partial<any>) =>
+      (
+        await axiosClient.put<{ data: any }>(
+          `/master-salary/sal-shift-timing/${id}`,
+          withUserId(data),
+        )
+      ).data.data,
+    remove: async (id: number) => axiosClient.delete(`/master-salary/sal-shift-timing/${id}`),
+    export: async (params?: Record<string, any>) => {
+      const response = await axiosClient.get('/master-salary/sal-shift-timing/export', {
+        params,
+        responseType: 'blob',
+      });
+      return response.data;
+    },
+  },
 };

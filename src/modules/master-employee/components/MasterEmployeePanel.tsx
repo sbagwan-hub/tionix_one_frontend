@@ -24,6 +24,7 @@ import { EmployeeRecord } from '../types';
 import { MasterEmployeeForm } from './MasterEmployeeForm';
 import { MasterEmployeeList } from './MasterEmployeeList';
 import { Chip } from '@/components/common/chip';
+import { useFormPermission } from '@/hooks/use-form-permission';
 
 const getDefaultForm = (): Partial<EmployeeRecord> => ({
   emp_code: '',
@@ -91,6 +92,8 @@ export const MasterEmployeePanel: React.FC = () => {
   const { t, i18n } = useTranslation('common');
   const lang = i18n.language || 'en';
   const isRtl = lang === 'ar';
+
+  const permissions = useFormPermission('Employee');
 
   const [activeTab, setActiveTab] = React.useState('employee');
   const [selectedEmployee, setSelectedEmployee] = React.useState<EmployeeRecord | null>(null);
@@ -331,21 +334,21 @@ export const MasterEmployeePanel: React.FC = () => {
               label: t('add'),
               variant: 'primary',
               onClick: handleAdd,
-              disabled: isAdding,
+              disabled: isAdding || !permissions.add,
             },
             {
               icon: Edit,
               label: t('edit'),
               variant: 'secondary',
               onClick: handleEdit,
-              disabled: !selectedEmployee || isAdding,
+              disabled: !selectedEmployee || isAdding || !permissions.edit,
             },
             {
               icon: Trash2,
               label: t('delete'),
               variant: 'danger',
               onClick: handleDelete,
-              disabled: !selectedEmployee || isAdding,
+              disabled: !selectedEmployee || isAdding || !permissions.delete,
             },
             { icon: RotateCcw, label: t('cancel'), variant: 'outline', onClick: handleCancel },
             {
@@ -353,13 +356,13 @@ export const MasterEmployeePanel: React.FC = () => {
               label: t('save'),
               variant: 'primary',
               onClick: handleSave,
-              disabled: !isFormValid || create.isPending || update.isPending,
+              disabled: !isFormValid || create.isPending || update.isPending || (isEditMode ? !permissions.edit : !permissions.add),
             },
           ]}
           utilities={[
             { icon: RefreshCw, title: t('refresh'), onClick: () => list.refetch() },
-            { icon: Printer, title: t('print'), onClick: () => window.print() },
-            { icon: Download, title: t('export'), onClick: handleExport },
+            { icon: Printer, title: t('print'), onClick: () => window.print(), disabled: !permissions.print },
+            { icon: Download, title: t('export'), onClick: handleExport, disabled: !permissions.export },
             {
               icon: Help,
               title: t('help'),

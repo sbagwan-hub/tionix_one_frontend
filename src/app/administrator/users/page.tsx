@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth-store';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -39,6 +40,9 @@ export default function AdministratorUsersPage() {
   const { t, i18n } = useTranslation('common');
   const lang = i18n.language || 'en';
   const isRtl = lang === 'ar';
+
+  const userRights = useAuthStore((state) => state.userRights);
+  const isAuthLoading = useAuthStore((state) => state.isLoading);
 
   const [activeTab, setActiveTab] = React.useState('user');
   const [selectedUser, setSelectedUser] = React.useState<UserRecord | null>(null);
@@ -272,6 +276,8 @@ export default function AdministratorUsersPage() {
     createUserMutation.isPending || updateUserMutation.isPending || deleteUserMutation.isPending;
 
   const isFormValid = formData.username.trim() !== '' && (isEditMode || formData.password !== '');
+
+
 
   return (
     <div

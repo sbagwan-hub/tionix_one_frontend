@@ -111,6 +111,8 @@ export const ScheduleTypeWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Schedule Type"
+      isEdit={editingId !== null}
     />
   );
 };

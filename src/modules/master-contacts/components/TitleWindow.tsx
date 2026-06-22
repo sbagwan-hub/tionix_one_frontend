@@ -86,6 +86,8 @@ export const TitleWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Title"
+      isEdit={editingId !== null}
     />
   );
 };

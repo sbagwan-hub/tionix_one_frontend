@@ -88,6 +88,8 @@ export const CategoryWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Product(s)\\Category"
+      isEdit={editingId !== null}
     />
   );
 };

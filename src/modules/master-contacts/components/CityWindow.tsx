@@ -169,6 +169,8 @@ export const CityWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="City"
+      isEdit={editingId !== null}
     />
   );
 };

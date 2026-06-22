@@ -23,6 +23,7 @@ import {
   useCreateForm,
 } from '@/modules/user-right/hooks/use-user-rights';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@/stores/auth-store';
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -41,6 +42,9 @@ import { toast } from 'sonner';
 export default function UserRightsPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
+
+  const userRights = useAuthStore((state) => state.userRights);
+  const isAuthLoading = useAuthStore((state) => state.isLoading);
 
   const [selectedUser, setSelectedUser] = useState<UserListItem | null>(null);
   const [tab, setTab] = useState<'masters' | 'transactions' | 'reports' | 'others'>('masters');
@@ -109,6 +113,7 @@ export default function UserRightsPage() {
       setEditable(false);
       setDirty(false);
       queryClient.invalidateQueries({ queryKey: ['userRights', selectedUser?.pk_user_id] });
+      queryClient.invalidateQueries({ queryKey: ['myUserRights'] });
     },
     (e: any) => {
       showToast(e.message || 'Failed to save rights', 'error');
@@ -234,6 +239,8 @@ export default function UserRightsPage() {
       onClick: () => router.push('/'),
     },
   ];
+
+
 
   return (
     <div className="bg-background text-foreground h-full font-sans">

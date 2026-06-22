@@ -54,4 +54,24 @@ export const salItSectionSchema = z.object({
 });
 export type SalItSectionDto = z.infer<typeof salItSectionSchema>;
 
+export const shiftTimingSchema = z.object({
+  pk_st_id: z.number().int().positive().optional(),
+  shift: z.string().min(1, 'Shift title is required').max(50),
+  s_work: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Start work time must be in HH:mm 24h format'),
+  e_work: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'End work time must be in HH:mm 24h format'),
+  t_work: z.union([z.number(), z.string()]).optional(),
+  s_break: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Start break time must be in HH:mm 24h format'),
+  e_break: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'End break time must be in HH:mm 24h format'),
+  t_break: z.union([z.number(), z.string()]).optional(),
+  sd: z.boolean().default(false),
+  sync: syncField,
+  sys_defined: z.boolean().default(false),
+  date_timestamp: z.union([z.string(), z.date()]).optional(),
+  fk_user_id: z.union([z.number(), z.string()]).optional(),
+  last_status: z.string().optional(),
+  username: z.string().nullable().optional(),
+});
+export type ShiftTimingDto = z.infer<typeof shiftTimingSchema>;
+
+
 
