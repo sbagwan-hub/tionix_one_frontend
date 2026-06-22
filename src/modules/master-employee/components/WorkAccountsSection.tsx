@@ -50,11 +50,11 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <h3 className="text-sm font-bold uppercase tracking-wider text-brand border-b border-border/20 pb-1.5">
+    <div className="flex h-full flex-col gap-4">
+      <h3 className="text-brand border-border/20 border-b pb-1.5 text-sm font-bold tracking-wider uppercase">
         Work & Account Details
       </h3>
-      <div className="flex flex-col gap-3.5 flex-1">
+      <div className="flex flex-1 flex-col gap-3.5">
         <div className="grid grid-cols-2 gap-3">
           <DatePicker
             label="Joining Date *"
@@ -63,15 +63,17 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             disabled={disabled}
           />
           <div className="flex flex-col gap-1">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Cash Account
             </Label>
             <Select
               value={formData.fk_acct_id ? String(formData.fk_acct_id) : 'none'}
-              onValueChange={(val) => onInputChange('fk_acct_id', val === 'none' ? null : parseInt(val, 10))}
+              onValueChange={(val) =>
+                onInputChange('fk_acct_id', val === 'none' ? null : parseInt(val, 10))
+              }
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
                 <SelectValue placeholder="Cash Ledger" />
               </SelectTrigger>
               <SelectContent position="popper">
@@ -89,7 +91,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             value={formData.pf_no || ''}
             onChange={(e) => onInputChange('pf_no', e.target.value)}
             placeholder="UAN Registration"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
           <FormInput
@@ -97,7 +99,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             value={formData.esic_no || ''}
             onChange={(e) => onInputChange('esic_no', e.target.value)}
             placeholder="ESIC ID"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
@@ -108,7 +110,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             value={formData.pan_no || ''}
             onChange={(e) => onInputChange('pan_no', e.target.value.toUpperCase())}
             placeholder="PAN Card ID"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
             maxLength={10}
           />
@@ -117,22 +119,24 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             value={formData.s_address || ''}
             onChange={(e) => onInputChange('s_address', e.target.value)}
             placeholder="Short address label"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <div className="flex flex-col gap-1 col-span-2">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+          <div className="col-span-2 flex flex-col gap-1">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Bank Name
             </Label>
             <Select
               value={formData.fk_bnk_id ? String(formData.fk_bnk_id) : 'none'}
-              onValueChange={(val) => onInputChange('fk_bnk_id', val === 'none' ? null : parseInt(val, 10))}
+              onValueChange={(val) =>
+                onInputChange('fk_bnk_id', val === 'none' ? null : parseInt(val, 10))
+              }
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
                 <SelectValue placeholder="Select Bank" />
               </SelectTrigger>
               <SelectContent position="popper">
@@ -143,8 +147,8 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col justify-end gap-1.5 col-span-1 pb-1">
-            <label className="flex items-center gap-1.5 text-xs font-semibold uppercase text-muted-foreground cursor-pointer">
+          <div className="col-span-1 flex flex-col justify-end gap-1.5 pb-1">
+            <label className="text-muted-foreground flex cursor-pointer items-center gap-1.5 text-xs font-semibold uppercase">
               <Checkbox
                 checked={formData.sb || false}
                 onCheckedChange={(val) => onInputChange('sb', !!val)}
@@ -161,7 +165,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             value={formData.account_no || ''}
             onChange={(e) => onInputChange('account_no', e.target.value)}
             placeholder="Bank Account"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
           <FormInput
@@ -169,15 +173,15 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
             value={formData.rtgs || ''}
             onChange={(e) => onInputChange('rtgs', e.target.value)}
             placeholder="IFSC Code"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
 
         {/* Additional Contacts - expands to take remaining space */}
-        <div className="flex flex-col gap-2.5 mt-1 flex-1 min-h-[160px]">
-          <div className="flex items-center justify-between border-b border-border/10 pb-1.5">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+        <div className="mt-1 flex min-h-[160px] flex-1 flex-col gap-2.5">
+          <div className="border-border/10 flex items-center justify-between border-b pb-1.5">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Contacts Detail
             </Label>
             <Button
@@ -191,9 +195,9 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-          <div className="overflow-y-auto flex flex-col gap-2 pr-1 flex-1 max-h-[260px]">
+          <div className="flex max-h-[260px] flex-1 flex-col gap-2 overflow-y-auto pr-1">
             {contacts.map((contact) => (
-              <div key={contact.id} className="flex gap-2 items-center">
+              <div key={contact.id} className="flex items-center gap-2">
                 <Select
                   value={contact.type}
                   onValueChange={(val) => handleUpdateContact(contact.id, 'type', val)}
@@ -212,14 +216,14 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
                   value={contact.detail}
                   onChange={(e) => handleUpdateContact(contact.id, 'detail', e.target.value)}
                   placeholder="Contact detail"
-                  className="h-9 text-sm rounded-sm flex-1"
+                  className="h-9 flex-1 rounded-sm text-sm"
                   disabled={disabled}
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 text-destructive rounded-sm"
+                  className="text-destructive h-9 w-9 rounded-sm"
                   onClick={() => handleRemoveContact(contact.id)}
                   disabled={disabled}
                 >
@@ -228,8 +232,8 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
               </div>
             ))}
             {contacts.length === 0 && (
-              <div className="text-center py-4 text-xs text-muted-foreground flex-1 flex items-center justify-center border border-dashed border-border/40 rounded-sm bg-muted/5">
-                No contact detail recorded. Click '+' to insert.
+              <div className="text-muted-foreground border-border/40 bg-muted/5 flex flex-1 items-center justify-center rounded-sm border border-dashed py-4 text-center text-xs">
+                {`No contact detail recorded. Click '+' to insert.`}
               </div>
             )}
           </div>

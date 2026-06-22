@@ -72,7 +72,7 @@ export interface TableColumn<T = any> {
   label: string;
   sortable?: boolean;
   filterable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: () => React.ReactNode;
 }
 
 export interface User extends BaseEntity {
