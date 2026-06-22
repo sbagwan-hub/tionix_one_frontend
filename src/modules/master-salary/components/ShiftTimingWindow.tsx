@@ -2,9 +2,10 @@
 
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '@/components/modern-ui/sonner';
+import { cn } from '@/lib/utils';
 import {
   Plus,
   Edit,
@@ -119,8 +120,8 @@ export const ShiftTimingWindow: React.FC = () => {
       form.setValue('t_work', netHours.toFixed(2));
       form.setValue('t_break', breakMin.toFixed(2));
       
-      const startHour = Number(watchedSWork.split(':')[0]);
-      const endHour = Number(watchedEWork.split(':')[0]);
+      const startHour = Number(watchedSWork.split(':')[0] || 0);
+      const endHour = Number(watchedEWork.split(':')[0] || 0);
       form.setValue('sd', endHour - startHour > 0);
     }
   }, [watchedSWork, watchedEWork, watchedSBreak, watchedEBreak, form]);
@@ -202,12 +203,19 @@ export const ShiftTimingWindow: React.FC = () => {
   };
 
   const handleSave = form.handleSubmit(async (data) => {
+    const payload = {
+      ...data,
+      s_work: data.s_work,
+      e_work: data.e_work,
+      s_break: data.s_break,
+      e_break: data.e_break,
+    };
     try {
       if (mode === 'add') {
-        await createMutation.mutateAsync(data);
+        await createMutation.mutateAsync(payload);
         setMode('view');
       } else if (mode === 'edit' && selectedId) {
-        await updateMutation.mutateAsync({ id: selectedId, data });
+        await updateMutation.mutateAsync({ id: selectedId, data: payload });
         setMode('view');
       }
     } catch (err: any) {
@@ -397,30 +405,44 @@ export const ShiftTimingWindow: React.FC = () => {
                 <Label className="col-span-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Work Timing *
                 </Label>
-                <div className="col-span-9 flex items-center gap-3">
-                  <Input
-                    type="time"
-                    disabled={!isEditing}
-                    {...form.register('s_work')}
-                    className="h-9 text-xs flex-1 border-border/60"
-                  />
-                  <span className="text-xs text-muted-foreground font-medium">To *</span>
-                  <Input
-                    type="time"
-                    disabled={!isEditing}
-                    {...form.register('e_work')}
-                    className="h-9 text-xs flex-1 border-border/60"
-                  />
-                  <span className="text-xs text-muted-foreground font-medium">Total *</span>
-                  <div className="flex items-center gap-1">
+                <div className="col-span-9">
+                  <div className="flex items-center gap-3">
                     <Input
-                      type="text"
-                      readOnly
-                      {...form.register('t_work')}
-                      className="h-9 w-16 text-center text-xs bg-muted/50 border-border/40 font-mono font-bold"
+                      type="time"
+                      disabled={!isEditing}
+                      {...form.register('s_work')}
+                      className={cn(
+                        "h-9 text-xs border-border/60 w-32",
+                        form.formState.errors.s_work && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                      )}
                     />
-                    <span className="text-[10px] text-muted-foreground font-semibold">hrs</span>
+                    <span className="text-xs text-muted-foreground font-medium">To *</span>
+                    <Input
+                      type="time"
+                      disabled={!isEditing}
+                      {...form.register('e_work')}
+                      className={cn(
+                        "h-9 text-xs border-border/60 w-32",
+                        form.formState.errors.e_work && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                      )}
+                    />
+                    <span className="text-xs text-muted-foreground font-medium">Total *</span>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="text"
+                        readOnly
+                        {...form.register('t_work')}
+                        className="h-9 w-16 text-center text-xs bg-muted/50 border-border/40 font-mono font-bold"
+                      />
+                      <span className="text-[10px] text-muted-foreground font-semibold">hrs</span>
+                    </div>
                   </div>
+                  {form.formState.errors.s_work && (
+                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.s_work.message}</p>
+                  )}
+                  {form.formState.errors.e_work && (
+                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.e_work.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -429,30 +451,44 @@ export const ShiftTimingWindow: React.FC = () => {
                 <Label className="col-span-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   Meal Break *
                 </Label>
-                <div className="col-span-9 flex items-center gap-3">
-                  <Input
-                    type="time"
-                    disabled={!isEditing}
-                    {...form.register('s_break')}
-                    className="h-9 text-xs flex-1 border-border/60"
-                  />
-                  <span className="text-xs text-muted-foreground font-medium">To *</span>
-                  <Input
-                    type="time"
-                    disabled={!isEditing}
-                    {...form.register('e_break')}
-                    className="h-9 text-xs flex-1 border-border/60"
-                  />
-                  <span className="text-xs text-muted-foreground font-medium">Total *</span>
-                  <div className="flex items-center gap-1">
+                <div className="col-span-9">
+                  <div className="flex items-center gap-3">
                     <Input
-                      type="text"
-                      readOnly
-                      {...form.register('t_break')}
-                      className="h-9 w-16 text-center text-xs bg-muted/50 border-border/40 font-mono font-bold"
+                      type="time"
+                      disabled={!isEditing}
+                      {...form.register('s_break')}
+                      className={cn(
+                        "h-9 text-xs border-border/60 w-32",
+                        form.formState.errors.s_break && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                      )}
                     />
-                    <span className="text-[10px] text-muted-foreground font-semibold">min</span>
+                    <span className="text-xs text-muted-foreground font-medium">To *</span>
+                    <Input
+                      type="time"
+                      disabled={!isEditing}
+                      {...form.register('e_break')}
+                      className={cn(
+                        "h-9 text-xs border-border/60 w-32",
+                        form.formState.errors.e_break && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                      )}
+                    />
+                    <span className="text-xs text-muted-foreground font-medium">Total *</span>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="text"
+                        readOnly
+                        {...form.register('t_break')}
+                        className="h-9 w-16 text-center text-xs bg-muted/50 border-border/40 font-mono font-bold"
+                      />
+                      <span className="text-[10px] text-muted-foreground font-semibold">min</span>
+                    </div>
                   </div>
+                  {form.formState.errors.s_break && (
+                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.s_break.message}</p>
+                  )}
+                  {form.formState.errors.e_break && (
+                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.e_break.message}</p>
+                  )}
                 </div>
               </div>
             </form>

@@ -166,6 +166,11 @@ export const NAV_MENUS: NavMenu[] = [
             icon: 'Clock',
             action: () => useWindowStore.getState().openWindow('salary-shift-timing'),
           },
+          {
+            key: 'Work Timings',
+            icon: 'Clock',
+            href: '/masters/salary/work-timing',
+          },
         ],
       },
     ],

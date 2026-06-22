@@ -152,4 +152,40 @@ export const masterSalaryApi = {
       return response.data;
     },
   },
+  workTimings: {
+    list: async (params?: Record<string, any>) =>
+      (
+        await axiosClient.get<{
+          data: { rows: any[]; total: number; page: number; page_size: number };
+        }>('/master-salary/sal-work-timing', { params })
+      ).data.data,
+    listByGroup: async (groupId: string) =>
+      (
+        await axiosClient.get<{ data: { rows: any[] } }>(
+          `/master-salary/sal-work-timing/group/${groupId}`,
+        )
+      ).data.data.rows,
+    create: async (data: any) =>
+      (
+        await axiosClient.post<{ data: { rows: any[] } }>(
+          '/master-salary/sal-work-timing',
+          withUserId(data),
+        )
+      ).data.data,
+    updateGroup: async (groupId: string, data: any) =>
+      (
+        await axiosClient.put<{ data: { rows: any[] } }>(
+          `/master-salary/sal-work-timing/group/${groupId}`,
+          withUserId(data),
+        )
+      ).data.data,
+    removeGroup: async (groupId: string) =>
+      (
+        await axiosClient.delete<{ data: { deleted: number } }>(
+          `/master-salary/sal-work-timing/group/${groupId}`,
+        )
+      ).data.data,
+    removeSingle: async (id: number) =>
+      (await axiosClient.delete(`/master-salary/sal-work-timing/${id}`)).data,
+  },
 };
