@@ -32,6 +32,7 @@ interface WorkTimingFormProps {
   isEditing: boolean;
   shifts: any[];
   manpowerAgencies: any[];
+  onShiftChange?: (shiftName: string) => void;
 }
 
 // File contents continue directly without duplicate toMinutes helper
@@ -46,39 +47,85 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
   isEditing,
   shifts = [],
   manpowerAgencies = [],
+  onShiftChange,
 }) => {
   const shiftInputRef = useRef<HTMLButtonElement>(null);
 
-  // Watch fields for calculations
   const watchedSWork = form.watch('s_work');
   const watchedEWork = form.watch('e_work');
   const watchedSBreak = form.watch('s_break');
   const watchedEBreak = form.watch('e_break');
   const watchedType = form.watch('type');
+  const watchedOt = form.watch('ot');
+  const watchedBreakOt = form.watch('break_ot');
+  const watchedEOvertime = form.watch('e_overtime');
 
   // Automatically calculate durations
   useEffect(() => {
-    if (watchedSWork && watchedEWork && watchedSBreak && watchedEBreak) {
-      const workMin = diffMinutesWrap(toMinutes(watchedSWork), toMinutes(watchedEWork));
-      const breakMin = diffMinutesWrap(toMinutes(watchedSBreak), toMinutes(watchedEBreak));
-      const netHours = (workMin - breakMin) / 60;
+    let breakMin = 0;
+    if (watchedSBreak && watchedEBreak) {
+      breakMin = diffMinutesWrap(toMinutes(watchedSBreak), toMinutes(watchedEBreak));
+      form.setValue('t_break', breakMin.toFixed(2), { shouldDirty: true });
+    } else {
+      form.setValue('t_break', '0.00', { shouldDirty: true });
+    }
 
-      form.setValue('t_work', netHours.toFixed(2));
-      form.setValue('t_break', breakMin.toFixed(2));
+    if (watchedSWork && watchedEWork) {
+      const workMin = diffMinutesWrap(toMinutes(watchedSWork), toMinutes(watchedEWork));
+      const netHours = Math.max(0, (workMin - breakMin) / 60);
+      form.setValue('t_work', netHours.toFixed(2), { shouldDirty: true });
+    } else {
+      form.setValue('t_work', '0.00', { shouldDirty: true });
     }
   }, [watchedSWork, watchedEWork, watchedSBreak, watchedEBreak, form]);
 
+  // Automatically calculate OT hours when e_overtime, e_work, or break_ot changes
+  useEffect(() => {
+    if (watchedEWork && watchedEOvertime) {
+      const eWorkMin = toMinutes(watchedEWork);
+      const eOvertimeMin = toMinutes(watchedEOvertime);
+      const otMin = diffMinutesWrap(eWorkMin, eOvertimeMin);
+      const otBreakMin = watchedBreakOt ? Number(watchedBreakOt) : 0;
+      const calculatedOt = Math.max(0, (otMin - otBreakMin) / 60);
+
+      const currentOt = Number(form.getValues('ot'));
+      if (isNaN(currentOt) || Math.abs(currentOt - calculatedOt) > 0.01) {
+        form.setValue('ot', Number(calculatedOt.toFixed(2)), { shouldDirty: true });
+      }
+    }
+  }, [watchedEWork, watchedEOvertime, watchedBreakOt, form]);
+
+  // Automatically calculate e_overtime when ot, e_work, or break_ot changes
+  useEffect(() => {
+    if (watchedEWork && watchedOt !== undefined && watchedOt !== null && watchedOt !== 0 && !isNaN(Number(watchedOt))) {
+      const eWorkMin = toMinutes(watchedEWork);
+      const otMinTotal = Number(watchedOt) * 60 + (watchedBreakOt ? Number(watchedBreakOt) : 0);
+      const eOvertimeMin = (eWorkMin + otMinTotal) % 1440;
+
+      const h = String(Math.floor(eOvertimeMin / 60)).padStart(2, '0');
+      const m = String(eOvertimeMin % 60).padStart(2, '0');
+      const calculatedTime = `${h}:${m}`;
+
+      if (form.getValues('e_overtime') !== calculatedTime) {
+        form.setValue('e_overtime', calculatedTime, { shouldDirty: true });
+      }
+    }
+  }, [watchedEWork, watchedOt, watchedBreakOt, form]);
+
   // Handle shift dropdown selection -> Autofills shift times!
   const handleShiftChange = (shiftName: string) => {
-    form.setValue('shift', shiftName);
+    form.setValue('shift', shiftName, { shouldDirty: true });
     const selectedShift = shifts.find((s) => s.shift === shiftName);
     if (selectedShift) {
       // Shift times in shift list are like '07:00'
-      form.setValue('s_work', selectedShift.s_work || '09:00');
-      form.setValue('e_work', selectedShift.e_work || '17:00');
-      form.setValue('s_break', selectedShift.s_break || '13:00');
-      form.setValue('e_break', selectedShift.e_break || '13:30');
-      form.setValue('fk_st_id', selectedShift.pk_st_id);
+      form.setValue('s_work', selectedShift.s_work || '09:00', { shouldDirty: true });
+      form.setValue('e_work', selectedShift.e_work || '17:00', { shouldDirty: true });
+      form.setValue('s_break', selectedShift.s_break || '13:00', { shouldDirty: true });
+      form.setValue('e_break', selectedShift.e_break || '13:30', { shouldDirty: true });
+      form.setValue('fk_st_id', selectedShift.pk_st_id, { shouldDirty: true });
+    }
+    if (onShiftChange) {
+      onShiftChange(shiftName);
     }
   };
 
@@ -140,7 +187,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                   <SelectContent className="border-border bg-popover z-[10000]">
                     <SelectItem value="Permanent Shift">Permanent Shift</SelectItem>
                     <SelectItem value="Regular Shift Basis">Regular Shift Basis</SelectItem>
-                    <SelectItem value="Temporary Shift">Temporary Shift</SelectItem>
+                    <SelectItem value="Short-Lived Shift">Short-Lived Shift</SelectItem>
                   </SelectContent>
                 </Select>
               )}
@@ -217,9 +264,10 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                 disabled={!isEditing}
                 {...form.register('s_work')}
                 className={cn(
-                  "h-8 text-xs border-border/60 w-28",
+                  "h-8 text-xs border-border/60 w-36",
                   form.formState.errors.s_work && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
                 )}
+                style={{ outline: 'none', boxShadow: 'none' }}
               />
               <span className="text-muted-foreground text-[10px] font-bold">To</span>
               <Input
@@ -227,15 +275,20 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                 disabled={!isEditing}
                 {...form.register('e_work')}
                 className={cn(
-                  "h-8 text-xs border-border/60 w-28",
+                  "h-8 text-xs border-border/60 w-36",
                   form.formState.errors.e_work && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
                 )}
+                style={{ outline: 'none', boxShadow: 'none' }}
               />
               <Input
                 type="text"
                 readOnly
                 {...form.register('t_work')}
-                className="h-8 w-14 text-center text-xs bg-muted/30 border-border/30 font-mono font-bold"
+                className={cn(
+                  "h-8 w-20 text-center text-xs bg-muted/30 border-none font-mono focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus:ring-0 select-none cursor-default ring-0",
+                  isEditing ? "font-bold text-foreground" : "font-normal text-muted-foreground/70"
+                )}
+                style={{ outline: 'none', boxShadow: 'none', border: 'none' }}
               />
               <span className="text-muted-foreground text-[9px] font-semibold">hrs</span>
             </div>
@@ -260,9 +313,10 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                 disabled={!isEditing}
                 {...form.register('s_break')}
                 className={cn(
-                  "h-8 text-xs border-border/60 w-28",
+                  "h-8 text-xs border-border/60 w-36",
                   form.formState.errors.s_break && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
                 )}
+                style={{ outline: 'none', boxShadow: 'none' }}
               />
               <span className="text-muted-foreground text-[10px] font-bold">To</span>
               <Input
@@ -270,15 +324,20 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                 disabled={!isEditing}
                 {...form.register('e_break')}
                 className={cn(
-                  "h-8 text-xs border-border/60 w-28",
+                  "h-8 text-xs border-border/60 w-36",
                   form.formState.errors.e_break && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
                 )}
+                style={{ outline: 'none', boxShadow: 'none' }}
               />
               <Input
                 type="text"
                 readOnly
                 {...form.register('t_break')}
-                className="h-8 w-14 text-center text-xs bg-muted/30 border-border/30 font-mono font-bold"
+                className={cn(
+                  "h-8 w-20 text-center text-xs bg-muted/30 border-none font-mono focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus:ring-0 select-none cursor-default",
+                  isEditing ? "font-bold text-foreground" : "font-normal text-muted-foreground/70"
+                )}
+                style={{ outline: 'none', boxShadow: 'none', border: 'none' }}
               />
               <span className="text-muted-foreground text-[9px] font-semibold">min</span>
             </div>
@@ -296,23 +355,31 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
           <Label className="col-span-4 font-semibold text-muted-foreground uppercase tracking-wider text-[10px]">
             OT Break / Fixed OT
           </Label>
-          <div className="col-span-8 flex items-center gap-2">
-            <Input
-              type="number"
-              placeholder="Break min"
-              disabled={!isEditing}
-              {...form.register('break_ot')}
-              className="h-8 text-xs border-border/60 w-24"
-            />
-            <span className="text-muted-foreground text-[9px] font-semibold mr-2">min</span>
-            <Input
-              type="number"
-              placeholder="OT hrs"
-              disabled={!isEditing}
-              {...form.register('ot')}
-              className="h-8 text-xs border-border/60 w-24"
-            />
-            <span className="text-muted-foreground text-[9px] font-semibold">hrs</span>
+          <div className="col-span-8 flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                placeholder="Break min"
+                disabled={!isEditing}
+                {...form.register('break_ot')}
+                className="h-8 text-xs border-border/60 w-24"
+              />
+              <span className="text-muted-foreground text-[9px] font-semibold mr-2">min</span>
+              <Input
+                type="number"
+                placeholder="OT hrs"
+                disabled={!isEditing}
+                {...form.register('ot')}
+                className="h-8 text-xs border-border/60 w-24"
+              />
+              <span className="text-muted-foreground text-[9px] font-semibold">hrs</span>
+            </div>
+            {form.formState.errors.break_ot && (
+              <p className="text-[10px] text-destructive mt-1 font-medium">{String(form.formState.errors.break_ot.message)}</p>
+            )}
+            {form.formState.errors.ot && (
+              <p className="text-[10px] text-destructive mt-1 font-medium">{String(form.formState.errors.ot.message)}</p>
+            )}
           </div>
         </div>
 
@@ -327,7 +394,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               disabled={!isEditing}
               {...form.register('e_overtime')}
               className={cn(
-                "h-8 text-xs border-border/60 w-28",
+                "h-8 text-xs border-border/60 w-36",
                 form.formState.errors.e_overtime && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
               )}
             />

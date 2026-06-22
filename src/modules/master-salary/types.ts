@@ -247,12 +247,22 @@ export const salWorkTimingSchema = z.object({
   ted: z.string().nullish(),
   s_work: z.string().min(1, 'Start work time is required'),
   e_work: z.string().min(1, 'End work time is required'),
-  t_work: z.union([z.number(), z.string()]).optional(),
+  t_work: z.union([z.number(), z.string()])
+    .refine((val) => {
+      const num = Number(val);
+      return !isNaN(num) && num >= 0;
+    }, { message: 'Work hours must not be less than zero' })
+    .optional(),
   s_break: z.string().min(1, 'Start break time is required'),
   e_break: z.string().min(1, 'End break time is required'),
-  t_break: z.union([z.number(), z.string()]).optional(),
-  ot: z.number().min(0).max(12).nullish(),
-  break_ot: z.number().min(0).max(120).nullish(),
+  t_break: z.union([z.number(), z.string()])
+    .refine((val) => {
+      const num = Number(val);
+      return !isNaN(num) && num >= 0;
+    }, { message: 'Break minutes must not be less than zero' })
+    .optional(),
+  ot: z.preprocess((val) => (val === '' || val === null || val === undefined ? null : Number(val)), z.number().min(0, 'OT must be at least 0').max(12, 'OT cannot exceed 12 hours').nullable()),
+  break_ot: z.preprocess((val) => (val === '' || val === null || val === undefined ? null : Number(val)), z.number().min(0, 'OT break must be at least 0').max(120, 'OT break cannot exceed 120 minutes').nullable()),
   e_overtime: z.string().nullish(),
   management: z.boolean().default(false),
   group_id: z.string().optional(),

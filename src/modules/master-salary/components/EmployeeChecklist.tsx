@@ -10,6 +10,7 @@ interface EmployeeChecklistProps {
   onSelectedEmpIdsChange: (ids: number[]) => void;
   isEditing: boolean;
   employees: any[];
+  assignedEmpIds?: number[] | null;
   departments: any[];
   designations: any[];
   isLoading: boolean;
@@ -20,6 +21,7 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
   onSelectedEmpIdsChange,
   isEditing,
   employees = [],
+  assignedEmpIds,
   departments = [],
   designations = [],
   isLoading,
@@ -39,16 +41,25 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
     });
   }, [employees, departments, designations]);
 
-  // Filter employees based on search query
+  // Filter employees based on search query or shift assignment
   const filteredEmployees = useMemo(() => {
-    if (!searchQuery.trim()) return mappedEmployees;
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) {
+      if (assignedEmpIds && assignedEmpIds.length > 0) {
+        return mappedEmployees.filter(
+          (emp) =>
+            assignedEmpIds.includes(emp.pk_emp_id) ||
+            selectedEmpIds.includes(emp.pk_emp_id)
+        );
+      }
+      return mappedEmployees;
+    }
     return mappedEmployees.filter(
       (emp) =>
         emp.employee.toLowerCase().includes(query) ||
         emp.emp_code.toLowerCase().includes(query)
     );
-  }, [mappedEmployees, searchQuery]);
+  }, [mappedEmployees, searchQuery, assignedEmpIds, selectedEmpIds]);
 
   const handleToggleEmployee = (empId: number) => {
     if (!isEditing) return;

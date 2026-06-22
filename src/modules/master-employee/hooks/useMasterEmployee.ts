@@ -2,13 +2,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { masterEmployeeApi } from '../services';
 import { EmployeeRecord, EmployeeFilterParams } from '../types';
 
-export const useMasterEmployee = (filters?: EmployeeFilterParams) => {
+export const useMasterEmployee = (filters?: EmployeeFilterParams, options?: { enabled?: boolean }) => {
   const queryClient = useQueryClient();
   const queryKey = ['master-employee', filters];
 
   const listQuery = useQuery({
     queryKey,
     queryFn: () => masterEmployeeApi.list(filters),
+    enabled: options?.enabled ?? true,
   });
 
   const createMutation = useMutation({

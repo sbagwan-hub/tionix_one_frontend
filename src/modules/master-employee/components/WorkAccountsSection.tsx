@@ -205,7 +205,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
                   <SelectContent position="popper">
                     <SelectItem value="Phone">Phone</SelectItem>
                     <SelectItem value="Fax">Fax</SelectItem>
-                    <SelectItem value="E-Mail">E-Mail</SelectItem>
+                    <SelectItem value="Email">Email</SelectItem>
                   </SelectContent>
                 </Select>
                 <Input

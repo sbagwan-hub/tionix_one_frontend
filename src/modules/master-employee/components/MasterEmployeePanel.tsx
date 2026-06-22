@@ -321,7 +321,7 @@ export const MasterEmployeePanel: React.FC = () => {
 
   return (
     <div
-      className="flex w-full flex-col items-stretch justify-start gap-3 select-none"
+      className="flex w-full h-[calc(100vh-100px)] flex-col items-stretch justify-start gap-3 select-none overflow-hidden"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* Action Toolbar */}
@@ -373,13 +373,13 @@ export const MasterEmployeePanel: React.FC = () => {
         />
       </div>
 
-      <div className="border-border/60 bg-card text-card-foreground relative flex w-full flex-col rounded-sm border">
+      <div className="border-border/60 bg-card text-card-foreground relative flex w-full flex-1 min-h-0 flex-col rounded-sm border overflow-hidden">
         {/* Premium Background Glows */}
         <div className="absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial from-brand/10 to-transparent opacity-20 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-40 -right-40 h-[300px] w-[300px] rounded-full bg-radial from-brand/10 to-transparent opacity-20 blur-3xl pointer-events-none" />
 
         {/* Tabs + Form */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="relative z-10 flex flex-col w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="relative z-10 flex flex-col w-full flex-1 min-h-0 overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-2 px-6 pt-4 shrink-0">
             <TabsList className="h-8 rounded-sm p-0.5">
               <TabsTrigger value="employee" className="h-full rounded-[2px] px-5 text-xs">
@@ -407,7 +407,7 @@ export const MasterEmployeePanel: React.FC = () => {
           </div>
 
           {/* Form tab */}
-          <TabsContent value="employee" className="m-0 px-6 pt-4 pb-6 w-full">
+          <TabsContent value="employee" className="m-0 px-6 pt-4 pb-6 w-full flex-1 overflow-y-auto min-h-0">
 
 
             <MasterEmployeeForm
@@ -419,7 +419,7 @@ export const MasterEmployeePanel: React.FC = () => {
           </TabsContent>
 
           {/* List tab */}
-          <TabsContent value="list" className="m-0 px-6 pt-4 pb-4 w-full">
+          <TabsContent value="list" className="m-0 px-6 pt-4 pb-4 w-full flex-1 min-h-0 flex flex-col overflow-hidden">
             <MasterEmployeeList
               employees={employees}
               selectedEmployee={selectedEmployee}

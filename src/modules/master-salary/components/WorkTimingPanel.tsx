@@ -28,6 +28,7 @@ import {
   useUpdateWorkTimingGroup,
   useDeleteWorkTimingGroup,
 } from '../hooks/use-work-timings';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { salWorkTimingSchema } from '../types';
 import { masterSalaryApi } from '../services';
 import { EmployeeChecklist } from './EmployeeChecklist';
@@ -73,32 +74,6 @@ export const WorkTimingPanel: React.FC = () => {
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  // Queries
-  const { list: employeesList } = useMasterEmployee({ pageSize: 1000 });
-  const employeesData = employeesList.data;
-  const isEmpLoading = employeesList.isLoading;
-  const { list: deptsList } = useMasterContacts('departments');
-  const { list: desgsList } = useMasterContacts('designations');
-  const { list: agenciesList } = useMasterContacts('organizationsDropdown');
-  const { data: shiftsData } = useShiftTimingsList({ pageSize: 200 });
-
-  const { data: recordsData, isLoading: isRecordsLoading, refetch } = useWorkTimingsList({
-    page,
-    page_size: pageSize,
-    shift: filterShift || undefined,
-  });
-
-  const createMutation = useCreateWorkTiming();
-  const updateMutation = useUpdateWorkTimingGroup();
-  const deleteMutation = useDeleteWorkTimingGroup();
-
-  const records = recordsData?.rows || [];
-  const employees = employeesData?.data || [];
-  const departments = deptsList.data || [];
-  const designations = desgsList.data || [];
-  const agencies = agenciesList.data || [];
-  const shifts = shiftsData?.rows || [];
-
   // Form Setup
   const form = useForm<any>({
     resolver: zodResolver(salWorkTimingSchema),
@@ -122,6 +97,69 @@ export const WorkTimingPanel: React.FC = () => {
     },
     mode: 'onChange',
   });
+
+  const watchedShift = form.watch('shift');
+  const watchedTsd = form.watch('tsd');
+  const queryClient = useQueryClient();
+
+  // Query to fetch all employee timings assigned to the selected date (tsd)
+  const { data: assignedOnDateData } = useQuery({
+    queryKey: ['assignedWorkTimingsOnDate', watchedTsd],
+    queryFn: () =>
+      watchedTsd
+        ? masterSalaryApi.workTimings.list({ tsd_from: watchedTsd, tsd_to: watchedTsd, page_size: 1000 })
+        : Promise.resolve({ rows: [], total: 0, page: 1, page_size: 1000 }),
+    enabled: !!watchedTsd && mode !== 'view',
+  });
+
+  const assignedEmpIdsOnDate = React.useMemo(() => {
+    if (!assignedOnDateData?.rows) return [];
+    return assignedOnDateData.rows.map((r: any) => r.fk_emp_id);
+  }, [assignedOnDateData]);
+
+  // Queries
+  const { list: employeesList } = useMasterEmployee({ pageSize: 1000 });
+  const employeesData = employeesList.data;
+  const isEmpLoading = employeesList.isLoading;
+  const { list: deptsList } = useMasterContacts('departments');
+  const { list: desgsList } = useMasterContacts('designations');
+  const { list: agenciesList } = useMasterContacts('organizationsDropdown');
+  const { data: shiftsData } = useShiftTimingsList({ pageSize: 200 });
+
+  const { data: recordsData, isLoading: isRecordsLoading, refetch } = useWorkTimingsList({
+    page,
+    page_size: pageSize,
+    shift: filterShift || undefined,
+  });
+
+  const createMutation = useCreateWorkTiming();
+  const updateMutation = useUpdateWorkTimingGroup();
+  const deleteMutation = useDeleteWorkTimingGroup();
+
+  const records = recordsData?.rows || [];
+  const currentShift = watchedShift || (mode === 'view' && records[cursor]?.shift) || '';
+  const employees = employeesData?.data || [];
+
+  const displayEmployees = React.useMemo(() => {
+    if (watchedTsd && mode !== 'view') {
+      return employees.filter((emp: any) => {
+        const isAssignedOnDate = assignedEmpIdsOnDate.includes(emp.pk_emp_id);
+        const isCurrentlySelected = selectedEmpIds.includes(emp.pk_emp_id);
+        if (isAssignedOnDate && !isCurrentlySelected) {
+          return false;
+        }
+        return true;
+      });
+    }
+    return employees;
+  }, [employees, mode, watchedTsd, assignedEmpIdsOnDate, selectedEmpIds]);
+
+  const departments = deptsList.data || [];
+  const designations = desgsList.data || [];
+  const agencies = agenciesList.data || [];
+  const shifts = shiftsData?.rows || [];
+
+
 
   const loadGroupEmployees = async (groupId: string) => {
     try {
@@ -172,23 +210,9 @@ export const WorkTimingPanel: React.FC = () => {
     }
   }, [cursor, records, mode, populateForm]);
 
-  // Dynamically select the first shift returned by backend as the default selection when shifts load
-  useEffect(() => {
-    if (shifts.length > 0 && mode === 'add' && !form.getValues('shift')) {
-      const defaultShift = shifts[0];
-      form.reset({
-        ...form.getValues(),
-        shift: defaultShift.shift,
-        fk_st_id: defaultShift.pk_st_id,
-        s_work: defaultShift.s_work,
-        e_work: defaultShift.e_work,
-        t_work: Number(defaultShift.t_work || 0).toFixed(2),
-        s_break: defaultShift.s_break,
-        e_break: defaultShift.e_break,
-        t_break: Number(defaultShift.t_break || 0).toFixed(2),
-      });
-    }
-  }, [shifts, mode, form]);
+  const handleShiftSelect = async (shiftName: string) => {
+    setSelectedEmpIds([]);
+  };
 
   // CRUD actions
   const handleAdd = () => {
@@ -196,20 +220,19 @@ export const WorkTimingPanel: React.FC = () => {
     setSelectedId(null);
     setSelectedGroupId(null);
     setSelectedEmpIds([]);
-    const defaultShift = shifts.length > 0 ? shifts[0] : null;
     form.reset({
-      shift: defaultShift ? defaultShift.shift : '',
-      fk_st_id: defaultShift ? defaultShift.pk_st_id : null,
+      shift: '',
+      fk_st_id: null,
       type: 'Permanent Shift',
       fk_cont_id: 'none',
       tsd: extractDate(new Date()),
       ted: '',
-      s_work: defaultShift ? defaultShift.s_work : '',
-      e_work: defaultShift ? defaultShift.e_work : '',
-      t_work: defaultShift ? Number(defaultShift.t_work || 0).toFixed(2) : '',
-      s_break: defaultShift ? defaultShift.s_break : '',
-      e_break: defaultShift ? defaultShift.e_break : '',
-      t_break: defaultShift ? Number(defaultShift.t_break || 0).toFixed(2) : '',
+      s_work: '',
+      e_work: '',
+      t_work: '',
+      s_break: '',
+      e_break: '',
+      t_break: '',
       ot: 0,
       break_ot: 0,
       e_overtime: '',
@@ -260,11 +283,13 @@ export const WorkTimingPanel: React.FC = () => {
     try {
       if (mode === 'add') {
         await createMutation.mutateAsync(payload);
+        queryClient.invalidateQueries({ queryKey: ['assignedWorkTimingsOnDate'] });
         toast.success('Work timings assigned successfully.');
         setMode('view');
         refetch();
       } else if (mode === 'edit' && selectedGroupId) {
         await updateMutation.mutateAsync({ groupId: selectedGroupId, data: payload });
+        queryClient.invalidateQueries({ queryKey: ['assignedWorkTimingsOnDate'] });
         toast.success('Work timings updated successfully.');
         setMode('view');
         refetch();
@@ -284,6 +309,7 @@ export const WorkTimingPanel: React.FC = () => {
     if (!selectedGroupId) return;
     try {
       await deleteMutation.mutateAsync(selectedGroupId);
+      queryClient.invalidateQueries({ queryKey: ['assignedWorkTimingsOnDate'] });
       toast.success('Work timings group deleted successfully.');
       setIsConfirmOpen(false);
       setCursor(0);
@@ -372,21 +398,19 @@ export const WorkTimingPanel: React.FC = () => {
       {/* Top Nav Tabs */}
       <div className="my-2 flex border-b border-border/60 shrink-0">
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${
-            activeTab === 'timing'
+          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${activeTab === 'timing'
               ? 'border-primary text-primary bg-primary/5 font-bold'
               : 'text-muted-foreground hover:text-foreground border-transparent'
-          }`}
+            }`}
           onClick={() => setActiveTab('timing')}
         >
           Work Timing Setup
         </button>
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${
-            activeTab === 'list'
+          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${activeTab === 'list'
               ? 'border-primary text-primary bg-primary/5 font-bold'
               : 'text-muted-foreground hover:text-foreground border-transparent'
-          }`}
+            }`}
           onClick={() => setActiveTab('list')}
         >
           Timing Assignments List
@@ -404,20 +428,34 @@ export const WorkTimingPanel: React.FC = () => {
                 isEditing={isEditing}
                 shifts={shifts}
                 manpowerAgencies={agencies}
+                onShiftChange={handleShiftSelect}
               />
             </div>
 
-            {/* Right side checklist */}
+             {/* Right side checklist */}
             <div className="w-full md:w-[48%] min-h-0 h-full overflow-hidden">
-              <EmployeeChecklist
-                selectedEmpIds={selectedEmpIds}
-                onSelectedEmpIdsChange={setSelectedEmpIds}
-                isEditing={isEditing}
-                employees={employees}
-                departments={departments}
-                designations={designations}
-                isLoading={isEmpLoading}
-              />
+              {currentShift ? (
+                <EmployeeChecklist
+                  selectedEmpIds={selectedEmpIds}
+                  onSelectedEmpIdsChange={setSelectedEmpIds}
+                  isEditing={isEditing}
+                  employees={displayEmployees}
+                  assignedEmpIds={null}
+                  departments={departments}
+                  designations={designations}
+                  isLoading={isEmpLoading}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full bg-card/25 border border-border/40 rounded-lg backdrop-blur-md p-6 text-center text-muted-foreground">
+                  <div className="rounded-full bg-primary/5 p-4 mb-3 border border-primary/10">
+                    <HelpCircle className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-foreground mb-1">No Shift Selected</h3>
+                  <p className="text-xs text-muted-foreground max-w-xs">
+                    Please select a Shift Name in the form to load and display the employee checklist.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         ) : (

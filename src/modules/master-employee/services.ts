@@ -54,7 +54,7 @@ export const masterEmployeeApi = {
         page: number;
         pageSize: number;
       };
-    }>('/master-employee', { params });
+    }>('/master/master-employee', { params });
 
     const mappedData = (response.data.data.data || []).map((emp) => ({
       ...emp,
@@ -73,7 +73,7 @@ export const masterEmployeeApi = {
       success: boolean;
       message: string;
       data: EmployeeRecord & { documents?: any[] };
-    }>(`/master-employee/${id}`);
+    }>(`/master/master-employee/${id}`);
 
     const emp = response.data.data;
     return {
@@ -94,7 +94,7 @@ export const masterEmployeeApi = {
       success: boolean;
       message: string;
       data: EmployeeRecord & { documents?: any[] };
-    }>('/master-employee', payload);
+    }>('/master/master-employee', payload);
 
     const created = response.data.data;
     return {
@@ -115,7 +115,7 @@ export const masterEmployeeApi = {
       success: boolean;
       message: string;
       data: EmployeeRecord & { documents?: any[] };
-    }>(`/master-employee/${id}`, payload);
+    }>(`/master/master-employee/${id}`, payload);
 
     const updated = response.data.data;
     return {
@@ -126,7 +126,7 @@ export const masterEmployeeApi = {
   },
 
   remove: async (id: number): Promise<void> => {
-    await axiosClient.delete(`/master-employee/${id}`);
+    await axiosClient.delete(`/master/master-employee/${id}`);
   },
 
   nextCode: async (): Promise<string> => {
@@ -134,7 +134,7 @@ export const masterEmployeeApi = {
       success: boolean;
       message: string;
       data: { nextCode: string };
-    }>('/master-employee/next-code');
+    }>('/master/master-employee/next-code');
     return response.data.data.nextCode;
   },
 
@@ -143,7 +143,7 @@ export const masterEmployeeApi = {
       success: boolean;
       message: string;
       data: { fk_dt_id: number; doc_file: string }[];
-    }>('/master-employee/document-types');
+    }>('/master/master-employee/document-types');
     return response.data.data;
   },
 
@@ -152,7 +152,7 @@ export const masterEmployeeApi = {
       success: boolean;
       message: string;
       data: { url: string; fileName: string };
-    }>('/master-employee/upload', { fileData, fileName, type });
+    }>('/master/master-employee/upload', { fileData, fileName, type });
     return response.data.data;
   },
 };

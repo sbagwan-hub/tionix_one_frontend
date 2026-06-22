@@ -1,6 +1,6 @@
 export interface ContactDetail {
   id: string;
-  type: string; // Phone, Fax, E-Mail
+  type: string; // Phone, Fax, Email
   detail: string;
 }
 

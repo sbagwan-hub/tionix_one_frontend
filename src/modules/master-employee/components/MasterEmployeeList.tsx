@@ -69,8 +69,8 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
   ];
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div className="flex items-center justify-between gap-4">
+    <div className="flex flex-col gap-4 w-full flex-1 min-h-0 overflow-hidden">
+      <div className="flex items-center justify-between gap-4 shrink-0">
         <SearchBox
           value={search}
           onChange={onSearchChange}
@@ -82,7 +82,7 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto">
+      <div className="w-full flex-1 min-h-0 overflow-auto border border-border/40 rounded-sm bg-card">
         <DataTable
           data={employees}
           columns={columns}
@@ -90,7 +90,7 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
           onRowClick={(row) => onSelectEmployee(row)}
           onRowDoubleClick={(row) => onRowDoubleClick && onRowDoubleClick(row)}
           rowClassName={(row) => selectedEmployee?.pk_emp_id === row.pk_emp_id ? 'bg-brand/10 hover:bg-brand/15' : ''}
-          className="border border-border/40 rounded-sm"
+          className="border-0 shadow-none rounded-none"
         />
       </div>
     </div>
