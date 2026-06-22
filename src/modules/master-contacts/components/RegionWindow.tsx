@@ -139,6 +139,8 @@ export const RegionWindow: React.FC = () => {
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
       className="h-[340px]"
+      formName="Area\\Region\\Shipping Location"
+      isEdit={editingId !== null}
     />
   );
 };

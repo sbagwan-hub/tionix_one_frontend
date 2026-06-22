@@ -124,7 +124,7 @@ export const masterContactsApi = {
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/relationships/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/relationships/${id}`),
   },
   titles: {
     list: async () =>

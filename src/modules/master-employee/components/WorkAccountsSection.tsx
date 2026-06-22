@@ -182,7 +182,7 @@ export const WorkAccountsSection: React.FC<SectionProps> = ({
         <div className="mt-1 flex min-h-[160px] flex-1 flex-col gap-2.5">
           <div className="border-border/10 flex items-center justify-between border-b pb-1.5">
             <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-              Contacts Detail
+              Contacts Detail *
             </Label>
             <Button
               type="button"

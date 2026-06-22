@@ -32,6 +32,7 @@ import { ReligionWindow } from '@/modules/master-salary/components/ReligionWindo
 import { ScheduleTypeWindow } from '@/modules/master-salary/components/ScheduleTypeWindow';
 import { NatureOfWorkWindow } from '@/modules/master-salary/components/NatureOfWorkWindow';
 import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSectionWindow';
+import { ShiftTimingWindow } from '@/modules/master-salary/components/ShiftTimingWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -147,6 +148,14 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-40 left-48 w-full max-w-2xl',
     component: SalItSectionWindow,
+  },
+  'salary-shift-timing': {
+    id: 'salary-shift-timing',
+    title: 'Shift Timings',
+    icon: <Settings className="h-4 w-4 text-sky-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-5xl h-[560px]',
+    component: ShiftTimingWindow,
   },
   'contacts-mode-of-contact': {
     id: 'contacts-mode-of-contact',

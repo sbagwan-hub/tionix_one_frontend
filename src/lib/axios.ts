@@ -185,8 +185,18 @@ api.interceptors.response.use(
       retryConfig && isRetryable && retryConfig.retryCount < (retryConfig.retries ?? 3);
 
     if (!willRetry) {
-      const message = extractAxiosErrorMessage(error);
-      toast.error(message, { id: message });
+      const method = String(originalRequest?.method ?? '').toLowerCase();
+      const status = error.response?.status;
+
+      // Suppress silent background permission failures:
+      // GET requests returning 403 are background permission checks — the UI
+      // already disables/hides controls. Showing a toast here is noise.
+      const isSilentPermissionFailure = method === 'get' && status === 403;
+
+      if (!isSilentPermissionFailure) {
+        const message = extractAxiosErrorMessage(error);
+        toast.error(message, { id: message });
+      }
     }
 
     return Promise.reject(error);

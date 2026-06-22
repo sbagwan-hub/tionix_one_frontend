@@ -31,14 +31,14 @@ export const ReferencesSection: React.FC<SectionProps> = ({
   const openWindow = useWindowStore((state) => state.openWindow);
 
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <h3 className="text-sm font-bold uppercase tracking-wider text-brand border-b border-border/20 pb-1.5">
+    <div className="flex h-full flex-col gap-4">
+      <h3 className="text-brand border-border/20 border-b pb-1.5 text-sm font-bold tracking-wider uppercase">
         Reference Persons (Personalities Know Employee)
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* Primary Reference */}
-        <div className="border border-border/15 bg-muted/5 p-3 rounded-sm flex flex-col gap-3">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground border-b border-border/10 pb-1">
+        <div className="border-border/15 bg-muted/5 flex flex-col gap-3 rounded-sm border p-3">
+          <h4 className="text-muted-foreground border-border/10 border-b pb-1 text-xs font-bold tracking-wider uppercase">
             Primary Reference Info
           </h4>
           <div className="grid grid-cols-2 gap-3">
@@ -47,7 +47,7 @@ export const ReferencesSection: React.FC<SectionProps> = ({
               value={formData.personality1 || ''}
               onChange={(e) => onInputChange('personality1', e.target.value)}
               placeholder="Name"
-              className="h-9 text-sm rounded-sm"
+              className="h-9 rounded-sm text-sm"
               disabled={disabled}
             />
             <FormInput
@@ -55,59 +55,47 @@ export const ReferencesSection: React.FC<SectionProps> = ({
               value={formData.p1_contact || ''}
               onChange={(e) => onInputChange('p1_contact', e.target.value)}
               placeholder="Phone"
-              className="h-9 text-sm rounded-sm"
+              className="h-9 rounded-sm text-sm"
               disabled={disabled}
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Designation
             </Label>
-            <div className="flex gap-1.5">
-              <div className="flex-1 min-w-0">
-                <Select
-                  value={formData.fk_p1_des_id ? String(formData.fk_p1_des_id) : 'none'}
-                  onValueChange={(val) => onInputChange('fk_p1_des_id', val === 'none' ? null : parseInt(val, 10))}
-                  disabled={disabled}
-                >
-                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="none">None</SelectItem>
-                    {(designationsQuery.list.data || []).map((dg: any) => (
-                      <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
-                        {dg.designation}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-sm shrink-0"
-                disabled={disabled}
-                onClick={() => openWindow('contacts-designation')}
-                type="button"
-              >
-                <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </div>
+            <Select
+              value={formData.fk_p1_des_id ? String(formData.fk_p1_des_id) : 'none'}
+              onValueChange={(val) =>
+                onInputChange('fk_p1_des_id', val === 'none' ? null : parseInt(val, 10))
+              }
+              disabled={disabled}
+            >
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="none">None</SelectItem>
+                {(designationsQuery.list.data || []).map((dg: any) => (
+                  <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
+                    {dg.designation}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <FormInput
             label="Address"
             value={formData.p1_address || ''}
             onChange={(e) => onInputChange('p1_address', e.target.value)}
             placeholder="Address"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
 
         {/* Secondary Reference */}
-        <div className="border border-border/15 bg-muted/5 p-3 rounded-sm flex flex-col gap-3">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground border-b border-border/10 pb-1">
+        <div className="border-border/15 bg-muted/5 flex flex-col gap-3 rounded-sm border p-3">
+          <h4 className="text-muted-foreground border-border/10 border-b pb-1 text-xs font-bold tracking-wider uppercase">
             Secondary Reference Info
           </h4>
           <div className="grid grid-cols-2 gap-3">
@@ -116,7 +104,7 @@ export const ReferencesSection: React.FC<SectionProps> = ({
               value={formData.personality2 || ''}
               onChange={(e) => onInputChange('personality2', e.target.value)}
               placeholder="Name"
-              className="h-9 text-sm rounded-sm"
+              className="h-9 rounded-sm text-sm"
               disabled={disabled}
             />
             <FormInput
@@ -124,52 +112,40 @@ export const ReferencesSection: React.FC<SectionProps> = ({
               value={formData.p2_contact || ''}
               onChange={(e) => onInputChange('p2_contact', e.target.value)}
               placeholder="Phone"
-              className="h-9 text-sm rounded-sm"
+              className="h-9 rounded-sm text-sm"
               disabled={disabled}
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Designation
             </Label>
-            <div className="flex gap-1.5">
-              <div className="flex-1 min-w-0">
-                <Select
-                  value={formData.fk_p2_des_id ? String(formData.fk_p2_des_id) : 'none'}
-                  onValueChange={(val) => onInputChange('fk_p2_des_id', val === 'none' ? null : parseInt(val, 10))}
-                  disabled={disabled}
-                >
-                  <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="none">None</SelectItem>
-                    {(designationsQuery.list.data || []).map((dg: any) => (
-                      <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
-                        {dg.designation}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-sm shrink-0"
-                disabled={disabled}
-                onClick={() => openWindow('contacts-designation')}
-                type="button"
-              >
-                <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </Button>
-            </div>
+            <Select
+              value={formData.fk_p2_des_id ? String(formData.fk_p2_des_id) : 'none'}
+              onValueChange={(val) =>
+                onInputChange('fk_p2_des_id', val === 'none' ? null : parseInt(val, 10))
+              }
+              disabled={disabled}
+            >
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="none">None</SelectItem>
+                {(designationsQuery.list.data || []).map((dg: any) => (
+                  <SelectItem key={dg.pk_des_id} value={String(dg.pk_des_id)}>
+                    {dg.designation}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <FormInput
             label="Address"
             value={formData.p2_address || ''}
             onChange={(e) => onInputChange('p2_address', e.target.value)}
             placeholder="Address"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
