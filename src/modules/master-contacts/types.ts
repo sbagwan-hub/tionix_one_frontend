@@ -141,7 +141,7 @@ export const individualSchema = z.object({
       },
       { message: 'Individual must be at least 18 years old' },
     ),
-  photo: z.string().nullable().optional(),
+  photo_url: z.string().nullable().optional(),
   fk_qual_id: z.number().nullable().optional(),
   gender: z.string().default('male'),
   marital_status: z.string().default('single'),

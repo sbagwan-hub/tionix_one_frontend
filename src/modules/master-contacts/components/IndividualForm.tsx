@@ -98,7 +98,12 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
           toggleCategory={toggleCategory}
           disabled={disabled}
         />
-        <PhotoSection photo={formData.photo} onInputChange={onInputChange} disabled={disabled} />
+        <PhotoSection
+          photo={formData.photo_url}
+          onInputChange={onInputChange}
+          disabled={disabled}
+          fieldName="photo_url"
+        />
         <ContactDetailsSection
           contacts={formData.contacts || []}
           onInputChange={onInputChange}
