@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import { FontSizeProvider } from '@/providers/font-size-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { LayoutWrapper } from '@/components/layout/layout-wrapper';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,9 +40,11 @@ export default function RootLayout({
         <ThemeProvider>
           <FontSizeProvider>
             <QueryProviders>
-              <LocaleUpdater />
-              <LayoutWrapper>{children}</LayoutWrapper>
-              <Toaster position="top-right" />
+              <TooltipProvider>
+                <LocaleUpdater />
+                <LayoutWrapper>{children}</LayoutWrapper>
+                <Toaster position="top-right" />
+              </TooltipProvider>
             </QueryProviders>
           </FontSizeProvider>
         </ThemeProvider>

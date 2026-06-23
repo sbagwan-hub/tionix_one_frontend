@@ -14,6 +14,8 @@ import {
   RegionDto,
   IndividualDto,
   IndividualRecord,
+  OrganisationDto,
+  OrganisationRecord,
 } from './types';
 
 // Common wrapper to inject fk_user_id for now
@@ -122,7 +124,7 @@ export const masterContactsApi = {
           withUserId(data),
         )
       ).data.data,
-    remove: async (id: number) => axiosClient.delete(`/master-contacts/relationships/${id}`),
+    remove: async (id: number) => axiosClient.delete(`/master/master-contacts/relationships/${id}`),
   },
   titles: {
     list: async () =>
@@ -183,7 +185,8 @@ export const masterContactsApi = {
     list: async () =>
       (
         await axiosClient.get<{ data: any[] }>(
-          '/master/master-contacts/address/organizations/dropdown',
+          '/master/master-contacts/individuals/common/dropdown',
+          { params: { type: 'O' } },
         )
       ).data.data,
     create: async () => ({}) as any,
@@ -324,6 +327,39 @@ export const masterContactsApi = {
       ).data.data,
     remove: async (id: string): Promise<void> => {
       await axiosClient.delete(`/master/master-contacts/individuals/${id}`);
+    },
+  },
+  organisations: {
+    list: async (params?: {
+      page?: number;
+      limit?: number;
+      search?: string;
+    }): Promise<{
+      data: OrganisationRecord[];
+      meta?: { total: number; page: number; limit: number };
+    }> =>
+      (
+        await axiosClient.get<{
+          data: OrganisationRecord[];
+          meta?: { total: number; page: number; limit: number };
+        }>('/master/master-contacts/organisations', { params })
+      ).data,
+    create: async (data: OrganisationDto): Promise<OrganisationRecord> =>
+      (
+        await axiosClient.post<{ data: OrganisationRecord }>(
+          '/master/master-contacts/organisations',
+          withUserId(data as any),
+        )
+      ).data.data,
+    update: async (id: string, data: Partial<OrganisationDto>): Promise<OrganisationRecord> =>
+      (
+        await axiosClient.put<{ data: OrganisationRecord }>(
+          `/master/master-contacts/organisations/${id}`,
+          withUserId(data as any),
+        )
+      ).data.data,
+    remove: async (id: string): Promise<void> => {
+      await axiosClient.delete(`/master/master-contacts/organisations/${id}`);
     },
   },
 };

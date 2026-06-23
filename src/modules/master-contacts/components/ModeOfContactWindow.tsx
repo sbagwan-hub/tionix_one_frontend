@@ -123,6 +123,8 @@ export const ModeOfContactWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Mode of Contact"
+      isEdit={editingId !== null}
     />
   );
 };

@@ -21,6 +21,7 @@ export interface LicenseDetail {
   has_original?: boolean;
   valid_until?: string;
   fk_dt_id?: number;
+  doc_file?: string | null;
 }
 
 export interface EmployeeRecord {
@@ -29,7 +30,7 @@ export interface EmployeeRecord {
   employee: string;
   doj: string;
   gender: string;
-  martial_status: string;
+  marital_status: string;
   p_address: string;
   n_address: string;
   account_no: string;

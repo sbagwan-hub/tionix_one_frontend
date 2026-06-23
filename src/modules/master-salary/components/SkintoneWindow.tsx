@@ -28,7 +28,11 @@ export const SkintoneWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update skintone.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update skintone.';
             toast.error(msg);
           },
         },
@@ -40,7 +44,11 @@ export const SkintoneWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create skintone.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create skintone.';
           toast.error(msg);
         },
       });
@@ -71,7 +79,11 @@ export const SkintoneWindow: React.FC = () => {
         toast.success('Skintone deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete skintone.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete skintone.';
         toast.error(msg);
       },
     });
@@ -91,9 +103,7 @@ export const SkintoneWindow: React.FC = () => {
         {...form.register('colour')}
       />
       {form.formState.errors.colour && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.colour.message}
-        </span>
+        <span className="text-destructive text-[10px]">{form.formState.errors.colour.message}</span>
       )}
     </form>
   );
@@ -111,6 +121,8 @@ export const SkintoneWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Skin Tones"
+      isEdit={editingId !== null}
     />
   );
 };

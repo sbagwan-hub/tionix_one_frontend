@@ -143,6 +143,8 @@ export const StateWindow: React.FC = () => {
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
       className="h-[350px]"
+      formName="State"
+      isEdit={editingId !== null}
     />
   );
 };

@@ -16,6 +16,7 @@ interface DatePickerProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  triggerClassName?: string;
   disabledDates?: (date: Date) => boolean;
 }
 
@@ -26,6 +27,7 @@ export function DatePicker({
   placeholder = 'Pick a date',
   disabled = false,
   className,
+  triggerClassName,
   disabledDates,
 }: DatePickerProps) {
   const parsedDate = React.useMemo(() => {
@@ -46,9 +48,9 @@ export function DatePicker({
   };
 
   return (
-    <div className={cn('flex flex-col gap-1 w-full', className)}>
+    <div className={cn('flex w-full flex-col gap-1', className)}>
       {label && (
-        <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+        <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
           {label}
         </Label>
       )}
@@ -57,14 +59,15 @@ export function DatePicker({
           <Button
             variant="outline"
             className={cn(
-              'h-9 text-left font-normal rounded-sm w-full bg-background/50 border border-input text-xs px-3 flex items-center justify-between',
+              'bg-background/50 border-input flex h-9 w-full items-center justify-between rounded-sm border px-3 text-left text-xs font-normal',
               !parsedDate && 'text-muted-foreground',
-              disabled && 'opacity-50 cursor-not-allowed'
+              disabled && 'cursor-not-allowed opacity-50',
+              triggerClassName,
             )}
             disabled={disabled}
           >
             {parsedDate ? format(parsedDate, 'PPP') : <span>{placeholder}</span>}
-            <CalendarIcon className="h-3.5 w-3.5 opacity-50 shrink-0" />
+            <CalendarIcon className="h-3.5 w-3.5 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">

@@ -2,7 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-@custom-variant dark (&:is(.dark *, [class*="dark"] *));
+@custom-variant dark (&:is(.dark *, [class*="-dark"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -177,10 +177,10 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.553 0.195 38.402);
+  --primary: #ff5c1c;
   --primary-foreground: oklch(0.98 0.016 73.684);
-  --secondary: #fef3c7;
-  --secondary-foreground: #b45309;
+  --secondary: color-mix(in srgb, var(--primary) 10%, transparent);
+  --secondary-foreground: var(--primary);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
@@ -190,7 +190,7 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --brand: oklch(0.553 0.195 38.402);
+  --brand: #ff5c1c;
   --brand-muted: oklch(0.97 0 0);
   --chart-1: oklch(0.837 0.128 66.29);
   --chart-2: oklch(0.705 0.213 47.604);
@@ -227,8 +227,8 @@
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.47 0.157 37.304);
   --primary-foreground: oklch(0.98 0.016 73.684);
-  --secondary: #451a03;
-  --secondary-foreground: #fde68a;
+  --secondary: color-mix(in srgb, var(--primary) 10%, transparent);
+  --secondary-foreground: var(--primary);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);

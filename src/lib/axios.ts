@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast } from '@/components/modern-ui/sonner';
 
@@ -82,14 +82,6 @@ const getBackendResponseData = (data: unknown): BackendResponse => {
   return {};
 };
 
-const shouldToastSuccess = (response: AxiosResponse) => {
-  const method = String(response.config.method).toLowerCase();
-  const url = response.config.url ?? '';
-
-  if (url.includes('/auth')) return false;
-  return ['post', 'put', 'delete'].includes(method);
-};
-
 export const extractAxiosErrorMessage = (error: unknown) => {
   if (axios.isAxiosError(error)) {
     const data = getBackendResponseData(error.response?.data);
@@ -115,16 +107,6 @@ export const extractAxiosErrorMessage = (error: unknown) => {
 
 api.interceptors.response.use(
   (response) => {
-    if (shouldToastSuccess(response)) {
-      const data = response.data as Record<string, any>;
-      const message =
-        data?.message ||
-        (response.status === 201 && 'Created successfully.') ||
-        (response.status === 200 && 'Saved successfully.') ||
-        'Operation completed successfully.';
-      toast.success(message);
-    }
-
     return response;
   },
   async (error: AxiosError) => {
@@ -185,8 +167,18 @@ api.interceptors.response.use(
       retryConfig && isRetryable && retryConfig.retryCount < (retryConfig.retries ?? 3);
 
     if (!willRetry) {
-      const message = extractAxiosErrorMessage(error);
-      toast.error(message, { id: message });
+      const method = String(originalRequest?.method ?? '').toLowerCase();
+      const status = error.response?.status;
+
+      // Suppress silent background permission failures:
+      // GET requests returning 403 are background permission checks — the UI
+      // already disables/hides controls. Showing a toast here is noise.
+      const isSilentPermissionFailure = method === 'get' && status === 403;
+
+      if (!isSilentPermissionFailure) {
+        const message = extractAxiosErrorMessage(error);
+        toast.error(message, { id: message });
+      }
     }
 
     return Promise.reject(error);

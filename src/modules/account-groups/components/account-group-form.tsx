@@ -1,19 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import {
-  Circle,
-  Info,
-  Layers,
-  KeyRound,
-  ShieldAlert,
-  Clock,
-  User,
-  Eye,
-  PlusCircle,
-  Settings2,
-  FolderOpen,
-} from 'lucide-react';
+import { Info, Layers, Eye, PlusCircle, Settings2, FolderOpen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AcctGroup } from '../types';

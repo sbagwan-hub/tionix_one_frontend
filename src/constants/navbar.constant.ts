@@ -53,6 +53,11 @@ export const NAV_MENUS: NavMenu[] = [
             href: '/masters/contacts/individual',
           },
           {
+            key: 'organisation',
+            icon: 'Building2',
+            href: '/masters/contacts/organisation',
+          },
+          {
             key: 'titles',
             icon: 'User',
             action: () => useWindowStore.getState().openWindow('contacts-title'),
@@ -160,6 +165,16 @@ export const NAV_MENUS: NavMenu[] = [
             key: 'Income Tax Sections',
             icon: 'Percent',
             action: () => useWindowStore.getState().openWindow('salary-sal-it-section'),
+          },
+          {
+            key: 'Shift Timings',
+            icon: 'Clock',
+            action: () => useWindowStore.getState().openWindow('salary-shift-timing'),
+          },
+          {
+            key: 'Work Timings',
+            icon: 'Clock',
+            href: '/masters/salary/work-timing',
           },
         ],
       },

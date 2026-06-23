@@ -25,8 +25,8 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <h3 className="text-sm font-bold uppercase tracking-wider text-brand border-b border-border/20 pb-1.5">
+    <div className="flex h-full flex-col gap-4">
+      <h3 className="text-brand border-border/20 border-b pb-1.5 text-sm font-bold tracking-wider uppercase">
         Security & Login Setup
       </h3>
       <div className="flex flex-col gap-3.5">
@@ -36,7 +36,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             value={formData.username || ''}
             onChange={(e) => onInputChange('username', e.target.value)}
             placeholder="Login username"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
             maxLength={15}
           />
@@ -45,10 +45,10 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             value={formData.password || ''}
             onChange={(e) => onInputChange('password', e.target.value)}
             placeholder="Login password"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
             showPasswordToggle
-            maxLength={10}
+            maxLength={100}
           />
         </div>
 
@@ -62,13 +62,19 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('question', val)}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper">
-                <SelectItem value="What is your favorite food?">What is your favorite food?</SelectItem>
-                <SelectItem value="What was your first pet's name?">What was your first pet's name?</SelectItem>
-                <SelectItem value="What is your mother's maiden name?">What is your mother's maiden name?</SelectItem>
+                <SelectItem value="What is your favorite food?">
+                  {`What is your favorite food?`}
+                </SelectItem>
+                <SelectItem value="What was your first pet's name?">
+                  {`What was your first pet's name?`}
+                </SelectItem>
+                <SelectItem value="What is your mother's maiden name?">
+                  {`What is your mother's maiden name?`}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -77,28 +83,28 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             value={formData.answer || ''}
             onChange={(e) => onInputChange('answer', e.target.value)}
             placeholder="Security answer"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
       </div>
 
-      <div className="flex flex-col gap-2.5 py-2.5 border-t border-border/10 mt-4">
-        <label className="flex items-center gap-2.5 text-sm text-muted-foreground cursor-pointer">
+      <div className="border-border/10 mt-4 flex flex-col gap-2.5 border-t py-2.5">
+        <label className="text-muted-foreground flex cursor-pointer items-center gap-2.5 text-sm">
           <Checkbox
             checked={formData.inform_pf || false}
             onCheckedChange={(val) => onInputChange('inform_pf', !!val)}
             disabled={disabled}
           />
-          Inform Universal Account No. (UAN) about Leaving
+          {`Inform Universal Account No. (UAN) about Leaving`}
         </label>
-        <label className="flex items-center gap-2.5 text-sm text-muted-foreground cursor-pointer">
+        <label className="text-muted-foreground flex cursor-pointer items-center gap-2.5 text-sm">
           <Checkbox
             checked={formData.inform_esic || false}
             onCheckedChange={(val) => onInputChange('inform_esic', !!val)}
             disabled={disabled}
           />
-          Inform Employees' State Insurance Scheme (ESIC) about Leaving
+          {`Inform Employees' State Insurance Scheme (ESIC) about Leaving`}
         </label>
       </div>
     </div>

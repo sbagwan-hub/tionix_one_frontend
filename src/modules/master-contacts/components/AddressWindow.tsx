@@ -241,6 +241,8 @@ export const AddressWindow: React.FC = () => {
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
       className="h-105"
+      formName="Address"
+      isEdit={editingId !== null}
     />
   );
 };
