@@ -5,7 +5,7 @@ import { BankAccount, CreateBankAccountDto, UpdateBankAccountDto, HolderDetail }
 async function findContactIdByName(name: string | undefined, type: 'I' | 'O'): Promise<number | null> {
   if (!name) return null;
   try {
-    const endpoint = type === 'O' ? '/master/bank-accounts/lookups/banks' : '/master/bank-accounts/lookups/individuals';
+    const endpoint = type === 'O' ? '/master/account/bank-account/lookups/banks' : '/master/account/bank-account/lookups/individuals';
     const res = await axiosClient.get<{ data: Array<{ pkContId: string; contactName: string }> }>(endpoint);
     const list = res.data.data || [];
     const found = list.find((c) => c.contactName.toLowerCase() === name.toLowerCase());
@@ -127,7 +127,7 @@ export const bankAccountApi = {
         if (params.page) backendParams.page = String(params.page);
         if (params.pageSize) backendParams.pageSize = String(params.pageSize);
       }
-      const res = await axiosClient.get<{ data: { items: any[] } | any[] }>('/master/bank-accounts', { params: backendParams });
+      const res = await axiosClient.get<{ data: { items: any[] } | any[] }>('/master/account/bank-account', { params: backendParams });
       const rawData = res.data.data;
       const items = Array.isArray(rawData) ? rawData : (rawData as any)?.items || [];
       return items.map(mapToFrontend);
@@ -146,7 +146,7 @@ export const bankAccountApi = {
 
   get: async (id: number | string): Promise<BankAccount> => {
     try {
-      const res = await axiosClient.get<{ data: any }>(`/master/bank-accounts/${id}`);
+      const res = await axiosClient.get<{ data: any }>(`/master/account/bank-account/${id}`);
       return mapToFrontend(res.data.data);
     } catch (error) {
       const list = getLocalData();
@@ -187,7 +187,7 @@ export const bankAccountApi = {
         fkNComId: fkNComId ? String(fkNComId) : undefined,
       };
 
-      const res = await axiosClient.post<{ data: any }>('/master/bank-accounts', backendBody);
+      const res = await axiosClient.post<{ data: any }>('/master/account/bank-account', backendBody);
       return mapToFrontend(res.data.data);
     } catch (error) {
       const list = getLocalData();
@@ -238,7 +238,7 @@ export const bankAccountApi = {
       }
       if (fkNComId !== undefined) backendBody.fkNComId = fkNComId ? String(fkNComId) : null;
 
-      const res = await axiosClient.put<{ data: any }>(`/master/bank-accounts/${id}`, backendBody);
+      const res = await axiosClient.put<{ data: any }>(`/master/account/bank-account/${id}`, backendBody);
       return mapToFrontend(res.data.data);
     } catch (error) {
       const list = getLocalData();
@@ -258,7 +258,7 @@ export const bankAccountApi = {
 
   remove: async (id: number | string): Promise<void> => {
     try {
-      await axiosClient.delete(`/master/bank-accounts/${id}`);
+      await axiosClient.delete(`/master/account/bank-account/${id}`);
     } catch (error) {
       const list = getLocalData();
       const updatedList = list.filter((b) => b.pk_bank_acct_id !== id && String(b.pk_bank_acct_id) !== String(id));
