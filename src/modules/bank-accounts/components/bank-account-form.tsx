@@ -110,7 +110,7 @@ export function BankAccountForm({
   ];
 
   return (
-    <div className="from-card to-card/70 border-border/60 shadow-foreground/[0.02] relative flex h-full min-h-0 flex-col rounded-xl border bg-gradient-to-b p-5 shadow-md transition-all duration-300 md:col-span-7 md:overflow-y-auto">
+    <div className="from-card to-card/70 border-border/60 relative flex h-full min-h-0 flex-col rounded-xl border bg-gradient-to-b p-5 transition-all duration-300 md:col-span-7 md:overflow-y-auto">
       {/* Dynamic Status Badges */}
       <div className="mb-3 flex items-center justify-between">
         <span className="text-foreground text-[10px] font-bold tracking-widest uppercase">
