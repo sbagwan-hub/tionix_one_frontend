@@ -48,6 +48,7 @@
 
   "theme": "Theme",
   "preferences": "Preferences",
+  "attendanceRules": "Attendance Rules",
   "calculator": "Calculator",
   "importExport": "Import / Export",
   "documentation": "Documentation",
