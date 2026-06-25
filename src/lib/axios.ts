@@ -2,7 +2,8 @@ import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig, AxiosResp
 import axiosRetry from 'axios-retry';
 import { toast } from '@/components/modern-ui/sonner';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4100/api';
+// const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4100/api';
+const BASE_URL = 'http://localhost:4100/api';
 
 const api: AxiosInstance = axios.create({
   baseURL: BASE_URL,
