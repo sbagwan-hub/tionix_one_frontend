@@ -8,34 +8,34 @@ import { BankAccount } from '../types';
 
 interface BankAccountsListProps {
   records: BankAccount[];
-  selectedId: number | string | null;
-  filterBank: string;
-  setFilterBank: (val: string) => void;
-  filterAccountNo: string;
-  setFilterAccountNo: (val: string) => void;
-  loadData: () => void;
-  onSelectRecord: (rec: BankAccount, index: number) => void;
-  onDoubleClickRecord: (rec: BankAccount, index: number) => void;
+  selected_id: number | string | null;
+  filter_bank: string;
+  set_filter_bank: (val: string) => void;
+  filter_account_no: string;
+  set_filter_account_no: (val: string) => void;
+  load_data: () => void;
+  on_select_record: (rec: BankAccount, index: number) => void;
+  on_double_click_record: (rec: BankAccount, index: number) => void;
 }
 
 export function BankAccountsList({
   records,
-  selectedId,
-  filterBank,
-  setFilterBank,
-  filterAccountNo,
-  setFilterAccountNo,
-  loadData,
-  onSelectRecord,
-  onDoubleClickRecord,
+  selected_id,
+  filter_bank,
+  set_filter_bank,
+  filter_account_no,
+  set_filter_account_no,
+  load_data,
+  on_select_record,
+  on_double_click_record,
 }: BankAccountsListProps) {
   const filtered = records.filter((r) => {
-    const bankMatch = filterBank
-      ? r.bank_name.toLowerCase().includes(filterBank.toLowerCase()) ||
-        r.bank_account_name.toLowerCase().includes(filterBank.toLowerCase())
+    const bankMatch = filter_bank
+      ? r.bank_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
+        r.bank_account_name.toLowerCase().includes(filter_bank.toLowerCase())
       : true;
-    const accountMatch = filterAccountNo
-      ? r.account_no.includes(filterAccountNo)
+    const accountMatch = filter_account_no
+      ? r.account_no.includes(filter_account_no)
       : true;
     return bankMatch && accountMatch;
   });
@@ -47,23 +47,23 @@ export function BankAccountsList({
         <div className="min-w-[200px] flex-1">
           <Input
             placeholder="Filter by bank or account name…"
-            value={filterBank}
-            onChange={(e) => setFilterBank(e.target.value)}
+            value={filter_bank}
+            onChange={(e) => set_filter_bank(e.target.value)}
             className="h-8 text-xs"
           />
         </div>
         <div className="min-w-[200px] flex-1">
           <Input
             placeholder="Filter by account number…"
-            value={filterAccountNo}
-            onChange={(e) => setFilterAccountNo(e.target.value)}
+            value={filter_account_no}
+            onChange={(e) => set_filter_account_no(e.target.value)}
             className="h-8 text-xs"
           />
         </div>
         <Button
           variant="outline"
           size="sm"
-          onClick={loadData}
+          onClick={load_data}
           className="h-8 gap-1.5 text-xs font-semibold"
         >
           <RotateCw className="h-3.5 w-3.5" />
@@ -97,14 +97,14 @@ export function BankAccountsList({
                 const idx = records.indexOf(rec);
                 return (
                   <tr
-                    key={rec.pk_bank_acct_id}
+                    key={rec.pk_ban_id}
                     className={`hover:bg-muted/40 cursor-pointer transition-colors ${
-                      rec.pk_bank_acct_id === selectedId
+                      rec.pk_ban_id === selected_id
                         ? 'bg-primary/10 text-primary font-medium'
                         : ''
                     }`}
-                    onClick={() => onSelectRecord(rec, idx)}
-                    onDoubleClick={() => onDoubleClickRecord(rec, idx)}
+                    onClick={() => on_select_record(rec, idx)}
+                    onDoubleClick={() => on_double_click_record(rec, idx)}
                   >
                     <td className="text-muted-foreground p-3 text-center">{i + 1}</td>
                     <td className="p-3 font-semibold">{rec.bank_account_name}</td>

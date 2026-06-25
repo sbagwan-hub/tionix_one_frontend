@@ -15,81 +15,81 @@ import { AcctGroup } from '../../account-groups/types';
 import { BankAccount, HolderDetail } from '../types';
 
 interface BankAccountFormProps {
-  bankName: string;
-  setBankName: (val: string) => void;
-  accountNo: string;
-  setAccountNo: (val: string) => void;
-  rtgsNeftIfsc: string;
-  setRtgsNeftIfsc: (val: string) => void;
-  accountType: string;
-  setAccountType: (val: string) => void;
-  accountCode: string;
-  setAccountCode: (val: string) => void;
-  bankAccountName: string;
-  setBankAccountName: (val: string) => void;
-  selectedGroup: AcctGroup | null;
-  setSelectedGroup: (val: AcctGroup | null) => void;
-  openingBalance: number;
-  setOpeningBalance: (val: number) => void;
-  openingBalanceSec: number;
-  setOpeningBalanceSec: (val: number) => void;
-  gstNo: string;
-  setGstNo: (val: string) => void;
-  holderDetails: HolderDetail[];
-  setHolderDetails: (val: HolderDetail[]) => void;
+  bank_name: string;
+  set_bank_name: (val: string) => void;
+  account_no: string;
+  set_account_no: (val: string) => void;
+  rtgs_neft_ifsc: string;
+  set_rtgs_neft_ifsc: (val: string) => void;
+  account_type: string;
+  set_account_type: (val: string) => void;
+  account_code: string;
+  set_account_code: (val: string) => void;
+  bank_account_name: string;
+  set_bank_account_name: (val: string) => void;
+  selected_group: AcctGroup | null;
+  set_selected_group: (val: AcctGroup | null) => void;
+  opening_balance: number;
+  set_opening_balance: (val: number) => void;
+  opening_balance_sec: number;
+  set_opening_balance_sec: (val: number) => void;
+  gst_no: string;
+  set_gst_no: (val: string) => void;
+  holder_details: HolderDetail[];
+  set_holder_details: (val: HolderDetail[]) => void;
   nominee: string;
-  setNominee: (val: string) => void;
+  set_nominee: (val: string) => void;
 
-  isEditing: boolean;
+  is_editing: boolean;
   mode: 'view' | 'add' | 'edit';
-  selectedId: number | string | null;
-  isSysDefined: boolean;
+  selected_id: number | string | null;
+  is_sys_defined: boolean;
   records: BankAccount[];
   cursor: number;
-  formInputRef: React.RefObject<HTMLInputElement | null>;
+  form_input_ref: React.RefObject<HTMLInputElement | null>;
   employees: Array<{ pk_emp_id: number; employee: string }>;
 }
 
 export function BankAccountForm({
-  bankName,
-  setBankName,
-  accountNo,
-  setAccountNo,
-  rtgsNeftIfsc,
-  setRtgsNeftIfsc,
-  accountType,
-  setAccountType,
-  accountCode,
-  setAccountCode,
-  bankAccountName,
-  setBankAccountName,
-  selectedGroup,
-  setSelectedGroup,
-  openingBalance,
-  setOpeningBalance,
-  openingBalanceSec,
-  setOpeningBalanceSec,
-  gstNo,
-  setGstNo,
-  holderDetails,
-  setHolderDetails,
+  bank_name,
+  set_bank_name,
+  account_no,
+  set_account_no,
+  rtgs_neft_ifsc,
+  set_rtgs_neft_ifsc,
+  account_type,
+  set_account_type,
+  account_code,
+  set_account_code,
+  bank_account_name,
+  set_bank_account_name,
+  selected_group,
+  set_selected_group,
+  opening_balance,
+  set_opening_balance,
+  opening_balance_sec,
+  set_opening_balance_sec,
+  gst_no,
+  set_gst_no,
+  holder_details,
+  set_holder_details,
   nominee,
-  setNominee,
+  set_nominee,
 
-  isEditing,
+  is_editing,
   mode,
-  selectedId,
-  isSysDefined,
+  selected_id,
+  is_sys_defined,
   records,
   cursor,
-  formInputRef,
+  form_input_ref,
   employees,
 }: BankAccountFormProps) {
   
   const handleHolderChange = (index: number, field: keyof HolderDetail, value: string) => {
-    const updated = [...holderDetails];
+    const updated = [...holder_details];
     updated[index] = { ...updated[index], [field]: value };
-    setHolderDetails(updated);
+    set_holder_details(updated);
   };
 
   const bankOptions = [
@@ -119,14 +119,14 @@ export function BankAccountForm({
 
         <div
           className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 select-none ${
-            !isEditing
+            !is_editing
               ? 'border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400'
               : mode === 'add'
                 ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
                 : 'border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400'
           }`}
         >
-          {!isEditing ? (
+          {!is_editing ? (
             <>
               <Eye className="h-3 w-3" />
               <span>Read-Only Mode</span>
@@ -150,10 +150,10 @@ export function BankAccountForm({
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              Bank Name {isEditing && <span className="text-destructive">*</span>}
+              Bank Name {is_editing && <span className="text-destructive">*</span>}
             </Label>
-            {isEditing ? (
-              <Select value={bankName} onValueChange={setBankName}>
+            {is_editing ? (
+              <Select value={bank_name} onValueChange={set_bank_name}>
                 <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
                   <SelectValue placeholder="Select Bank" />
                 </SelectTrigger>
@@ -166,19 +166,19 @@ export function BankAccountForm({
                 </SelectContent>
               </Select>
             ) : (
-              <Input value={bankName} disabled className="h-9 text-xs" />
+              <Input value={bank_name} disabled className="h-9 text-xs" />
             )}
           </div>
 
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              Account No. {isEditing && <span className="text-destructive">*</span>}
+              Account No. {is_editing && <span className="text-destructive">*</span>}
             </Label>
             <Input
-              ref={formInputRef}
-              value={accountNo}
-              onChange={(e) => setAccountNo(e.target.value)}
-              disabled={!isEditing}
+              ref={form_input_ref}
+              value={account_no}
+              onChange={(e) => set_account_no(e.target.value)}
+              disabled={!is_editing}
               placeholder="Enter Account Number"
               className="h-9 text-xs"
             />
@@ -190,9 +190,9 @@ export function BankAccountForm({
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">RTGS/NEFT/IFSC</Label>
             <Input
-              value={rtgsNeftIfsc}
-              onChange={(e) => setRtgsNeftIfsc(e.target.value.toUpperCase())}
-              disabled={!isEditing}
+              value={rtgs_neft_ifsc}
+              onChange={(e) => set_rtgs_neft_ifsc(e.target.value.toUpperCase())}
+              disabled={!is_editing}
               placeholder="e.g. SBIN0001234"
               className="h-9 text-xs"
             />
@@ -200,10 +200,10 @@ export function BankAccountForm({
 
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              Account Type {isEditing && <span className="text-destructive">*</span>}
+              Account Type {is_editing && <span className="text-destructive">*</span>}
             </Label>
-            {isEditing ? (
-              <Select value={accountType} onValueChange={setAccountType}>
+            {is_editing ? (
+              <Select value={account_type} onValueChange={set_account_type}>
                 <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
                   <SelectValue placeholder="Select Account Type" />
                 </SelectTrigger>
@@ -216,7 +216,7 @@ export function BankAccountForm({
                 </SelectContent>
               </Select>
             ) : (
-              <Input value={accountType} disabled className="h-9 text-xs" />
+              <Input value={account_type} disabled className="h-9 text-xs" />
             )}
           </div>
         </div>
@@ -225,12 +225,12 @@ export function BankAccountForm({
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              Account Code {isEditing && <span className="text-destructive">*</span>}
+              Account Code {is_editing && <span className="text-destructive">*</span>}
             </Label>
             <Input
-              value={accountCode}
-              onChange={(e) => setAccountCode(e.target.value)}
-              disabled={!isEditing}
+              value={account_code}
+              onChange={(e) => set_account_code(e.target.value)}
+              disabled={!is_editing}
               placeholder="Enter Account Code"
               className="h-9 text-xs"
             />
@@ -238,12 +238,12 @@ export function BankAccountForm({
 
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              Bank Account {isEditing && <span className="text-destructive">*</span>}
+              Bank Account {is_editing && <span className="text-destructive">*</span>}
             </Label>
             <Input
-              value={bankAccountName}
-              onChange={(e) => setBankAccountName(e.target.value)}
-              disabled={!isEditing}
+              value={bank_account_name}
+              onChange={(e) => set_bank_account_name(e.target.value)}
+              disabled={!is_editing}
               placeholder="Enter Bank Account Display Name"
               className="h-9 text-xs"
             />
@@ -254,14 +254,14 @@ export function BankAccountForm({
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              Group {isEditing && <span className="text-destructive">*</span>}
+              Group {is_editing && <span className="text-destructive">*</span>}
             </Label>
             <div className="group relative">
               <FolderOpen className="text-foreground/50 group-focus-within:text-primary absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 transition-colors" />
               <Input
-                value={selectedGroup ? selectedGroup.group_name : ''}
+                value={selected_group ? selected_group.group_name : ''}
                 disabled
-                placeholder={isEditing ? 'Select a group from tree on right...' : 'Root Context'}
+                placeholder={is_editing ? 'Select a group from tree on right...' : 'Root Context'}
                 className="bg-muted/30 text-foreground h-9 pl-9 text-xs font-medium cursor-not-allowed"
               />
             </div>
@@ -269,12 +269,12 @@ export function BankAccountForm({
 
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">
-              GST No. {isEditing && <span className="text-destructive">*</span>}
+              GST No. {is_editing && <span className="text-destructive">*</span>}
             </Label>
             <Input
-              value={gstNo}
-              onChange={(e) => setGstNo(e.target.value.toUpperCase())}
-              disabled={!isEditing}
+              value={gst_no}
+              onChange={(e) => set_gst_no(e.target.value.toUpperCase())}
+              disabled={!is_editing}
               placeholder="Enter GST Number"
               className="h-9 text-xs"
             />
@@ -288,9 +288,9 @@ export function BankAccountForm({
             <Input
               type="number"
               step="0.01"
-              value={openingBalance || ''}
-              onChange={(e) => setOpeningBalance(parseFloat(e.target.value) || 0)}
-              disabled={!isEditing}
+              value={opening_balance || ''}
+              onChange={(e) => set_opening_balance(parseFloat(e.target.value) || 0)}
+              disabled={!is_editing}
               placeholder="0.00"
               className="h-9 text-xs"
             />
@@ -303,9 +303,9 @@ export function BankAccountForm({
             <Input
               type="number"
               step="0.01"
-              value={openingBalanceSec || ''}
-              onChange={(e) => setOpeningBalanceSec(parseFloat(e.target.value) || 0)}
-              disabled={!isEditing}
+              value={opening_balance_sec || ''}
+              onChange={(e) => set_opening_balance_sec(parseFloat(e.target.value) || 0)}
+              disabled={!is_editing}
               placeholder="0.00"
               className="h-9 text-xs"
             />
@@ -318,14 +318,14 @@ export function BankAccountForm({
             Holder Details
           </span>
           <div className="space-y-2.5">
-            {holderDetails.map((holder, idx) => (
+            {holder_details.map((holder, idx) => (
               <div key={holder.id} className="grid grid-cols-12 gap-3.5 items-center">
                 <span className="col-span-1 text-xs text-muted-foreground font-semibold text-center">
                   {idx + 1}
                 </span>
 
                 <div className="col-span-6">
-                  {isEditing ? (
+                  {is_editing ? (
                     <Select
                       value={holder.name}
                       onValueChange={(val) => handleHolderChange(idx, 'name', val)}
@@ -336,9 +336,9 @@ export function BankAccountForm({
                       <SelectContent>
                         {employees.map((emp) => (
                           <SelectItem
-                            key={emp.pk_emp_id}
-                            value={emp.employee}
-                            className="text-xs"
+                             key={emp.pk_emp_id}
+                             value={emp.employee}
+                             className="text-xs"
                           >
                             {emp.employee}
                           </SelectItem>
@@ -354,7 +354,7 @@ export function BankAccountForm({
                   <Input
                     value={holder.client_id}
                     onChange={(e) => handleHolderChange(idx, 'client_id', e.target.value)}
-                    disabled={!isEditing}
+                    disabled={!is_editing}
                     placeholder="Client ID"
                     className="h-8.5 text-xs"
                   />
@@ -369,15 +369,15 @@ export function BankAccountForm({
           <Label className="text-foreground/80 text-xs font-semibold">Nominee</Label>
           <Input
             value={nominee}
-            onChange={(e) => setNominee(e.target.value)}
-            disabled={!isEditing}
+            onChange={(e) => set_nominee(e.target.value)}
+            disabled={!is_editing}
             placeholder="Enter Nominee Name"
             className="h-9 text-xs"
           />
         </div>
       </div>
 
-      {isEditing && !selectedGroup && (
+      {is_editing && !selected_group && (
         <div className="bg-muted/20 border-border/30 text-foreground/90 mt-4 flex items-start gap-2 rounded-md border p-2 text-[11px] leading-normal">
           <Info className="text-primary mt-0.5 h-3.5 w-3.5 shrink-0" />
           <span>

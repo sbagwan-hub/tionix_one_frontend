@@ -19,38 +19,38 @@ async function findContactIdByName(name: string | undefined, type: 'I' | 'O'): P
 // Mapper from backend ListItem/Detail to frontend BankAccount
 const mapToFrontend = (item: any): BankAccount => {
   const holder_details: HolderDetail[] = [];
-  if (item.fkH1ComId && item.holderName1) {
-    holder_details.push({ id: String(item.fkH1ComId), name: item.holderName1, client_id: item.h1ClientId ?? '' });
+  if (item.fk_h1_com_id && item.holder_name_1) {
+    holder_details.push({ id: String(item.fk_h1_com_id), name: item.holder_name_1, client_id: item.h1_client_id ?? '' });
   }
-  if (item.fkH2ComId && item.holderName2) {
-    holder_details.push({ id: String(item.fkH2ComId), name: item.holderName2, client_id: item.h2ClientId ?? '' });
+  if (item.fk_h2_com_id && item.holder_name_2) {
+    holder_details.push({ id: String(item.fk_h2_com_id), name: item.holder_name_2, client_id: item.h2_client_id ?? '' });
   }
-  if (item.fkH3ComId && item.holderName3) {
-    holder_details.push({ id: String(item.fkH3ComId), name: item.holderName3, client_id: item.h3ClientId ?? '' });
+  if (item.fk_h3_com_id && item.holder_name_3) {
+    holder_details.push({ id: String(item.fk_h3_com_id), name: item.holder_name_3, client_id: item.h3_client_id ?? '' });
   }
-  if (item.fkH4ComId && item.holderName4) {
-    holder_details.push({ id: String(item.fkH4ComId), name: item.holderName4, client_id: item.h4ClientId ?? '' });
+  if (item.fk_h4_com_id && item.holder_name_4) {
+    holder_details.push({ id: String(item.fk_h4_com_id), name: item.holder_name_4, client_id: item.h4_client_id ?? '' });
   }
 
   return {
-    pk_bank_acct_id: isNaN(parseInt(item.pkBanId, 10)) ? item.pkBanId : parseInt(item.pkBanId, 10),
-    bank_name: item.bankName ?? '',
-    account_no: item.accountNo ?? '',
-    rtgs_neft_ifsc: item.rtgsNeftIfsc ?? '',
-    account_type: item.accountType ?? '',
-    account_code: item.acctCode ?? '',
+    pk_ban_id: isNaN(parseInt(item.pk_ban_id, 10)) ? item.pk_ban_id : parseInt(item.pk_ban_id, 10),
+    bank_name: item.bank_name ?? '',
+    account_no: item.account_no ?? '',
+    rtgs_neft_ifsc: item.rtgs_neft_ifsc ?? '',
+    account_type: item.account_type ?? '',
+    account_code: item.acct_code ?? '',
     bank_account_name: item.account ?? '',
-    fk_grp_id: item.fkGrpId ?? 0,
-    group_name: item.groupName ?? '',
-    opening_balance: parseFloat(item.openBal ?? '0'),
-    opening_balance_sec: parseFloat(item.sOpenBal ?? '0'),
-    gst_no: item.cgstNo ?? '',
+    fk_grp_id: item.fk_grp_id ?? 0,
+    group_name: item.group_name ?? '',
+    opening_balance: parseFloat(item.open_bal ?? '0'),
+    opening_balance_sec: parseFloat(item.s_open_bal ?? '0'),
+    gst_no: item.cgst_no ?? '',
     holder_details,
     nominee: item.nominee ?? '',
-    sys_defined: item.sysDefined ?? false,
-    date_time_stamp: item.dateTimeStamp ?? '',
-    fk_user_id: item.fkUserId ?? '',
-    last_status: item.lastStatus ?? '',
+    sys_defined: item.sys_defined ?? false,
+    date_time_stamp: item.date_time_stamp ?? '',
+    fk_user_id: item.fk_user_id ?? '',
+    last_status: item.last_status ?? '',
   };
 };
 
@@ -64,7 +64,7 @@ const getLocalData = (): BankAccount[] => {
     // Seed some initial mock data
     const initial: BankAccount[] = [
       {
-        pk_bank_acct_id: 1,
+        pk_ban_id: 1,
         bank_name: 'State Bank of India',
         account_no: '33214567890',
         rtgs_neft_ifsc: 'SBIN0001234',
@@ -85,7 +85,7 @@ const getLocalData = (): BankAccount[] => {
         date_time_stamp: new Date().toISOString(),
       },
       {
-        pk_bank_acct_id: 2,
+        pk_ban_id: 2,
         bank_name: 'HDFC Bank',
         account_no: '5010022334455',
         rtgs_neft_ifsc: 'HDFC0000012',
@@ -150,7 +150,7 @@ export const bankAccountApi = {
       return mapToFrontend(res.data.data);
     } catch (error) {
       const list = getLocalData();
-      const found = list.find((b) => b.pk_bank_acct_id === id || String(b.pk_bank_acct_id) === String(id));
+      const found = list.find((b) => b.pk_ban_id === id || String(b.pk_ban_id) === String(id));
       if (!found) throw new Error('Bank account not found');
       return found;
     }
@@ -166,35 +166,35 @@ export const bankAccountApi = {
       const fkNComId = body.nominee ? await findContactIdByName(body.nominee, 'I') : null;
 
       const backendBody = {
-        acctCode: body.account_code,
+        acct_code: body.account_code,
         account: body.bank_account_name,
-        fkGrpId: body.fk_grp_id,
-        cgstNo: body.gst_no ?? '',
-        openBal: body.opening_balance ?? 0,
-        sOpenBal: body.opening_balance_sec ?? 0,
-        fkBComId: fkBComId ? String(fkBComId) : '',
-        accountNo: body.account_no,
-        rtgsNeftIfsc: body.rtgs_neft_ifsc ?? '',
-        accountType: body.account_type,
-        fkH1ComId: fkH1ComId ? String(fkH1ComId) : '',
-        h1ClientId: body.holder_details?.[0]?.client_id ?? '',
-        fkH2ComId: fkH2ComId ? String(fkH2ComId) : undefined,
-        h2ClientId: body.holder_details?.[1]?.client_id ?? '',
-        fkH3ComId: fkH3ComId ? String(fkH3ComId) : undefined,
-        h3ClientId: body.holder_details?.[2]?.client_id ?? '',
-        fkH4ComId: fkH4ComId ? String(fkH4ComId) : undefined,
-        h4ClientId: body.holder_details?.[3]?.client_id ?? '',
-        fkNComId: fkNComId ? String(fkNComId) : undefined,
+        fk_grp_id: body.fk_grp_id,
+        cgst_no: body.gst_no ?? '',
+        open_bal: body.opening_balance ?? 0,
+        s_open_bal: body.opening_balance_sec ?? 0,
+        fk_b_com_id: fkBComId ? String(fkBComId) : '',
+        account_no: body.account_no,
+        rtgs_neft_ifsc: body.rtgs_neft_ifsc ?? '',
+        account_type: body.account_type,
+        fk_h1_com_id: fkH1ComId ? String(fkH1ComId) : '',
+        h1_client_id: body.holder_details?.[0]?.client_id ?? '',
+        fk_h2_com_id: fkH2ComId ? String(fkH2ComId) : undefined,
+        h2_client_id: body.holder_details?.[1]?.client_id ?? '',
+        fk_h3_com_id: fkH3ComId ? String(fkH3ComId) : undefined,
+        h3_client_id: body.holder_details?.[2]?.client_id ?? '',
+        fk_h4_com_id: fkH4ComId ? String(fkH4ComId) : undefined,
+        h4_client_id: body.holder_details?.[3]?.client_id ?? '',
+        fk_n_com_id: fkNComId ? String(fkNComId) : undefined,
       };
 
       const res = await axiosClient.post<{ data: any }>('/master/account/bank-account', backendBody);
       return mapToFrontend(res.data.data);
     } catch (error) {
       const list = getLocalData();
-      const newId = list.length > 0 ? Math.max(...list.map((b) => typeof b.pk_bank_acct_id === 'number' ? b.pk_bank_acct_id : 0)) + 1 : 1;
+      const newId = list.length > 0 ? Math.max(...list.map((b) => typeof b.pk_ban_id === 'number' ? b.pk_ban_id : 0)) + 1 : 1;
       const newRecord: BankAccount = {
         ...body,
-        pk_bank_acct_id: newId,
+        pk_ban_id: newId,
         sys_defined: false,
         date_time_stamp: new Date().toISOString(),
         sync: 'N',
@@ -215,34 +215,34 @@ export const bankAccountApi = {
       const fkNComId = body.nominee ? await findContactIdByName(body.nominee, 'I') : undefined;
 
       const backendBody: Record<string, any> = {};
-      if (body.account_code !== undefined) backendBody.acctCode = body.account_code;
+      if (body.account_code !== undefined) backendBody.acct_code = body.account_code;
       if (body.bank_account_name !== undefined) backendBody.account = body.bank_account_name;
-      if (body.fk_grp_id !== undefined) backendBody.fkGrpId = body.fk_grp_id;
-      if (body.gst_no !== undefined) backendBody.cgstNo = body.gst_no;
-      if (body.opening_balance !== undefined) backendBody.openBal = body.opening_balance;
-      if (body.opening_balance_sec !== undefined) backendBody.sOpenBal = body.opening_balance_sec;
-      if (fkBComId !== undefined) backendBody.fkBComId = fkBComId ? String(fkBComId) : '';
-      if (body.account_no !== undefined) backendBody.accountNo = body.account_no;
-      if (body.rtgs_neft_ifsc !== undefined) backendBody.rtgsNeftIfsc = body.rtgs_neft_ifsc;
-      if (body.account_type !== undefined) backendBody.accountType = body.account_type;
+      if (body.fk_grp_id !== undefined) backendBody.fk_grp_id = body.fk_grp_id;
+      if (body.gst_no !== undefined) backendBody.cgst_no = body.gst_no;
+      if (body.opening_balance !== undefined) backendBody.open_bal = body.opening_balance;
+      if (body.opening_balance_sec !== undefined) backendBody.s_open_bal = body.opening_balance_sec;
+      if (fkBComId !== undefined) backendBody.fk_b_com_id = fkBComId ? String(fkBComId) : '';
+      if (body.account_no !== undefined) backendBody.account_no = body.account_no;
+      if (body.rtgs_neft_ifsc !== undefined) backendBody.rtgs_neft_ifsc = body.rtgs_neft_ifsc;
+      if (body.account_type !== undefined) backendBody.account_type = body.account_type;
 
       if (body.holder_details) {
-        if (fkH1ComId !== undefined) backendBody.fkH1ComId = fkH1ComId ? String(fkH1ComId) : '';
-        if (body.holder_details[0]?.client_id !== undefined) backendBody.h1ClientId = body.holder_details[0].client_id;
-        if (fkH2ComId !== undefined) backendBody.fkH2ComId = fkH2ComId ? String(fkH2ComId) : null;
-        if (body.holder_details[1]?.client_id !== undefined) backendBody.h2ClientId = body.holder_details[1].client_id;
-        if (fkH3ComId !== undefined) backendBody.fkH3ComId = fkH3ComId ? String(fkH3ComId) : null;
-        if (body.holder_details[2]?.client_id !== undefined) backendBody.h3ClientId = body.holder_details[2].client_id;
-        if (fkH4ComId !== undefined) backendBody.fkH4ComId = fkH4ComId ? String(fkH4ComId) : null;
-        if (body.holder_details[3]?.client_id !== undefined) backendBody.h4ClientId = body.holder_details[3].client_id;
+        if (fkH1ComId !== undefined) backendBody.fk_h1_com_id = fkH1ComId ? String(fkH1ComId) : '';
+        if (body.holder_details[0]?.client_id !== undefined) backendBody.h1_client_id = body.holder_details[0].client_id;
+        if (fkH2ComId !== undefined) backendBody.fk_h2_com_id = fkH2ComId ? String(fkH2ComId) : null;
+        if (body.holder_details[1]?.client_id !== undefined) backendBody.h2_client_id = body.holder_details[1].client_id;
+        if (fkH3ComId !== undefined) backendBody.fk_h3_com_id = fkH3ComId ? String(fkH3ComId) : null;
+        if (body.holder_details[2]?.client_id !== undefined) backendBody.h3_client_id = body.holder_details[2].client_id;
+        if (fkH4ComId !== undefined) backendBody.fk_h4_com_id = fkH4ComId ? String(fkH4ComId) : null;
+        if (body.holder_details[3]?.client_id !== undefined) backendBody.h4_client_id = body.holder_details[3].client_id;
       }
-      if (fkNComId !== undefined) backendBody.fkNComId = fkNComId ? String(fkNComId) : null;
+      if (fkNComId !== undefined) backendBody.fk_n_com_id = fkNComId ? String(fkNComId) : null;
 
       const res = await axiosClient.put<{ data: any }>(`/master/account/bank-account/${id}`, backendBody);
       return mapToFrontend(res.data.data);
     } catch (error) {
       const list = getLocalData();
-      const index = list.findIndex((b) => b.pk_bank_acct_id === id || String(b.pk_bank_acct_id) === String(id));
+      const index = list.findIndex((b) => b.pk_ban_id === id || String(b.pk_ban_id) === String(id));
       if (index === -1) throw new Error('Bank account not found');
       const updatedRecord: BankAccount = {
         ...list[index],
@@ -261,7 +261,7 @@ export const bankAccountApi = {
       await axiosClient.delete(`/master/account/bank-account/${id}`);
     } catch (error) {
       const list = getLocalData();
-      const updatedList = list.filter((b) => b.pk_bank_acct_id !== id && String(b.pk_bank_acct_id) !== String(id));
+      const updatedList = list.filter((b) => b.pk_ban_id !== id && String(b.pk_ban_id) !== String(id));
       saveLocalData(updatedList);
     }
   },

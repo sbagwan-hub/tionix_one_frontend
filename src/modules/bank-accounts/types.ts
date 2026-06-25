@@ -5,7 +5,7 @@ export interface HolderDetail {
 }
 
 export interface BankAccount {
-  pk_bank_acct_id: number | string;
+  pk_ban_id: number | string;
   bank_name: string;
   account_no: string;
   rtgs_neft_ifsc: string;
