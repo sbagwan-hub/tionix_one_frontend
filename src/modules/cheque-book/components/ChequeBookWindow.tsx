@@ -227,7 +227,7 @@ export const ChequeBookWindow: React.FC = () => {
           <Input
             type="number"
             readOnly
-            value={total_cheques ?? 0}
+            value={Number(total_cheques ?? 0)}
             className="bg-muted/50 border-border/40 h-9 font-mono text-xs font-bold"
           />
         </div>
