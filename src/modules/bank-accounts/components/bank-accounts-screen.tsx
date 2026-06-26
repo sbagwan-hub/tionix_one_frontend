@@ -49,8 +49,8 @@ export function BankAccountsScreen() {
     form_input_ref,
     records,
     refetch_list,
+    individuals,
     is_tree_loading,
-    employees,
     loading,
     get_bank_tree,
     is_editing,
@@ -61,6 +61,8 @@ export function BankAccountsScreen() {
     handle_double_click_record,
     handle_confirm_delete,
   } = useBankAccountForm();
+
+
 
   return (
     <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans select-none">
@@ -129,8 +131,10 @@ export function BankAccountsScreen() {
             records={records}
             cursor={cursor}
             form_input_ref={form_input_ref}
-            employees={employees}
+            individuals={individuals}
           />
+
+
 
           {/* Tree Component */}
           <div className="md:col-span-5 h-full">

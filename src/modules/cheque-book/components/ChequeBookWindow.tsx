@@ -31,7 +31,7 @@ type Mode = 'view' | 'add' | 'edit';
 export const ChequeBookWindow: React.FC = () => {
   const [mode, set_mode] = useState<Mode>('view');
   const [active_tab, set_active_tab] = useState<'details' | 'list'>('details');
-  const [selected_id, set_selected_id] = useState<number | null>(null);
+  const [selected_id, set_selected_id] = useState<string | number | null>(null);
   const [cursor, set_cursor] = useState(0);
 
   const [page, set_page] = useState(1);

@@ -2,34 +2,53 @@ import axiosClient from '@/lib/axios';
 import { BankAccount, CreateBankAccountDto, UpdateBankAccountDto, HolderDetail } from './types';
 
 // Helper to look up contact ID by name for bank or holder
-async function findContactIdByName(name: string | undefined, type: 'I' | 'O'): Promise<number | null> {
+async function findContactIdByName(
+  name: string | undefined,
+  type: 'I' | 'O',
+): Promise<number | null> {
   if (!name) return null;
-  try {
-    const endpoint = type === 'O' ? '/master/account/bank-account/lookups/banks' : '/master/account/bank-account/lookups/individuals';
-    const res = await axiosClient.get<{ data: Array<{ pkContId: string; contactName: string }> }>(endpoint);
-    const list = res.data.data || [];
-    const found = list.find((c) => c.contactName.toLowerCase() === name.toLowerCase());
-    return found ? parseInt(found.pkContId, 10) : (list[0] ? parseInt(list[0].pkContId, 10) : null);
-  } catch (e) {
-    console.error('Error looking up contact by name:', e);
-    return null;
-  }
+  const endpoint =
+    type === 'O'
+      ? '/master/account/bank-account/lookups/banks'
+      : '/master/account/bank-account/lookups/individuals';
+  const res = await axiosClient.get<{ data: Array<{ pkContId: string; contactName: string }> }>(
+    endpoint,
+  );
+  const list = res.data.data || [];
+  const found = list.find((c) => c.contactName.toLowerCase() === name.toLowerCase());
+  return found ? parseInt(found.pkContId, 10) : list[0] ? parseInt(list[0].pkContId, 10) : null;
 }
 
 // Mapper from backend ListItem/Detail to frontend BankAccount
 const mapToFrontend = (item: any): BankAccount => {
   const holder_details: HolderDetail[] = [];
   if (item.fk_h1_com_id && item.holder_name_1) {
-    holder_details.push({ id: String(item.fk_h1_com_id), name: item.holder_name_1, client_id: item.h1_client_id ?? '' });
+    holder_details.push({
+      id: String(item.fk_h1_com_id),
+      name: item.holder_name_1,
+      client_id: item.h1_client_id ?? '',
+    });
   }
   if (item.fk_h2_com_id && item.holder_name_2) {
-    holder_details.push({ id: String(item.fk_h2_com_id), name: item.holder_name_2, client_id: item.h2_client_id ?? '' });
+    holder_details.push({
+      id: String(item.fk_h2_com_id),
+      name: item.holder_name_2,
+      client_id: item.h2_client_id ?? '',
+    });
   }
   if (item.fk_h3_com_id && item.holder_name_3) {
-    holder_details.push({ id: String(item.fk_h3_com_id), name: item.holder_name_3, client_id: item.h3_client_id ?? '' });
+    holder_details.push({
+      id: String(item.fk_h3_com_id),
+      name: item.holder_name_3,
+      client_id: item.h3_client_id ?? '',
+    });
   }
   if (item.fk_h4_com_id && item.holder_name_4) {
-    holder_details.push({ id: String(item.fk_h4_com_id), name: item.holder_name_4, client_id: item.h4_client_id ?? '' });
+    holder_details.push({
+      id: String(item.fk_h4_com_id),
+      name: item.holder_name_4,
+      client_id: item.h4_client_id ?? '',
+    });
   }
 
   return {
@@ -54,215 +73,128 @@ const mapToFrontend = (item: any): BankAccount => {
   };
 };
 
-// Local storage key for fallback/mock data
-const STORAGE_KEY = 'tionix_bank_accounts';
-
-const getLocalData = (): BankAccount[] => {
-  if (typeof window === 'undefined') return [];
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) {
-    // Seed some initial mock data
-    const initial: BankAccount[] = [
-      {
-        pk_ban_id: 1,
-        bank_name: 'State Bank of India',
-        account_no: '33214567890',
-        rtgs_neft_ifsc: 'SBIN0001234',
-        account_type: 'Current Account',
-        account_code: 'SBI-CUR-01',
-        bank_account_name: 'SBI Main A/C',
-        fk_grp_id: 33, // Example group ID
-        group_name: 'Bank OD A/C',
-        opening_balance: 150000.0,
-        opening_balance_sec: 1800.0,
-        gst_no: '27AAAAA1111A1Z1',
-        holder_details: [
-          { id: '1', name: 'Ramesh P', client_id: 'CLI001' },
-          { id: '2', name: 'Suresh K', client_id: 'CLI002' },
-        ],
-        nominee: 'Sunita P',
-        sys_defined: false,
-        date_time_stamp: new Date().toISOString(),
-      },
-      {
-        pk_ban_id: 2,
-        bank_name: 'HDFC Bank',
-        account_no: '5010022334455',
-        rtgs_neft_ifsc: 'HDFC0000012',
-        account_type: 'Savings Account',
-        account_code: 'HDFC-SAV-02',
-        bank_account_name: 'HDFC Savings',
-        fk_grp_id: 34,
-        group_name: 'Fixed Deposit',
-        opening_balance: 75000.5,
-        opening_balance_sec: 0.0,
-        gst_no: '27BBBBB2222B2Z2',
-        holder_details: [
-          { id: '1', name: 'Ramesh P', client_id: 'CLI001' },
-        ],
-        nominee: 'Amit P',
-        sys_defined: false,
-        date_time_stamp: new Date().toISOString(),
-      },
-    ];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
-    return initial;
-  }
-  return JSON.parse(stored);
-};
-
-const saveLocalData = (data: BankAccount[]) => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
-};
-
 export const bankAccountApi = {
   list: async (params?: Record<string, any>): Promise<BankAccount[]> => {
-    try {
-      const backendParams: Record<string, any> = {};
-      if (params) {
-        if (params.bank_name) backendParams.bankName = params.bank_name;
-        if (params.account_no) backendParams.accountNo = params.account_no;
-        if (params.page) backendParams.page = String(params.page);
-        if (params.pageSize) backendParams.pageSize = String(params.pageSize);
-      }
-      const res = await axiosClient.get<{ data: { items: any[] } | any[] }>('/master/account/bank-account', { params: backendParams });
-      const rawData = res.data.data;
-      const items = Array.isArray(rawData) ? rawData : (rawData as any)?.items || [];
-      return items.map(mapToFrontend);
-    } catch (error) {
-      console.warn('Backend API not available, falling back to local storage:', error);
-      let list = getLocalData();
-      if (params?.bank_name) {
-        list = list.filter((b) => b.bank_name.toLowerCase().includes(params.bank_name.toLowerCase()));
-      }
-      if (params?.account_no) {
-        list = list.filter((b) => b.account_no.includes(params.account_no));
-      }
-      return list;
+    const backendParams: Record<string, any> = {};
+    if (params) {
+      if (params.bank_name) backendParams.bankName = params.bank_name;
+      if (params.account_no) backendParams.accountNo = params.account_no;
+      if (params.page) backendParams.page = String(params.page);
+      if (params.pageSize) backendParams.pageSize = String(params.pageSize);
     }
+    const res = await axiosClient.get<{ data: { items: any[] } | any[] }>(
+      '/master/account/bank-account',
+      { params: backendParams },
+    );
+    const rawData = res.data.data;
+    const items = Array.isArray(rawData) ? rawData : (rawData as any)?.items || [];
+    return items.map(mapToFrontend);
   },
 
   get: async (id: number | string): Promise<BankAccount> => {
-    try {
-      const res = await axiosClient.get<{ data: any }>(`/master/account/bank-account/${id}`);
-      return mapToFrontend(res.data.data);
-    } catch (error) {
-      const list = getLocalData();
-      const found = list.find((b) => b.pk_ban_id === id || String(b.pk_ban_id) === String(id));
-      if (!found) throw new Error('Bank account not found');
-      return found;
-    }
+    const res = await axiosClient.get<{ data: any }>(`/master/account/bank-account/${id}`);
+    return mapToFrontend(res.data.data);
   },
 
   create: async (body: CreateBankAccountDto): Promise<BankAccount> => {
-    try {
-      const fkBComId = await findContactIdByName(body.bank_name, 'O');
-      const fkH1ComId = await findContactIdByName(body.holder_details?.[0]?.name, 'I');
-      const fkH2ComId = body.holder_details?.[1]?.name ? await findContactIdByName(body.holder_details[1].name, 'I') : null;
-      const fkH3ComId = body.holder_details?.[2]?.name ? await findContactIdByName(body.holder_details[2].name, 'I') : null;
-      const fkH4ComId = body.holder_details?.[3]?.name ? await findContactIdByName(body.holder_details[3].name, 'I') : null;
-      const fkNComId = body.nominee ? await findContactIdByName(body.nominee, 'I') : null;
+    const fkBComId = await findContactIdByName(body.bank_name, 'O');
+    const fkH1ComId = await findContactIdByName(body.holder_details?.[0]?.name, 'I');
+    const fkH2ComId = body.holder_details?.[1]?.name
+      ? await findContactIdByName(body.holder_details[1].name, 'I')
+      : null;
+    const fkH3ComId = body.holder_details?.[2]?.name
+      ? await findContactIdByName(body.holder_details[2].name, 'I')
+      : null;
+    const fkH4ComId = body.holder_details?.[3]?.name
+      ? await findContactIdByName(body.holder_details[3].name, 'I')
+      : null;
+    const fkNComId = body.nominee ? await findContactIdByName(body.nominee, 'I') : null;
 
-      const backendBody = {
-        acct_code: body.account_code,
-        account: body.bank_account_name,
-        fk_grp_id: body.fk_grp_id,
-        cgst_no: body.gst_no ?? '',
-        open_bal: body.opening_balance ?? 0,
-        s_open_bal: body.opening_balance_sec ?? 0,
-        fk_b_com_id: fkBComId ? String(fkBComId) : '',
-        account_no: body.account_no,
-        rtgs_neft_ifsc: body.rtgs_neft_ifsc ?? '',
-        account_type: body.account_type,
-        fk_h1_com_id: fkH1ComId ? String(fkH1ComId) : '',
-        h1_client_id: body.holder_details?.[0]?.client_id ?? '',
-        fk_h2_com_id: fkH2ComId ? String(fkH2ComId) : undefined,
-        h2_client_id: body.holder_details?.[1]?.client_id ?? '',
-        fk_h3_com_id: fkH3ComId ? String(fkH3ComId) : undefined,
-        h3_client_id: body.holder_details?.[2]?.client_id ?? '',
-        fk_h4_com_id: fkH4ComId ? String(fkH4ComId) : undefined,
-        h4_client_id: body.holder_details?.[3]?.client_id ?? '',
-        fk_n_com_id: fkNComId ? String(fkNComId) : undefined,
-      };
+    const backendBody = {
+      acct_code: body.account_code,
+      account: body.bank_account_name,
+      fk_grp_id: body.fk_grp_id,
+      cgst_no: body.gst_no ?? '',
+      open_bal: body.opening_balance ?? 0,
+      s_open_bal: body.opening_balance_sec ?? 0,
+      fk_b_com_id: fkBComId ? String(fkBComId) : '',
+      account_no: body.account_no,
+      rtgs_neft_ifsc: body.rtgs_neft_ifsc ?? '',
+      account_type: body.account_type,
+      fk_h1_com_id: fkH1ComId ? String(fkH1ComId) : '',
+      h1_client_id: body.holder_details?.[0]?.client_id ?? '',
+      fk_h2_com_id: fkH2ComId ? String(fkH2ComId) : undefined,
+      h2_client_id: body.holder_details?.[1]?.client_id ?? '',
+      fk_h3_com_id: fkH3ComId ? String(fkH3ComId) : undefined,
+      h3_client_id: body.holder_details?.[2]?.client_id ?? '',
+      fk_h4_com_id: fkH4ComId ? String(fkH4ComId) : undefined,
+      h4_client_id: body.holder_details?.[3]?.client_id ?? '',
+      fk_n_com_id: fkNComId ? String(fkNComId) : undefined,
+    };
 
-      const res = await axiosClient.post<{ data: any }>('/master/account/bank-account', backendBody);
-      return mapToFrontend(res.data.data);
-    } catch (error) {
-      const list = getLocalData();
-      const newId = list.length > 0 ? Math.max(...list.map((b) => typeof b.pk_ban_id === 'number' ? b.pk_ban_id : 0)) + 1 : 1;
-      const newRecord: BankAccount = {
-        ...body,
-        pk_ban_id: newId,
-        sys_defined: false,
-        date_time_stamp: new Date().toISOString(),
-        sync: 'N',
-      };
-      const updatedList = [...list, newRecord];
-      saveLocalData(updatedList);
-      return newRecord;
-    }
+    const res = await axiosClient.post<{ data: any }>('/master/account/bank-account', backendBody);
+    return mapToFrontend(res.data.data);
   },
 
   update: async (id: number | string, body: UpdateBankAccountDto): Promise<BankAccount> => {
-    try {
-      const fkBComId = body.bank_name ? await findContactIdByName(body.bank_name, 'O') : undefined;
-      const fkH1ComId = body.holder_details?.[0]?.name ? await findContactIdByName(body.holder_details[0].name, 'I') : undefined;
-      const fkH2ComId = body.holder_details?.[1]?.name ? await findContactIdByName(body.holder_details[1].name, 'I') : undefined;
-      const fkH3ComId = body.holder_details?.[2]?.name ? await findContactIdByName(body.holder_details[2].name, 'I') : undefined;
-      const fkH4ComId = body.holder_details?.[3]?.name ? await findContactIdByName(body.holder_details[3].name, 'I') : undefined;
-      const fkNComId = body.nominee ? await findContactIdByName(body.nominee, 'I') : undefined;
+    const fkBComId = body.bank_name ? await findContactIdByName(body.bank_name, 'O') : undefined;
+    const fkH1ComId = body.holder_details?.[0]?.name
+      ? await findContactIdByName(body.holder_details[0].name, 'I')
+      : undefined;
+    const fkH2ComId = body.holder_details?.[1]?.name
+      ? await findContactIdByName(body.holder_details[1].name, 'I')
+      : undefined;
+    const fkH3ComId = body.holder_details?.[2]?.name
+      ? await findContactIdByName(body.holder_details[2].name, 'I')
+      : undefined;
+    const fkH4ComId = body.holder_details?.[3]?.name
+      ? await findContactIdByName(body.holder_details[3].name, 'I')
+      : undefined;
+    const fkNComId = body.nominee ? await findContactIdByName(body.nominee, 'I') : undefined;
 
-      const backendBody: Record<string, any> = {};
-      if (body.account_code !== undefined) backendBody.acct_code = body.account_code;
-      if (body.bank_account_name !== undefined) backendBody.account = body.bank_account_name;
-      if (body.fk_grp_id !== undefined) backendBody.fk_grp_id = body.fk_grp_id;
-      if (body.gst_no !== undefined) backendBody.cgst_no = body.gst_no;
-      if (body.opening_balance !== undefined) backendBody.open_bal = body.opening_balance;
-      if (body.opening_balance_sec !== undefined) backendBody.s_open_bal = body.opening_balance_sec;
-      if (fkBComId !== undefined) backendBody.fk_b_com_id = fkBComId ? String(fkBComId) : '';
-      if (body.account_no !== undefined) backendBody.account_no = body.account_no;
-      if (body.rtgs_neft_ifsc !== undefined) backendBody.rtgs_neft_ifsc = body.rtgs_neft_ifsc;
-      if (body.account_type !== undefined) backendBody.account_type = body.account_type;
+    const backendBody: Record<string, any> = {};
+    if (body.account_code !== undefined) backendBody.acct_code = body.account_code;
+    if (body.bank_account_name !== undefined) backendBody.account = body.bank_account_name;
+    if (body.fk_grp_id !== undefined) backendBody.fk_grp_id = body.fk_grp_id;
+    if (body.gst_no !== undefined) backendBody.cgst_no = body.gst_no;
+    if (body.opening_balance !== undefined) backendBody.open_bal = body.opening_balance;
+    if (body.opening_balance_sec !== undefined) backendBody.s_open_bal = body.opening_balance_sec;
+    if (fkBComId !== undefined) backendBody.fk_b_com_id = fkBComId ? String(fkBComId) : '';
+    if (body.account_no !== undefined) backendBody.account_no = body.account_no;
+    if (body.rtgs_neft_ifsc !== undefined) backendBody.rtgs_neft_ifsc = body.rtgs_neft_ifsc;
+    if (body.account_type !== undefined) backendBody.account_type = body.account_type;
 
-      if (body.holder_details) {
-        if (fkH1ComId !== undefined) backendBody.fk_h1_com_id = fkH1ComId ? String(fkH1ComId) : '';
-        if (body.holder_details[0]?.client_id !== undefined) backendBody.h1_client_id = body.holder_details[0].client_id;
-        if (fkH2ComId !== undefined) backendBody.fk_h2_com_id = fkH2ComId ? String(fkH2ComId) : null;
-        if (body.holder_details[1]?.client_id !== undefined) backendBody.h2_client_id = body.holder_details[1].client_id;
-        if (fkH3ComId !== undefined) backendBody.fk_h3_com_id = fkH3ComId ? String(fkH3ComId) : null;
-        if (body.holder_details[2]?.client_id !== undefined) backendBody.h3_client_id = body.holder_details[2].client_id;
-        if (fkH4ComId !== undefined) backendBody.fk_h4_com_id = fkH4ComId ? String(fkH4ComId) : null;
-        if (body.holder_details[3]?.client_id !== undefined) backendBody.h4_client_id = body.holder_details[3].client_id;
-      }
-      if (fkNComId !== undefined) backendBody.fk_n_com_id = fkNComId ? String(fkNComId) : null;
-
-      const res = await axiosClient.put<{ data: any }>(`/master/account/bank-account/${id}`, backendBody);
-      return mapToFrontend(res.data.data);
-    } catch (error) {
-      const list = getLocalData();
-      const index = list.findIndex((b) => b.pk_ban_id === id || String(b.pk_ban_id) === String(id));
-      if (index === -1) throw new Error('Bank account not found');
-      const updatedRecord: BankAccount = {
-        ...list[index],
-        ...body,
-        date_time_stamp: new Date().toISOString(),
-      };
-      const updatedList = [...list];
-      updatedList[index] = updatedRecord;
-      saveLocalData(updatedList);
-      return updatedRecord;
+    if (body.holder_details) {
+      if (fkH1ComId !== undefined) backendBody.fk_h1_com_id = fkH1ComId ? String(fkH1ComId) : '';
+      if (body.holder_details[0]?.client_id !== undefined)
+        backendBody.h1_client_id = body.holder_details[0].client_id;
+      if (fkH2ComId !== undefined) backendBody.fk_h2_com_id = fkH2ComId ? String(fkH2ComId) : null;
+      if (body.holder_details[1]?.client_id !== undefined)
+        backendBody.h2_client_id = body.holder_details[1].client_id;
+      if (fkH3ComId !== undefined) backendBody.fk_h3_com_id = fkH3ComId ? String(fkH3ComId) : null;
+      if (body.holder_details[2]?.client_id !== undefined)
+        backendBody.h3_client_id = body.holder_details[2].client_id;
+      if (fkH4ComId !== undefined) backendBody.fk_h4_com_id = fkH4ComId ? String(fkH4ComId) : null;
+      if (body.holder_details[3]?.client_id !== undefined)
+        backendBody.h4_client_id = body.holder_details[3].client_id;
     }
+    if (fkNComId !== undefined) backendBody.fk_n_com_id = fkNComId ? String(fkNComId) : null;
+
+    const res = await axiosClient.put<{ data: any }>(
+      `/master/account/bank-account/${id}`,
+      backendBody,
+    );
+    return mapToFrontend(res.data.data);
   },
 
   remove: async (id: number | string): Promise<void> => {
-    try {
-      await axiosClient.delete(`/master/account/bank-account/${id}`);
-    } catch (error) {
-      const list = getLocalData();
-      const updatedList = list.filter((b) => b.pk_ban_id !== id && String(b.pk_ban_id) !== String(id));
-      saveLocalData(updatedList);
-    }
+    await axiosClient.delete(`/master/account/bank-account/${id}`);
+  },
+
+  listIndividuals: async (): Promise<Array<{ pkContId: string; contactName: string }>> => {
+    const res = await axiosClient.get<{ data: Array<{ pkContId: string; contactName: string }> }>(
+      '/master/account/bank-account/lookups/individuals',
+    );
+    return res.data.data || [];
   },
 };

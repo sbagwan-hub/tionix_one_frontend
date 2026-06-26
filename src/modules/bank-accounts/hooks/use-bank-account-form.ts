@@ -21,9 +21,9 @@ import {
   useCreateBankAccount,
   useUpdateBankAccount,
   useDeleteBankAccount,
+  useIndividualLookups,
 } from './use-bank-accounts';
 import { useAccountGroupsTree } from '../../account-groups/hooks/use-account-groups';
-import { useMasterEmployee } from '../../master-employee/hooks/useMasterEmployee';
 
 type Mode = 'view' | 'add' | 'edit';
 
@@ -74,13 +74,7 @@ export function useBankAccountForm() {
     isLoading: is_tree_loading,
   } = useAccountGroupsTree();
 
-  const { list: employee_query } = useMasterEmployee();
-  const employees = employee_query.data?.data || [
-    { pk_emp_id: 1, employee: 'Ramesh P' },
-    { pk_emp_id: 2, employee: 'Suresh K' },
-    { pk_emp_id: 3, employee: 'Samiksha' },
-    { pk_emp_id: 4, employee: 'Amit P' },
-  ];
+  const { data: individuals = [], isLoading: is_individuals_loading } = useIndividualLookups();
 
   const create_mutation = useCreateBankAccount();
   const update_mutation = useUpdateBankAccount();
@@ -89,10 +83,11 @@ export function useBankAccountForm() {
   const loading =
     is_list_loading ||
     is_tree_loading ||
-    employee_query.isLoading ||
+    is_individuals_loading ||
     create_mutation.isPending ||
     update_mutation.isPending ||
     delete_mutation.isPending;
+
 
   // Auto-adjust cursor if it goes out of bounds when records list changes
   useEffect(() => {
@@ -504,10 +499,11 @@ export function useBankAccountForm() {
     form_input_ref,
     records,
     refetch_list,
+    individuals,
     is_tree_loading,
-    employees,
     loading,
     get_bank_tree,
+
     is_editing,
     crud_actions,
     utility_actions,
@@ -517,3 +513,4 @@ export function useBankAccountForm() {
     handle_confirm_delete,
   };
 }
+

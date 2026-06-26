@@ -7,7 +7,7 @@ import { ChequeBookDto } from '../types';
 interface ChequeBookListProps {
   is_loading: boolean;
   paginated_records: ChequeBookDto[];
-  selected_id: number | null;
+  selected_id: string | number | null;
   page: number;
   set_page: (page: number | ((p: number) => number)) => void;
   page_size: number;

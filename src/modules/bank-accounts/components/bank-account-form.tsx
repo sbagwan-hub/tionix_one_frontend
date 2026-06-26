@@ -47,7 +47,7 @@ interface BankAccountFormProps {
   records: BankAccount[];
   cursor: number;
   form_input_ref: React.RefObject<HTMLInputElement | null>;
-  employees: Array<{ pk_emp_id: number; employee: string }>;
+  individuals: Array<{ pkContId: string; contactName: string }>;
 }
 
 export function BankAccountForm({
@@ -83,8 +83,9 @@ export function BankAccountForm({
   records,
   cursor,
   form_input_ref,
-  employees,
+  individuals,
 }: BankAccountFormProps) {
+
   
   const handleHolderChange = (index: number, field: keyof HolderDetail, value: string) => {
     const updated = [...holder_details];
@@ -334,17 +335,18 @@ export function BankAccountForm({
                         <SelectValue placeholder="Select Holder Name" />
                       </SelectTrigger>
                       <SelectContent>
-                        {employees.map((emp) => (
+                        {individuals.map((ind) => (
                           <SelectItem
-                             key={emp.pk_emp_id}
-                             value={emp.employee}
+                             key={ind.pkContId}
+                             value={ind.contactName}
                              className="text-xs"
                           >
-                            {emp.employee}
+                            {ind.contactName}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
+
                   ) : (
                     <Input value={holder.name} disabled className="h-8.5 text-xs" />
                   )}

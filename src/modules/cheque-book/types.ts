@@ -3,7 +3,7 @@ import { z } from 'zod';
 const syncField = z.enum(['N', 'C', 'E']).default('N');
 
 export const chequeBookSchema = z.object({
-  pk_chq_id: z.number().int().positive().optional(),
+  pk_chq_id: z.union([z.number(), z.string()]).optional(),
   fk_ban_id: z.union([z.number(), z.string()]).refine(val => !!val, { message: 'Bank Account is required' }),
   bank_account_name: z.string().optional(),
   start_no: z.coerce.number().int().positive('Starting Cheque No. must be positive'),
