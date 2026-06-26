@@ -155,7 +155,7 @@ export function BankAccountForm({
             </Label>
             {is_editing ? (
               <Select value={bank_name} onValueChange={set_bank_name}>
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+                <SelectTrigger className="w-full border-border/85 bg-background/50 h-9 text-xs">
                   <SelectValue placeholder="Select Bank" />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +205,7 @@ export function BankAccountForm({
             </Label>
             {is_editing ? (
               <Select value={account_type} onValueChange={set_account_type}>
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+                <SelectTrigger className="w-full border-border/85 bg-background/50 h-9 text-xs">
                   <SelectValue placeholder="Select Account Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -331,7 +331,7 @@ export function BankAccountForm({
                       value={holder.name}
                       onValueChange={(val) => handleHolderChange(idx, 'name', val)}
                     >
-                      <SelectTrigger className="bg-background h-8.5 text-xs">
+                      <SelectTrigger className="w-full bg-background h-8.5 text-xs">
                         <SelectValue placeholder="Select Holder Name" />
                       </SelectTrigger>
                       <SelectContent>

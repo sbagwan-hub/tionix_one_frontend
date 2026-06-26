@@ -188,7 +188,7 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     title: 'Debit Card Setup',
     icon: <Settings className="h-4 w-4 text-cyan-500" />,
     isMinimizable: true,
-    className: 'absolute top-20 left-12 w-full max-w-5xl h-[560px]',
+    className: 'absolute top-20 left-12 w-full max-w-2xl',
     component: DebitCardWindow,
   },
   'accounts-cheque-book': {
@@ -196,7 +196,7 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     title: 'Cheque Book Setup',
     icon: <Settings className="h-4 w-4 text-emerald-500" />,
     isMinimizable: true,
-    className: 'absolute top-24 left-16 w-full max-w-5xl h-[560px]',
+    className: 'absolute top-24 left-16 w-full max-w-2xl',
     component: ChequeBookWindow,
   },
 };
