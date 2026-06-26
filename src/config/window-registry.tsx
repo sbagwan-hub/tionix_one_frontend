@@ -33,6 +33,8 @@ import { ScheduleTypeWindow } from '@/modules/master-salary/components/ScheduleT
 import { NatureOfWorkWindow } from '@/modules/master-salary/components/NatureOfWorkWindow';
 import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSectionWindow';
 import { ShiftTimingWindow } from '@/modules/master-salary/components/ShiftTimingWindow';
+import { DebitCardWindow } from '@/modules/debit-card/components/DebitCardWindow';
+import { ChequeBookWindow } from '@/modules/cheque-book/components/ChequeBookWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -180,5 +182,21 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-60 left-88 w-full max-w-2xl',
     component: RegionWindow,
+  },
+  'accounts-debit-card': {
+    id: 'accounts-debit-card',
+    title: 'Debit Card Setup',
+    icon: <Settings className="h-4 w-4 text-cyan-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-5xl h-[560px]',
+    component: DebitCardWindow,
+  },
+  'accounts-cheque-book': {
+    id: 'accounts-cheque-book',
+    title: 'Cheque Book Setup',
+    icon: <Settings className="h-4 w-4 text-emerald-500" />,
+    isMinimizable: true,
+    className: 'absolute top-24 left-16 w-full max-w-5xl h-[560px]',
+    component: ChequeBookWindow,
   },
 };
