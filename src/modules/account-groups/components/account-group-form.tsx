@@ -38,7 +38,7 @@ export function AccountGroupForm({
   const currentRecord = records[cursor];
 
   return (
-    <div className="from-card to-card/70 border-border/60 shadow-foreground/2 relative flex h-full min-h-0 flex-col rounded-xl border bg-linear-to-b p-6 shadow-md transition-all duration-300 md:col-span-5 md:overflow-y-auto">
+    <div className="from-card to-card/70 border-border/60 shadow-foreground/2 scrollbar-thumb-muted-foreground/15 relative flex h-full min-h-0 scrollbar-thin scrollbar-track-transparent flex-col rounded-xl border bg-linear-to-b p-6 shadow-md transition-all duration-300 md:col-span-5 md:overflow-y-auto">
       {/* Dynamic Status Badges */}
       <div className="mb-2 flex items-center justify-between">
         <span className="text-foreground text-xxs font-bold tracking-widest uppercase">

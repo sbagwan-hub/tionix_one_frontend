@@ -32,11 +32,11 @@ export function BankAccountsList({
   const filtered = records.filter((r) => {
     const bankMatch = filter_bank
       ? r.bank_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
-        r.bank_account_name.toLowerCase().includes(filter_bank.toLowerCase())
+        r.bank_account_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
+        r.account_code.toLowerCase().includes(filter_bank.toLowerCase()) ||
+        (r.holder_details?.[0]?.client_id || '').toLowerCase().includes(filter_bank.toLowerCase())
       : true;
-    const accountMatch = filter_account_no
-      ? r.account_no.includes(filter_account_no)
-      : true;
+    const accountMatch = filter_account_no ? r.account_no.includes(filter_account_no) : true;
     return bankMatch && accountMatch;
   });
 
@@ -77,7 +77,10 @@ export function BankAccountsList({
           <thead>
             <tr className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase select-none">
               <th className="w-12 p-3 text-center">#</th>
+              <th className="p-3">Code</th>
               <th className="p-3">Account Name</th>
+              <th className="p-3">Customer ID</th>
+              <th className="p-3">GSTIN</th>
               <th className="p-3">Bank Name</th>
               <th className="p-3">Account Number</th>
               <th className="p-3">IFSC / RTGS</th>
@@ -88,26 +91,28 @@ export function BankAccountsList({
           <tbody className="divide-y">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-muted-foreground p-8 text-center">
+                <td colSpan={10} className="text-muted-foreground p-8 text-center">
                   No records found matching filters.
                 </td>
               </tr>
             ) : (
               filtered.map((rec, i) => {
                 const idx = records.indexOf(rec);
+                const primaryCustomerId = rec.holder_details?.[0]?.client_id || '';
                 return (
                   <tr
                     key={rec.pk_ban_id}
                     className={`hover:bg-muted/40 cursor-pointer transition-colors ${
-                      rec.pk_ban_id === selected_id
-                        ? 'bg-primary/10 text-primary font-medium'
-                        : ''
+                      rec.pk_ban_id === selected_id ? 'bg-primary/10 text-primary font-medium' : ''
                     }`}
                     onClick={() => on_select_record(rec, idx)}
                     onDoubleClick={() => on_double_click_record(rec, idx)}
                   >
                     <td className="text-muted-foreground p-3 text-center">{i + 1}</td>
+                    <td className="p-3 font-mono font-medium">{rec.account_code}</td>
                     <td className="p-3 font-semibold">{rec.bank_account_name}</td>
+                    <td className="p-3 font-mono">{primaryCustomerId}</td>
+                    <td className="p-3 font-mono">{rec.gst_no || '-'}</td>
                     <td className="p-3">{rec.bank_name}</td>
                     <td className="p-3 font-mono">{rec.account_no}</td>
                     <td className="p-3 font-mono">{rec.rtgs_neft_ifsc}</td>

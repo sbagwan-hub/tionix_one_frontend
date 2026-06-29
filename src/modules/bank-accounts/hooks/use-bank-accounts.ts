@@ -42,8 +42,8 @@ export function useDeleteBankAccount() {
 
 export function useIndividualLookups() {
   const queryClient = useQueryClient();
-  return useQuery<Array<{ pkContId: string; contactName: string }>>({
-    queryKey: ['masterIndividualLookups'],
+  return useQuery<Array<{ pk_cont_id: number; contact_name: string }>>({
+    queryKey: ['masterIndividualLookupsV2'],
     queryFn: async () => {
       const res = await bankAccountApi.listIndividuals();
       return res;
@@ -52,8 +52,8 @@ export function useIndividualLookups() {
 }
 
 export function useOrganizationLookups() {
-  return useQuery<Array<{ pkContId: string; contactName: string }>>({
-    queryKey: ['masterOrganizationLookups'],
+  return useQuery<Array<{ pk_cont_id: number; contact_name: string }>>({
+    queryKey: ['masterOrganizationLookupsV2'],
     queryFn: async () => {
       const res = await bankAccountApi.listOrganizations();
       return res;

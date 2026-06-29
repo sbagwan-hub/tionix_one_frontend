@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Info, Eye, PlusCircle, Settings2, FolderOpen, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { FormInput } from '@/components/common/form-input';
 import {
   Select,
   SelectContent,
@@ -47,8 +48,8 @@ interface BankAccountFormProps {
   records: BankAccount[];
   cursor: number;
   form_input_ref: React.RefObject<HTMLInputElement | null>;
-  individuals: Array<{ pkContId: string; contactName: string }>;
-  organizations: Array<{ pkContId: string; contactName: string }>;
+  individuals: Array<{ pk_cont_id: number; contact_name: string }>;
+  organizations: Array<{ pk_cont_id: number; contact_name: string }>;
 }
 
 export function BankAccountForm({
@@ -97,7 +98,7 @@ export function BankAccountForm({
   const accountTypeOptions = ['Current Account', 'Savings Account', 'Cash Credit', 'Overdraft'];
 
   return (
-    <div className="from-card to-card/70 relative flex h-full min-h-0 w-full flex-col bg-linear-to-b p-5 transition-all duration-300">
+    <div className="from-card to-card/70 scrollbar-thumb-muted-foreground/15 relative flex h-full min-h-0 w-full scrollbar-thin scrollbar-track-transparent flex-col overflow-y-auto bg-linear-to-b p-5 transition-all duration-300 md:col-span-7">
       {/* Dynamic Status Badges */}
       <div className="mb-3 flex items-center justify-between">
         <span className="text-foreground text-xxs font-bold tracking-widest uppercase">
@@ -132,7 +133,7 @@ export function BankAccountForm({
         </div>
       </div>
 
-      <div className="scrollbar-thumb-muted-foreground/15 min-h-0 flex-1 scrollbar-thin scrollbar-track-transparent space-y-3.5 overflow-y-auto pr-1 pb-16">
+      <div className="space-y-3.5 pr-1 pb-16">
         {/* Row 1: Bank Name & Account No. */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
@@ -144,10 +145,10 @@ export function BankAccountForm({
                 <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Bank" />
                 </SelectTrigger>
-                <SelectContent className="border-border bg-popover z-[10000]">
+                <SelectContent position="popper" sideOffset={4}>
                   {organizations.map((org) => (
-                    <SelectItem key={org.pkContId} value={org.contactName} className="text-xs">
-                      {org.contactName}
+                    <SelectItem key={org.pk_cont_id} value={org.contact_name} className="text-xs">
+                      {org.contact_name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -158,11 +159,11 @@ export function BankAccountForm({
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Account No. {is_editing && <span className="text-destructive">*</span>}
-            </Label>
-            <Input
+            <FormInput
               ref={form_input_ref}
+              label={
+                <span>Account No. {is_editing && <span className="text-destructive">*</span>}</span>
+              }
               value={account_no}
               onChange={(e) => set_account_no(e.target.value)}
               disabled={!is_editing}
@@ -175,8 +176,8 @@ export function BankAccountForm({
         {/* Row 2: RTGS/NEFT/IFSC & Account Type */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">RTGS/NEFT/IFSC</Label>
-            <Input
+            <FormInput
+              label="RTGS/NEFT/IFSC"
               value={rtgs_neft_ifsc}
               onChange={(e) => set_rtgs_neft_ifsc(e.target.value.toUpperCase())}
               disabled={!is_editing}
@@ -211,10 +212,12 @@ export function BankAccountForm({
         {/* Row 3: Account Code & Bank Account Name */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Account Code {is_editing && <span className="text-destructive">*</span>}
-            </Label>
-            <Input
+            <FormInput
+              label={
+                <span>
+                  Account Code {is_editing && <span className="text-destructive">*</span>}
+                </span>
+              }
               value={account_code}
               onChange={(e) => set_account_code(e.target.value)}
               disabled={!is_editing}
@@ -224,10 +227,12 @@ export function BankAccountForm({
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Bank Account {is_editing && <span className="text-destructive">*</span>}
-            </Label>
-            <Input
+            <FormInput
+              label={
+                <span>
+                  Bank Account {is_editing && <span className="text-destructive">*</span>}
+                </span>
+              }
               value={bank_account_name}
               onChange={(e) => set_bank_account_name(e.target.value)}
               disabled={!is_editing}
@@ -240,25 +245,21 @@ export function BankAccountForm({
         {/* Row 4: Group & GST No. */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Group {is_editing && <span className="text-destructive">*</span>}
-            </Label>
-            <div className="group relative">
-              <FolderOpen className="text-foreground/50 group-focus-within:text-primary absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 transition-colors" />
-              <Input
-                value={selected_group ? selected_group.group_name : ''}
-                disabled
-                placeholder={is_editing ? 'Select a group from tree on right...' : 'Root Context'}
-                className="bg-muted/30 text-foreground h-9 cursor-not-allowed pl-9 text-xs font-medium"
-              />
-            </div>
+            <FormInput
+              label={<span>Group {is_editing && <span className="text-destructive">*</span>}</span>}
+              icon={FolderOpen}
+              value={selected_group ? selected_group.group_name : ''}
+              disabled
+              placeholder={is_editing ? 'Select a group from tree on right...' : 'Root Context'}
+              className="bg-muted/30 text-foreground h-9 cursor-not-allowed text-xs font-medium"
+            />
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              GST No. {is_editing && <span className="text-destructive">*</span>}
-            </Label>
-            <Input
+            <FormInput
+              label={
+                <span>GST No. {is_editing && <span className="text-destructive">*</span>}</span>
+              }
               value={gst_no}
               onChange={(e) => set_gst_no(e.target.value.toUpperCase())}
               disabled={!is_editing}
@@ -271,8 +272,8 @@ export function BankAccountForm({
         {/* Row 5: Opening Balances */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">Opening Balance</Label>
-            <Input
+            <FormInput
+              label="Opening Balance"
               type="number"
               step="0.01"
               value={opening_balance || ''}
@@ -284,10 +285,8 @@ export function BankAccountForm({
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Opening Balance (Secondary Currency)
-            </Label>
-            <Input
+            <FormInput
+              label="Opening Balance (Secondary Currency)"
               type="number"
               step="0.01"
               value={opening_balance_sec || ''}
@@ -320,14 +319,14 @@ export function BankAccountForm({
                       <SelectTrigger className="bg-background h-8.5 w-full text-xs">
                         <SelectValue placeholder="Select Holder Name" />
                       </SelectTrigger>
-                      <SelectContent className="border-border bg-popover z-10000">
+                      <SelectContent position="popper" sideOffset={4}>
                         {individuals.map((ind) => (
                           <SelectItem
-                            key={ind.pkContId}
-                            value={ind.contactName}
+                            key={ind.pk_cont_id}
+                            value={ind.contact_name}
                             className="text-xs"
                           >
-                            {ind.contactName}
+                            {ind.contact_name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -338,7 +337,7 @@ export function BankAccountForm({
                 </div>
 
                 <div className="col-span-5">
-                  <Input
+                  <FormInput
                     value={holder.client_id}
                     onChange={(e) => handleHolderChange(idx, 'client_id', e.target.value)}
                     disabled={!is_editing}
@@ -352,16 +351,14 @@ export function BankAccountForm({
         </div>
 
         {/* Nominee Field */}
-        <div className="space-y-1.5">
-          <Label className="text-foreground/80 text-xs font-semibold">Nominee</Label>
-          <Input
-            value={nominee}
-            onChange={(e) => set_nominee(e.target.value)}
-            disabled={!is_editing}
-            placeholder="Enter Nominee Name"
-            className="h-9 text-xs"
-          />
-        </div>
+        <FormInput
+          label="Nominee"
+          value={nominee}
+          onChange={(e) => set_nominee(e.target.value)}
+          disabled={!is_editing}
+          placeholder="Enter Nominee Name"
+          className="h-9 text-xs"
+        />
       </div>
 
       {is_editing && !selected_group && (

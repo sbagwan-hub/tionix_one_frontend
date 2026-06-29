@@ -367,7 +367,7 @@ export function AccountGroupsScreen() {
 
       {/* Content Container */}
       {activeTab === 'group' ? (
-        <div className="bg-card grid min-h-0 flex-1 grid-cols-1 divide-y overflow-y-auto rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
+        <div className="bg-card grid h-[calc(100vh-140px)] grid-cols-1 divide-y overflow-y-auto rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
           {/* Form Component */}
           <AccountGroupForm
             groupName={groupName}

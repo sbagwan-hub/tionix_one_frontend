@@ -197,27 +197,19 @@ export const bankAccountApi = {
     await axiosClient.delete(`/master/account/bank-account/${id}`);
   },
 
-  listIndividuals: async (): Promise<Array<{ pkContId: string; contactName: string }>> => {
+  listIndividuals: async (): Promise<Array<{ pk_cont_id: number; contact_name: string }>> => {
     const res = await axiosClient.get<{ data: any[] }>(
       '/master/contacts/individuals/common/dropdown',
       { params: { type: 'I' } },
     );
-    const data = res.data.data || [];
-    return data.map((item) => ({
-      pkContId: String(item.pk_cont_id || item.pkContId),
-      contactName: item.contact_name || item.contactName || '',
-    }));
+    return res.data.data || [];
   },
 
-  listOrganizations: async (): Promise<Array<{ pkContId: string; contactName: string }>> => {
+  listOrganizations: async (): Promise<Array<{ pk_cont_id: number; contact_name: string }>> => {
     const res = await axiosClient.get<{ data: any[] }>(
       '/master/contacts/individuals/common/dropdown',
       { params: { type: 'O' } },
     );
-    const data = res.data.data || [];
-    return data.map((item) => ({
-      pkContId: String(item.pk_cont_id || item.pkContId),
-      contactName: item.contact_name || item.contactName || '',
-    }));
+    return res.data.data || [];
   },
 };
