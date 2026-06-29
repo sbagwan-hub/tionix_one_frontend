@@ -33,7 +33,7 @@ export const ChequeBookList: React.FC<ChequeBookListProps> = ({
       <div className="min-h-0 flex-1 overflow-auto">
         <table className="w-full border-collapse text-left text-xs">
           <thead>
-            <tr className="bg-muted/50 border-border/50 text-muted-foreground border-b text-[10px] font-bold tracking-wider uppercase">
+            <tr className="bg-muted/50 border-border/50 text-muted-foreground text-xxs border-b font-bold tracking-wider uppercase">
               <th className="p-2.5 pl-4">Bank Account</th>
               <th className="p-2.5">Start No.</th>
               <th className="p-2.5">End No.</th>
@@ -63,7 +63,9 @@ export const ChequeBookList: React.FC<ChequeBookListProps> = ({
                     selected_id === rec.pk_chq_id ? 'bg-primary/10 text-primary font-medium' : ''
                   }`}
                 >
-                  <td className="p-2.5 pl-4 font-semibold">{rec.bank_account_name || 'Bank Account'}</td>
+                  <td className="p-2.5 pl-4 font-semibold">
+                    {rec.bank_account_name || 'Bank Account'}
+                  </td>
                   <td className="p-2.5 font-mono">{rec.start_no}</td>
                   <td className="p-2.5 font-mono">{rec.end_no}</td>
                   <td className="p-2.5 text-center font-mono font-bold">{rec.total_cheques}</td>
@@ -79,7 +81,8 @@ export const ChequeBookList: React.FC<ChequeBookListProps> = ({
       {total_pages > 1 && (
         <div className="border-border/40 bg-muted/20 text-muted-foreground flex items-center justify-between border-t p-2.5 text-xs">
           <span>
-            Showing {(page - 1) * page_size + 1} - {Math.min(page * page_size, total_records)} of {total_records}
+            Showing {(page - 1) * page_size + 1} - {Math.min(page * page_size, total_records)} of{' '}
+            {total_records}
           </span>
           <div className="flex items-center gap-1.5">
             <button

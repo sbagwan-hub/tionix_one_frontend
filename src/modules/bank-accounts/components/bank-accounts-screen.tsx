@@ -62,16 +62,14 @@ export function BankAccountsScreen() {
     handle_confirm_delete,
   } = useBankAccountForm();
 
-
-
   return (
-    <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans select-none">
+    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans select-none">
       <Toolbar title="Bank Account" actions={crud_actions} utilities={utility_actions} />
 
       {/* Tabs list toggle */}
       <div className="my-2 flex border-b">
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
+          className={`mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             active_tab === 'details'
               ? 'border-primary text-primary bg-muted/30 font-bold'
               : 'text-foreground hover:text-foreground border-transparent'
@@ -81,7 +79,7 @@ export function BankAccountsScreen() {
           Account Details
         </button>
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
+          className={`mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             active_tab === 'list'
               ? 'border-primary text-primary bg-muted/30 font-bold'
               : 'text-foreground hover:text-foreground border-transparent'
@@ -97,47 +95,47 @@ export function BankAccountsScreen() {
 
       {/* Content Container */}
       {active_tab === 'details' ? (
-        <div className="bg-card grid min-h-0 flex-1 grid-cols-1 divide-y overflow-y-auto rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
+        <div className="bg-card grid h-[calc(100vh-140px)] grid-cols-1 divide-y rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
           {/* Form Component */}
-          <BankAccountForm
-            bank_name={bank_name}
-            set_bank_name={set_bank_name}
-            account_no={account_no}
-            set_account_no={set_account_no}
-            rtgs_neft_ifsc={rtgs_neft_ifsc}
-            set_rtgs_neft_ifsc={set_rtgs_neft_ifsc}
-            account_type={account_type}
-            set_account_type={set_account_type}
-            account_code={account_code}
-            set_account_code={set_account_code}
-            bank_account_name={bank_account_name}
-            set_bank_account_name={set_bank_account_name}
-            selected_group={selected_group}
-            set_selected_group={set_selected_group}
-            opening_balance={opening_balance}
-            set_opening_balance={set_opening_balance}
-            opening_balance_sec={opening_balance_sec}
-            set_opening_balance_sec={set_opening_balance_sec}
-            gst_no={gst_no}
-            set_gst_no={set_gst_no}
-            holder_details={holder_details}
-            set_holder_details={set_holder_details}
-            nominee={nominee}
-            set_nominee={set_nominee}
-            is_editing={is_editing}
-            mode={mode}
-            selected_id={selected_id}
-            is_sys_defined={is_sys_defined}
-            records={records}
-            cursor={cursor}
-            form_input_ref={form_input_ref}
-            individuals={individuals}
-          />
-
-
+          <div className="h-full min-h-0 overflow-hidden md:col-span-7">
+            <BankAccountForm
+              bank_name={bank_name}
+              set_bank_name={set_bank_name}
+              account_no={account_no}
+              set_account_no={set_account_no}
+              rtgs_neft_ifsc={rtgs_neft_ifsc}
+              set_rtgs_neft_ifsc={set_rtgs_neft_ifsc}
+              account_type={account_type}
+              set_account_type={set_account_type}
+              account_code={account_code}
+              set_account_code={set_account_code}
+              bank_account_name={bank_account_name}
+              set_bank_account_name={set_bank_account_name}
+              selected_group={selected_group}
+              set_selected_group={set_selected_group}
+              opening_balance={opening_balance}
+              set_opening_balance={set_opening_balance}
+              opening_balance_sec={opening_balance_sec}
+              set_opening_balance_sec={set_opening_balance_sec}
+              gst_no={gst_no}
+              set_gst_no={set_gst_no}
+              holder_details={holder_details}
+              set_holder_details={set_holder_details}
+              nominee={nominee}
+              set_nominee={set_nominee}
+              is_editing={is_editing}
+              mode={mode}
+              selected_id={selected_id}
+              is_sys_defined={is_sys_defined}
+              records={records}
+              cursor={cursor}
+              form_input_ref={form_input_ref}
+              individuals={individuals}
+            />
+          </div>
 
           {/* Tree Component */}
-          <div className="md:col-span-5 h-full">
+          <div className="h-full md:col-span-5">
             <AccountGroupsTree
               tree={get_bank_tree()}
               loading={is_tree_loading}

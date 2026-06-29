@@ -43,11 +43,10 @@ export function useDeleteBankAccount() {
 export function useIndividualLookups() {
   const queryClient = useQueryClient();
   return useQuery<Array<{ pkContId: string; contactName: string }>>({
-    queryKey: ['individualLookups'],
+    queryKey: ['masterIndividualLookups'],
     queryFn: async () => {
       const res = await bankAccountApi.listIndividuals();
       return res;
     },
   });
 }
-

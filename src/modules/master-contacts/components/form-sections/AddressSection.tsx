@@ -35,7 +35,7 @@ export const AddressSection: React.FC<AddressSectionProps> = ({
 }) => {
   return (
     <div className="border-border/80 bg-background/50 space-y-4 rounded-sm border p-4">
-      <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+      <Label className="text-muted-foreground text-xxs block font-semibold tracking-wider uppercase">
         Address Details
       </Label>
       <div className="space-y-4">

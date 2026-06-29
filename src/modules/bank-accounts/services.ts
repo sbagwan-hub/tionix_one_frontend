@@ -10,13 +10,19 @@ async function findContactIdByName(
   const endpoint =
     type === 'O'
       ? '/master/account/bank-account/lookups/banks'
-      : '/master/account/bank-account/lookups/individuals';
-  const res = await axiosClient.get<{ data: Array<{ pkContId: string; contactName: string }> }>(
-    endpoint,
-  );
+      : '/master/contacts/individuals/common/dropdown?type=I';
+  const res = await axiosClient.get<{ data: any[] }>(endpoint);
   const list = res.data.data || [];
-  const found = list.find((c) => c.contactName.toLowerCase() === name.toLowerCase());
-  return found ? parseInt(found.pkContId, 10) : list[0] ? parseInt(list[0].pkContId, 10) : null;
+  const found = list.find((c) => {
+    const cName = c.contactName || c.contact_name || c.bank_account_name;
+    return cName?.toLowerCase() === name.toLowerCase();
+  });
+  const foundId = found
+    ? found.pkContId || found.pk_cont_id || found.pk_ban_id
+    : list[0]
+      ? list[0].pkContId || list[0].pk_cont_id || list[0].pk_ban_id
+      : null;
+  return foundId ? parseInt(foundId, 10) : null;
 }
 
 // Mapper from backend ListItem/Detail to frontend BankAccount
@@ -192,9 +198,14 @@ export const bankAccountApi = {
   },
 
   listIndividuals: async (): Promise<Array<{ pkContId: string; contactName: string }>> => {
-    const res = await axiosClient.get<{ data: Array<{ pkContId: string; contactName: string }> }>(
-      '/master/account/bank-account/lookups/individuals',
+    const res = await axiosClient.get<{ data: any[] }>(
+      '/master/contacts/individuals/common/dropdown',
+      { params: { type: 'I' } },
     );
-    return res.data.data || [];
+    const data = res.data.data || [];
+    return data.map((item) => ({
+      pkContId: String(item.pk_cont_id || item.pkContId),
+      contactName: item.contact_name || item.contactName || '',
+    }));
   },
 };

@@ -113,7 +113,7 @@ export function DeleteDialog({
         {/* Targeted Item Micro-Block (Adapts to Dark/Light seamlessly) */}
         {itemName && (
           <div className="border-border bg-muted/40 dark:bg-muted/20 mt-4 space-y-1 rounded-lg border p-3.5">
-            <span className="text-foreground block text-[10px] font-bold tracking-widest uppercase">
+            <span className="text-foreground text-xxs block font-bold tracking-widest uppercase">
               Target Entity
             </span>
             <p className="text-destructive truncate font-mono text-xs font-semibold tracking-wide dark:text-red-400">

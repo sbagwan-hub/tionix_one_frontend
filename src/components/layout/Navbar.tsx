@@ -127,9 +127,7 @@ function Navbar() {
                   <div className="flex flex-col space-y-1 p-2">
                     <p className="text-xs leading-none font-bold">{user?.username}</p>
                     {user?.email && (
-                      <p className="text-muted-foreground text-[10px] leading-none">
-                        {user?.email}
-                      </p>
+                      <p className="text-muted-foreground text-xxs leading-none">{user?.email}</p>
                     )}
                   </div>
                   <DropdownMenuSeparator className="bg-border/60 my-1" />
@@ -146,7 +144,7 @@ function Navbar() {
                           e.stopPropagation();
                           decreaseFontSize();
                         }}
-                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border text-xxs flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent font-bold transition-all focus:outline-none"
                         title="Decrease Font Size"
                       >
                         A-
@@ -160,7 +158,7 @@ function Navbar() {
                           e.stopPropagation();
                           increaseFontSize();
                         }}
-                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border text-xxs flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent font-bold transition-all focus:outline-none"
                         title="Increase Font Size"
                       >
                         A+

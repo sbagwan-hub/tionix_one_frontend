@@ -85,8 +85,7 @@ export function BankAccountForm({
   form_input_ref,
   individuals,
 }: BankAccountFormProps) {
-
-  
+  console.log('BankAccountForm individuals:', individuals);
   const handleHolderChange = (index: number, field: keyof HolderDetail, value: string) => {
     const updated = [...holder_details];
     updated[index] = { ...updated[index], [field]: value };
@@ -103,18 +102,13 @@ export function BankAccountForm({
     'Canara Bank',
   ];
 
-  const accountTypeOptions = [
-    'Current Account',
-    'Savings Account',
-    'Cash Credit',
-    'Overdraft',
-  ];
+  const accountTypeOptions = ['Current Account', 'Savings Account', 'Cash Credit', 'Overdraft'];
 
   return (
-    <div className="from-card to-card/70 border-border/60 relative flex h-full min-h-0 flex-col rounded-xl border bg-gradient-to-b p-5 transition-all duration-300 md:col-span-7 md:overflow-y-auto">
+    <div className="from-card to-card/70 relative flex h-full min-h-0 w-full flex-col bg-linear-to-b p-5 transition-all duration-300">
       {/* Dynamic Status Badges */}
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-foreground text-[10px] font-bold tracking-widest uppercase">
+        <span className="text-foreground text-xxs font-bold tracking-widest uppercase">
           Bank Account Form
         </span>
 
@@ -146,7 +140,7 @@ export function BankAccountForm({
         </div>
       </div>
 
-      <div className="space-y-3.5">
+      <div className="scrollbar-thumb-muted-foreground/15 min-h-0 flex-1 scrollbar-thin scrollbar-track-transparent space-y-3.5 overflow-y-auto pr-1 pb-16">
         {/* Row 1: Bank Name & Account No. */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
@@ -154,11 +148,11 @@ export function BankAccountForm({
               Bank Name {is_editing && <span className="text-destructive">*</span>}
             </Label>
             {is_editing ? (
-              <Select value={bank_name} onValueChange={set_bank_name}>
-                <SelectTrigger className="w-full border-border/85 bg-background/50 h-9 text-xs">
+              <Select value={bank_name || undefined} onValueChange={set_bank_name}>
+                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Bank" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="border-border bg-popover z-10000">
                   {bankOptions.map((b) => (
                     <SelectItem key={b} value={b} className="text-xs">
                       {b}
@@ -204,11 +198,11 @@ export function BankAccountForm({
               Account Type {is_editing && <span className="text-destructive">*</span>}
             </Label>
             {is_editing ? (
-              <Select value={account_type} onValueChange={set_account_type}>
-                <SelectTrigger className="w-full border-border/85 bg-background/50 h-9 text-xs">
+              <Select value={account_type || undefined} onValueChange={set_account_type}>
+                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Account Type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="border-border bg-popover z-10000">
                   {accountTypeOptions.map((t) => (
                     <SelectItem key={t} value={t} className="text-xs">
                       {t}
@@ -263,7 +257,7 @@ export function BankAccountForm({
                 value={selected_group ? selected_group.group_name : ''}
                 disabled
                 placeholder={is_editing ? 'Select a group from tree on right...' : 'Root Context'}
-                className="bg-muted/30 text-foreground h-9 pl-9 text-xs font-medium cursor-not-allowed"
+                className="bg-muted/30 text-foreground h-9 cursor-not-allowed pl-9 text-xs font-medium"
               />
             </div>
           </div>
@@ -314,39 +308,38 @@ export function BankAccountForm({
         </div>
 
         {/* Holder Details Grid (Rows 1 to 4) */}
-        <div className="border-border/60 bg-muted/10 rounded-lg border p-4 space-y-3">
+        <div className="border-border/60 bg-muted/10 space-y-3 rounded-lg border p-4">
           <span className="text-foreground/80 block text-xs font-bold tracking-wider uppercase">
             Holder Details
           </span>
           <div className="space-y-2.5">
             {holder_details.map((holder, idx) => (
-              <div key={holder.id} className="grid grid-cols-12 gap-3.5 items-center">
-                <span className="col-span-1 text-xs text-muted-foreground font-semibold text-center">
+              <div key={holder.id} className="grid grid-cols-12 items-center gap-3.5">
+                <span className="text-muted-foreground col-span-1 text-center text-xs font-semibold">
                   {idx + 1}
                 </span>
 
                 <div className="col-span-6">
                   {is_editing ? (
                     <Select
-                      value={holder.name}
+                      value={holder.name || undefined}
                       onValueChange={(val) => handleHolderChange(idx, 'name', val)}
                     >
-                      <SelectTrigger className="w-full bg-background h-8.5 text-xs">
+                      <SelectTrigger className="bg-background h-8.5 w-full text-xs">
                         <SelectValue placeholder="Select Holder Name" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="border-border bg-popover z-10000">
                         {individuals.map((ind) => (
                           <SelectItem
-                             key={ind.pkContId}
-                             value={ind.contactName}
-                             className="text-xs"
+                            key={ind.pkContId}
+                            value={ind.contactName}
+                            className="text-xs"
                           >
                             {ind.contactName}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-
                   ) : (
                     <Input value={holder.name} disabled className="h-8.5 text-xs" />
                   )}

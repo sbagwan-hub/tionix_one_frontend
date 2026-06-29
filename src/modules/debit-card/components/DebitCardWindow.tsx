@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -35,7 +35,7 @@ export const DebitCardWindow: React.FC = () => {
   const [pending_delete_id, set_pending_delete_id] = useState<number | null>(null);
 
   // Queries
-  const { data: records = [], isLoading: is_loading } = useDebitCardsList();
+  const { data: records = [] } = useDebitCardsList();
   const { data: bank_accounts = [] } = useBankAccountsList();
   const { list: employees_query } = useMasterEmployee();
   const employees = employees_query.data?.data || [];
@@ -148,7 +148,7 @@ export const DebitCardWindow: React.FC = () => {
             value={fk_ban_id ? String(fk_ban_id) : ''}
             onValueChange={(val) => form.setValue('fk_ban_id', val, { shouldDirty: true })}
           >
-            <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+            <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
               <SelectValue placeholder="Select Bank Account" />
             </SelectTrigger>
             <SelectContent>
@@ -160,7 +160,7 @@ export const DebitCardWindow: React.FC = () => {
             </SelectContent>
           </Select>
           {form.formState.errors.fk_ban_id && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.fk_ban_id.message?.toString()}
             </p>
           )}
@@ -180,7 +180,7 @@ export const DebitCardWindow: React.FC = () => {
             className="h-9 text-xs"
           />
           {form.formState.errors.card_no && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.card_no.message?.toString()}
             </p>
           )}
@@ -190,14 +190,14 @@ export const DebitCardWindow: React.FC = () => {
       {/* Holder's Name */}
       <div className="grid grid-cols-12 items-center gap-4">
         <Label className="text-muted-foreground col-span-3 text-xs font-medium tracking-wider uppercase">
-          Holder's Name *
+          Holder&apos;s Name *
         </Label>
         <div className="col-span-9">
           <Select
             value={holder_name || ''}
             onValueChange={(val) => form.setValue('holder_name', val, { shouldDirty: true })}
           >
-            <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+            <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
               <SelectValue placeholder="Select Holder" />
             </SelectTrigger>
             <SelectContent>
@@ -209,7 +209,7 @@ export const DebitCardWindow: React.FC = () => {
             </SelectContent>
           </Select>
           {form.formState.errors.holder_name && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.holder_name.message?.toString()}
             </p>
           )}
@@ -228,7 +228,7 @@ export const DebitCardWindow: React.FC = () => {
             className="border-border/60 h-9 w-full text-xs"
           />
           {form.formState.errors.expiry_date && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.expiry_date.message?.toString()}
             </p>
           )}

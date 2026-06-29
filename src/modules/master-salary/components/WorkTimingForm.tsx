@@ -85,7 +85,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
       <form className="flex flex-col gap-4 pb-16 text-xs">
         {/* Shift Selection */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Shift Name *
           </Label>
           <div className="col-span-8">
@@ -111,7 +111,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               )}
             />
             {form.formState.errors.shift && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.shift.message)}
               </p>
             )}
@@ -120,7 +120,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Type of Work Shift */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Type of Work Shift
           </Label>
           <div className="col-span-8">
@@ -149,7 +149,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Supplied To/Manpower Agency */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Supplied To/Manpower Agency
           </Label>
           <div className="col-span-8">
@@ -181,7 +181,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Timing Start Date */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Timing Start Date *
           </Label>
           <div className="col-span-8">
@@ -199,7 +199,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               )}
             />
             {form.formState.errors.tsd && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.tsd.message)}
               </p>
             )}
@@ -208,7 +208,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Work Timing */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Work Timing *
           </Label>
           <div className="col-span-8">
@@ -223,7 +223,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                     'border-destructive focus-visible:ring-destructive/30 bg-destructive/5',
                 )}
               />
-              <span className="text-muted-foreground text-[10px] font-bold">To</span>
+              <span className="text-muted-foreground text-xxs font-bold">To</span>
               <Input
                 type="time"
                 disabled={!isEditing}
@@ -243,12 +243,12 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               <span className="text-muted-foreground text-[9px] font-semibold">hrs</span>
             </div>
             {form.formState.errors.s_work && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.s_work.message)}
               </p>
             )}
             {form.formState.errors.e_work && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.e_work.message)}
               </p>
             )}
@@ -257,7 +257,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Meal Break */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Meal Break *
           </Label>
           <div className="col-span-8">
@@ -272,7 +272,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
                     'border-destructive focus-visible:ring-destructive/30 bg-destructive/5',
                 )}
               />
-              <span className="text-muted-foreground text-[10px] font-bold">To</span>
+              <span className="text-muted-foreground text-xxs font-bold">To</span>
               <Input
                 type="time"
                 disabled={!isEditing}
@@ -292,12 +292,12 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               <span className="text-muted-foreground text-[9px] font-semibold">min</span>
             </div>
             {form.formState.errors.s_break && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.s_break.message)}
               </p>
             )}
             {form.formState.errors.e_break && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.e_break.message)}
               </p>
             )}
@@ -306,7 +306,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Overtime fields */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             OT Break / Fixed OT
           </Label>
           <div className="col-span-8 flex items-center gap-2">
@@ -331,7 +331,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Overtime Till */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Overtime Till
           </Label>
           <div className="col-span-8">
@@ -346,7 +346,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               )}
             />
             {form.formState.errors.e_overtime && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.e_overtime.message)}
               </p>
             )}
@@ -355,7 +355,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Timing End Date */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Timing End Date {watchedType && watchedType !== 'Permanent Shift' && '*'}
           </Label>
           <div className="col-span-8">
@@ -377,7 +377,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
               )}
             />
             {form.formState.errors.ted && (
-              <p className="text-destructive mt-1 text-[10px] font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {String(form.formState.errors.ted.message)}
               </p>
             )}
@@ -386,7 +386,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
 
         {/* Consider Default Attendance / Management Member */}
         <div className="grid grid-cols-12 items-center gap-3">
-          <Label className="text-muted-foreground col-span-4 text-[10px] font-semibold tracking-wider uppercase">
+          <Label className="text-muted-foreground text-xxs col-span-4 font-semibold tracking-wider uppercase">
             Management Member
           </Label>
           <div className="col-span-8 flex items-center gap-2">

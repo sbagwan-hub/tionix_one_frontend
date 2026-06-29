@@ -107,7 +107,7 @@ export const ScheduleTypeWindow: React.FC = () => {
         {...form.register('type')}
       />
       {form.formState.errors.type && (
-        <span className="text-destructive text-[10px]">{form.formState.errors.type.message}</span>
+        <span className="text-destructive text-xxs">{form.formState.errors.type.message}</span>
       )}
     </form>
   );

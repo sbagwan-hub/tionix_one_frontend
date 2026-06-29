@@ -72,7 +72,7 @@ export const DepartmentWindow: React.FC = () => {
         {...form.register('department')}
       />
       {form.formState.errors.department && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.department.message}
         </span>
       )}

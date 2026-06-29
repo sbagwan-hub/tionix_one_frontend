@@ -38,10 +38,10 @@ export function AccountGroupForm({
   const currentRecord = records[cursor];
 
   return (
-    <div className="from-card to-card/70 border-border/60 shadow-foreground/[0.02] relative flex h-full min-h-0 flex-col rounded-xl border bg-gradient-to-b p-6 shadow-md transition-all duration-300 md:col-span-5 md:overflow-y-auto">
+    <div className="from-card to-card/70 border-border/60 shadow-foreground/2 relative flex h-full min-h-0 flex-col rounded-xl border bg-linear-to-b p-6 shadow-md transition-all duration-300 md:col-span-5 md:overflow-y-auto">
       {/* Dynamic Status Badges */}
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-foreground text-[10px] font-bold tracking-widest uppercase">
+        <span className="text-foreground text-xxs font-bold tracking-widest uppercase">
           Form Inspector
         </span>
 
@@ -119,7 +119,7 @@ export function AccountGroupForm({
               placeholder={isEditing ? 'Choose parent from hierarchy tree...' : 'Root Context'}
               className={`border-border/50 bg-muted/30 text-foreground h-9.5 cursor-not-allowed pl-9 text-xs font-medium transition-all duration-200 select-none ${
                 isEditing && !selectedParent
-                  ? 'border-amber-500/30 bg-amber-500/[0.02] placeholder:font-medium placeholder:text-amber-600/70 dark:placeholder:text-amber-400/60'
+                  ? 'border-amber-500/30 bg-amber-500/2 placeholder:font-medium placeholder:text-amber-600/70 dark:placeholder:text-amber-400/60'
                   : ''
               }`}
             />
@@ -142,14 +142,14 @@ export function AccountGroupForm({
         <div className="border-border/60 bg-muted/10 animate-in fade-in slide-in-from-top-1.5 mt-5 flex flex-col gap-3 rounded-lg border p-4 duration-200">
           <div className="border-border/40 flex items-center gap-1.5 border-b pb-2">
             <Layers className="text-foreground/60 h-3.5 w-3.5" />
-            <span className="text-foreground text-[10px] font-bold tracking-wider uppercase">
+            <span className="text-foreground text-xxs font-bold tracking-wider uppercase">
               Cascaded Inherited Vectors
             </span>
           </div>
 
           <div className="grid grid-cols-3 gap-2.5 text-xs">
             <div className="bg-background border-border/40 shadow-3xs rounded-md border p-2 text-center">
-              <span className="text-foreground/80 mb-0.5 block text-[10px] font-medium">
+              <span className="text-foreground/80 text-xxs mb-0.5 block font-medium">
                 DC Variant
               </span>
               <span className="text-foreground text-[13px] font-semibold tracking-wide">
@@ -157,7 +157,7 @@ export function AccountGroupForm({
               </span>
             </div>
             <div className="bg-background border-border/40 shadow-3xs rounded-md border p-2 text-center">
-              <span className="text-foreground/80 mb-0.5 block text-[10px] font-medium">
+              <span className="text-foreground/80 text-xxs mb-0.5 block font-medium">
                 Prefix ID
               </span>
               <span className="text-foreground text-[13px] font-semibold tracking-wide">
@@ -165,7 +165,7 @@ export function AccountGroupForm({
               </span>
             </div>
             <div className="bg-background border-border/40 shadow-3xs rounded-md border p-2 text-center">
-              <span className="text-foreground/80 mb-0.5 block text-[10px] font-medium">
+              <span className="text-foreground/80 text-xxs mb-0.5 block font-medium">
                 Group Vector
               </span>
               <span className="text-foreground text-[13px] font-semibold tracking-wide">

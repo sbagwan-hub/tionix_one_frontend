@@ -12,14 +12,12 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { FormInput } from '@/components/common/form-input';
-import { DebitCardDto } from '../types';
 
 interface DebitCardFormProps {
   form: UseFormReturn<any>;
   is_editing: boolean;
   bank_accounts: any[];
   employees: any[];
-  card_input_ref: React.RefObject<HTMLInputElement | null>;
 }
 
 export const DebitCardForm: React.FC<DebitCardFormProps> = ({
@@ -27,7 +25,6 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
   is_editing,
   bank_accounts,
   employees,
-  card_input_ref,
 }) => {
   return (
     <div className="bg-card/30 border-border/40 flex h-full flex-col items-center justify-center rounded-lg border p-6 backdrop-blur-md">
@@ -43,7 +40,7 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
                 value={form.watch('fk_ban_id') ? String(form.watch('fk_ban_id')) : ''}
                 onValueChange={(val) => form.setValue('fk_ban_id', val, { shouldDirty: true })}
               >
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Bank Account" />
                 </SelectTrigger>
                 <SelectContent>
@@ -57,9 +54,9 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
             ) : (
               <Input
                 value={
-                  bank_accounts.find((b) => String(b.pk_ban_id) === String(form.watch('fk_ban_id')))?.[
-                    'bank_account_name'
-                  ] || ''
+                  bank_accounts.find(
+                    (b) => String(b.pk_ban_id) === String(form.watch('fk_ban_id')),
+                  )?.['bank_account_name'] || ''
                 }
                 disabled
                 className="h-9 text-xs"
@@ -79,14 +76,10 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
               placeholder="Enter Debit Card Number"
               disabled={!is_editing}
               {...form.register('card_no')}
-              ref={(e) => {
-                form.register('card_no').ref(e);
-                (card_input_ref as any).current = e;
-              }}
               className="h-9 text-xs"
             />
             {form.formState.errors.card_no && (
-              <p className="text-destructive mt-1 text-xxs font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {form.formState.errors.card_no.message?.toString()}
               </p>
             )}
@@ -96,7 +89,7 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
         {/* Holder's Name */}
         <div className="grid grid-cols-12 items-center gap-4">
           <Label className="text-muted-foreground col-span-3 text-xs font-medium tracking-wider uppercase">
-            Holder's Name *
+            Holder&apos;s Name *
           </Label>
           <div className="col-span-9">
             {is_editing ? (
@@ -104,7 +97,7 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
                 value={form.watch('holder_name') || ''}
                 onValueChange={(val) => form.setValue('holder_name', val, { shouldDirty: true })}
               >
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Holder" />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,7 +127,7 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
               className="border-border/60 h-9 w-full text-xs"
             />
             {form.formState.errors.expiry_date && (
-              <p className="text-destructive mt-1 text-xxs font-medium">
+              <p className="text-destructive text-xxs mt-1 font-medium">
                 {form.formState.errors.expiry_date.message?.toString()}
               </p>
             )}

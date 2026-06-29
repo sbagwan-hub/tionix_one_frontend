@@ -68,9 +68,7 @@ export const CategoryWindow: React.FC = () => {
         {...form.register('category')}
       />
       {form.formState.errors.category && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.category.message}
-        </span>
+        <span className="text-destructive text-xxs">{form.formState.errors.category.message}</span>
       )}
     </form>
   );

@@ -70,9 +70,7 @@ export const UserForm: React.FC<UserFormProps> = ({
           type={showPassword ? 'text' : 'password'}
           value={formData.password || ''}
           onChange={(e) => onInputChange('password', e.target.value)}
-          placeholder={
-            isEditMode ? 'Leave blank to keep current password' : 'Enter your password'
-          }
+          placeholder={isEditMode ? 'Leave blank to keep current password' : 'Enter your password'}
           className="h-9 rounded-sm"
           disabled={disabled}
         />
@@ -80,8 +78,9 @@ export const UserForm: React.FC<UserFormProps> = ({
           type="button"
           disabled={disabled}
           onClick={() => setShowPassword((v) => !v)}
-          className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${isRtl ? 'left-3' : 'right-3'
-            } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
+          className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
+            isRtl ? 'left-3' : 'right-3'
+          } ${disabled ? 'pointer-events-none opacity-50' : ''}`}
           style={{ top: 'calc(50% + 8px)', transform: 'translateY(-50%)' }}
         >
           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -90,7 +89,7 @@ export const UserForm: React.FC<UserFormProps> = ({
 
       {/* Security Question */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase">
           {t('question') + ' *'}
         </Label>
         <div className="relative">
@@ -99,15 +98,16 @@ export const UserForm: React.FC<UserFormProps> = ({
           </div>
           <Select value={selectedQuestion} onValueChange={onQuestionChange} disabled={disabled}>
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                }`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
+                isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+              }`}
             >
               <SelectValue placeholder="Select a security question" />
             </SelectTrigger>
             <SelectContent>
               {securityQuestions.map((sq) => (
                 <SelectItem key={sq.pk_question_id} value={sq.questions}>
-                   {sq.questions}
+                  {sq.questions}
                 </SelectItem>
               ))}
               {securityQuestions.length === 0 && (
@@ -133,7 +133,7 @@ export const UserForm: React.FC<UserFormProps> = ({
 
       {/* Linked Employee */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase">
           {t('employee')}
         </Label>
         <div className="relative">
@@ -148,8 +148,9 @@ export const UserForm: React.FC<UserFormProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                }`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
+                isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+              }`}
             >
               <SelectValue placeholder={t('Select Employee')} />
             </SelectTrigger>
@@ -167,7 +168,7 @@ export const UserForm: React.FC<UserFormProps> = ({
 
       {/* Email Configuration */}
       <div className="flex flex-col gap-1.5">
-        <Label className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+        <Label className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase">
           {t('email')}
         </Label>
         <div className="relative">
@@ -182,8 +183,9 @@ export const UserForm: React.FC<UserFormProps> = ({
             disabled={disabled}
           >
             <SelectTrigger
-              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                }`}
+              className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
+                isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+              }`}
             >
               <SelectValue placeholder={t('Select Email')} />
             </SelectTrigger>

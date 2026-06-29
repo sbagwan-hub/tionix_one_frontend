@@ -105,7 +105,7 @@ export function TreeNodeRow({
         </div>
 
         {/* Node Label */}
-        <span className="z-10 truncate text-[13px] tracking-wide transition-colors">
+        <span className="z-10 min-w-0 truncate text-[13px] tracking-wide transition-colors">
           {node.group_name}
         </span>
       </div>

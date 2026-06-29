@@ -169,7 +169,7 @@ export const ChequeBookWindow: React.FC = () => {
             </SelectContent>
           </Select>
           {form.formState.errors.fk_ban_id && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.fk_ban_id.message?.toString()}
             </p>
           )}
@@ -190,7 +190,7 @@ export const ChequeBookWindow: React.FC = () => {
             className="h-9 text-xs"
           />
           {form.formState.errors.start_no && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.start_no.message?.toString()}
             </p>
           )}
@@ -211,7 +211,7 @@ export const ChequeBookWindow: React.FC = () => {
             className="h-9 text-xs"
           />
           {form.formState.errors.end_no && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.end_no.message?.toString()}
             </p>
           )}
@@ -245,7 +245,7 @@ export const ChequeBookWindow: React.FC = () => {
             className="border-border/60 h-9 w-full text-xs"
           />
           {form.formState.errors.date_issue && (
-            <p className="text-destructive mt-1 text-[10px]">
+            <p className="text-destructive text-xxs mt-1">
               {form.formState.errors.date_issue.message?.toString()}
             </p>
           )}
@@ -271,6 +271,7 @@ export const ChequeBookWindow: React.FC = () => {
         isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
         formName="Cheque Book"
         isEdit={is_editing}
+        className="h-100"
       />
 
       <DeleteDialog

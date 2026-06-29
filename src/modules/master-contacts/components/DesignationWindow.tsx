@@ -76,7 +76,7 @@ export const DesignationWindow: React.FC = () => {
           {...form.register('designation')}
         />
         {form.formState.errors.designation && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.designation.message}
           </span>
         )}

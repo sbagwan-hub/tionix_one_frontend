@@ -72,7 +72,7 @@ export const QualificationWindow: React.FC = () => {
         {...form.register('qualification')}
       />
       {form.formState.errors.qualification && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.qualification.message}
         </span>
       )}

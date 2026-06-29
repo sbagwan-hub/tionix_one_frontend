@@ -68,7 +68,7 @@ export const TitleWindow: React.FC = () => {
         {...form.register('title')}
       />
       {form.formState.errors.title && (
-        <span className="text-destructive text-[10px]">{form.formState.errors.title.message}</span>
+        <span className="text-destructive text-xxs">{form.formState.errors.title.message}</span>
       )}
     </form>
   );
