@@ -341,7 +341,7 @@ export function AccountGroupsScreen() {
       {/* Tabs list toggle */}
       <div className="my-2 flex border-b">
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
+          className={`mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             activeTab === 'group'
               ? 'border-primary text-primary bg-muted/30 font-bold'
               : 'text-foreground hover:text-foreground border-transparent'
@@ -351,7 +351,7 @@ export function AccountGroupsScreen() {
           Hierarchy Detail
         </button>
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
+          className={`mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             activeTab === 'list'
               ? 'border-primary text-primary bg-muted/30 font-bold'
               : 'text-foreground hover:text-foreground border-transparent'
