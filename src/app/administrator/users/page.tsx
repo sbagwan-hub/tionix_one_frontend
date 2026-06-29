@@ -224,7 +224,7 @@ export default function AdministratorUsersPage() {
       fk_ec_id: selectedUser.fk_ec_id,
       mobile: selectedUser.mobile || '',
     });
-    setSelectedQuestion(selectedUser.security_question || (securityQuestions[0]?.questions || ''));
+    setSelectedQuestion(selectedUser.security_question || securityQuestions[0]?.questions || '');
     setIsEditMode(true);
     setIsAdding(false);
     setActiveTab('user');
@@ -276,8 +276,6 @@ export default function AdministratorUsersPage() {
     createUserMutation.isPending || updateUserMutation.isPending || deleteUserMutation.isPending;
 
   const isFormValid = formData.username.trim() !== '' && (isEditMode || formData.password !== '');
-
-
 
   return (
     <div

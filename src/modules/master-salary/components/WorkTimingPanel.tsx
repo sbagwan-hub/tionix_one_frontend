@@ -200,7 +200,7 @@ export const WorkTimingPanel: React.FC = () => {
         setSelectedEmpIds([rec.fk_emp_id]);
       }
     },
-    [form]
+    [form],
   );
 
   // Sync cursor record in view mode
@@ -295,7 +295,11 @@ export const WorkTimingPanel: React.FC = () => {
         refetch();
       }
     } catch (err: any) {
-      const msg = err.response?.data?.message || err.response?.data?.error?.details || err.message || 'Operation failed.';
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data?.error?.details ||
+        err.message ||
+        'Operation failed.';
       toast.error(msg);
     }
   });
@@ -316,7 +320,11 @@ export const WorkTimingPanel: React.FC = () => {
       setMode('view');
       refetch();
     } catch (err: any) {
-      const msg = err.response?.data?.message || err.response?.data?.error?.details || err.message || 'Deletion failed.';
+      const msg =
+        err.response?.data?.message ||
+        err.response?.data?.error?.details ||
+        err.message ||
+        'Deletion failed.';
       toast.error(msg);
       setIsConfirmOpen(false);
     }
@@ -346,7 +354,9 @@ export const WorkTimingPanel: React.FC = () => {
       icon: mode === 'view' ? Plus : Save,
       variant: 'primary' as const,
       onClick: mode === 'view' ? handleAdd : handleSave,
-      disabled: isRecordsLoading || (mode !== 'view' && !form.formState.isDirty && selectedEmpIds.length === 0),
+      disabled:
+        isRecordsLoading ||
+        (mode !== 'view' && !form.formState.isDirty && selectedEmpIds.length === 0),
     },
     {
       label: 'Edit',
@@ -374,7 +384,11 @@ export const WorkTimingPanel: React.FC = () => {
   const utilities = [
     { icon: RotateCw, title: 'Refresh', onClick: handleRefresh },
     { icon: Printer, title: 'Print', onClick: () => window.print() },
-    { icon: FileSpreadsheet, title: 'Export', onClick: () => toast.info('Export functionality ready.') },
+    {
+      icon: FileSpreadsheet,
+      title: 'Export',
+      onClick: () => toast.info('Export functionality ready.'),
+    },
     {
       icon: HelpCircle,
       title: 'Help',
@@ -384,23 +398,19 @@ export const WorkTimingPanel: React.FC = () => {
   ];
 
   return (
-    <div className="bg-background text-foreground flex h-full flex-col font-sans select-none overflow-hidden relative">
+    <div className="bg-background text-foreground relative flex h-full flex-col overflow-hidden font-sans select-none">
       {/* Background glow radial */}
-      <div className="bg-radial from-brand/5 to-transparent pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full blur-3xl opacity-40" />
+      <div className="from-brand/5 pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-radial to-transparent opacity-40 blur-3xl" />
 
       {/* Toolbar header */}
-      <Toolbar
-        title="Work Timing of Employees"
-        actions={actions}
-        utilities={utilities}
-      />
+      <Toolbar title="Work Timing of Employees" actions={actions} utilities={utilities} />
 
       {/* Top Nav Tabs */}
-      <div className="my-2 flex border-b border-border/60 shrink-0">
+      <div className="border-border/60 my-2 flex shrink-0 border-b">
         <button
           className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${activeTab === 'timing'
-              ? 'border-primary text-primary bg-primary/5 font-bold'
-              : 'text-muted-foreground hover:text-foreground border-transparent'
+            ? 'border-primary text-primary bg-primary/5 font-bold'
+            : 'text-muted-foreground hover:text-foreground border-transparent'
             }`}
           onClick={() => setActiveTab('timing')}
         >
@@ -408,8 +418,8 @@ export const WorkTimingPanel: React.FC = () => {
         </button>
         <button
           className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer ${activeTab === 'list'
-              ? 'border-primary text-primary bg-primary/5 font-bold'
-              : 'text-muted-foreground hover:text-foreground border-transparent'
+            ? 'border-primary text-primary bg-primary/5 font-bold'
+            : 'text-muted-foreground hover:text-foreground border-transparent'
             }`}
           onClick={() => setActiveTab('list')}
         >
@@ -418,11 +428,11 @@ export const WorkTimingPanel: React.FC = () => {
       </div>
 
       {/* Center content panel */}
-      <div className="min-h-0 flex-1 overflow-hidden relative">
+      <div className="relative min-h-0 flex-1 overflow-hidden">
         {activeTab === 'timing' ? (
-          <div className="h-full flex flex-col md:flex-row gap-4">
+          <div className="flex h-full flex-col gap-4 md:flex-row">
             {/* Left side form */}
-            <div className="flex-1 min-h-0 h-full overflow-hidden">
+            <div className="h-full min-h-0 flex-1 overflow-hidden">
               <WorkTimingForm
                 form={form}
                 isEditing={isEditing}
@@ -432,7 +442,7 @@ export const WorkTimingPanel: React.FC = () => {
               />
             </div>
 
-             {/* Right side checklist */}
+            {/* Right side checklist */}
             <div className="w-full md:w-[48%] min-h-0 h-full overflow-hidden">
               {currentShift ? (
                 <EmployeeChecklist

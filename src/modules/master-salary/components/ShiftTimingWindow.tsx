@@ -71,7 +71,11 @@ export const ShiftTimingWindow: React.FC = () => {
   const shiftInputRef = useRef<HTMLInputElement>(null);
 
   // TanStack Query
-  const { data: recordsData, isLoading, refetch } = useShiftTimingsList({
+  const {
+    data: recordsData,
+    isLoading,
+    refetch,
+  } = useShiftTimingsList({
     page,
     pageSize,
     shift: filterShift || undefined,
@@ -119,7 +123,7 @@ export const ShiftTimingWindow: React.FC = () => {
       // Update calculated values
       form.setValue('t_work', netHours.toFixed(2));
       form.setValue('t_break', breakMin.toFixed(2));
-      
+
       const startHour = Number(watchedSWork.split(':')[0] || 0);
       const endHour = Number(watchedEWork.split(':')[0] || 0);
       form.setValue('sd', endHour - startHour > 0);
@@ -146,7 +150,7 @@ export const ShiftTimingWindow: React.FC = () => {
         last_status: rec.last_status,
       });
     },
-    [form]
+    [form],
   );
 
   // Sync cursor record to form in view mode
@@ -252,7 +256,9 @@ export const ShiftTimingWindow: React.FC = () => {
 
   const handleExport = async () => {
     try {
-      const csvData = await masterSalaryApi.shiftTimings.export({ shift: filterShift || undefined });
+      const csvData = await masterSalaryApi.shiftTimings.export({
+        shift: filterShift || undefined,
+      });
       const blob = new Blob([csvData], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -332,24 +338,22 @@ export const ShiftTimingWindow: React.FC = () => {
       icon: HelpCircle,
       title: 'Help',
       onClick: () =>
-        toast.info('Define Shift Title, Work Timings, and Meal Breaks. Totals calculate automatically.'),
+        toast.info(
+          'Define Shift Title, Work Timings, and Meal Breaks. Totals calculate automatically.',
+        ),
     },
   ];
 
   return (
-    <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans select-none overflow-hidden">
+    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans select-none">
       {/* Dynamic glow decoration */}
-      <div className="bg-radial from-brand/5 to-transparent pointer-events-none absolute -top-20 -left-20 h-80 w-80 rounded-full blur-3xl opacity-40" />
+      <div className="from-brand/5 pointer-events-none absolute -top-20 -left-20 h-80 w-80 rounded-full bg-radial to-transparent opacity-40 blur-3xl" />
 
       {/* Header Toolbar */}
-      <Toolbar
-        title="Shift Timing"
-        actions={actions}
-        utilities={utilities}
-      />
+      <Toolbar title="Shift Timing" actions={actions} utilities={utilities} />
 
       {/* Tabs Menu */}
-      <div className="my-2 flex border-b border-border/60">
+      <div className="border-border/60 my-2 flex border-b">
         <button
           className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             activeTab === 'timing'
@@ -373,13 +377,16 @@ export const ShiftTimingWindow: React.FC = () => {
       </div>
 
       {/* Main Panel Content */}
-      <div className="min-h-0 flex-1 overflow-hidden relative">
+      <div className="relative min-h-0 flex-1 overflow-hidden">
         {activeTab === 'timing' ? (
-          <div className="h-full flex flex-col justify-center items-center bg-card/30 border border-border/40 rounded-lg p-6 backdrop-blur-md">
-            <form className="w-full max-w-xl flex flex-col gap-6">
+          <div className="bg-card/30 border-border/40 flex h-full flex-col items-center justify-center rounded-lg border p-6 backdrop-blur-md">
+            <form className="flex w-full max-w-xl flex-col gap-6">
               {/* Shift Title */}
-              <div className="grid grid-cols-12 gap-4 items-center">
-                <Label htmlFor="shift-title" className="col-span-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <div className="grid grid-cols-12 items-center gap-4">
+                <Label
+                  htmlFor="shift-title"
+                  className="text-muted-foreground col-span-3 text-xs font-medium tracking-wider uppercase"
+                >
                   Shift Title *
                 </Label>
                 <div className="col-span-9">
@@ -395,14 +402,16 @@ export const ShiftTimingWindow: React.FC = () => {
                     className="h-9 text-xs"
                   />
                   {form.formState.errors.shift && (
-                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.shift.message}</p>
+                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                      {form.formState.errors.shift.message}
+                    </p>
                   )}
                 </div>
               </div>
 
               {/* Work Timing */}
-              <div className="grid grid-cols-12 gap-4 items-center">
-                <Label className="col-span-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <div className="grid grid-cols-12 items-center gap-4">
+                <Label className="text-muted-foreground col-span-3 text-xs font-medium tracking-wider uppercase">
                   Work Timing *
                 </Label>
                 <div className="col-span-9">
@@ -412,43 +421,49 @@ export const ShiftTimingWindow: React.FC = () => {
                       disabled={!isEditing}
                       {...form.register('s_work')}
                       className={cn(
-                        "h-9 text-xs border-border/60 w-32",
-                        form.formState.errors.s_work && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                        'border-border/60 h-9 w-32 text-xs',
+                        form.formState.errors.s_work &&
+                          'border-destructive focus-visible:ring-destructive/30 bg-destructive/5',
                       )}
                     />
-                    <span className="text-xs text-muted-foreground font-medium">To *</span>
+                    <span className="text-muted-foreground text-xs font-medium">To *</span>
                     <Input
                       type="time"
                       disabled={!isEditing}
                       {...form.register('e_work')}
                       className={cn(
-                        "h-9 text-xs border-border/60 w-32",
-                        form.formState.errors.e_work && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                        'border-border/60 h-9 w-32 text-xs',
+                        form.formState.errors.e_work &&
+                          'border-destructive focus-visible:ring-destructive/30 bg-destructive/5',
                       )}
                     />
-                    <span className="text-xs text-muted-foreground font-medium">Total *</span>
+                    <span className="text-muted-foreground text-xs font-medium">Total *</span>
                     <div className="flex items-center gap-1">
                       <Input
                         type="text"
                         readOnly
                         {...form.register('t_work')}
-                        className="h-9 w-16 text-center text-xs bg-muted/50 border-border/40 font-mono font-bold"
+                        className="bg-muted/50 border-border/40 h-9 w-16 text-center font-mono text-xs font-bold"
                       />
-                      <span className="text-[10px] text-muted-foreground font-semibold">hrs</span>
+                      <span className="text-muted-foreground text-[10px] font-semibold">hrs</span>
                     </div>
                   </div>
                   {form.formState.errors.s_work && (
-                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.s_work.message}</p>
+                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                      {form.formState.errors.s_work.message}
+                    </p>
                   )}
                   {form.formState.errors.e_work && (
-                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.e_work.message}</p>
+                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                      {form.formState.errors.e_work.message}
+                    </p>
                   )}
                 </div>
               </div>
 
               {/* Meal Break */}
-              <div className="grid grid-cols-12 gap-4 items-center">
-                <Label className="col-span-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <div className="grid grid-cols-12 items-center gap-4">
+                <Label className="text-muted-foreground col-span-3 text-xs font-medium tracking-wider uppercase">
                   Meal Break *
                 </Label>
                 <div className="col-span-9">
@@ -458,47 +473,53 @@ export const ShiftTimingWindow: React.FC = () => {
                       disabled={!isEditing}
                       {...form.register('s_break')}
                       className={cn(
-                        "h-9 text-xs border-border/60 w-32",
-                        form.formState.errors.s_break && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                        'border-border/60 h-9 w-32 text-xs',
+                        form.formState.errors.s_break &&
+                          'border-destructive focus-visible:ring-destructive/30 bg-destructive/5',
                       )}
                     />
-                    <span className="text-xs text-muted-foreground font-medium">To *</span>
+                    <span className="text-muted-foreground text-xs font-medium">To *</span>
                     <Input
                       type="time"
                       disabled={!isEditing}
                       {...form.register('e_break')}
                       className={cn(
-                        "h-9 text-xs border-border/60 w-32",
-                        form.formState.errors.e_break && "border-destructive focus-visible:ring-destructive/30 bg-destructive/5"
+                        'border-border/60 h-9 w-32 text-xs',
+                        form.formState.errors.e_break &&
+                          'border-destructive focus-visible:ring-destructive/30 bg-destructive/5',
                       )}
                     />
-                    <span className="text-xs text-muted-foreground font-medium">Total *</span>
+                    <span className="text-muted-foreground text-xs font-medium">Total *</span>
                     <div className="flex items-center gap-1">
                       <Input
                         type="text"
                         readOnly
                         {...form.register('t_break')}
-                        className="h-9 w-16 text-center text-xs bg-muted/50 border-border/40 font-mono font-bold"
+                        className="bg-muted/50 border-border/40 h-9 w-16 text-center font-mono text-xs font-bold"
                       />
-                      <span className="text-[10px] text-muted-foreground font-semibold">min</span>
+                      <span className="text-muted-foreground text-[10px] font-semibold">min</span>
                     </div>
                   </div>
                   {form.formState.errors.s_break && (
-                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.s_break.message}</p>
+                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                      {form.formState.errors.s_break.message}
+                    </p>
                   )}
                   {form.formState.errors.e_break && (
-                    <p className="text-[10px] text-destructive mt-1 font-medium">{form.formState.errors.e_break.message}</p>
+                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                      {form.formState.errors.e_break.message}
+                    </p>
                   )}
                 </div>
               </div>
             </form>
           </div>
         ) : (
-          <div className="h-full flex flex-col min-h-0 bg-card/20 border border-border/40 rounded-lg backdrop-blur-md overflow-hidden">
+          <div className="bg-card/20 border-border/40 flex h-full min-h-0 flex-col overflow-hidden rounded-lg border backdrop-blur-md">
             {/* Filter Panel */}
-            <div className="p-3 border-b border-border/40 bg-muted/30 flex items-center gap-3">
+            <div className="border-border/40 bg-muted/30 flex items-center gap-3 border-b p-3">
               <div className="relative max-w-sm flex-1">
-                <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+                <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-3.5 w-3.5" />
                 <Input
                   placeholder="Filter by shift name..."
                   value={filterShift}
@@ -506,16 +527,16 @@ export const ShiftTimingWindow: React.FC = () => {
                     setFilterShift(e.target.value);
                     setPage(1);
                   }}
-                  className="pl-8 h-8 text-xs bg-background/60"
+                  className="bg-background/60 h-8 pl-8 text-xs"
                 />
               </div>
             </div>
 
             {/* Grid List Table */}
-            <div className="flex-1 overflow-auto min-h-0">
-              <table className="w-full text-left text-xs border-collapse">
+            <div className="min-h-0 flex-1 overflow-auto">
+              <table className="w-full border-collapse text-left text-xs">
                 <thead>
-                  <tr className="bg-muted/50 border-b border-border/50 text-[10px] uppercase tracking-wider text-muted-foreground font-bold">
+                  <tr className="bg-muted/50 border-border/50 text-muted-foreground border-b text-[10px] font-bold tracking-wider uppercase">
                     <th className="p-2.5 pl-4">Shift Name</th>
                     <th className="p-2.5">Work Start</th>
                     <th className="p-2.5">Work End</th>
@@ -525,17 +546,17 @@ export const ShiftTimingWindow: React.FC = () => {
                     <th className="p-2.5 pr-4 text-center">Total Break (min)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/30">
+                <tbody className="divide-border/30 divide-y">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={7} className="text-center p-8 text-muted-foreground">
-                        <Clock className="h-5 w-5 animate-spin mx-auto mb-2 text-primary" />
+                      <td colSpan={7} className="text-muted-foreground p-8 text-center">
+                        <Clock className="text-primary mx-auto mb-2 h-5 w-5 animate-spin" />
                         Loading shift timings...
                       </td>
                     </tr>
                   ) : records.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="text-center p-8 text-muted-foreground">
+                      <td colSpan={7} className="text-muted-foreground p-8 text-center">
                         No shift timings found.
                       </td>
                     </tr>
@@ -545,16 +566,22 @@ export const ShiftTimingWindow: React.FC = () => {
                         key={rec.pk_st_id}
                         onClick={() => handleSelectRecord(rec, idx)}
                         className={`hover:bg-primary/5 cursor-pointer transition-colors ${
-                          selectedId === rec.pk_st_id ? 'bg-primary/10 font-medium text-primary' : ''
+                          selectedId === rec.pk_st_id
+                            ? 'bg-primary/10 text-primary font-medium'
+                            : ''
                         }`}
                       >
                         <td className="p-2.5 pl-4 font-semibold">{rec.shift}</td>
                         <td className="p-2.5 font-mono">{rec.s_work}</td>
                         <td className="p-2.5 font-mono">{rec.e_work}</td>
-                        <td className="p-2.5 text-center font-mono font-bold">{Number(rec.t_work).toFixed(2)}</td>
+                        <td className="p-2.5 text-center font-mono font-bold">
+                          {Number(rec.t_work).toFixed(2)}
+                        </td>
                         <td className="p-2.5 font-mono">{rec.s_break || '-'}</td>
                         <td className="p-2.5 font-mono">{rec.e_break || '-'}</td>
-                        <td className="p-2.5 pr-4 text-center font-mono font-bold">{Number(rec.t_break).toFixed(0)}</td>
+                        <td className="p-2.5 pr-4 text-center font-mono font-bold">
+                          {Number(rec.t_break).toFixed(0)}
+                        </td>
                       </tr>
                     ))
                   )}
@@ -564,9 +591,10 @@ export const ShiftTimingWindow: React.FC = () => {
 
             {/* Pagination controls */}
             {totalPages > 1 && (
-              <div className="p-2.5 border-t border-border/40 bg-muted/20 flex items-center justify-between text-xs text-muted-foreground">
+              <div className="border-border/40 bg-muted/20 text-muted-foreground flex items-center justify-between border-t p-2.5 text-xs">
                 <span>
-                  Showing {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, totalRecords)} of {totalRecords}
+                  Showing {(page - 1) * pageSize + 1} - {Math.min(page * pageSize, totalRecords)} of{' '}
+                  {totalRecords}
                 </span>
                 <div className="flex items-center gap-1.5">
                   <Button
@@ -585,7 +613,7 @@ export const ShiftTimingWindow: React.FC = () => {
                   >
                     <ChevronLeft className="h-3.5 w-3.5" />
                   </Button>
-                  <span className="font-medium text-foreground px-2">
+                  <span className="text-foreground px-2 font-medium">
                     Page {page} of {totalPages}
                   </span>
                   <Button
@@ -643,7 +671,7 @@ function Button({
       onClick={onClick}
       disabled={disabled}
       type="button"
-      className={`border border-border/60 hover:bg-muted/50 transition-all rounded-sm flex items-center justify-center disabled:opacity-50 disabled:pointer-events-none ${className}`}
+      className={`border-border/60 hover:bg-muted/50 flex items-center justify-center rounded-sm border transition-all disabled:pointer-events-none disabled:opacity-50 ${className}`}
     >
       {children}
     </button>

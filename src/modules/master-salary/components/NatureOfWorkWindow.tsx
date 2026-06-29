@@ -28,7 +28,11 @@ export const NatureOfWorkWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update nature of work.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update nature of work.';
             toast.error(msg);
           },
         },
@@ -40,7 +44,11 @@ export const NatureOfWorkWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create nature of work.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create nature of work.';
           toast.error(msg);
         },
       });
@@ -71,7 +79,11 @@ export const NatureOfWorkWindow: React.FC = () => {
         toast.success('Nature of work deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete nature of work.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete nature of work.';
         toast.error(msg);
       },
     });
@@ -83,7 +95,11 @@ export const NatureOfWorkWindow: React.FC = () => {
   }));
 
   const formContent = (
-    <form id="nature-of-work-form" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+    <form
+      id="nature-of-work-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-3"
+    >
       <FormInput
         id="nature-of-work-input"
         label="Nature of Work"

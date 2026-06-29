@@ -56,8 +56,7 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
     }
     return mappedEmployees.filter(
       (emp) =>
-        emp.employee.toLowerCase().includes(query) ||
-        emp.emp_code.toLowerCase().includes(query)
+        emp.employee.toLowerCase().includes(query) || emp.emp_code.toLowerCase().includes(query),
     );
   }, [mappedEmployees, searchQuery, assignedEmpIds, selectedEmpIds]);
 
@@ -91,35 +90,35 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
   }, [filteredEmployees, selectedEmpIds]);
 
   return (
-    <div className="flex flex-col h-full bg-card/25 border border-border/40 rounded-lg backdrop-blur-md overflow-hidden">
+    <div className="bg-card/25 border-border/40 flex h-full flex-col overflow-hidden rounded-lg border backdrop-blur-md">
       {/* Search Header */}
-      <div className="p-3 border-b border-border/40 bg-muted/20 flex items-center justify-between gap-3">
-        <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+      <div className="border-border/40 bg-muted/20 flex items-center justify-between gap-3 border-b p-3">
+        <span className="text-muted-foreground text-[11px] font-bold tracking-wider uppercase">
           Employee Checklist ({selectedEmpIds.length} Selected)
         </span>
         <div className="relative max-w-xs flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-3.5 w-3.5" />
           <Input
             placeholder="Search code or name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8 h-8 text-xs bg-background/60 border-border/60 focus-visible:ring-primary/40"
+            className="bg-background/60 border-border/60 focus-visible:ring-primary/40 h-8 pl-8 text-xs"
           />
         </div>
       </div>
 
       {/* Checklist Table */}
-      <div className="flex-1 overflow-auto min-h-0">
-        <table className="w-full text-left text-xs border-collapse">
+      <div className="min-h-0 flex-1 overflow-auto">
+        <table className="w-full border-collapse text-left text-xs">
           <thead>
-            <tr className="bg-muted/40 border-b border-border/40 text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
-              <th className="p-2 w-10 text-center">
+            <tr className="bg-muted/40 border-border/40 text-muted-foreground border-b text-[9px] font-bold tracking-wider uppercase">
+              <th className="w-10 p-2 text-center">
                 <input
                   type="checkbox"
                   checked={isAllSelected}
                   onChange={handleToggleSelectAll}
                   disabled={!isEditing || filteredEmployees.length === 0}
-                  className="rounded border-border/60 text-primary focus:ring-primary/40 cursor-pointer disabled:opacity-50"
+                  className="border-border/60 text-primary focus:ring-primary/40 cursor-pointer rounded disabled:opacity-50"
                 />
               </th>
               <th className="p-2">Code</th>
@@ -128,17 +127,17 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
               <th className="p-2">Designation</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/25">
+          <tbody className="divide-border/25 divide-y">
             {isLoading ? (
               <tr>
-                <td colSpan={5} className="text-center p-8 text-muted-foreground">
-                  <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2 text-primary" />
+                <td colSpan={5} className="text-muted-foreground p-8 text-center">
+                  <Loader2 className="text-primary mx-auto mb-2 h-5 w-5 animate-spin" />
                   Loading employees...
                 </td>
               </tr>
             ) : filteredEmployees.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center p-8 text-muted-foreground">
+                <td colSpan={5} className="text-muted-foreground p-8 text-center">
                   No matching employees found.
                 </td>
               </tr>
@@ -149,7 +148,7 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
                   <tr
                     key={emp.pk_emp_id}
                     onClick={() => handleToggleEmployee(emp.pk_emp_id)}
-                    className={`hover:bg-primary/5 transition-colors cursor-pointer ${
+                    className={`hover:bg-primary/5 cursor-pointer transition-colors ${
                       isChecked ? 'bg-primary/5 font-medium' : ''
                     } ${!isEditing ? 'pointer-events-none' : ''}`}
                   >
@@ -159,13 +158,13 @@ export const EmployeeChecklist: React.FC<EmployeeChecklistProps> = ({
                         checked={isChecked}
                         onChange={() => handleToggleEmployee(emp.pk_emp_id)}
                         disabled={!isEditing}
-                        className="rounded border-border/60 text-primary focus:ring-primary/40 cursor-pointer disabled:opacity-50"
+                        className="border-border/60 text-primary focus:ring-primary/40 cursor-pointer rounded disabled:opacity-50"
                       />
                     </td>
-                    <td className="p-2 font-mono text-muted-foreground">{emp.emp_code}</td>
-                    <td className="p-2 font-semibold text-foreground">{emp.employee}</td>
-                    <td className="p-2 text-muted-foreground">{emp.departmentName}</td>
-                    <td className="p-2 text-muted-foreground">{emp.designationName}</td>
+                    <td className="text-muted-foreground p-2 font-mono">{emp.emp_code}</td>
+                    <td className="text-foreground p-2 font-semibold">{emp.employee}</td>
+                    <td className="text-muted-foreground p-2">{emp.departmentName}</td>
+                    <td className="text-muted-foreground p-2">{emp.designationName}</td>
                   </tr>
                 );
               })

@@ -141,7 +141,7 @@ export const individualSchema = z.object({
       },
       { message: 'Individual must be at least 18 years old' },
     ),
-  photo: z.string().nullable().optional(),
+  photo_url: z.string().nullable().optional(),
   fk_qual_id: z.number().nullable().optional(),
   gender: z.string().default('male'),
   marital_status: z.string().default('single'),
@@ -202,5 +202,49 @@ export interface IndividualRecord extends IndividualDto {
   state?: string;
   state_name?: string | null;
   country?: string;
+  country_name?: string | null;
+}
+
+export const organisationSchema = z.object({
+  pk_cont_id: z.number().int().optional(),
+  contact_name: z.string().min(1, 'Name is required').max(50),
+  postfix: z.string().max(25).nullable().optional(),
+  address: z.string().max(150).nullable().optional(),
+  fk_city_id: z.number().nullable().optional(),
+  region: z.string().max(50).nullable().optional(),
+  pincode: z.string().max(10).nullable().optional(),
+  fk_state_id: z.number().nullable().optional(),
+  fk_ctry_id: z.number().nullable().optional(),
+  categoryIds: z.array(z.number()).optional().default([]),
+  contacts: z
+    .array(
+      z.object({
+        pk_contact_id: z.number().optional(),
+        fk_moc_id: z.number(),
+        contact: z.string().min(1, 'Contact detail is required'),
+        ext: z.string().optional().default(''),
+        department: z.string().optional().default(''),
+      }),
+    )
+    .optional()
+    .default([]),
+  documents: z
+    .array(
+      z.object({
+        pk_doc_id: z.number().optional(),
+        doc_name: z.string().min(1, 'Document description is required'),
+        file_path: z.string().min(1, 'File is required'),
+        valid_until: z.string().nullable().optional(),
+      }),
+    )
+    .optional()
+    .default([]),
+});
+
+export type OrganisationDto = z.infer<typeof organisationSchema>;
+
+export interface OrganisationRecord extends OrganisationDto {
+  city_name?: string | null;
+  state_name?: string | null;
   country_name?: string | null;
 }

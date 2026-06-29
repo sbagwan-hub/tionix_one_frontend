@@ -148,7 +148,7 @@ export const MasterEmployeePanel: React.FC = () => {
       toast.error('At least one contact detail is required.');
       return;
     }
-    const hasEmptyContact = formData.contacts.some(c => !c.detail || !c.detail.trim());
+    const hasEmptyContact = formData.contacts.some((c) => !c.detail || !c.detail.trim());
     if (hasEmptyContact) {
       toast.error('All contact details must have valid information.');
       return;
@@ -182,8 +182,14 @@ export const MasterEmployeePanel: React.FC = () => {
         return;
       }
     }
-    const isBcrypt = formData.password ? /^\$2[ayb]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(formData.password) : false;
-    if (formData.password && !isBcrypt && (formData.password.length < 4 || formData.password.length > 10)) {
+    const isBcrypt = formData.password
+      ? /^\$2[ayb]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(formData.password)
+      : false;
+    if (
+      formData.password &&
+      !isBcrypt &&
+      (formData.password.length < 4 || formData.password.length > 10)
+    ) {
       toast.error('Password must be between 4 and 10 characters.');
       return;
     }
@@ -356,13 +362,27 @@ export const MasterEmployeePanel: React.FC = () => {
               label: t('save'),
               variant: 'primary',
               onClick: handleSave,
-              disabled: !isFormValid || create.isPending || update.isPending || (isEditMode ? !permissions.edit : !permissions.add),
+              disabled:
+                !isFormValid ||
+                create.isPending ||
+                update.isPending ||
+                (isEditMode ? !permissions.edit : !permissions.add),
             },
           ]}
           utilities={[
             { icon: RefreshCw, title: t('refresh'), onClick: () => list.refetch() },
-            { icon: Printer, title: t('print'), onClick: () => window.print(), disabled: !permissions.print },
-            { icon: Download, title: t('export'), onClick: handleExport, disabled: !permissions.export },
+            {
+              icon: Printer,
+              title: t('print'),
+              onClick: () => window.print(),
+              disabled: !permissions.print,
+            },
+            {
+              icon: Download,
+              title: t('export'),
+              onClick: handleExport,
+              disabled: !permissions.export,
+            },
             {
               icon: Help,
               title: t('help'),
@@ -375,8 +395,8 @@ export const MasterEmployeePanel: React.FC = () => {
 
       <div className="border-border/60 bg-card text-card-foreground relative flex w-full flex-1 min-h-0 flex-col rounded-sm border overflow-hidden">
         {/* Premium Background Glows */}
-        <div className="absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial from-brand/10 to-transparent opacity-20 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 h-[300px] w-[300px] rounded-full bg-radial from-brand/10 to-transparent opacity-20 blur-3xl pointer-events-none" />
+        <div className="from-brand/10 pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-20 blur-3xl" />
+        <div className="from-brand/10 pointer-events-none absolute -right-40 -bottom-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-20 blur-3xl" />
 
         {/* Tabs + Form */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="relative z-10 flex flex-col w-full flex-1 min-h-0 overflow-hidden">
@@ -393,15 +413,14 @@ export const MasterEmployeePanel: React.FC = () => {
             {/* Visual Mode Indicator */}
             {activeTab === 'employee' && (
               <div className="flex items-center gap-1.5 text-xs font-medium">
-                {isAdding && (
-                  <Chip label="Adding New Employee" variant="primary" pulse />
-                )}
+                {isAdding && <Chip label="Adding New Employee" variant="primary" pulse />}
                 {isEditMode && selectedEmployee && (
-                  <Chip label={`Editing Employee: ${selectedEmployee.employee}`} variant="warning" />
+                  <Chip
+                    label={`Editing Employee: ${selectedEmployee.employee}`}
+                    variant="warning"
+                  />
                 )}
-                {!isAdding && !isEditMode && (
-                  <Chip label="Viewing Record" variant="neutral" />
-                )}
+                {!isAdding && !isEditMode && <Chip label="Viewing Record" variant="neutral" />}
               </div>
             )}
           </div>

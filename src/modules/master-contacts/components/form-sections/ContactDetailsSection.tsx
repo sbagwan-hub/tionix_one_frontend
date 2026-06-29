@@ -30,8 +30,12 @@ export const ContactDetailsSection: React.FC<ContactDetailsSectionProps> = ({
   const { list: mocList } = useMasterContacts('modeOfContact');
   const mocs = mocList.data || [];
 
+  const { list: departmentList } = useMasterContacts('departments');
+  const departments = departmentList.data || [];
+
   // Sync contact list departments with the selected department from WorkInfoSection
   React.useEffect(() => {
+    if (!defaultDepartment) return;
     const needsUpdate = contacts.some((c) => c.department !== defaultDepartment);
     if (needsUpdate) {
       const updated = contacts.map((c) => ({ ...c, department: defaultDepartment }));
@@ -43,7 +47,7 @@ export const ContactDetailsSection: React.FC<ContactDetailsSectionProps> = ({
     const defaultMocId = mocs[0]?.pk_moc_id;
     onInputChange('contacts', [
       ...contacts,
-      { fk_moc_id: defaultMocId, contact: '', ext: '', department: defaultDepartment },
+      { fk_moc_id: defaultMocId, contact: '', ext: '', department: defaultDepartment || '' },
     ]);
   };
 
@@ -122,12 +126,32 @@ export const ContactDetailsSection: React.FC<ContactDetailsSectionProps> = ({
                 disabled={disabled}
                 className="bg-background h-8 w-14 text-[11px]"
               />
-              <Input
-                placeholder="Dept"
-                value={defaultDepartment}
-                disabled={true}
-                className="bg-background h-8 w-16 text-[11px] opacity-80"
-              />
+              {defaultDepartment ? (
+                <Input
+                  placeholder="Dept"
+                  value={defaultDepartment}
+                  disabled={true}
+                  className="bg-background h-8 w-24 text-[11px] opacity-80"
+                />
+              ) : (
+                <Select
+                  key={`${departments.length}-${d.department || 'none'}`}
+                  value={d.department || undefined}
+                  onValueChange={(val) => updateDetailRow(index, 'department', val)}
+                  disabled={disabled || departmentList.isLoading}
+                >
+                  <SelectTrigger className="bg-background h-8 w-24 text-[11px]">
+                    <SelectValue placeholder="Select Dept" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    {departments.map((dept) => (
+                      <SelectItem key={dept.pk_dep_id} value={dept.department}>
+                        {dept.department}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
               <Button
                 variant="ghost"
                 size="icon"

@@ -11,7 +11,8 @@ export function useWorkTimingsList(params?: Record<string, any>) {
 export function useWorkTimingsByGroup(groupId?: string) {
   return useQuery({
     queryKey: ['workTimingsByGroup', groupId],
-    queryFn: () => (groupId ? masterSalaryApi.workTimings.listByGroup(groupId) : Promise.resolve([])),
+    queryFn: () =>
+      groupId ? masterSalaryApi.workTimings.listByGroup(groupId) : Promise.resolve([]),
     enabled: !!groupId,
   });
 }

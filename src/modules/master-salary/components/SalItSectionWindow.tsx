@@ -42,7 +42,11 @@ export const SalItSectionWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update Income Tax Section.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update Income Tax Section.';
             toast.error(msg);
           },
         },
@@ -54,7 +58,11 @@ export const SalItSectionWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create Income Tax Section.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create Income Tax Section.';
           toast.error(msg);
         },
       });
@@ -93,7 +101,11 @@ export const SalItSectionWindow: React.FC = () => {
         toast.success('Income Tax Section deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete Income Tax Section.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete Income Tax Section.';
         toast.error(msg);
       },
     });
@@ -105,7 +117,11 @@ export const SalItSectionWindow: React.FC = () => {
   }));
 
   const formContent = (
-    <form id="sal-it-section-form" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+    <form
+      id="sal-it-section-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-3"
+    >
       <FormInput
         id="it-section-input"
         label="Income Tax Section *"
@@ -131,7 +147,10 @@ export const SalItSectionWindow: React.FC = () => {
       )}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="additraction-input" className="text-muted-foreground text-[10px] font-semibold uppercase">
+        <Label
+          htmlFor="additraction-input"
+          className="text-muted-foreground text-[10px] font-semibold uppercase"
+        >
           Addition / Subtraction *
         </Label>
         <Controller
@@ -139,10 +158,15 @@ export const SalItSectionWindow: React.FC = () => {
           control={form.control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger id="additraction-input" className="w-full text-xs h-9">
+              <SelectTrigger id="additraction-input" className="h-9 w-full text-xs">
                 <SelectValue placeholder="Select Addition or Subtraction" />
               </SelectTrigger>
-              <SelectContent position="popper" side="bottom" sideOffset={4} className="border-border bg-popover border z-[9999]">
+              <SelectContent
+                position="popper"
+                side="bottom"
+                sideOffset={4}
+                className="border-border bg-popover z-[9999] border"
+              >
                 <SelectItem value="Addition">Addition</SelectItem>
                 <SelectItem value="Subtraction">Subtraction</SelectItem>
               </SelectContent>
@@ -171,7 +195,7 @@ export const SalItSectionWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
-      className='h-[360px]'
+      className="h-[360px]"
       formName="Sections of Income Tax"
       isEdit={editingId !== null}
     />

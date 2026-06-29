@@ -146,19 +146,21 @@ function Navbar() {
                           e.stopPropagation();
                           decreaseFontSize();
                         }}
-                        className="hover:bg-accent hover:text-accent-foreground text-foreground flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border border-border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
                         title="Decrease Font Size"
                       >
                         A-
                       </button>
-                      <span className="text-[11px] font-bold min-w-8 text-center">{fontSize}px</span>
+                      <span className="min-w-8 text-center text-[11px] font-bold">
+                        {fontSize}px
+                      </span>
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           increaseFontSize();
                         }}
-                        className="hover:bg-accent hover:text-accent-foreground text-foreground flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border border-border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
                         title="Increase Font Size"
                       >
                         A+

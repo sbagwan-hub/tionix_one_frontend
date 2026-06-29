@@ -53,6 +53,11 @@ export const NAV_MENUS: NavMenu[] = [
             href: '/masters/contacts/individual',
           },
           {
+            key: 'organisation',
+            icon: 'Building2',
+            href: '/masters/contacts/organisation',
+          },
+          {
             key: 'titles',
             icon: 'User',
             action: () => useWindowStore.getState().openWindow('contacts-title'),

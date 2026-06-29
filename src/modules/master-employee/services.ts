@@ -7,7 +7,7 @@ const mapContactToBackend = (contacts?: any[]) => {
     fk_moc_id: c.type || 'Phone',
     contact: c.detail || '',
     ext: c.ext || '',
-    sr_no: c.sr_no ?? (index + 1),
+    sr_no: c.sr_no ?? index + 1,
   }));
 };
 
@@ -18,7 +18,7 @@ const mapContactToFrontend = (contacts?: any[]) => {
     type: c.fk_moc_id || 'Phone',
     detail: c.contact || '',
     ext: c.ext || '',
-    sr_no: c.sr_no ?? (index + 1),
+    sr_no: c.sr_no ?? index + 1,
   }));
 };
 
@@ -44,7 +44,9 @@ const mapDocumentsToFrontend = (documents?: any[]) => {
 };
 
 export const masterEmployeeApi = {
-  list: async (params?: EmployeeFilterParams): Promise<{ data: EmployeeRecord[]; total: number }> => {
+  list: async (
+    params?: EmployeeFilterParams,
+  ): Promise<{ data: EmployeeRecord[]; total: number }> => {
     const response = await axiosClient.get<{
       success: boolean;
       message: string;
@@ -190,4 +192,3 @@ export function getFileUrl(path: string | null): string {
   const serverBase = apiBase.replace('/api', '');
   return `${serverBase}${path}`;
 }
-

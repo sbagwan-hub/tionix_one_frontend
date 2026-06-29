@@ -29,28 +29,28 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="flex flex-col gap-4 h-full">
-      <h3 className="text-sm font-bold uppercase tracking-wider text-brand border-b border-border/20 pb-1.5">
+    <div className="flex h-full flex-col gap-4">
+      <h3 className="text-brand border-border/20 border-b pb-1.5 text-sm font-bold tracking-wider uppercase">
         Metrics & Photograph
       </h3>
 
-      <div className="flex flex-col gap-3.5 flex-1">
+      <div className="flex flex-1 flex-col gap-3.5">
         {/* Photo Upload Area - expands to take complete remaining space */}
-        <div className="flex flex-col items-center justify-center border border-dashed border-border/60 bg-muted/5 rounded-sm p-4 flex-1 min-h-[160px] relative">
-          <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider absolute top-3 left-3">
+        <div className="border-border/60 bg-muted/5 relative flex min-h-[160px] flex-1 flex-col items-center justify-center rounded-sm border border-dashed p-4">
+          <Label className="text-muted-foreground absolute top-3 left-3 text-xs font-semibold tracking-wider uppercase">
             Employee Photo
           </Label>
-          <div className="flex flex-col items-center justify-center gap-3.5 w-full h-full">
-            <div className="w-24 h-24 rounded-full border border-border/80 bg-background flex items-center justify-center overflow-hidden shadow-inner">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-3.5">
+            <div className="border-border/80 bg-background flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border shadow-inner">
               {formData.photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={getFileUrl(formData.photo)}
                   alt="Employee"
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="text-muted-foreground text-xs uppercase font-bold text-center p-2">
+                <div className="text-muted-foreground p-2 text-center text-xs font-bold uppercase">
                   No Photo
                 </div>
               )}
@@ -85,9 +85,11 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-8 text-xs rounded-sm px-3"
+                className="h-8 rounded-sm px-3 text-xs"
                 disabled={disabled}
-                onClick={() => document.getElementById('photo-upload-input-metrics-ref-v2')?.click()}
+                onClick={() =>
+                  document.getElementById('photo-upload-input-metrics-ref-v2')?.click()
+                }
               >
                 Select
               </Button>
@@ -95,7 +97,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="h-8 text-xs text-destructive rounded-sm px-2.5"
+                className="text-destructive h-8 rounded-sm px-2.5 text-xs"
                 disabled={disabled || !formData.photo}
                 onClick={() => onInputChange('photo', null)}
               >
@@ -111,12 +113,12 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
             value={formData.aadhar || ''}
             onChange={(e) => onInputChange('aadhar', e.target.value)}
             placeholder="Aadhar No."
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
             maxLength={12}
           />
           <div className="flex flex-col gap-1">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Workplace
             </Label>
             <Select
@@ -124,7 +126,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('wp', val)}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper">
@@ -146,23 +148,25 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               onInputChange('height', val ? parseInt(val, 10) : null);
             }}
             placeholder="cm"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
           <FormInput
             label="Weight (kg)"
             type="number"
             value={formData.weight || ''}
-            onChange={(e) => onInputChange('weight', e.target.value ? parseFloat(e.target.value) : null)}
+            onChange={(e) =>
+              onInputChange('weight', e.target.value ? parseFloat(e.target.value) : null)
+            }
             placeholder="kg"
-            className="h-9 text-sm rounded-sm"
+            className="h-9 rounded-sm text-sm"
             disabled={disabled}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1">
-            <Label className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+            <Label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               Blood Group
             </Label>
             <Select
@@ -170,7 +174,7 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
               onValueChange={(val) => onInputChange('blood_grp', val === 'none' ? '' : val)}
               disabled={disabled}
             >
-              <SelectTrigger className="bg-background/50 h-9 rounded-sm text-sm w-full">
+              <SelectTrigger className="bg-background/50 h-9 w-full rounded-sm text-sm">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent position="popper">

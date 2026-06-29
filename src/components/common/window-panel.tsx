@@ -209,7 +209,7 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
     };
 
     const permissions = useFormPermission(formName || '');
-    
+
     // Resolve permission states: use formName queries if provided, otherwise fallback to props
     const resolvedCanAdd = formName ? permissions.add : canAdd;
     const resolvedCanEdit = formName ? permissions.edit : canEdit;

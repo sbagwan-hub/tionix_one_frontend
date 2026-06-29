@@ -28,7 +28,11 @@ export const ScheduleTypeWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update schedule type.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update schedule type.';
             toast.error(msg);
           },
         },
@@ -40,7 +44,11 @@ export const ScheduleTypeWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create schedule type.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create schedule type.';
           toast.error(msg);
         },
       });
@@ -71,7 +79,11 @@ export const ScheduleTypeWindow: React.FC = () => {
         toast.success('Schedule type deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete schedule type.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete schedule type.';
         toast.error(msg);
       },
     });
@@ -83,7 +95,11 @@ export const ScheduleTypeWindow: React.FC = () => {
   }));
 
   const formContent = (
-    <form id="schedule-type-form" onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+    <form
+      id="schedule-type-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-3"
+    >
       <FormInput
         id="schedule-type-input"
         label="Schedule Type"
@@ -91,9 +107,7 @@ export const ScheduleTypeWindow: React.FC = () => {
         {...form.register('type')}
       />
       {form.formState.errors.type && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.type.message}
-        </span>
+        <span className="text-destructive text-[10px]">{form.formState.errors.type.message}</span>
       )}
     </form>
   );

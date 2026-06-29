@@ -14,12 +14,7 @@ import {
 } from '@/components/ui/select';
 import { DatePicker } from '@/components/common/date-picker';
 import { toast } from 'sonner';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   Table,
   TableHeader,
@@ -84,16 +79,16 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col gap-4 h-full">
-        <div className="flex items-center justify-between border-b border-border/10 pb-2">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-brand">
+      <div className="flex h-full flex-col gap-4">
+        <div className="border-border/10 flex items-center justify-between border-b pb-2">
+          <h4 className="text-brand text-sm font-bold tracking-wider uppercase">
             Certificates / Licenses Produced
           </h4>
           <Button
             type="button"
             variant="outline"
             size="sm"
-            className="h-8 text-xs rounded-sm px-3 gap-1.5"
+            className="h-8 gap-1.5 rounded-sm px-3 text-xs"
             onClick={handleAddLicense}
             disabled={disabled}
           >
@@ -102,34 +97,34 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
           </Button>
         </div>
 
-        <div className="border border-border/40 rounded-sm flex-1 min-h-[160px] max-h-[260px] overflow-y-auto overflow-x-hidden">
+        <div className="border-border/40 max-h-[260px] min-h-[160px] flex-1 overflow-x-hidden overflow-y-auto rounded-sm border">
           <Table className="w-full table-fixed border-collapse text-left text-sm whitespace-normal">
             <TableHeader>
-              <TableRow className="border-b border-border/30 bg-muted/40 text-muted-foreground font-semibold hover:bg-muted/40">
-                <TableHead className="py-2.5 px-3 h-auto text-muted-foreground font-semibold w-[37%] text-left whitespace-normal">
+              <TableRow className="border-border/30 bg-muted/40 text-muted-foreground hover:bg-muted/40 border-b font-semibold">
+                <TableHead className="text-muted-foreground h-auto w-[37%] px-3 py-2.5 text-left font-semibold whitespace-normal">
                   Document Type
                 </TableHead>
-                <TableHead className="py-2.5 px-3 h-auto text-muted-foreground font-semibold w-[20%] text-center whitespace-normal">
+                <TableHead className="text-muted-foreground h-auto w-[20%] px-3 py-2.5 text-center font-semibold whitespace-normal">
                   Attachment
                 </TableHead>
-                <TableHead className="py-2.5 px-3 h-auto text-muted-foreground font-semibold w-[24%] text-left whitespace-normal">
+                <TableHead className="text-muted-foreground h-auto w-[24%] px-3 py-2.5 text-left font-semibold whitespace-normal">
                   Valid Until
                 </TableHead>
-                <TableHead className="py-2.5 px-3 h-auto text-muted-foreground font-semibold w-[15%] text-center whitespace-normal">
+                <TableHead className="text-muted-foreground h-auto w-[15%] px-3 py-2.5 text-center font-semibold whitespace-normal">
                   Action
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {licenses.map((license) => (
-                <TableRow key={license.id} className="border-b border-border/10 hover:bg-muted/5">
-                  <TableCell className="py-1 px-1.5 w-[37%] min-w-0 whitespace-normal">
+                <TableRow key={license.id} className="border-border/10 hover:bg-muted/5 border-b">
+                  <TableCell className="w-[37%] min-w-0 px-1.5 py-1 whitespace-normal">
                     <Select
                       value={license.fk_dt_id ? String(license.fk_dt_id) : 'none'}
                       onValueChange={(val) => handleDocumentTypeChange(license.id, val)}
                       disabled={disabled}
                     >
-                      <SelectTrigger className="h-8 text-xs rounded-sm bg-transparent border-0 focus:bg-background focus:ring-0 w-full truncate">
+                      <SelectTrigger className="focus:bg-background h-8 w-full truncate rounded-sm border-0 bg-transparent text-xs focus:ring-0">
                         <SelectValue placeholder="Select Document Type" />
                       </SelectTrigger>
                       <SelectContent position="popper">
@@ -142,23 +137,23 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
                       </SelectContent>
                     </Select>
                   </TableCell>
-                  <TableCell className="py-1 px-1.5 w-[20%] min-w-0 whitespace-normal">
-                    <div className="flex items-center gap-1 justify-center w-full min-w-0">
+                  <TableCell className="w-[20%] min-w-0 px-1.5 py-1 whitespace-normal">
+                    <div className="flex w-full min-w-0 items-center justify-center gap-1">
                       {license.doc_file ? (
-                        <div className="flex items-center gap-1 justify-center w-full min-w-0">
+                        <div className="flex w-full min-w-0 items-center justify-center gap-1">
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
                                 type="button"
                                 variant="ghost"
                                 size="icon"
-                                className="h-7 w-7 text-brand hover:bg-brand/10 rounded-sm cursor-pointer shrink-0"
+                                className="text-brand hover:bg-brand/10 h-7 w-7 shrink-0 cursor-pointer rounded-sm"
                                 onClick={() => {
                                   try {
                                     const newWindow = window.open();
                                     if (newWindow) {
                                       newWindow.document.write(
-                                        `<iframe src="${getFileUrl(license.doc_file ?? null)}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`
+                                        `<iframe src="${getFileUrl(license.doc_file ?? null)}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`,
                                       );
                                     }
                                   } catch (e) {
@@ -178,7 +173,7 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
                                 type="button"
                                 variant="ghost"
                                 size="icon"
-                                className="h-7 w-7 text-destructive hover:bg-destructive/10 rounded-sm cursor-pointer shrink-0"
+                                className="text-destructive hover:bg-destructive/10 h-7 w-7 shrink-0 cursor-pointer rounded-sm"
                                 onClick={() => {
                                   handleUpdateLicense(license.id, 'doc_file', null);
                                   toast.success('Document deleted successfully.');
@@ -221,9 +216,11 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
                             type="button"
                             variant="outline"
                             size="xs"
-                            className="h-7 text-xs px-2 rounded-sm flex items-center gap-1 cursor-pointer w-full justify-center truncate min-w-0"
+                            className="flex h-7 w-full min-w-0 cursor-pointer items-center justify-center gap-1 truncate rounded-sm px-2 text-xs"
                             disabled={disabled}
-                            onClick={() => document.getElementById(`file-upload-${license.id}`)?.click()}
+                            onClick={() =>
+                              document.getElementById(`file-upload-${license.id}`)?.click()
+                            }
                           >
                             <UploadCloud className="h-3.5 w-3.5 shrink-0" />
                             Attach
@@ -232,22 +229,22 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
                       )}
                     </div>
                   </TableCell>
-                  <TableCell className="py-1 px-1.5 w-[24%] min-w-0 whitespace-normal">
+                  <TableCell className="w-[24%] min-w-0 px-1.5 py-1 whitespace-normal">
                     <DatePicker
                       value={license.valid_until ? license.valid_until.slice(0, 10) : ''}
                       onChange={(val) => handleUpdateLicense(license.id, 'valid_until', val)}
                       disabled={disabled}
                     />
                   </TableCell>
-                  <TableCell className="py-1 px-1.5 w-[15%] min-w-0 whitespace-normal">
-                    <div className="flex items-center justify-center w-full">
+                  <TableCell className="w-[15%] min-w-0 px-1.5 py-1 whitespace-normal">
+                    <div className="flex w-full items-center justify-center">
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-destructive hover:bg-destructive/10 rounded-sm cursor-pointer shrink-0"
+                            className="text-destructive hover:bg-destructive/10 h-8 w-8 shrink-0 cursor-pointer rounded-sm"
                             onClick={() => handleRemoveLicense(license.id)}
                             disabled={disabled}
                           >
@@ -262,8 +259,11 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
               ))}
               {licenses.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground text-sm bg-muted/5 h-full whitespace-normal">
-                    <div className="flex items-center justify-center h-full w-full">
+                  <TableCell
+                    colSpan={4}
+                    className="text-muted-foreground bg-muted/5 h-full py-8 text-center text-sm whitespace-normal"
+                  >
+                    <div className="flex h-full w-full items-center justify-center">
                       No certificates recorded. Click Add Certificate to record credentials.
                     </div>
                   </TableCell>

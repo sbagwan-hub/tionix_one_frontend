@@ -78,7 +78,7 @@ export default function CompaniesPage() {
     {
       key: 'actions',
       label: 'Actions',
-      render: (_: any, row: any) => (
+      render: () => (
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <Eye className="h-4 w-4" />

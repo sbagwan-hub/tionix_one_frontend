@@ -54,7 +54,7 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
     {
       key: 'doj',
       label: 'Joining Date',
-      render: (val: string) => val ? new Date(val).toLocaleDateString() : '-',
+      render: (val: string) => (val ? new Date(val).toLocaleDateString() : '-'),
     },
     {
       key: 'fk_dep_id',
@@ -75,11 +75,9 @@ export const MasterEmployeeList: React.FC<MasterEmployeeListProps> = ({
           value={search}
           onChange={onSearchChange}
           placeholder="Search employees by name..."
-          className="max-w-md h-9"
+          className="h-9 max-w-md"
         />
-        <div className="text-muted-foreground text-xs">
-          Showing {employees.length} records
-        </div>
+        <div className="text-muted-foreground text-xs">Showing {employees.length} records</div>
       </div>
 
       <div className="w-full flex-1 min-h-0 overflow-auto border border-border/40 rounded-sm bg-card">

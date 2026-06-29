@@ -28,7 +28,11 @@ export const ReligionWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update religion.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update religion.';
             toast.error(msg);
           },
         },
@@ -40,7 +44,11 @@ export const ReligionWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create religion.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create religion.';
           toast.error(msg);
         },
       });
@@ -71,7 +79,11 @@ export const ReligionWindow: React.FC = () => {
         toast.success('Religion deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete religion.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete religion.';
         toast.error(msg);
       },
     });

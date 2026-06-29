@@ -42,6 +42,7 @@ async function ensureBucketWithPublicPolicy() {
   } catch (err: any) {
     // If bucket doesn't exist, create it
     await s3Client.send(new CreateBucketCommand({ Bucket: BUCKET_NAME }));
+    console.log('Ensure Bucket With Public Policy :', err);
   }
 
   try {

@@ -240,8 +240,6 @@ export default function UserRightsPage() {
     },
   ];
 
-
-
   return (
     <div className="bg-background text-foreground h-full font-sans">
       <div className="flex h-full flex-col py-2">

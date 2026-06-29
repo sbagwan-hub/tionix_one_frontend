@@ -14,7 +14,7 @@ export interface FormPermissions {
 
 /**
  * Reusable hook to check permissions for a specific form name.
- * 
+ *
  * @param formName Name of the form (e.g. 'skintone', 'caste')
  * @returns An object containing boolean permission flags
  */
@@ -56,9 +56,7 @@ export function useFormPermission(formName: string): FormPermissions {
     const nameLower = formName.toLowerCase();
 
     // 1. Search in masters
-    const masterRow = userRights.masters?.find(
-      (r) => r.form_name?.toLowerCase() === nameLower
-    );
+    const masterRow = userRights.masters?.find((r) => r.form_name?.toLowerCase() === nameLower);
     if (masterRow) {
       return {
         add: !!masterRow.add,
@@ -74,7 +72,7 @@ export function useFormPermission(formName: string): FormPermissions {
 
     // 2. Search in transactions
     const transactionRow = userRights.transactions?.find(
-      (r) => r.form_name?.toLowerCase() === nameLower
+      (r) => r.form_name?.toLowerCase() === nameLower,
     );
     if (transactionRow) {
       return {
@@ -90,9 +88,7 @@ export function useFormPermission(formName: string): FormPermissions {
     }
 
     // 3. Search in reports
-    const reportRow = userRights.reports?.find(
-      (r) => r.form_name?.toLowerCase() === nameLower
-    );
+    const reportRow = userRights.reports?.find((r) => r.form_name?.toLowerCase() === nameLower);
     if (reportRow) {
       return {
         add: false,
@@ -107,9 +103,7 @@ export function useFormPermission(formName: string): FormPermissions {
     }
 
     // 4. Search in others
-    const otherRow = userRights.others?.find(
-      (r) => r.form_name?.toLowerCase() === nameLower
-    );
+    const otherRow = userRights.others?.find((r) => r.form_name?.toLowerCase() === nameLower);
     if (otherRow) {
       const hasRight = !!otherRow.rights;
       return {
