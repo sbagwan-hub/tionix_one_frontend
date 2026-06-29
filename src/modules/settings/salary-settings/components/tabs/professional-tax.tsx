@@ -145,7 +145,7 @@ export function ProfessionalTax({ value, onChange, isEditing }: ProfessionalTaxP
             <div key={index} className="flex flex-col xl:flex-row xl:items-center gap-3 p-4 rounded-xl bg-card border border-border/40 hover:border-border/80 transition-all">
               
               {/* Range block */}
-              <div className="flex items-center gap-2 flex-1 min-w-[280px]">
+              <div className="flex items-center gap-2 w-full xl:w-[230px] shrink-0">
                 <FormInput
                   label="From"
                   type="number"
@@ -153,8 +153,9 @@ export function ProfessionalTax({ value, onChange, isEditing }: ProfessionalTaxP
                   value={slab.upto}
                   onChange={(e) => handleSlabChange(gender, index, 'upto', e.target.value)}
                   className="text-right font-mono"
+                  containerClassName="flex-1 min-w-0"
                 />
-                <span className="text-muted-foreground pt-5 text-xs font-bold uppercase">To</span>
+                <span className="text-muted-foreground pt-5 text-xs font-bold uppercase shrink-0">To</span>
                 <FormInput
                   label="To"
                   type="number"
@@ -162,13 +163,14 @@ export function ProfessionalTax({ value, onChange, isEditing }: ProfessionalTaxP
                   value={slab.to}
                   onChange={(e) => handleSlabChange(gender, index, 'to', e.target.value)}
                   className="text-right font-mono"
+                  containerClassName="flex-1 min-w-0"
                 />
               </div>
 
-              <span className="text-muted-foreground pt-5 text-sm font-bold hidden xl:inline">=</span>
+              <span className="text-muted-foreground pt-5 text-sm font-bold hidden xl:inline shrink-0">=</span>
 
               {/* Amount block */}
-              <div className="flex items-center gap-2 flex-1 min-w-[320px]">
+              <div className="flex items-center gap-2 flex-1 min-w-[360px]">
                 <FormInput
                   label="Rate/Month"
                   type="number"
@@ -176,16 +178,17 @@ export function ProfessionalTax({ value, onChange, isEditing }: ProfessionalTaxP
                   value={slab.amount}
                   onChange={(e) => handleSlabChange(gender, index, 'amount', e.target.value)}
                   className="text-right font-mono"
+                  containerClassName="flex-1 min-w-0"
                 />
                 
-                <div className="space-y-1.5 flex-1 min-w-[110px]">
-                  <Label className="text-[12px] font-semibold tracking-wider text-muted-foreground">Special Month</Label>
+                <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+                  <Label className="text-foreground text-[12px] font-semibold tracking-wider whitespace-nowrap">Special Month</Label>
                   <Select
                     disabled={!isEditing}
                     value={slab.month || 'February'}
                     onValueChange={(val) => handleSlabChange(gender, index, 'month', val)}
                   >
-                    <SelectTrigger className="w-full h-9 border-border/60 font-mono text-xs">
+                    <SelectTrigger className="w-full h-9 border-border/80 font-mono text-xs rounded-lg bg-background">
                       <SelectValue placeholder="Month" />
                     </SelectTrigger>
                     <SelectContent className="border-border bg-popover z-[10000]">
@@ -203,14 +206,15 @@ export function ProfessionalTax({ value, onChange, isEditing }: ProfessionalTaxP
                   value={slab.monthAmount || ''}
                   onChange={(e) => handleSlabChange(gender, index, 'monthAmount', e.target.value)}
                   className="text-right font-mono"
+                  containerClassName="flex-1 min-w-0"
                 />
               </div>
 
-              <span className="text-muted-foreground pt-5 text-sm font-bold hidden xl:inline">=</span>
+              <span className="text-muted-foreground pt-5 text-sm font-bold hidden xl:inline shrink-0">=</span>
 
               {/* Total block */}
-              <div className="flex items-center gap-3">
-                <div className="w-28">
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="w-32">
                   <FormInput
                     label="Yearly Amount"
                     type="number"
@@ -224,7 +228,7 @@ export function ProfessionalTax({ value, onChange, isEditing }: ProfessionalTaxP
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="text-destructive hover:bg-destructive/10 h-9 w-9 mt-5"
+                    className="text-destructive hover:bg-destructive/10 h-9 w-9 mt-5 shrink-0"
                     onClick={() => handleRemoveSlab(gender, index)}
                   >
                     <Trash2 className="h-4 w-4" />

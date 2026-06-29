@@ -42,7 +42,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         {label && (
           <Label
             htmlFor={inputId}
-            className="text-foreground text-[12px] font-semibold tracking-wider"
+            className="text-foreground text-[12px] font-semibold tracking-wider whitespace-nowrap"
           >
             {label}
           </Label>
