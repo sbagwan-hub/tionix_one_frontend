@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { FormInput } from '@/components/common/form-input';
+import { DatePicker } from '@/components/common/date-picker';
 import { DeleteDialog } from '@/components/common/delete-dialog';
 import WindowPanel, { WindowPanelItem } from '@/components/common/window-panel';
 
@@ -24,9 +25,9 @@ import {
   useCreateDebitCard,
   useUpdateDebitCard,
   useDeleteDebitCard,
+  useLookupHolders,
 } from '../hooks/use-debit-cards';
 import { useBankAccountsList } from '@/modules/bank-accounts/hooks/use-bank-accounts';
-import { useMasterEmployee } from '@/modules/master-employee/hooks/useMasterEmployee';
 import { debitCardSchema, DebitCardDto } from '../types';
 
 export const DebitCardWindow: React.FC = () => {
@@ -37,8 +38,6 @@ export const DebitCardWindow: React.FC = () => {
   // Queries
   const { data: records = [] } = useDebitCardsList();
   const { data: bank_accounts = [] } = useBankAccountsList();
-  const { list: employees_query } = useMasterEmployee();
-  const employees = employees_query.data?.data || [];
 
   const create_mutation = useCreateDebitCard();
   const update_mutation = useUpdateDebitCard();
@@ -48,7 +47,8 @@ export const DebitCardWindow: React.FC = () => {
     resolver: zodResolver(debitCardSchema),
     defaultValues: {
       fk_ban_id: '',
-      card_no: '',
+      debit_card_no: '',
+      fk_h_com_id: '',
       holder_name: '',
       expiry_date: new Date().toISOString().split('T')[0],
       sync: 'N',
@@ -57,11 +57,17 @@ export const DebitCardWindow: React.FC = () => {
     mode: 'onChange',
   });
 
+  const fk_ban_id = form.watch('fk_ban_id');
+  const fk_h_com_id = form.watch('fk_h_com_id');
+
+  const { data: holders = [] } = useLookupHolders(fk_ban_id ? Number(fk_ban_id) : null);
+
   const resetForm = () => {
     setEditingId(null);
     form.reset({
       fk_ban_id: '',
-      card_no: '',
+      debit_card_no: '',
+      fk_h_com_id: '',
       holder_name: '',
       expiry_date: new Date().toISOString().split('T')[0],
       sync: 'N',
@@ -95,7 +101,8 @@ export const DebitCardWindow: React.FC = () => {
     form.reset({
       pk_deb_id: rec.pk_deb_id,
       fk_ban_id: String(rec.fk_ban_id),
-      card_no: rec.card_no,
+      debit_card_no: rec.debit_card_no,
+      fk_h_com_id: String(rec.fk_h_com_id || ''),
       holder_name: rec.holder_name,
       expiry_date: rec.expiry_date ? rec.expiry_date.split('T')[0] : '',
       sync: rec.sync,
@@ -128,12 +135,10 @@ export const DebitCardWindow: React.FC = () => {
   };
 
   const is_editing = editingId !== null;
-  const fk_ban_id = form.watch('fk_ban_id');
-  const holder_name = form.watch('holder_name');
 
   const items: WindowPanelItem[] = records.map((r) => ({
     id: String(r.pk_deb_id),
-    label: `${r.card_no} — ${r.holder_name}`,
+    label: `${r.debit_card_no?.trim() || ''} — ${r.holder_name}`,
   }));
 
   const formContent = (
@@ -151,7 +156,7 @@ export const DebitCardWindow: React.FC = () => {
             <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
               <SelectValue placeholder="Select Bank Account" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper" sideOffset={4} className="z-10000">
               {bank_accounts.map((b) => (
                 <SelectItem key={b.pk_ban_id} value={String(b.pk_ban_id)} className="text-xs">
                   {b.bank_account_name} ({b.account_no})
@@ -176,12 +181,12 @@ export const DebitCardWindow: React.FC = () => {
           <FormInput
             id="debit-card-no"
             placeholder="Enter Debit Card Number"
-            {...form.register('card_no')}
+            {...form.register('debit_card_no')}
             className="h-9 text-xs"
           />
-          {form.formState.errors.card_no && (
+          {form.formState.errors.debit_card_no && (
             <p className="text-destructive text-xxs mt-1">
-              {form.formState.errors.card_no.message?.toString()}
+              {form.formState.errors.debit_card_no.message?.toString()}
             </p>
           )}
         </div>
@@ -194,23 +199,28 @@ export const DebitCardWindow: React.FC = () => {
         </Label>
         <div className="col-span-9">
           <Select
-            value={holder_name || ''}
-            onValueChange={(val) => form.setValue('holder_name', val, { shouldDirty: true })}
+            value={fk_h_com_id ? String(fk_h_com_id) : ''}
+            onValueChange={(val) => {
+              form.setValue('fk_h_com_id', val, { shouldDirty: true });
+              const selectedContactName =
+                holders.find((h) => String(h.pk_cont_id) === val)?.contact_name || '';
+              form.setValue('holder_name', selectedContactName, { shouldDirty: true });
+            }}
           >
             <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
               <SelectValue placeholder="Select Holder" />
             </SelectTrigger>
-            <SelectContent>
-              {employees.map((e: any) => (
-                <SelectItem key={e.pk_emp_id} value={e.employee} className="text-xs">
-                  {e.employee}
+            <SelectContent position="popper" sideOffset={4} className="z-10000">
+              {holders.map((h) => (
+                <SelectItem key={h.pk_cont_id} value={String(h.pk_cont_id)} className="text-xs">
+                  {h.contact_name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {form.formState.errors.holder_name && (
+          {form.formState.errors.fk_h_com_id && (
             <p className="text-destructive text-xxs mt-1">
-              {form.formState.errors.holder_name.message?.toString()}
+              {form.formState.errors.fk_h_com_id.message?.toString()}
             </p>
           )}
         </div>
@@ -222,10 +232,16 @@ export const DebitCardWindow: React.FC = () => {
           Expiry Date *
         </Label>
         <div className="col-span-9">
-          <Input
-            type="date"
-            {...form.register('expiry_date')}
-            className="border-border/60 h-9 w-full text-xs"
+          <Controller
+            control={form.control}
+            name="expiry_date"
+            render={({ field }) => (
+              <DatePicker
+                value={field.value}
+                onChange={(date) => field.onChange(date)}
+                placeholder="Pick expiry date"
+              />
+            )}
           />
           {form.formState.errors.expiry_date && (
             <p className="text-destructive text-xxs mt-1">
@@ -263,7 +279,7 @@ export const DebitCardWindow: React.FC = () => {
         onConfirm={handle_confirm_delete}
         title="Confirm Deletion"
         description="Are you sure you want to permanently delete this debit card? This action cannot be undone."
-        itemName={records.find((r) => r.pk_deb_id === pending_delete_id)?.card_no || ''}
+        itemName={records.find((r) => r.pk_deb_id === pending_delete_id)?.debit_card_no || ''}
         isDeleting={delete_mutation.isPending}
       />
     </>

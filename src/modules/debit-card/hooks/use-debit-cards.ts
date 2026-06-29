@@ -39,3 +39,18 @@ export function useDeleteDebitCard() {
     },
   });
 }
+
+export function useLookupBankAccounts() {
+  return useQuery({
+    queryKey: ['debitCardBankAccountsLookup'],
+    queryFn: () => debitCardApi.listBankAccounts(),
+  });
+}
+
+export function useLookupHolders(bankAccountId: number | null) {
+  return useQuery({
+    queryKey: ['debitCardHoldersLookup', bankAccountId],
+    queryFn: () => debitCardApi.listHolders(bankAccountId!),
+    enabled: !!bankAccountId,
+  });
+}

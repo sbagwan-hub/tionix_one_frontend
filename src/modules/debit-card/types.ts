@@ -4,10 +4,18 @@ const syncField = z.enum(['N', 'C', 'E']).default('N');
 
 export const debitCardSchema = z.object({
   pk_deb_id: z.number().int().positive().optional(),
-  fk_ban_id: z.union([z.number(), z.string()]).refine(val => !!val, { message: 'Bank Account is required' }),
+  fk_ban_id: z
+    .union([z.number(), z.string()])
+    .refine((val) => !!val, { message: 'Bank Account is required' }),
   bank_account_name: z.string().optional(),
-  card_no: z.string().min(1, 'Debit Card No is required').max(30, 'Debit Card No is too long'),
-  holder_name: z.string().min(1, "Holder's Name is required"),
+  debit_card_no: z
+    .string()
+    .min(1, 'Debit Card No is required')
+    .max(30, 'Debit Card No is too long'),
+  fk_h_com_id: z
+    .union([z.number(), z.string()])
+    .refine((val) => !!val, { message: "Holder's Name is required" }),
+  holder_name: z.string().optional(),
   expiry_date: z.string().min(1, 'Expiry Date is required'),
   sync: syncField,
   sys_defined: z.boolean().default(false),

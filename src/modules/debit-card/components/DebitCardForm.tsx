@@ -43,7 +43,7 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
                 <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Bank Account" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" sideOffset={4}>
                   {bank_accounts.map((b) => (
                     <SelectItem key={b.pk_ban_id} value={String(b.pk_ban_id)} className="text-xs">
                       {b.bank_account_name} ({b.account_no})
@@ -100,7 +100,7 @@ export const DebitCardForm: React.FC<DebitCardFormProps> = ({
                 <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Holder" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" sideOffset={4}>
                   {employees.map((e) => (
                     <SelectItem key={e.pk_emp_id} value={e.employee} className="text-xs">
                       {e.employee}
