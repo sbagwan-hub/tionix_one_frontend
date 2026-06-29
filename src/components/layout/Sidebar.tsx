@@ -376,7 +376,7 @@ export function Sidebar() {
             <GraduationCap className="h-5 w-5" />
           </div>
           {sidebarOpen && (
-            <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-base font-extrabold tracking-tight text-transparent dark:from-slate-100 dark:to-slate-300">
+            <span className="bg-linear-to-r from-slate-900 to-slate-700 bg-clip-text text-base font-extrabold tracking-tight text-transparent dark:from-slate-100 dark:to-slate-300">
               PreSkool
             </span>
           )}
@@ -426,7 +426,7 @@ export function Sidebar() {
         {categories.map((cat) => (
           <div key={cat.title} className="space-y-1">
             {sidebarOpen && (
-              <div className="text-muted-foreground/50 px-3.5 py-1.5 text-[10px] font-bold tracking-wider uppercase select-none">
+              <div className="text-muted-foreground/50 text-xxs px-3.5 py-1.5 font-bold tracking-wider uppercase select-none">
                 {cat.title}
               </div>
             )}
