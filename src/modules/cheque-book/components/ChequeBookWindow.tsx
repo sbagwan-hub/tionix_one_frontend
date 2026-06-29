@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { FormInput } from '@/components/common/form-input';
+import { DatePicker } from '@/components/common/date-picker';
 import { DeleteDialog } from '@/components/common/delete-dialog';
 import WindowPanel, { WindowPanelItem } from '@/components/common/window-panel';
 
@@ -25,7 +26,10 @@ import {
   useUpdateChequeBook,
   useDeleteChequeBook,
 } from '../hooks/use-cheque-books';
-import { useBankAccountsList } from '@/modules/bank-accounts/hooks/use-bank-accounts';
+import {
+  useBankAccountsList,
+  useOrganizationLookups,
+} from '@/modules/bank-accounts/hooks/use-bank-accounts';
 import { chequeBookSchema, ChequeBookDto } from '../types';
 
 export const ChequeBookWindow: React.FC = () => {
@@ -34,8 +38,9 @@ export const ChequeBookWindow: React.FC = () => {
   const [pending_delete_id, set_pending_delete_id] = useState<string | number | null>(null);
 
   // Queries
-  const { data: records = [], isLoading: is_loading } = useChequeBooksList();
+  const { data: records = [] } = useChequeBooksList();
   const { data: bank_accounts = [] } = useBankAccountsList();
+  const { data: organizations = [] } = useOrganizationLookups();
 
   const create_mutation = useCreateChequeBook();
   const update_mutation = useUpdateChequeBook();
@@ -45,6 +50,7 @@ export const ChequeBookWindow: React.FC = () => {
     resolver: zodResolver(chequeBookSchema),
     defaultValues: {
       fk_ban_id: '',
+      fk_org_com_id: '',
       start_no: 0,
       end_no: 0,
       total_cheques: 0,
@@ -68,6 +74,7 @@ export const ChequeBookWindow: React.FC = () => {
     setEditingId(null);
     form.reset({
       fk_ban_id: '',
+      fk_org_com_id: '',
       start_no: 0,
       end_no: 0,
       total_cheques: 0,
@@ -103,6 +110,7 @@ export const ChequeBookWindow: React.FC = () => {
     form.reset({
       pk_chq_id: rec.pk_chq_id,
       fk_ban_id: String(rec.fk_ban_id),
+      fk_org_com_id: String((rec as any).fk_org_com_id || ''),
       start_no: rec.start_no,
       end_no: rec.end_no,
       total_cheques: rec.total_cheques,
@@ -138,6 +146,7 @@ export const ChequeBookWindow: React.FC = () => {
 
   const is_editing = editingId !== null;
   const fk_ban_id = form.watch('fk_ban_id');
+  const fk_org_com_id = form.watch('fk_org_com_id');
   const total_cheques = form.watch('total_cheques');
 
   const items: WindowPanelItem[] = records.map((r) => ({
@@ -157,10 +166,10 @@ export const ChequeBookWindow: React.FC = () => {
             value={fk_ban_id ? String(fk_ban_id) : ''}
             onValueChange={(val) => form.setValue('fk_ban_id', val, { shouldDirty: true })}
           >
-            <SelectTrigger className="border-border/85 bg-background/50 h-9 text-xs">
+            <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
               <SelectValue placeholder="Select Bank Account" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper" sideOffset={4} className="z-10000">
               {bank_accounts.map((b) => (
                 <SelectItem key={b.pk_ban_id} value={String(b.pk_ban_id)} className="text-xs">
                   {b.bank_account_name} ({b.account_no})
@@ -187,7 +196,7 @@ export const ChequeBookWindow: React.FC = () => {
             type="number"
             placeholder="Enter starting number"
             {...form.register('start_no')}
-            className="h-9 text-xs"
+            className="h-9 w-full text-xs"
           />
           {form.formState.errors.start_no && (
             <p className="text-destructive text-xxs mt-1">
@@ -208,7 +217,7 @@ export const ChequeBookWindow: React.FC = () => {
             type="number"
             placeholder="Enter ending number"
             {...form.register('end_no')}
-            className="h-9 text-xs"
+            className="h-9 w-full text-xs"
           />
           {form.formState.errors.end_no && (
             <p className="text-destructive text-xxs mt-1">
@@ -228,7 +237,7 @@ export const ChequeBookWindow: React.FC = () => {
             type="number"
             readOnly
             value={Number(total_cheques ?? 0)}
-            className="bg-muted/50 border-border/40 h-9 font-mono text-xs font-bold"
+            className="bg-muted/50 border-border/40 h-9 w-full font-mono text-xs font-bold"
           />
         </div>
       </div>
@@ -239,10 +248,16 @@ export const ChequeBookWindow: React.FC = () => {
           Date of Issue
         </Label>
         <div className="col-span-9">
-          <Input
-            type="date"
-            {...form.register('date_issue')}
-            className="border-border/60 h-9 w-full text-xs"
+          <Controller
+            control={form.control}
+            name="date_issue"
+            render={({ field }) => (
+              <DatePicker
+                value={field.value}
+                onChange={(date) => field.onChange(date)}
+                placeholder="Pick issue date"
+              />
+            )}
           />
           {form.formState.errors.date_issue && (
             <p className="text-destructive text-xxs mt-1">
