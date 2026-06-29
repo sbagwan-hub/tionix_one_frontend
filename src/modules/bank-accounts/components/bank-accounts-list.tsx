@@ -102,8 +102,10 @@ export function BankAccountsList({
                 return (
                   <tr
                     key={rec.pk_ban_id}
-                    className={`hover:bg-muted/40 cursor-pointer transition-colors ${
-                      rec.pk_ban_id === selected_id ? 'bg-primary/10 text-primary font-medium' : ''
+                    className={`cursor-pointer transition-colors ${
+                      rec.pk_ban_id === selected_id
+                        ? 'bg-primary/10 text-primary font-medium'
+                        : 'hover:bg-muted/40'
                     }`}
                     onClick={() => on_select_record(rec, idx)}
                     onDoubleClick={() => on_double_click_record(rec, idx)}

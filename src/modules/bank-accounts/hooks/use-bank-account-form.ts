@@ -292,7 +292,6 @@ export function useBankAccountForm() {
   const handle_select_record = (rec: BankAccount, index: number) => {
     set_cursor(index);
     populate_form(rec);
-    set_active_tab('details');
     set_mode('view');
   };
 
@@ -300,7 +299,7 @@ export function useBankAccountForm() {
     set_cursor(index);
     populate_form(rec);
     set_active_tab('details');
-    handle_edit();
+    set_mode('view');
   };
 
   // Build/Mock the "Bank" tree structure
