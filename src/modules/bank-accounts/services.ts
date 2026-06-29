@@ -9,7 +9,7 @@ async function findContactIdByName(
   if (!name) return null;
   const endpoint =
     type === 'O'
-      ? '/master/account/bank-account/lookups/banks'
+      ? '/master/contacts/individuals/common/dropdown?type=O'
       : '/master/contacts/individuals/common/dropdown?type=I';
   const res = await axiosClient.get<{ data: any[] }>(endpoint);
   const list = res.data.data || [];
@@ -201,6 +201,18 @@ export const bankAccountApi = {
     const res = await axiosClient.get<{ data: any[] }>(
       '/master/contacts/individuals/common/dropdown',
       { params: { type: 'I' } },
+    );
+    const data = res.data.data || [];
+    return data.map((item) => ({
+      pkContId: String(item.pk_cont_id || item.pkContId),
+      contactName: item.contact_name || item.contactName || '',
+    }));
+  },
+
+  listOrganizations: async (): Promise<Array<{ pkContId: string; contactName: string }>> => {
+    const res = await axiosClient.get<{ data: any[] }>(
+      '/master/contacts/individuals/common/dropdown',
+      { params: { type: 'O' } },
     );
     const data = res.data.data || [];
     return data.map((item) => ({

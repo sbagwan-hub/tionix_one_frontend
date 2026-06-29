@@ -22,6 +22,7 @@ import {
   useUpdateBankAccount,
   useDeleteBankAccount,
   useIndividualLookups,
+  useOrganizationLookups,
 } from './use-bank-accounts';
 import { useAccountGroupsTree } from '../../account-groups/hooks/use-account-groups';
 
@@ -69,12 +70,10 @@ export function useBankAccountForm() {
     ...(filter_account_no ? { account_no: filter_account_no } : {}),
   });
 
-  const {
-    data: account_groups_tree = [],
-    isLoading: is_tree_loading,
-  } = useAccountGroupsTree();
+  const { data: account_groups_tree = [], isLoading: is_tree_loading } = useAccountGroupsTree();
 
   const { data: individuals = [], isLoading: is_individuals_loading } = useIndividualLookups();
+  const { data: organizations = [], isLoading: is_orgs_loading } = useOrganizationLookups();
 
   const create_mutation = useCreateBankAccount();
   const update_mutation = useUpdateBankAccount();
@@ -84,10 +83,10 @@ export function useBankAccountForm() {
     is_list_loading ||
     is_tree_loading ||
     is_individuals_loading ||
+    is_orgs_loading ||
     create_mutation.isPending ||
     update_mutation.isPending ||
     delete_mutation.isPending;
-
 
   // Auto-adjust cursor if it goes out of bounds when records list changes
   useEffect(() => {
@@ -500,6 +499,8 @@ export function useBankAccountForm() {
     records,
     refetch_list,
     individuals,
+    organizations,
+    account_groups_tree,
     is_tree_loading,
     loading,
     get_bank_tree,
@@ -513,4 +514,3 @@ export function useBankAccountForm() {
     handle_confirm_delete,
   };
 }
-

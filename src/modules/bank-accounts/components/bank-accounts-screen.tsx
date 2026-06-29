@@ -50,6 +50,8 @@ export function BankAccountsScreen() {
     records,
     refetch_list,
     individuals,
+    organizations,
+    account_groups_tree,
     is_tree_loading,
     loading,
     get_bank_tree,
@@ -95,7 +97,7 @@ export function BankAccountsScreen() {
 
       {/* Content Container */}
       {active_tab === 'details' ? (
-        <div className="bg-card grid h-[calc(100vh-140px)] grid-cols-1 divide-y rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
+        <div className="bg-card grid min-h-0 flex-1 grid-cols-1 divide-y rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
           {/* Form Component */}
           <div className="h-full min-h-0 overflow-hidden md:col-span-7">
             <BankAccountForm
@@ -131,13 +133,13 @@ export function BankAccountsScreen() {
               cursor={cursor}
               form_input_ref={form_input_ref}
               individuals={individuals}
+              organizations={organizations}
             />
           </div>
 
-          {/* Tree Component */}
-          <div className="h-full md:col-span-5">
+          <div className="flex h-full min-h-0 flex-col overflow-hidden md:col-span-5">
             <AccountGroupsTree
-              tree={get_bank_tree()}
+              tree={account_groups_tree}
               loading={is_tree_loading}
               selectedId={selected_group?.pk_grp_id ?? null}
               onSelectNode={handle_tree_select}

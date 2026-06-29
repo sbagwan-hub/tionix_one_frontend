@@ -50,3 +50,13 @@ export function useIndividualLookups() {
     },
   });
 }
+
+export function useOrganizationLookups() {
+  return useQuery<Array<{ pkContId: string; contactName: string }>>({
+    queryKey: ['masterOrganizationLookups'],
+    queryFn: async () => {
+      const res = await bankAccountApi.listOrganizations();
+      return res;
+    },
+  });
+}

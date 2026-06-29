@@ -24,6 +24,11 @@ export function TreeNodeRow({
   const hasChildren = node.children && node.children.length > 0;
   const isLast = ancestorsIsLast[depth];
   const isSelected = selectedId === node.pk_grp_id;
+  console.log('TreeNodeRow node:', {
+    pk_grp_id: node.pk_grp_id,
+    group_name: node.group_name,
+    raw: node,
+  });
 
   return (
     <div className="relative isolate w-full select-none">
@@ -49,7 +54,7 @@ export function TreeNodeRow({
             return (
               <span
                 key={i}
-                className="border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-0 bottom-0 w-[1px] border-l border-dashed transition-colors"
+                className="border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-0 bottom-0 w-px border-l border-dashed transition-colors"
                 style={{ left: `${i * 20 + 14}px` }}
                 aria-hidden="true"
               />
@@ -61,7 +66,7 @@ export function TreeNodeRow({
         {/* Current node branch vertical line */}
         {depth >= 0 && (
           <span
-            className={`border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-0 w-[1px] border-l border-dashed transition-colors ${
+            className={`border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-0 w-px border-l border-dashed transition-colors ${
               isLast ? 'h-1/2' : 'h-full'
             }`}
             style={{ left: `${depth * 20 + 14}px` }}
@@ -72,7 +77,7 @@ export function TreeNodeRow({
         {/* Current node branch horizontal tick line */}
         {depth >= 0 && (
           <span
-            className="border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-1/2 h-[1px] w-[12px] -translate-y-1/2 border-t border-dashed transition-colors"
+            className="border-foreground/80 group-hover:border-foreground/90 pointer-events-none absolute top-1/2 h-px w-[12px] -translate-y-1/2 border-t border-dashed transition-colors"
             style={{ left: `${depth * 20 + 14}px` }}
             aria-hidden="true"
           />
@@ -105,14 +110,14 @@ export function TreeNodeRow({
         </div>
 
         {/* Node Label */}
-        <span className="z-10 min-w-0 truncate text-[13px] tracking-wide transition-colors">
+        <span className="z-10 text-[13px] font-medium tracking-wide text-slate-800 transition-colors dark:text-zinc-200">
           {node.group_name}
         </span>
       </div>
 
       {/* --- CHILDREN RENDERER --- */}
       {open && hasChildren && (
-        <div className="animate-in fade-in slide-in-from-top-1 mt-[1px] duration-150 ease-out">
+        <div className="animate-in fade-in slide-in-from-top-1 mt-px duration-150 ease-out">
           {node.children.map((c, index) => (
             <TreeNodeRow
               key={c.pk_grp_id}

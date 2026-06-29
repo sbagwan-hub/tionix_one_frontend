@@ -48,6 +48,7 @@ interface BankAccountFormProps {
   cursor: number;
   form_input_ref: React.RefObject<HTMLInputElement | null>;
   individuals: Array<{ pkContId: string; contactName: string }>;
+  organizations: Array<{ pkContId: string; contactName: string }>;
 }
 
 export function BankAccountForm({
@@ -84,6 +85,7 @@ export function BankAccountForm({
   cursor,
   form_input_ref,
   individuals,
+  organizations,
 }: BankAccountFormProps) {
   console.log('BankAccountForm individuals:', individuals);
   const handleHolderChange = (index: number, field: keyof HolderDetail, value: string) => {
@@ -91,16 +93,6 @@ export function BankAccountForm({
     updated[index] = { ...updated[index], [field]: value };
     set_holder_details(updated);
   };
-
-  const bankOptions = [
-    'State Bank of India',
-    'HDFC Bank',
-    'ICICI Bank',
-    'Axis Bank',
-    'Punjab National Bank',
-    'Bank of Baroda',
-    'Canara Bank',
-  ];
 
   const accountTypeOptions = ['Current Account', 'Savings Account', 'Cash Credit', 'Overdraft'];
 
@@ -152,10 +144,10 @@ export function BankAccountForm({
                 <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
                   <SelectValue placeholder="Select Bank" />
                 </SelectTrigger>
-                <SelectContent className="border-border bg-popover z-10000">
-                  {bankOptions.map((b) => (
-                    <SelectItem key={b} value={b} className="text-xs">
-                      {b}
+                <SelectContent className="border-border bg-popover z-[10000]">
+                  {organizations.map((org) => (
+                    <SelectItem key={org.pkContId} value={org.contactName} className="text-xs">
+                      {org.contactName}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -350,7 +342,7 @@ export function BankAccountForm({
                     value={holder.client_id}
                     onChange={(e) => handleHolderChange(idx, 'client_id', e.target.value)}
                     disabled={!is_editing}
-                    placeholder="Client ID"
+                    placeholder="Customer ID"
                     className="h-8.5 text-xs"
                   />
                 </div>
