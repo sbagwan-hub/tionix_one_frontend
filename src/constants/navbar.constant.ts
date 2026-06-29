@@ -200,6 +200,7 @@ export const NAV_MENUS: NavMenu[] = [
     items: [
       { key: 'preferences', href: '/preferences', icon: 'Settings2' },
       { key: 'attendanceRules', href: '/settings/attendance-rules', icon: 'Calendar' },
+      { key: 'salarySettings', href: '/settings/salary-settings', icon: 'Coins' },
       { key: 'theme', href: '/theme', icon: 'Palette' },
     ],
   },

@@ -23,11 +23,11 @@ export function RuleIV({
   onDefault,
 }: RuleIVProps) {
   const handleRangeChange = (index: number, key: 'from_min' | 'to_min' | 'late_mark', valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     const newRanges = [...value.ranges];
     newRanges[index] = {
       ...newRanges[index],
-      [key]: val,
+      [key]: isNaN(val) ? 0 : val,
     };
     onChange({
       ...value,
@@ -36,23 +36,32 @@ export function RuleIV({
   };
 
   const handleNumChange = (key: keyof RuleIVConfig, valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
-    onChange({
-      ...value,
-      [key]: val,
-    });
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
+    const parsedVal = isNaN(val) ? 0 : val;
+    if (key === 'absent_threshold_minutes') {
+      onChange({
+        ...value,
+        absent_threshold_minutes: parsedVal,
+        half_day_min_minutes: parsedVal + 1,
+      });
+    } else {
+      onChange({
+        ...value,
+        [key]: parsedVal,
+      });
+    }
   };
 
   const handleExtraNumChange = (key: keyof RuleIVConfigExtra, valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     onExtraChange({
       ...extraValue,
-      [key]: val,
+      [key]: isNaN(val) ? 0 : val,
     });
   };
 
   return (
-    <div className="flex min-h-full flex-col p-6 space-y-6 w-full">
+    <div className="flex flex-col p-6 space-y-6 w-full h-auto max-h-[calc(100vh-200px)] overflow-y-auto">
       <div className="rounded-xl border border-border/80 bg-card/50 p-6 shadow-sm backdrop-blur-md space-y-6">
         <h3 className="text-base font-bold text-primary border-b pb-2">
           Office Staff, Temporary, Apprentice and Miscellaneous (Late Coming / Early Going)
@@ -65,7 +74,7 @@ export function RuleIV({
               <span className="w-10 text-muted-foreground font-semibold">From</span>
               <Input
                 type="number"
-                value={range.from_min}
+                value={range.from_min === 0 ? '' : range.from_min}
                 disabled={!isEditing}
                 onChange={(e) => handleRangeChange(index, 'from_min', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -75,7 +84,7 @@ export function RuleIV({
               <span className="text-muted-foreground font-semibold">To</span>
               <Input
                 type="number"
-                value={range.to_min}
+                value={range.to_min === 0 ? '' : range.to_min}
                 disabled={!isEditing}
                 onChange={(e) => handleRangeChange(index, 'to_min', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -85,7 +94,7 @@ export function RuleIV({
               <span className="text-muted-foreground font-semibold">Consider</span>
               <Input
                 type="number"
-                value={range.late_mark}
+                value={range.late_mark === 0 ? '' : range.late_mark}
                 disabled={!isEditing}
                 onChange={(e) => handleRangeChange(index, 'late_mark', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -100,7 +109,7 @@ export function RuleIV({
           <span>Every</span>
           <Input
             type="number"
-            value={value.every_late_mark}
+            value={value.every_late_mark === 0 ? '' : value.every_late_mark}
             disabled={!isEditing}
             onChange={(e) => handleNumChange('every_late_mark', e.target.value)}
             className="w-18 h-8 text-center font-semibold"
@@ -113,7 +122,7 @@ export function RuleIV({
           <span>Employee gets</span>
           <Input
             type="number"
-            value={value.yearly_hours}
+            value={value.yearly_hours === 0 ? '' : value.yearly_hours}
             disabled={!isEditing}
             onChange={(e) => handleNumChange('yearly_hours', e.target.value)}
             className="w-20 h-8 text-center font-semibold"
@@ -121,7 +130,7 @@ export function RuleIV({
           <span>Hours in a Year, they can utilize for Early Going and Late Coming. Maximum</span>
           <Input
             type="number"
-            value={value.max_monthly_adjusted_hours}
+            value={value.max_monthly_adjusted_hours === 0 ? '' : value.max_monthly_adjusted_hours}
             disabled={!isEditing}
             onChange={(e) => handleNumChange('max_monthly_adjusted_hours', e.target.value)}
             className="w-18 h-8 text-center font-semibold"
@@ -135,7 +144,7 @@ export function RuleIV({
             <span className="w-36 text-muted-foreground font-medium">Working Less Than</span>
             <Input
               type="number"
-              value={value.absent_threshold_minutes}
+              value={value.absent_threshold_minutes === 0 ? '' : value.absent_threshold_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('absent_threshold_minutes', e.target.value)}
               className="w-20 h-8 text-center font-semibold"
@@ -147,7 +156,7 @@ export function RuleIV({
             <span className="w-36 text-muted-foreground font-medium">Working More Than</span>
             <Input
               type="number"
-              value={value.half_day_min_minutes}
+              value={value.half_day_min_minutes === 0 ? '' : value.half_day_min_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('half_day_min_minutes', e.target.value)}
               className="w-20 h-8 text-center font-semibold"
@@ -155,7 +164,7 @@ export function RuleIV({
             <span>Minutes and Less Than</span>
             <Input
               type="number"
-              value={value.half_day_max_minutes}
+              value={value.half_day_max_minutes === 0 ? '' : value.half_day_max_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('half_day_max_minutes', e.target.value)}
               className="w-20 h-8 text-center font-semibold"
@@ -186,7 +195,7 @@ export function RuleIV({
               <span>For getting incentive, employee has to work full month less</span>
               <Input
                 type="number"
-                value={extraValue.incentive_max_days_less}
+                value={extraValue.incentive_max_days_less === 0 ? '' : extraValue.incentive_max_days_less}
                 disabled={!isEditing}
                 onChange={(e) => handleExtraNumChange('incentive_max_days_less', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -194,7 +203,7 @@ export function RuleIV({
               <span>days in a month and work</span>
               <Input
                 type="number"
-                value={extraValue.incentive_overtime_hours}
+                value={extraValue.incentive_overtime_hours === 0 ? '' : extraValue.incentive_overtime_hours}
                 disabled={!isEditing}
                 onChange={(e) => handleExtraNumChange('incentive_overtime_hours', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"

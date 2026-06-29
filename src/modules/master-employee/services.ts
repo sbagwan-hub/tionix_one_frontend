@@ -146,15 +146,6 @@ export const masterEmployeeApi = {
     }>('/master/master-employee/document-types');
     return response.data.data;
   },
-
-  uploadFile: async (fileData: string, fileName: string, type: 'emp' | 'indi'): Promise<{ url: string; fileName: string }> => {
-    const response = await axiosClient.post<{
-      success: boolean;
-      message: string;
-      data: { url: string; fileName: string };
-    }>('/master/master-employee/upload', { fileData, fileName, type });
-    return response.data.data;
-  },
 };
 
 export const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt'];

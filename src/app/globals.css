@@ -473,3 +473,20 @@
     @apply font-sans;
   }
 }
+
+/* Custom Neat Scrollbar */
+.neat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.neat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.neat-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+.neat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+

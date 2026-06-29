@@ -13,7 +13,8 @@ import {
 } from '@/components/ui/select';
 import { EmployeeRecord } from '../types';
 import { DatePicker } from '@/components/common/date-picker';
-import { getFileUrl, validateClientFile, masterEmployeeApi } from '../services';
+import { getFileUrl, validateClientFile } from '../services';
+import { uploadFileToMinio } from '@/lib/s3';
 import { toast } from 'sonner';
 
 interface SectionProps {
@@ -70,21 +71,13 @@ export const MetricsPhotoSection: React.FC<SectionProps> = ({
                       return;
                     }
 
-                    const reader = new FileReader();
-                    reader.onloadend = async () => {
-                      try {
-                        const result = await masterEmployeeApi.uploadFile(
-                          reader.result as string,
-                          file.name,
-                          'emp'
-                        );
-                        onInputChange('photo', result.url);
-                        toast.success('Photo uploaded successfully');
-                      } catch (error) {
-                        toast.error('Failed to upload photo to server');
-                      }
-                    };
-                    reader.readAsDataURL(file);
+                    try {
+                      const url = await uploadFileToMinio(file, 'employee', 'emp');
+                      onInputChange('photo', url);
+                      toast.success('Photo uploaded successfully');
+                    } catch (error) {
+                      toast.error('Failed to upload photo to server');
+                    }
                   }
                 }}
               />

@@ -91,3 +91,73 @@ export interface RuleVIConfig {
   absent_threshold_hours: number;
   manual_adjustment_years: number;
 }
+
+export interface LinkageFieldsConfig {
+  selectedRuleTag: string;
+  empIdField: string;
+  timeInField: string;
+}
+
+export interface ImportConditionConfig {
+  enabled: boolean;
+  fullDayMinutes: number;
+  halfDayMinutes: number;
+}
+
+export interface LateBand {
+  from: number;
+  to: number;
+  deduct: number;
+}
+
+export interface AttendanceRules {
+  selectedRuleTag: string;
+  empIdField: string;
+  timeInField: string;
+  rule2: {
+    allowDays: number;
+    completed: number;
+    onwardDays: number;
+    consider: number;
+  };
+  rule3Bands: LateBand[];
+  rule4: {
+    bands: LateBand[];
+    lateMarkThreshold: number;
+    totalHours: number;
+    halfDayHourCredit: number;
+    workHourFrom: number;
+    workHourTo: number;
+    workHourDays: number;
+    workHourHours: number;
+    isWorker: boolean;
+  };
+  incentiveMonthly: {
+    enabled: boolean;
+    fullDayMinutes: number;
+    halfDayMinutes: number;
+  };
+  rule5: {
+    headingA: string;
+    headingB: string;
+    lateA: number;
+    tillA: number;
+    onwardA: number;
+    lateB: number;
+    tillB: number;
+    onwardB: number;
+    isLate: boolean;
+    isEarly: boolean;
+  };
+  rule6: {
+    late1: number;
+    days1: number;
+    late2: number;
+    days2: number;
+    late3: number;
+    late4: number;
+    days4: number;
+    hours: number;
+    manualTimesPerYear: number;
+  };
+}

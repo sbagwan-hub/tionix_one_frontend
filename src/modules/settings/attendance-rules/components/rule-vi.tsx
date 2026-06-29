@@ -12,15 +12,15 @@ interface RuleVIProps {
 
 export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
   const handleNumChange = (key: keyof RuleVIConfig, valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     onChange({
       ...value,
-      [key]: val,
+      [key]: isNaN(val) ? 0 : val,
     });
   };
 
   return (
-    <div className="flex min-h-full flex-col p-6 space-y-6 w-full">
+    <div className="flex flex-col p-6 space-y-6 w-full h-auto max-h-[calc(100vh-200px)] overflow-y-auto">
       <div className="rounded-xl border border-border/80 bg-card/50 p-6 shadow-sm backdrop-blur-md space-y-6">
         <h3 className="text-lg font-bold text-primary">Rule VI: Special Late Deductions & Policies</h3>
 
@@ -30,7 +30,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>If an employee is late by</span>
             <Input
               type="number"
-              value={value.late_minutes_1}
+              value={value.late_minutes_1 === 0 ? '' : value.late_minutes_1}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_minutes_1', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -38,7 +38,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>minutes till</span>
             <Input
               type="number"
-              value={value.late_days_1}
+              value={value.late_days_1 === 0 ? '' : value.late_days_1}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_days_1', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -51,7 +51,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>If an employee is late by</span>
             <Input
               type="number"
-              value={value.late_minutes_2}
+              value={value.late_minutes_2 === 0 ? '' : value.late_minutes_2}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_minutes_2', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -59,7 +59,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>minutes till</span>
             <Input
               type="number"
-              value={value.late_days_2}
+              value={value.late_days_2 === 0 ? '' : value.late_days_2}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_days_2', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -72,7 +72,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>If an employee is late by more than</span>
             <Input
               type="number"
-              value={value.late_half_day_minutes}
+              value={value.late_half_day_minutes === 0 ? '' : value.late_half_day_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_half_day_minutes', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -85,7 +85,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>If an employee is late by more than</span>
             <Input
               type="number"
-              value={value.late_half_day_after_minutes}
+              value={value.late_half_day_after_minutes === 0 ? '' : value.late_half_day_after_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_half_day_after_minutes', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -93,7 +93,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>minutes after</span>
             <Input
               type="number"
-              value={value.late_half_day_after_days}
+              value={value.late_half_day_after_days === 0 ? '' : value.late_half_day_after_days}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('late_half_day_after_days', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -106,7 +106,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>Working hours less than</span>
             <Input
               type="number"
-              value={value.absent_threshold_hours}
+              value={value.absent_threshold_hours === 0 ? '' : value.absent_threshold_hours}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('absent_threshold_hours', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -119,7 +119,7 @@ export function RuleVI({ value, onChange, isEditing, onDefault }: RuleVIProps) {
             <span>Manual adjustment of attendance only</span>
             <Input
               type="number"
-              value={value.manual_adjustment_years}
+              value={value.manual_adjustment_years === 0 ? '' : value.manual_adjustment_years}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('manual_adjustment_years', e.target.value)}
               className="w-20 h-9 text-center font-semibold"

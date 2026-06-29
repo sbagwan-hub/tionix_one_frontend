@@ -34,12 +34,12 @@ export function RuleV({
   };
 
   const handleRuleANumChange = (key: keyof RuleVConfig['ruleA'], valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     onChange({
       ...value,
       ruleA: {
         ...value.ruleA,
-        [key]: val,
+        [key]: isNaN(val) ? 0 : val,
       },
     });
   };
@@ -65,18 +65,18 @@ export function RuleV({
   };
 
   const handleRuleBNumChange = (key: keyof RuleVConfigExtra['ruleB'], valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     onExtraChange({
       ...extraValue,
       ruleB: {
         ...extraValue.ruleB,
-        [key]: val,
+        [key]: isNaN(val) ? 0 : val,
       },
     });
   };
 
   return (
-    <div className="flex min-h-full flex-col p-6 space-y-6 w-full">
+    <div className="flex flex-col p-6 space-y-6 w-full h-auto max-h-[calc(100vh-200px)] overflow-y-auto">
       <div className="rounded-xl border border-border/80 bg-card/50 p-6 shadow-sm backdrop-blur-md space-y-6">
         
         {/* Rule A */}
@@ -98,7 +98,7 @@ export function RuleV({
               <span>If an employee is late/early go by less than</span>
               <Input
                 type="number"
-                value={value.ruleA.minutes}
+                value={value.ruleA.minutes === 0 ? '' : value.ruleA.minutes}
                 disabled={!isEditing}
                 onChange={(e) => handleRuleANumChange('minutes', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -106,7 +106,7 @@ export function RuleV({
               <span>minutes up till</span>
               <Input
                 type="number"
-                value={value.ruleA.no_deduction_days}
+                value={value.ruleA.no_deduction_days === 0 ? '' : value.ruleA.no_deduction_days}
                 disabled={!isEditing}
                 onChange={(e) => handleRuleANumChange('no_deduction_days', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -118,7 +118,7 @@ export function RuleV({
               <span>If an employee is late/early go for the</span>
               <Input
                 type="number"
-                value={value.ruleA.deduct_from_day}
+                value={value.ruleA.deduct_from_day === 0 ? '' : value.ruleA.deduct_from_day}
                 disabled={!isEditing}
                 onChange={(e) => handleRuleANumChange('deduct_from_day', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -173,7 +173,7 @@ export function RuleV({
               <span>Late arrival up to</span>
               <Input
                 type="number"
-                value={extraValue.ruleB.minutes}
+                value={extraValue.ruleB.minutes === 0 ? '' : extraValue.ruleB.minutes}
                 disabled={!isEditing}
                 onChange={(e) => handleRuleBNumChange('minutes', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -181,7 +181,7 @@ export function RuleV({
               <span>minutes up till</span>
               <Input
                 type="number"
-                value={extraValue.ruleB.no_deduction_days}
+                value={extraValue.ruleB.no_deduction_days === 0 ? '' : extraValue.ruleB.no_deduction_days}
                 disabled={!isEditing}
                 onChange={(e) => handleRuleBNumChange('no_deduction_days', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"
@@ -193,7 +193,7 @@ export function RuleV({
               <span>If an employee is late for the</span>
               <Input
                 type="number"
-                value={extraValue.ruleB.deduct_from_day}
+                value={extraValue.ruleB.deduct_from_day === 0 ? '' : extraValue.ruleB.deduct_from_day}
                 disabled={!isEditing}
                 onChange={(e) => handleRuleBNumChange('deduct_from_day', e.target.value)}
                 className="w-18 h-8 text-center font-semibold"

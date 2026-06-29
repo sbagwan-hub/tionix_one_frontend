@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast } from '@/components/modern-ui/sonner';
+import { useAuthStore } from '@/stores/auth-store';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4100/api';
 
@@ -166,7 +167,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        clearTokens();
+        useAuthStore.getState().logout();
 
         window.location.href = '/auth/login';
 

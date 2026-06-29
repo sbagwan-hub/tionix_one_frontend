@@ -29,7 +29,8 @@ import {
   TableCell,
 } from '@/components/ui/table';
 
-import { getFileUrl, validateClientFile, masterEmployeeApi } from '../services';
+import { getFileUrl, validateClientFile } from '../services';
+import { uploadFileToMinio } from '@/lib/s3';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -197,7 +198,7 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
                             id={`file-upload-${license.id}`}
                             className="hidden"
                             disabled={disabled}
-                            onChange={(e) => {
+                            onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
                                 const validation = validateClientFile(file);
@@ -206,21 +207,13 @@ export const CertificatesLicensesSection: React.FC<SectionProps> = ({
                                   return;
                                 }
 
-                                const reader = new FileReader();
-                                reader.onloadend = async () => {
-                                  try {
-                                    const result = await masterEmployeeApi.uploadFile(
-                                      reader.result as string,
-                                      file.name,
-                                      'emp'
-                                    );
-                                    handleUpdateLicense(license.id, 'doc_file', result.url);
-                                    toast.success(`${file.name} uploaded successfully.`);
-                                  } catch (err) {
-                                    toast.error('Failed to upload file to server');
-                                  }
-                                };
-                                reader.readAsDataURL(file);
+                                try {
+                                  const url = await uploadFileToMinio(file, 'certificates', 'emp');
+                                  handleUpdateLicense(license.id, 'doc_file', url);
+                                  toast.success(`${file.name} uploaded successfully.`);
+                                } catch (err) {
+                                  toast.error('Failed to upload file to server');
+                                }
                               }
                             }}
                           />

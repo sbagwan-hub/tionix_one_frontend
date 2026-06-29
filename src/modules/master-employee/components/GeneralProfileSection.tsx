@@ -25,7 +25,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { getFileUrl, validateClientFile, masterEmployeeApi } from '../services';
+import { getFileUrl, validateClientFile } from '../services';
+import { uploadFileToMinio } from '@/lib/s3';
 
 interface SectionProps {
   formData: Partial<EmployeeRecord>;
@@ -202,7 +203,7 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
                         id="qualification-upload-input"
                         className="hidden"
                         disabled={disabled}
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (file) {
                             const validation = validateClientFile(file);
@@ -211,21 +212,13 @@ export const GeneralProfileSection: React.FC<SectionProps> = ({
                               return;
                             }
 
-                            const reader = new FileReader();
-                            reader.onloadend = async () => {
-                              try {
-                                const result = await masterEmployeeApi.uploadFile(
-                                  reader.result as string,
-                                  file.name,
-                                  'emp'
-                                );
-                                onInputChange('cv_copy', result.url);
-                                toast.success(`${file.name} uploaded successfully.`);
-                              } catch (err) {
-                                toast.error('Failed to upload qualification document');
-                              }
-                            };
-                            reader.readAsDataURL(file);
+                            try {
+                              const url = await uploadFileToMinio(file, 'documents', 'emp');
+                              onInputChange('cv_copy', url);
+                              toast.success(`${file.name} uploaded successfully.`);
+                            } catch (err) {
+                              toast.error('Failed to upload qualification document');
+                            }
                           }
                         }}
                       />

@@ -12,15 +12,15 @@ interface RuleIIProps {
 
 export function RuleII({ value, onChange, isEditing, onDefault }: RuleIIProps) {
   const handleNumChange = (key: keyof RuleIIConfig, valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     onChange({
       ...value,
-      [key]: val,
+      [key]: isNaN(val) ? 0 : val,
     });
   };
 
   return (
-    <div className="flex min-h-full flex-col p-6 space-y-6 w-full">
+    <div className="flex flex-col p-6 space-y-6 w-full h-auto max-h-[calc(100vh-200px)] overflow-y-auto">
       <div className="rounded-xl border border-border/80 bg-card/50 p-6 shadow-sm backdrop-blur-md space-y-6">
         <h3 className="text-lg font-bold text-primary">Rule II: Monthly Late/Early Allowances</h3>
 
@@ -30,7 +30,7 @@ export function RuleII({ value, onChange, isEditing, onDefault }: RuleIIProps) {
             <span>Only</span>
             <Input
               type="number"
-              value={value.days_allowed}
+              value={value.days_allowed === 0 ? '' : value.days_allowed}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('days_allowed', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -38,7 +38,7 @@ export function RuleII({ value, onChange, isEditing, onDefault }: RuleIIProps) {
             <span>days allowed in a month for late coming/early going, provided employee has completed</span>
             <Input
               type="number"
-              value={value.min_completed_minutes}
+              value={value.min_completed_minutes === 0 ? '' : value.min_completed_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('min_completed_minutes', e.target.value)}
               className="w-24 h-9 text-center font-semibold"
@@ -50,7 +50,7 @@ export function RuleII({ value, onChange, isEditing, onDefault }: RuleIIProps) {
           <div className="flex flex-wrap items-center gap-2 leading-8">
             <Input
               type="number"
-              value={value.days_onward}
+              value={value.days_onward === 0 ? '' : value.days_onward}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('days_onward', e.target.value)}
               className="w-20 h-9 text-center font-semibold"
@@ -58,7 +58,7 @@ export function RuleII({ value, onChange, isEditing, onDefault }: RuleIIProps) {
             <span>days onward, for late coming/early going in a month, will consider</span>
             <Input
               type="number"
-              value={value.working_time_minutes}
+              value={value.working_time_minutes === 0 ? '' : value.working_time_minutes}
               disabled={!isEditing}
               onChange={(e) => handleNumChange('working_time_minutes', e.target.value)}
               className="w-24 h-9 text-center font-semibold"

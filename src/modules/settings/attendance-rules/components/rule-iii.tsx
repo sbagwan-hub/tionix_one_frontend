@@ -12,11 +12,11 @@ interface RuleIIIProps {
 
 export function RuleIII({ value, onChange, isEditing, onDefault }: RuleIIIProps) {
   const handleRangeChange = (index: number, key: 'from_min' | 'to_min' | 'deduct_min', valStr: string) => {
-    const val = parseInt(valStr, 10) || 0;
+    const val = valStr === '' ? 0 : parseInt(valStr, 10);
     const newRanges = [...value.ranges];
     newRanges[index] = {
       ...newRanges[index],
-      [key]: val,
+      [key]: isNaN(val) ? 0 : val,
     };
     onChange({
       ...value,
@@ -25,7 +25,7 @@ export function RuleIII({ value, onChange, isEditing, onDefault }: RuleIIIProps)
   };
 
   return (
-    <div className="flex min-h-full flex-col p-6 space-y-6 w-full">
+    <div className="flex flex-col p-6 space-y-6 w-full h-auto max-h-[calc(100vh-200px)] overflow-y-auto">
       <div className="rounded-xl border border-border/80 bg-card/50 p-6 shadow-sm backdrop-blur-md space-y-6">
         <h3 className="text-lg font-bold text-primary">Rule III: Shift Late Coming Deductions</h3>
 
@@ -35,7 +35,7 @@ export function RuleIII({ value, onChange, isEditing, onDefault }: RuleIIIProps)
               <span className="w-10 text-muted-foreground font-semibold">From</span>
               <Input
                 type="number"
-                value={range.from_min}
+                value={range.from_min === 0 ? '' : range.from_min}
                 disabled={!isEditing}
                 onChange={(e) => handleRangeChange(index, 'from_min', e.target.value)}
                 className="w-20 h-9 text-center font-semibold"
@@ -45,7 +45,7 @@ export function RuleIII({ value, onChange, isEditing, onDefault }: RuleIIIProps)
               <span className="text-muted-foreground font-semibold">To</span>
               <Input
                 type="number"
-                value={range.to_min}
+                value={range.to_min === 0 ? '' : range.to_min}
                 disabled={!isEditing}
                 onChange={(e) => handleRangeChange(index, 'to_min', e.target.value)}
                 className="w-20 h-9 text-center font-semibold"
@@ -55,7 +55,7 @@ export function RuleIII({ value, onChange, isEditing, onDefault }: RuleIIIProps)
               <span className="text-muted-foreground font-semibold">Deduct</span>
               <Input
                 type="number"
-                value={range.deduct_min}
+                value={range.deduct_min === 0 ? '' : range.deduct_min}
                 disabled={!isEditing}
                 onChange={(e) => handleRangeChange(index, 'deduct_min', e.target.value)}
                 className="w-20 h-9 text-center font-semibold animate-pulse-once"
