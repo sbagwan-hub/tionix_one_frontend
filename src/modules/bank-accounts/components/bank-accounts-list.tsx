@@ -4,6 +4,8 @@ import * as React from 'react';
 import { RotateCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { TanStackTable } from '@/components/common/tanstack-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { BankAccount } from '../types';
 
 interface BankAccountsListProps {
@@ -29,27 +31,96 @@ export function BankAccountsList({
   on_select_record,
   on_double_click_record,
 }: BankAccountsListProps) {
-  const filtered = records.filter((r) => {
-    const bankMatch = filter_bank
-      ? r.bank_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
-        r.bank_account_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
-        r.account_code.toLowerCase().includes(filter_bank.toLowerCase()) ||
-        (r.holder_details?.[0]?.client_id || '').toLowerCase().includes(filter_bank.toLowerCase())
-      : true;
-    const accountMatch = filter_account_no ? r.account_no.includes(filter_account_no) : true;
-    return bankMatch && accountMatch;
-  });
+  const filtered = React.useMemo(() => {
+    return records.filter((r) => {
+      const bankMatch = filter_bank
+        ? r.bank_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
+          r.bank_account_name.toLowerCase().includes(filter_bank.toLowerCase()) ||
+          r.account_code.toLowerCase().includes(filter_bank.toLowerCase()) ||
+          (r.holder_details?.[0]?.client_id || '').toLowerCase().includes(filter_bank.toLowerCase())
+        : true;
+      const accountMatch = filter_account_no ? r.account_no.includes(filter_account_no) : true;
+      return bankMatch && accountMatch;
+    });
+  }, [records, filter_bank, filter_account_no]);
+
+  const columns = React.useMemo<ColumnDef<BankAccount, any>[]>(
+    () => [
+      {
+        id: 'index',
+        header: '#',
+        cell: (info) => (
+          <span className="text-muted-foreground font-mono">{info.row.index + 1}</span>
+        ),
+        enableSorting: false,
+      },
+      {
+        accessorKey: 'account_code',
+        header: 'Code',
+        cell: (info) => <span className="font-mono font-medium">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'bank_account_name',
+        header: 'Account Name',
+        cell: (info) => <span className="font-semibold">{info.getValue() || '-'}</span>,
+      },
+      {
+        id: 'customer_id',
+        header: 'Customer ID',
+        accessorFn: (row) => row.holder_details?.[0]?.client_id || '',
+        cell: (info) => <span className="font-mono">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'gst_no',
+        header: 'GSTIN',
+        cell: (info) => <span className="font-mono">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'bank_name',
+        header: 'Bank Name',
+        cell: (info) => info.getValue() || '-',
+      },
+      {
+        accessorKey: 'account_no',
+        header: 'Account Number',
+        cell: (info) => <span className="font-mono">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'rtgs_neft_ifsc',
+        header: 'IFSC / RTGS',
+        cell: (info) => <span className="font-mono">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'account_type',
+        header: 'Type',
+        cell: (info) => info.getValue() || '-',
+      },
+      {
+        accessorKey: 'opening_balance',
+        header: () => <div className="text-right">Opening Balance</div>,
+        cell: (info) => (
+          <div className="text-right font-mono font-semibold">
+            {Number(info.getValue() || 0).toLocaleString('en-IN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </div>
+        ),
+      },
+    ],
+    [],
+  );
 
   return (
-    <div className="bg-card flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border">
+    <div className="flex h-full flex-col gap-3 overflow-hidden">
       {/* Filters Area */}
-      <div className="bg-muted/20 flex flex-wrap items-center gap-3 border-b p-3">
+      <div className="bg-card/25 flex flex-wrap items-center gap-3 rounded-lg border p-3 shadow-2xs">
         <div className="min-w-[200px] flex-1">
           <Input
             placeholder="Filter by bank or account name…"
             value={filter_bank}
             onChange={(e) => set_filter_bank(e.target.value)}
-            className="h-8 text-xs"
+            className="bg-background/80 h-8 text-xs"
           />
         </div>
         <div className="min-w-[200px] flex-1">
@@ -57,7 +128,7 @@ export function BankAccountsList({
             placeholder="Filter by account number…"
             value={filter_account_no}
             onChange={(e) => set_filter_account_no(e.target.value)}
-            className="h-8 text-xs"
+            className="bg-background/80 h-8 text-xs"
           />
         </div>
         <Button
@@ -71,67 +142,15 @@ export function BankAccountsList({
         </Button>
       </div>
 
-      {/* Table Area */}
-      <div className="min-h-0 flex-1 overflow-auto">
-        <table className="w-full border-collapse text-left text-xs">
-          <thead>
-            <tr className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase select-none">
-              <th className="w-12 p-3 text-center">#</th>
-              <th className="p-3">Code</th>
-              <th className="p-3">Account Name</th>
-              <th className="p-3">Customer ID</th>
-              <th className="p-3">GSTIN</th>
-              <th className="p-3">Bank Name</th>
-              <th className="p-3">Account Number</th>
-              <th className="p-3">IFSC / RTGS</th>
-              <th className="p-3">Type</th>
-              <th className="p-3 text-right">Opening Balance</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={10} className="text-muted-foreground p-8 text-center">
-                  No records found matching filters.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((rec, i) => {
-                const idx = records.indexOf(rec);
-                const primaryCustomerId = rec.holder_details?.[0]?.client_id || '';
-                return (
-                  <tr
-                    key={rec.pk_ban_id}
-                    className={`cursor-pointer transition-colors ${
-                      rec.pk_ban_id === selected_id
-                        ? 'bg-primary/10 text-primary font-medium'
-                        : 'hover:bg-muted/40'
-                    }`}
-                    onClick={() => on_select_record(rec, idx)}
-                    onDoubleClick={() => on_double_click_record(rec, idx)}
-                  >
-                    <td className="text-muted-foreground p-3 text-center">{i + 1}</td>
-                    <td className="p-3 font-mono font-medium">{rec.account_code}</td>
-                    <td className="p-3 font-semibold">{rec.bank_account_name}</td>
-                    <td className="p-3 font-mono">{primaryCustomerId}</td>
-                    <td className="p-3 font-mono">{rec.gst_no || '-'}</td>
-                    <td className="p-3">{rec.bank_name}</td>
-                    <td className="p-3 font-mono">{rec.account_no}</td>
-                    <td className="p-3 font-mono">{rec.rtgs_neft_ifsc}</td>
-                    <td className="p-3">{rec.account_type}</td>
-                    <td className="p-3 text-right font-mono font-semibold">
-                      {rec.opening_balance.toLocaleString('en-IN', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+      {/* TanStack Table */}
+      <TanStackTable
+        columns={columns}
+        data={filtered}
+        selectedRowId={selected_id ?? undefined}
+        getRowId={(row) => row.pk_ban_id}
+        onRowClick={on_select_record}
+        onRowDoubleClick={on_double_click_record}
+      />
     </div>
   );
 }

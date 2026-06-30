@@ -4,6 +4,8 @@ import * as React from 'react';
 import { RotateCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { TanStackTable } from '@/components/common/tanstack-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { CreditCard } from '../types';
 
 interface CreditCardListProps {
@@ -29,29 +31,114 @@ export function CreditCardList({
   on_select_record,
   on_double_click_record,
 }: CreditCardListProps) {
-  const filtered = records.filter((r) => {
-    const cardMatch = filter_card
-      ? (r.credit_card_no || '').toLowerCase().includes(filter_card.toLowerCase()) ||
-        (r.bank_name || '').toLowerCase().includes(filter_card.toLowerCase()) ||
-        (r.account_code || '').toLowerCase().includes(filter_card.toLowerCase()) ||
-        (r.account || '').toLowerCase().includes(filter_card.toLowerCase())
-      : true;
-    const holderMatch = filter_holder
-      ? (r.holders_name || '').toLowerCase().includes(filter_holder.toLowerCase())
-      : true;
-    return cardMatch && holderMatch;
-  });
+  const filtered = React.useMemo(() => {
+    return records.filter((r) => {
+      const cardMatch = filter_card
+        ? (r.credit_card_no || '').toLowerCase().includes(filter_card.toLowerCase()) ||
+          (r.bank_name || '').toLowerCase().includes(filter_card.toLowerCase()) ||
+          (r.account_code || '').toLowerCase().includes(filter_card.toLowerCase()) ||
+          (r.account || '').toLowerCase().includes(filter_card.toLowerCase())
+        : true;
+      const holderMatch = filter_holder
+        ? (r.holders_name || '').toLowerCase().includes(filter_holder.toLowerCase())
+        : true;
+      return cardMatch && holderMatch;
+    });
+  }, [records, filter_card, filter_holder]);
+
+  const columns = React.useMemo<ColumnDef<CreditCard, any>[]>(
+    () => [
+      {
+        id: 'index',
+        header: '#',
+        cell: (info) => (
+          <span className="text-muted-foreground font-mono">{info.row.index + 1}</span>
+        ),
+        enableSorting: false,
+      },
+      {
+        accessorKey: 'account_code',
+        header: 'Code',
+        cell: (info) => <span className="font-mono font-medium">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'account',
+        header: 'Account Name',
+        cell: (info) => <span className="font-semibold">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'credit_card_no',
+        header: 'Card No',
+        cell: (info) => <span className="font-mono">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'bank_name',
+        header: 'Bank',
+        cell: (info) => info.getValue() || '-',
+      },
+      {
+        accessorKey: 'holders_name',
+        header: 'Holder',
+        cell: (info) => info.getValue() || '-',
+      },
+      {
+        accessorKey: 'cgst_no',
+        header: 'GSTIN',
+        cell: (info) => <span className="font-mono">{info.getValue() || '-'}</span>,
+      },
+      {
+        accessorKey: 'group_name',
+        header: 'Group',
+        cell: (info) => info.getValue() || '-',
+      },
+      {
+        accessorKey: 'opening_balance',
+        header: () => <div className="text-right">Opening Bal.</div>,
+        cell: (info) => (
+          <div className="text-right font-mono font-semibold">
+            {Number(info.getValue() || 0).toLocaleString('en-IN', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'credit_limit',
+        header: () => <div className="text-right">Credit Limit</div>,
+        cell: (info) => (
+          <div className="text-right font-mono">
+            {info.getValue() != null
+              ? Number(info.getValue()).toLocaleString('en-IN', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+              : '-'}
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'expiry_date',
+        header: 'Expiry',
+        cell: (info) => {
+          const val = info.getValue();
+          return <span className="font-mono">{val ? val.split('T')[0] : '-'}</span>;
+        },
+      },
+    ],
+    [],
+  );
 
   return (
-    <div className="bg-card flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border">
+    <div className="flex h-full flex-col gap-3 overflow-hidden">
       {/* Filters */}
-      <div className="bg-muted/20 flex flex-wrap items-center gap-3 border-b p-3">
+      <div className="bg-card/25 flex flex-wrap items-center gap-3 rounded-lg border p-3 shadow-2xs">
         <div className="min-w-[200px] flex-1">
           <Input
             placeholder="Filter by card no, bank or account…"
             value={filter_card}
             onChange={(e) => set_filter_card(e.target.value)}
-            className="h-8 text-xs"
+            className="bg-background/80 h-8 text-xs"
           />
         </div>
         <div className="min-w-[200px] flex-1">
@@ -59,7 +146,7 @@ export function CreditCardList({
             placeholder="Filter by holder name…"
             value={filter_holder}
             onChange={(e) => set_filter_holder(e.target.value)}
-            className="h-8 text-xs"
+            className="bg-background/80 h-8 text-xs"
           />
         </div>
         <Button
@@ -73,77 +160,15 @@ export function CreditCardList({
         </Button>
       </div>
 
-      {/* Table */}
-      <div className="min-h-0 flex-1 overflow-auto">
-        <table className="w-full border-collapse text-left text-xs">
-          <thead>
-            <tr className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase select-none">
-              <th className="w-12 p-3 text-center">#</th>
-              <th className="p-3">Code</th>
-              <th className="p-3">Account Name</th>
-              <th className="p-3">Card No</th>
-              <th className="p-3">Bank</th>
-              <th className="p-3">Holder</th>
-              <th className="p-3">GSTIN</th>
-              <th className="p-3">Group</th>
-              <th className="p-3 text-right">Opening Bal.</th>
-              <th className="p-3 text-right">Credit Limit</th>
-              <th className="p-3">Expiry</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={11} className="text-muted-foreground p-8 text-center">
-                  No records found matching filters.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((rec, i) => {
-                const idx = records.indexOf(rec);
-                return (
-                  <tr
-                    key={rec.pk_acct_id}
-                    className={`cursor-pointer transition-colors ${
-                      rec.pk_acct_id === selected_id
-                        ? 'bg-primary/10 text-primary font-medium'
-                        : 'hover:bg-muted/40'
-                    }`}
-                    onClick={() => on_select_record(rec, idx)}
-                    onDoubleClick={() => on_double_click_record(rec, idx)}
-                  >
-                    <td className="text-muted-foreground p-3 text-center">{i + 1}</td>
-                    <td className="p-3 font-mono font-medium">{rec.account_code}</td>
-                    <td className="p-3 font-semibold">{rec.account}</td>
-                    <td className="p-3 font-mono">{rec.credit_card_no}</td>
-                    <td className="p-3">{rec.bank_name || '-'}</td>
-                    <td className="p-3">{rec.holders_name || '-'}</td>
-                    <td className="p-3 font-mono">{rec.cgst_no || '-'}</td>
-                    <td className="p-3">{rec.group_name || '-'}</td>
-                    <td className="p-3 text-right font-mono font-semibold">
-                      {Number(rec.opening_balance).toLocaleString('en-IN', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </td>
-                    <td className="p-3 text-right font-mono">
-                      {rec.credit_limit != null
-                        ? Number(rec.credit_limit).toLocaleString('en-IN', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })
-                        : '-'}
-                    </td>
-                    <td className="p-3 font-mono">
-                      {rec.expiry_date ? rec.expiry_date.split('T')[0] : '-'}
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+      {/* TanStack Table */}
+      <TanStackTable
+        columns={columns}
+        data={filtered}
+        selectedRowId={selected_id}
+        getRowId={(row) => row.pk_acct_id!}
+        onRowClick={on_select_record}
+        onRowDoubleClick={on_double_click_record}
+      />
     </div>
   );
 }

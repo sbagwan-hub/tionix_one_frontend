@@ -87,6 +87,25 @@ export const CreditCardWindow: React.FC = () => {
   }, [records, cursor]);
 
   // Populate form from a record
+  const clear_form = () => {
+    set_fk_b_com_id('');
+    set_fk_h_com_id('');
+    set_credit_card_no('');
+    set_account_code('');
+    set_account('');
+    set_group_name('');
+    set_cgst_no('');
+    set_opening_balance(0);
+    set_credit_limit(null);
+    set_cash_advance(null);
+    set_expiry_date('');
+    set_state_from(null);
+    set_state_to(null);
+    set_payment_day(null);
+    set_is_sys_defined(false);
+    set_selected_id(null);
+  };
+
   const populate_form = useCallback((rec: CreditCard) => {
     set_fk_b_com_id(rec.fk_b_com_id);
     set_fk_h_com_id(rec.fk_h_com_id);
@@ -106,30 +125,18 @@ export const CreditCardWindow: React.FC = () => {
     set_selected_id(rec.pk_acct_id ?? null);
   }, []);
 
-  // Auto-populate in view mode
+  // Auto-populate in view mode only when a specific record is selected
   useEffect(() => {
-    if (records.length > 0 && mode === 'view') {
-      populate_form(records[cursor]);
+    if (records.length > 0 && mode === 'view' && selected_id !== null) {
+      const rec = records.find((r) => r.pk_acct_id === selected_id);
+      if (rec) {
+        populate_form(rec);
+      }
     }
-  }, [cursor, records, mode, populate_form]);
+  }, [records, mode, selected_id, populate_form]);
 
   const handle_add = () => {
-    set_fk_b_com_id('');
-    set_fk_h_com_id('');
-    set_credit_card_no('');
-    set_account_code('');
-    set_account('');
-    set_group_name('');
-    set_cgst_no('');
-    set_opening_balance(0);
-    set_credit_limit(null);
-    set_cash_advance(null);
-    set_expiry_date('');
-    set_state_from(null);
-    set_state_to(null);
-    set_payment_day(null);
-    set_is_sys_defined(false);
-    set_selected_id(null);
+    clear_form();
     set_mode('add');
     set_active_tab('details');
   };
@@ -148,7 +155,12 @@ export const CreditCardWindow: React.FC = () => {
   };
 
   const handle_undo = () => {
-    if (records[cursor]) populate_form(records[cursor]);
+    if (selected_id !== null) {
+      const rec = records.find((r) => r.pk_acct_id === selected_id);
+      if (rec) populate_form(rec);
+    } else {
+      clear_form();
+    }
     set_mode('view');
   };
 
