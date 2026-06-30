@@ -18,7 +18,11 @@ axiosRetry(api, {
   retries: 3,
   retryDelay: axiosRetry.exponentialDelay,
   retryCondition: (error: AxiosError) => {
-    return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 500;
+    const isGet = error.config?.method?.toLowerCase() === 'get';
+    return (
+      isGet &&
+      (axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 500)
+    );
   },
 });
 
@@ -134,17 +138,23 @@ api.interceptors.response.use(
           throw new Error('No refresh token');
         }
 
-        const response = await axios.post(`${BASE_URL}/auth/refresh`, {
+        const response = await axios.post(`${BASE_URL}/auth/refresh-token`, {
           refresh_token: refreshToken,
         });
 
-        const { access_token, refresh_token } = response.data;
+        const responseData = response.data?.data;
+        const newAccessToken = responseData?.token || responseData?.access_token;
+        const newRefreshToken = responseData?.refreshToken || responseData?.refresh_token;
 
-        setTokens(access_token, refresh_token);
+        if (!newAccessToken) {
+          throw new Error('Invalid refresh response structure');
+        }
 
-        processQueue(null, access_token);
+        setTokens(newAccessToken, newRefreshToken);
 
-        originalRequest.headers.Authorization = `Bearer ${access_token}`;
+        processQueue(null, newAccessToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
         return api(originalRequest);
       } catch (err) {
