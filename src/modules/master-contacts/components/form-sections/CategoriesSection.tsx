@@ -24,7 +24,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({
 }) => {
   return (
     <div className="border-border/80 bg-background/50 space-y-2.5 rounded-sm border p-3">
-      <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+      <Label className="text-muted-foreground text-xxs block font-semibold tracking-wider uppercase">
         Select Categories
       </Label>
       <div className="grid grid-cols-2 gap-2 pr-1">

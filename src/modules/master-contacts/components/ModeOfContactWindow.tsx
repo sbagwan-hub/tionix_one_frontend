@@ -83,7 +83,7 @@ export const ModeOfContactWindow: React.FC = () => {
           {...form.register('moc')}
         />
         {form.formState.errors.moc && (
-          <span className="text-destructive text-[10px]">{form.formState.errors.moc.message}</span>
+          <span className="text-destructive text-xxs">{form.formState.errors.moc.message}</span>
         )}
       </div>
 
@@ -102,7 +102,7 @@ export const ModeOfContactWindow: React.FC = () => {
           ))}
         </select>
         {form.formState.errors.fk_mt_id && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.fk_mt_id.message}
           </span>
         )}

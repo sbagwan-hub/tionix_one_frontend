@@ -103,9 +103,7 @@ export const ReligionWindow: React.FC = () => {
         {...form.register('religion')}
       />
       {form.formState.errors.religion && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.religion.message}
-        </span>
+        <span className="text-destructive text-xxs">{form.formState.errors.religion.message}</span>
       )}
     </form>
   );

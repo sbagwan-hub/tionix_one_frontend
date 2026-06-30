@@ -402,7 +402,7 @@ export const ShiftTimingWindow: React.FC = () => {
                     className="h-9 text-xs"
                   />
                   {form.formState.errors.shift && (
-                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                    <p className="text-destructive text-xxs mt-1 font-medium">
                       {form.formState.errors.shift.message}
                     </p>
                   )}
@@ -445,16 +445,16 @@ export const ShiftTimingWindow: React.FC = () => {
                         {...form.register('t_work')}
                         className="bg-muted/50 border-border/40 h-9 w-16 text-center font-mono text-xs font-bold"
                       />
-                      <span className="text-muted-foreground text-[10px] font-semibold">hrs</span>
+                      <span className="text-muted-foreground text-xxs font-semibold">hrs</span>
                     </div>
                   </div>
                   {form.formState.errors.s_work && (
-                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                    <p className="text-destructive text-xxs mt-1 font-medium">
                       {form.formState.errors.s_work.message}
                     </p>
                   )}
                   {form.formState.errors.e_work && (
-                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                    <p className="text-destructive text-xxs mt-1 font-medium">
                       {form.formState.errors.e_work.message}
                     </p>
                   )}
@@ -497,16 +497,16 @@ export const ShiftTimingWindow: React.FC = () => {
                         {...form.register('t_break')}
                         className="bg-muted/50 border-border/40 h-9 w-16 text-center font-mono text-xs font-bold"
                       />
-                      <span className="text-muted-foreground text-[10px] font-semibold">min</span>
+                      <span className="text-muted-foreground text-xxs font-semibold">min</span>
                     </div>
                   </div>
                   {form.formState.errors.s_break && (
-                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                    <p className="text-destructive text-xxs mt-1 font-medium">
                       {form.formState.errors.s_break.message}
                     </p>
                   )}
                   {form.formState.errors.e_break && (
-                    <p className="text-destructive mt-1 text-[10px] font-medium">
+                    <p className="text-destructive text-xxs mt-1 font-medium">
                       {form.formState.errors.e_break.message}
                     </p>
                   )}
@@ -536,7 +536,7 @@ export const ShiftTimingWindow: React.FC = () => {
             <div className="min-h-0 flex-1 overflow-auto">
               <table className="w-full border-collapse text-left text-xs">
                 <thead>
-                  <tr className="bg-muted/50 border-border/50 text-muted-foreground border-b text-[10px] font-bold tracking-wider uppercase">
+                  <tr className="bg-muted/50 border-border/50 text-muted-foreground text-xxs border-b font-bold tracking-wider uppercase">
                     <th className="p-2.5 pl-4">Shift Name</th>
                     <th className="p-2.5">Work Start</th>
                     <th className="p-2.5">Work End</th>

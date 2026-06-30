@@ -85,9 +85,7 @@ export const RegionWindow: React.FC = () => {
           {...form.register('region')}
         />
         {form.formState.errors.region && (
-          <span className="text-destructive text-[10px]">
-            {form.formState.errors.region.message}
-          </span>
+          <span className="text-destructive text-xxs">{form.formState.errors.region.message}</span>
         )}
       </div>
 
@@ -101,9 +99,7 @@ export const RegionWindow: React.FC = () => {
           {...form.register('rate1', { valueAsNumber: true })}
         />
         {form.formState.errors.rate1 && (
-          <span className="text-destructive text-[10px]">
-            {form.formState.errors.rate1.message}
-          </span>
+          <span className="text-destructive text-xxs">{form.formState.errors.rate1.message}</span>
         )}
       </div>
 
@@ -117,9 +113,7 @@ export const RegionWindow: React.FC = () => {
           {...form.register('rate2', { valueAsNumber: true })}
         />
         {form.formState.errors.rate2 && (
-          <span className="text-destructive text-[10px]">
-            {form.formState.errors.rate2.message}
-          </span>
+          <span className="text-destructive text-xxs">{form.formState.errors.rate2.message}</span>
         )}
       </div>
     </form>

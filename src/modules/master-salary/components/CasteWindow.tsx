@@ -103,7 +103,7 @@ export const CasteWindow: React.FC = () => {
         {...form.register('caste')}
       />
       {form.formState.errors.caste && (
-        <span className="text-destructive text-[10px]">{form.formState.errors.caste.message}</span>
+        <span className="text-destructive text-xxs">{form.formState.errors.caste.message}</span>
       )}
     </form>
   );

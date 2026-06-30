@@ -42,7 +42,7 @@ export const PhotoSection: React.FC<PhotoSectionProps> = ({
 
   return (
     <div className="border-border/80 bg-background/50 space-y-3 rounded-sm border p-4 text-center">
-      <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+      <Label className="text-muted-foreground text-xxs block font-semibold tracking-wider uppercase">
         PHOTOGRAPH
       </Label>
       <div className="border-border/100 bg-background relative mx-auto flex h-36 w-32 items-center justify-center overflow-hidden rounded-md border border-dashed">

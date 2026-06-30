@@ -86,7 +86,7 @@ export default function ContactsDashboardPage() {
               <nav className="space-y-0.5" aria-label="Configuration settings tabs">
                 <div className="flex items-center gap-2 px-3 pt-2 pb-3">
                   <Settings2 className="text-muted-foreground/80 h-3.5 w-3.5" />
-                  <p className="text-muted-foreground/90 text-[10px] font-bold tracking-wider uppercase">
+                  <p className="text-muted-foreground/90 text-xxs font-bold tracking-wider uppercase">
                     Configurations
                   </p>
                 </div>

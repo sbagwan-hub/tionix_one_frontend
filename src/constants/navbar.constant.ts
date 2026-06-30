@@ -121,8 +121,16 @@ export const NAV_MENUS: NavMenu[] = [
           { key: 'group', href: '/masters/accounts/account-groups', icon: 'Folder' },
           { key: 'account', href: '/masters/accounts/accounts', icon: 'FileText' },
           { key: 'bankAccount', href: '/masters/accounts/bank-accounts', icon: 'Briefcase' },
-          { key: 'debitCard', href: '/masters/accounts/debit-cards', icon: 'CreditCard' },
-          { key: 'chequeBook', href: '/masters/accounts/cheque-books', icon: 'BookOpen' },
+          {
+            key: 'debitCard',
+            icon: 'CreditCard',
+            action: () => useWindowStore.getState().openWindow('accounts-debit-card'),
+          },
+          {
+            key: 'chequeBook',
+            icon: 'BookOpen',
+            action: () => useWindowStore.getState().openWindow('accounts-cheque-book'),
+          },
           {
             key: 'openingBalanceSplitUp',
             href: '/masters/accounts/opening-balance-split',

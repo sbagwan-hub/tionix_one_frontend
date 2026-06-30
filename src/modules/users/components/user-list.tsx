@@ -117,7 +117,7 @@ export const UserList: React.FC<UserListProps> = ({
 
         {/* Pagination controls */}
         <div className="border-border/60 bg-muted/20 flex items-center justify-between border-t px-4 py-2.5">
-          <span className="text-foreground text-[10px]">Total: {total} records</span>
+          <span className="text-foreground text-xxs">Total: {total} records</span>
           <div className="flex items-center gap-1.5">
             <Button
               variant="outline"
@@ -139,7 +139,7 @@ export const UserList: React.FC<UserListProps> = ({
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <span className="text-foreground px-2 text-[10px] font-semibold">
+            <span className="text-foreground text-xxs px-2 font-semibold">
               Page {page} of {totalPages}
             </span>
             <Button
