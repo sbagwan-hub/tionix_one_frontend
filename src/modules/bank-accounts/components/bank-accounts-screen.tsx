@@ -65,7 +65,7 @@ export function BankAccountsScreen() {
   } = useBankAccountForm();
 
   return (
-    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans select-none">
+    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans">
       <Toolbar title="Bank Account" actions={crud_actions} utilities={utility_actions} />
 
       {/* Tabs list toggle */}

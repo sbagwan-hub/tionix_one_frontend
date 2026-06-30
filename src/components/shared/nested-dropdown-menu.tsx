@@ -61,7 +61,7 @@ export function RenderMenuItems({ items }: { items: MenuItem[] }) {
             <DropdownMenuSub key={item.key ?? idx}>
               <DropdownMenuSubTrigger
                 className={cn(
-                  'text-foreground flex cursor-default items-center rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none select-none',
+                  'text-foreground flex cursor-default items-center rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none',
                   'focus:bg-muted focus:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground',
                 )}
               >
@@ -92,7 +92,7 @@ export function RenderMenuItems({ items }: { items: MenuItem[] }) {
             key={item.key ?? idx}
             onClick={() => handleClick(item)}
             className={cn(
-              'text-foreground flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none select-none',
+              'text-foreground flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none',
               'focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
             )}
           >
@@ -103,7 +103,7 @@ export function RenderMenuItems({ items }: { items: MenuItem[] }) {
               <span>{displayLabel}</span>
             </div>
             {item.shortcut && (
-              <kbd className="bg-muted text-muted-foreground text-xxs pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono font-medium tracking-wider select-none">
+              <kbd className="bg-muted text-muted-foreground text-xxs pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono font-medium tracking-wider">
                 {item.shortcut}
               </kbd>
             )}
@@ -119,7 +119,7 @@ export function NavbarMenu({ label, items }: NavbarMenuProps) {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         className={cn(
-          'text-foreground inline-flex h-8 items-center justify-center rounded-md bg-transparent px-3 text-xs font-medium transition-colors outline-none select-none',
+          'text-foreground inline-flex h-8 items-center justify-center rounded-md bg-transparent px-3 text-xs font-medium transition-colors outline-none',
           'hover:bg-muted/60 hover:text-foreground',
           'data-[state=open]:bg-muted data-[state=open]:text-foreground',
           'focus:bg-muted/60 focus:text-foreground cursor-pointer',

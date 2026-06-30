@@ -89,7 +89,7 @@ export function CreditCardForm({
         </span>
 
         <div
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 select-none ${
+          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 ${
             !is_editing
               ? 'border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400'
               : mode === 'add'

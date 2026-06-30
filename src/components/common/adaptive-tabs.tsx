@@ -25,7 +25,7 @@ const AdaptiveTabs = React.forwardRef<HTMLDivElement, AdaptiveTabsProps>(
       <div ref={ref} className={cn('flex w-full min-w-0 flex-col gap-1.5', className)}>
         {/* Label Block */}
         {label && (
-          <Label className="text-muted-foreground block text-xs font-medium tracking-tight select-none">
+          <Label className="text-muted-foreground block text-xs font-medium tracking-tight">
             {label} {required && <span className="text-destructive">*</span>}
           </Label>
         )}

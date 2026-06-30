@@ -74,7 +74,7 @@ export function AccountGroupsList({
       <div className="min-h-0 flex-1 overflow-auto">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase select-none">
+            <tr className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase">
               <th className="w-12 p-3 text-center">#</th>
               <th className="p-3">Group Name</th>
               <th className="p-3">Parent Group</th>

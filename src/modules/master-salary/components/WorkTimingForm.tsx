@@ -399,7 +399,7 @@ export const WorkTimingForm: React.FC<WorkTimingFormProps> = ({
             />
             <label
               htmlFor="management"
-              className="text-muted-foreground cursor-pointer text-xs font-medium select-none"
+              className="text-muted-foreground cursor-pointer text-xs font-medium"
             >
               Consider Default Attendance
             </label>

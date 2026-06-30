@@ -240,7 +240,7 @@ export default function PermissionTable({
                   <label
                     key={idx}
                     className={cn(
-                      'flex items-center gap-3 rounded-lg border p-3 transition-all select-none',
+                      'flex items-center gap-3 rounded-lg border p-3 transition-all',
                       s.rights
                         ? 'border-emerald-500/40 bg-emerald-500/5 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300'
                         : 'border-border bg-card text-muted-foreground',

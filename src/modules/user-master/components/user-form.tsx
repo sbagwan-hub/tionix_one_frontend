@@ -1,11 +1,28 @@
 'use client';
 
 import * as React from 'react';
-import { User, UserRound, Shield, Lock, Phone, Settings2, PlusCircle, Eye, HelpCircle, Building2 } from 'lucide-react';
+import {
+  User,
+  UserRound,
+  Shield,
+  Lock,
+  Phone,
+  Settings2,
+  PlusCircle,
+  Eye,
+  HelpCircle,
+  Building2,
+} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { UserCreateInput, UserUpdateInput } from '../types';
 
 interface UserFormProps {
@@ -39,8 +56,8 @@ export function UserForm({
   ];
 
   const securityQuestions = [
-    'What is your pet\'s name?',
-    'What is your mother\'s maiden name?',
+    "What is your pet's name?",
+    "What is your mother's maiden name?",
     'What was the name of your first school?',
     'What city were you born in?',
     'What is your favorite color?',
@@ -54,7 +71,7 @@ export function UserForm({
   };
 
   return (
-    <div className="from-card to-card/70 border-border/60 shadow-foreground/[0.02] relative flex h-full min-h-0 flex-col rounded-xl border bg-gradient-to-b p-6 shadow-md transition-all duration-300 z-10">
+    <div className="from-card to-card/70 border-border/60 shadow-foreground/[0.02] relative z-10 flex h-full min-h-0 flex-col rounded-xl border bg-gradient-to-b p-6 shadow-md transition-all duration-300">
       {/* Header */}
       <div className="mb-4 flex items-center justify-between">
         <span className="text-foreground text-[10px] font-bold tracking-widest uppercase">
@@ -62,7 +79,7 @@ export function UserForm({
         </span>
 
         <div
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 select-none ${
+          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 ${
             mode === 'view'
               ? 'border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400'
               : mode === 'add'
@@ -155,7 +172,9 @@ export function UserForm({
             onChange={(e) => handleChange('password', e.target.value)}
             disabled={!isEditing}
             maxLength={10}
-            placeholder={isPasswordRequired ? 'Enter password (max 10 chars)' : 'Leave blank to keep current'}
+            placeholder={
+              isPasswordRequired ? 'Enter password (max 10 chars)' : 'Leave blank to keep current'
+            }
             autoComplete="new-password"
             className="border-border/80 bg-background/40 focus:bg-background shadow-3xs focus-visible:ring-primary/40 disabled:bg-muted/30 h-9.5 text-xs transition-all duration-200 focus-visible:ring-1 disabled:opacity-65"
           />
@@ -322,7 +341,7 @@ export function UserForm({
             type="button"
             onClick={onSubmit}
             disabled={isLoading}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground flex-1 h-9 rounded-md px-4 py-2 text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground h-9 flex-1 rounded-md px-4 py-2 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? 'Saving...' : mode === 'add' ? 'Create User' : 'Update User'}
           </button>
@@ -330,7 +349,7 @@ export function UserForm({
             type="button"
             onClick={onCancel}
             disabled={isLoading}
-            className="bg-muted hover:bg-muted/80 text-muted-foreground h-9 rounded-md px-4 py-2 text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-muted hover:bg-muted/80 text-muted-foreground h-9 rounded-md px-4 py-2 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancel
           </button>

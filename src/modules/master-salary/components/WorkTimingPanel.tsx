@@ -376,7 +376,7 @@ export const WorkTimingPanel: React.FC = () => {
   ];
 
   return (
-    <div className="bg-background text-foreground relative flex h-full flex-col overflow-hidden font-sans select-none">
+    <div className="bg-background text-foreground relative flex h-full flex-col overflow-hidden font-sans">
       {/* Background glow radial */}
       <div className="from-brand/5 pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-radial to-transparent opacity-40 blur-3xl" />
 

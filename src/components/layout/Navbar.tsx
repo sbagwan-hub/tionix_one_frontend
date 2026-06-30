@@ -42,7 +42,7 @@ function Navbar() {
   }, [isAdmin]);
 
   return (
-    <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5 select-none">
+    <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5">
       {/* Left section: Logo + Desktop Menu */}
       <div className="flex min-w-0 items-center gap-0">
         <div

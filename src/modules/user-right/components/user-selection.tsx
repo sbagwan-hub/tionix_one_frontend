@@ -87,7 +87,7 @@ export default function UserSelection({
                   <span className="flex items-center gap-1">
                     {user.username}
                     {user.sys_defined && (
-                      <span className="bg-primary/10 text-primary ml-2 rounded px-1.5 py-0.5 text-[9px] font-semibold tracking-wider uppercase select-none dark:bg-amber-950 dark:text-amber-300">
+                      <span className="bg-primary/10 text-primary ml-2 rounded px-1.5 py-0.5 text-[9px] font-semibold tracking-wider uppercase dark:bg-amber-950 dark:text-amber-300">
                         sys
                       </span>
                     )}
@@ -118,7 +118,7 @@ export default function UserSelection({
               <Label
                 htmlFor="all-records"
                 className={cn(
-                  'text-foreground text-xs font-medium tracking-tight select-none',
+                  'text-foreground text-xs font-medium tracking-tight',
                   isInteractionDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
               >
@@ -131,7 +131,7 @@ export default function UserSelection({
               <Label
                 htmlFor="self-records"
                 className={cn(
-                  'text-foreground text-xs font-medium tracking-tight select-none',
+                  'text-foreground text-xs font-medium tracking-tight',
                   isInteractionDisabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
               >
@@ -146,7 +146,7 @@ export default function UserSelection({
           <label
             htmlFor="modify-other-users"
             className={cn(
-              'border-border bg-background flex h-14 w-full items-start gap-3 rounded-md border px-3 py-2 transition-colors select-none',
+              'border-border bg-background flex h-14 w-full items-start gap-3 rounded-md border px-3 py-2 transition-colors',
               isInteractionDisabled
                 ? 'cursor-not-allowed opacity-50'
                 : 'hover:bg-muted/30 cursor-pointer',

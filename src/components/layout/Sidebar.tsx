@@ -364,7 +364,7 @@ export function Sidebar() {
 
   return (
     <div
-      className={`bg-card text-card-foreground flex h-full flex-col overflow-hidden border-r transition-all duration-300 ease-in-out select-none ${
+      className={`bg-card text-card-foreground flex h-full flex-col overflow-hidden border-r transition-all duration-300 ease-in-out ${
         sidebarOpen ? 'w-64' : 'w-[72px]'
       }`}
     >
@@ -426,7 +426,7 @@ export function Sidebar() {
         {categories.map((cat) => (
           <div key={cat.title} className="space-y-1">
             {sidebarOpen && (
-              <div className="text-muted-foreground/50 text-xxs px-3.5 py-1.5 font-bold tracking-wider uppercase select-none">
+              <div className="text-muted-foreground/50 text-xxs px-3.5 py-1.5 font-bold tracking-wider uppercase">
                 {cat.title}
               </div>
             )}

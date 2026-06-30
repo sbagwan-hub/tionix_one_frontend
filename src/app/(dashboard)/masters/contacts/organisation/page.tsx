@@ -246,7 +246,7 @@ export default function OrganisationContactsPage() {
   ];
 
   return (
-    <div className="mt-2 flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden select-none">
+    <div className="mt-2 flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden">
       {/* Action Toolbar */}
       <Toolbar
         title="Organisation Master"

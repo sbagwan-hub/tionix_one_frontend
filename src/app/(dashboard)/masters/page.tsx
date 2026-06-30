@@ -190,7 +190,7 @@ export default function MastersPage() {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-4 select-none"
+      className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-4"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* Main Container */}
@@ -238,8 +238,9 @@ export default function MastersPage() {
               {menuItems.map((item, index) => (
                 <button
                   key={item}
-                  className={`hover:text-brand font-medium transition-colors ${index === 1 ? 'text-brand border-brand border-b pb-1' : 'text-muted-foreground'
-                    }`}
+                  className={`hover:text-brand font-medium transition-colors ${
+                    index === 1 ? 'text-brand border-brand border-b pb-1' : 'text-muted-foreground'
+                  }`}
                 >
                   {item}
                 </button>

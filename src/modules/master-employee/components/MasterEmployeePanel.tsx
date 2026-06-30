@@ -327,7 +327,7 @@ export const MasterEmployeePanel: React.FC = () => {
 
   return (
     <div
-      className="flex w-full flex-col items-stretch justify-start gap-3 select-none"
+      className="flex w-full flex-col items-stretch justify-start gap-3"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* Action Toolbar */}

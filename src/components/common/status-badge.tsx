@@ -44,7 +44,7 @@ export function StatusBadge({ status, variant, className }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors select-none',
+        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors',
         {
           'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-400':
             currentVariant === 'success',

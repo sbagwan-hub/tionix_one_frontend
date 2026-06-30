@@ -55,7 +55,7 @@ export function DataTable<T>({
               <TableHead
                 key={col.key}
                 className={cn(
-                  'text-foreground/80 h-10 py-3 text-xs font-bold tracking-wide select-none',
+                  'text-foreground/80 h-10 py-3 text-xs font-bold tracking-wide',
                   col.className,
                 )}
               >

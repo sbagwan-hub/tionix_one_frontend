@@ -122,7 +122,7 @@ function PermissionGridInner<T extends Record<string, any>>({
                         className="bg-foreground/20 before:bg-foreground/20 absolute top-0 bottom-0 left-3 w-[1px] before:absolute before:top-1/2 before:left-0 before:h-[1px] before:w-2 before:content-['']"
                         aria-hidden="true"
                       />
-                      <span className="truncate pl-2 select-none" title={r.form_name}>
+                      <span className="truncate pl-2" title={r.form_name}>
                         {r.form_name}
                       </span>
                     </div>

@@ -279,7 +279,7 @@ export default function AdministratorUsersPage() {
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-center gap-2 select-none"
+      className="flex h-full w-full flex-col items-center justify-center gap-2"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* ── Action Toolbar ── */}

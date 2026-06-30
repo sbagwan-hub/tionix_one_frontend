@@ -63,7 +63,7 @@ export function TanStackTable<T>({
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase select-none"
+                className="bg-muted/40 text-muted-foreground border-b text-[11px] font-bold uppercase"
               >
                 {headerGroup.headers.map((header) => {
                   const isSortable = header.column.getCanSort();
@@ -73,7 +73,7 @@ export function TanStackTable<T>({
                     <th
                       key={header.id}
                       className={cn(
-                        'p-3 font-bold transition-colors select-none',
+                        'p-3 font-bold transition-colors',
                         isSortable && 'hover:bg-muted/65 hover:text-foreground cursor-pointer',
                       )}
                       onClick={header.column.getToggleSortingHandler()}

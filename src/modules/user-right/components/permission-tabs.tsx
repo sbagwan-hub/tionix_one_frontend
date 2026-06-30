@@ -14,7 +14,7 @@ const PermissionTabs = ({ tabs, activeTab, setActiveTab, className }: Permission
   return (
     <div
       className={cn(
-        'border-border bg-muted flex h-8 w-full items-center gap-1 border-b px-4 select-none',
+        'border-border bg-muted flex h-8 w-full items-center gap-1 border-b px-4',
         className,
       )}
     >

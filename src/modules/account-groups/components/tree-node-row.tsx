@@ -31,7 +31,7 @@ export function TreeNodeRow({
   });
 
   return (
-    <div className="relative isolate w-full select-none">
+    <div className="relative isolate w-full">
       {/* Row Wrapper */}
       <div
         className={`group relative z-10 mx-1.5 flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition-all duration-150 ease-in-out ${

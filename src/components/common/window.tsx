@@ -208,7 +208,7 @@ export const Window: React.FC<WindowProps> = ({
         // High contrast container with premium glassmorphism and shadow depth
         'border-border/80 bg-card/98 pointer-events-auto relative flex flex-col overflow-hidden rounded-xl border shadow-[0_20px_50px_rgba(0,0,0,0.22)] ring-1 ring-black/10 backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-950/98 dark:shadow-[0_30px_70px_rgba(0,0,0,0.55)] dark:ring-white/10',
         dragging
-          ? 'scale-[1.002] cursor-grabbing shadow-[0_30px_70px_rgba(0,0,0,0.3)] select-none'
+          ? 'scale-[1.002] cursor-grabbing shadow-[0_30px_70px_rgba(0,0,0,0.3)]'
           : 'transition-all duration-200 hover:shadow-[0_24px_55px_rgba(0,0,0,0.28)]',
         // Maximize states
         isMaximized
@@ -224,7 +224,7 @@ export const Window: React.FC<WindowProps> = ({
         onPointerUp={handlePointerUp}
         onDoubleClick={handleHeaderDoubleClick}
         className={cn(
-          'border-border/60 bg-muted flex items-center justify-between border-b px-4 py-2.5 select-none dark:bg-zinc-900/90',
+          'border-border/60 bg-muted flex items-center justify-between border-b px-4 py-2.5 dark:bg-zinc-900/90',
           isDraggable && !isMaximized ? 'cursor-grab' : '',
           headerClassName,
         )}

@@ -94,7 +94,7 @@ export const OrganisationInfoSection: React.FC<OrganisationInfoSectionProps> = (
                     disabled={disabled}
                     className="text-primary border-input focus:ring-primary h-3.5 w-3.5 rounded"
                   />
-                  <span className="text-foreground/90 truncate select-none">{cat.category}</span>
+                  <span className="text-foreground/90 truncate">{cat.category}</span>
                 </label>
               ))
             )}

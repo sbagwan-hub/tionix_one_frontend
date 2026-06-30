@@ -54,7 +54,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
 
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
-            <Label className="text-muted-foreground block text-xs font-medium tracking-tight select-none">
+            <Label className="text-muted-foreground block text-xs font-medium tracking-tight">
               Security Question
             </Label>
             <Select

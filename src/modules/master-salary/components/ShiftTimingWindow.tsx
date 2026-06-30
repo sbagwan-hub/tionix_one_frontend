@@ -345,7 +345,7 @@ export const ShiftTimingWindow: React.FC = () => {
   ];
 
   return (
-    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans select-none">
+    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans">
       {/* Dynamic glow decoration */}
       <div className="from-brand/5 pointer-events-none absolute -top-20 -left-20 h-80 w-80 rounded-full bg-radial to-transparent opacity-40 blur-3xl" />
 

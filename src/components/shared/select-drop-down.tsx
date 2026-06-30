@@ -58,7 +58,7 @@ export function SelectDropDown({
       )}
     >
       {/* Clean label styling with comfortable spacing */}
-      <span className="text-muted-foreground shrink-0 text-xs font-medium tracking-tight select-none">
+      <span className="text-muted-foreground shrink-0 text-xs font-medium tracking-tight">
         {label}
       </span>
 

@@ -335,7 +335,7 @@ export function AccountGroupsScreen() {
   // ────────────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans select-none">
+    <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans">
       <Toolbar title="Account Group" actions={crudActions} utilities={utilityActions} />
 
       {/* Tabs list toggle */}

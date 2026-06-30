@@ -288,10 +288,10 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
           {/* Modernized Inline-Segmented Sub-Header Navigation */}
           <div className="border-border/30 bg-muted/15 border-b p-1">
             <div className="relative w-fit min-w-[40%]">
-              <TabsList className="border-border/10 relative flex h-auto w-full list-none rounded-sm border bg-slate-100 p-1 select-none dark:bg-zinc-900/60">
+              <TabsList className="border-border/10 relative flex h-auto w-full list-none rounded-sm border bg-slate-100 p-1 dark:bg-zinc-900/60">
                 <TabsTrigger
                   value="title"
-                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-4 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
+                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-4 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
                 >
                   <FileText className="h-3.5 w-3.5 shrink-0 opacity-70" />
                   <span>{titleTabLabel}</span>
@@ -299,7 +299,7 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
 
                 <TabsTrigger
                   value="list"
-                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-4 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
+                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-4 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
                 >
                   <List className="h-3.5 w-3.5 shrink-0 opacity-70" />
                   <span>{listTabLabel}</span>
@@ -342,7 +342,7 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
             className="bg-card mt-0 flex-1 overflow-y-auto focus-visible:ring-0 focus-visible:outline-none"
           >
             {items?.length === 0 ? (
-              <div className="flex h-full min-h-[180px] flex-col items-center justify-center gap-2 p-6 text-center select-none">
+              <div className="flex h-full min-h-[180px] flex-col items-center justify-center gap-2 p-6 text-center">
                 <div className="bg-muted border-border/40 rounded-full border p-3">
                   <List className="text-muted-foreground/60 h-5 w-5" />
                 </div>

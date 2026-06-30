@@ -46,7 +46,7 @@ export function AccountGroupForm({
         </span>
 
         <div
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 select-none ${
+          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 ${
             !isEditing
               ? 'border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400'
               : mode === 'add'
@@ -117,7 +117,7 @@ export function AccountGroupForm({
               value={selectedParent ? selectedParent.group_name : ''}
               disabled
               placeholder={isEditing ? 'Choose parent from hierarchy tree...' : 'Root Context'}
-              className={`border-border/50 bg-muted/30 text-foreground h-9.5 cursor-not-allowed pl-9 text-xs font-medium transition-all duration-200 select-none ${
+              className={`border-border/50 bg-muted/30 text-foreground h-9.5 cursor-not-allowed pl-9 text-xs font-medium transition-all duration-200 ${
                 isEditing && !selectedParent
                   ? 'border-amber-500/30 bg-amber-500/2 placeholder:font-medium placeholder:text-amber-600/70 dark:placeholder:text-amber-400/60'
                   : ''

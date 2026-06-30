@@ -108,10 +108,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div
-      className="flex h-full w-full items-center justify-center p-4 select-none"
-      dir={isRtl ? 'rtl' : 'ltr'}
-    >
+    <div className="flex h-full w-full items-center justify-center p-4" dir={isRtl ? 'rtl' : 'ltr'}>
       <div className="border-border/60 bg-card text-card-foreground relative flex min-h-[500px] w-full max-w-[420px] flex-col justify-center overflow-hidden rounded-sm border p-6 md:p-8">
         {/* Glow Effects / Radial Brand Shading */}
         <div className="from-brand/15 pointer-events-none absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-radial to-transparent opacity-30 blur-3xl" />

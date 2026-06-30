@@ -61,7 +61,7 @@ export function DeleteDialog({
 
   return (
     <div
-      className={`animate-in fade-in fixed inset-0 ${zIndex} flex items-center justify-center p-4 duration-200 select-none sm:p-6`}
+      className={`animate-in fade-in fixed inset-0 ${zIndex} flex items-center justify-center p-4 duration-200 sm:p-6`}
     >
       {/* Universal Premium Dark Mask Backdrop (Beautiful in both themes) */}
       <div

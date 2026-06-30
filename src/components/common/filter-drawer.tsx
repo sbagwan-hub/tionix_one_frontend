@@ -45,7 +45,7 @@ export function FilterDrawer({
 
       {/* Slide-out Drawer Panel */}
       <div
-        className={`bg-card border-border/40 fixed top-0 right-0 bottom-0 z-50 flex h-full w-full max-w-sm flex-col border-l shadow-2xl transition-transform duration-300 select-none ${
+        className={`bg-card border-border/40 fixed top-0 right-0 bottom-0 z-50 flex h-full w-full max-w-sm flex-col border-l shadow-2xl transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

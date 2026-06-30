@@ -5,7 +5,7 @@ import { CreditCardWindow } from '@/modules/credit-card/components/CreditCardWin
 
 export default function CreditCardsPage() {
   return (
-    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans select-none">
+    <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-4 font-sans">
       <CreditCardWindow />
     </div>
   );

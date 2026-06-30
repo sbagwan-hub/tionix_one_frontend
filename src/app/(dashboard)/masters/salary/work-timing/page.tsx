@@ -5,7 +5,7 @@ import { WorkTimingPanel } from '@/modules/master-salary/components/WorkTimingPa
 
 export default function WorkTimingPage() {
   return (
-    <div className="mt-2 flex h-[calc(100vh-76px)] w-full flex-col overflow-hidden select-none">
+    <div className="mt-2 flex h-[calc(100vh-76px)] w-full flex-col overflow-hidden">
       <WorkTimingPanel />
     </div>
   );
