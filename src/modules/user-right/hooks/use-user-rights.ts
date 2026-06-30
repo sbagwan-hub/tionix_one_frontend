@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@/stores/auth-store';
 import { userRightApi } from '../services';
 import { UserListItem, UserRightsOut } from '../types';
 
@@ -30,5 +32,20 @@ export function useCreateForm(onSuccess?: () => void, onError?: (error: any) => 
     mutationFn: userRightApi.createNewForm,
     onSuccess,
     onError,
+  });
+}
+
+export function useMyUserRights(enabled: boolean) {
+  const setUserRights = useAuthStore((state) => state.setUserRights);
+
+  return useQuery<UserRightsOut>({
+    queryKey: ['myUserRights'],
+    queryFn: async () => {
+      const rights = await userRightApi.getMyUserRights();
+      setUserRights(rights);
+      return rights;
+    },
+    enabled,
+    refetchInterval: 5000, // Sync permissions automatically every 5 seconds
   });
 }

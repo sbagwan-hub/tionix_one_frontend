@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth-store';
 import { useTranslation } from 'react-i18next';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
@@ -39,6 +40,9 @@ export default function AdministratorUsersPage() {
   const { t, i18n } = useTranslation('common');
   const lang = i18n.language || 'en';
   const isRtl = lang === 'ar';
+
+  const userRights = useAuthStore((state) => state.userRights);
+  const isAuthLoading = useAuthStore((state) => state.isLoading);
 
   const [activeTab, setActiveTab] = React.useState('user');
   const [selectedUser, setSelectedUser] = React.useState<UserRecord | null>(null);
@@ -220,7 +224,7 @@ export default function AdministratorUsersPage() {
       fk_ec_id: selectedUser.fk_ec_id,
       mobile: selectedUser.mobile || '',
     });
-    setSelectedQuestion(selectedUser.security_question || (securityQuestions[0]?.questions || ''));
+    setSelectedQuestion(selectedUser.security_question || securityQuestions[0]?.questions || '');
     setIsEditMode(true);
     setIsAdding(false);
     setActiveTab('user');
@@ -344,18 +348,18 @@ export default function AdministratorUsersPage() {
             {activeTab === 'user' && (
               <div className="flex items-center gap-1.5 text-xs font-medium">
                 {isAdding && (
-                  <span className="bg-primary/10 text-primary border-primary/20 animate-pulse rounded-full border px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">
+                  <span className="bg-primary/10 text-primary border-primary/20 text-xxs animate-pulse rounded-full border px-2.5 py-0.5 font-mono tracking-wider uppercase">
                     Adding New User
                   </span>
                 )}
                 {isEditMode && selectedUser && (
-                  <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2.5 py-0.5 font-mono text-[10px] tracking-wider text-yellow-500 uppercase">
+                  <span className="text-xxs rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2.5 py-0.5 font-mono tracking-wider text-yellow-500 uppercase">
                     Editing User:{' '}
                     <span className="text-foreground font-semibold">{selectedUser.username}</span>
                   </span>
                 )}
                 {!isAdding && !isEditMode && (
-                  <span className="bg-muted text-muted-foreground border-border/50 rounded-full border px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">
+                  <span className="bg-muted text-muted-foreground border-border/50 text-xxs rounded-full border px-2.5 py-0.5 font-mono tracking-wider uppercase">
                     Viewing Form
                   </span>
                 )}

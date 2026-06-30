@@ -29,8 +29,17 @@ function Navbar() {
   const { t, i18n } = useTranslation();
   const mounted = useMounted();
   const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated, user, logout, userRights } = useAuthStore();
   const { fontSize, increaseFontSize, decreaseFontSize } = useFontSize();
+
+  const isAdmin = userRights?.user?.sys_defined === true;
+
+  const menus = React.useMemo(() => {
+    if (isAdmin) {
+      return NAV_MENUS;
+    }
+    return NAV_MENUS.filter((menu) => menu.key !== 'administrator');
+  }, [isAdmin]);
 
   return (
     <div className="border-border bg-background flex h-12 w-full items-center justify-between border-b px-3.5 select-none">
@@ -51,7 +60,7 @@ function Navbar() {
 
         {/* Navigation Menus (Desktop only) */}
         <nav className="hidden min-w-0 items-center gap-0.5 lg:flex">
-          {NAV_MENUS.map((menu) => (
+          {menus.map((menu) => (
             <NavbarMenu key={menu.key} label={t(menu.key)} items={menu.items} />
           ))}
         </nav>
@@ -118,9 +127,7 @@ function Navbar() {
                   <div className="flex flex-col space-y-1 p-2">
                     <p className="text-xs leading-none font-bold">{user?.username}</p>
                     {user?.email && (
-                      <p className="text-muted-foreground text-[10px] leading-none">
-                        {user?.email}
-                      </p>
+                      <p className="text-muted-foreground text-xxs leading-none">{user?.email}</p>
                     )}
                   </div>
                   <DropdownMenuSeparator className="bg-border/60 my-1" />
@@ -137,19 +144,21 @@ function Navbar() {
                           e.stopPropagation();
                           decreaseFontSize();
                         }}
-                        className="hover:bg-accent hover:text-accent-foreground text-foreground flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border border-border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border text-xxs flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent font-bold transition-all focus:outline-none"
                         title="Decrease Font Size"
                       >
                         A-
                       </button>
-                      <span className="text-[11px] font-bold min-w-8 text-center">{fontSize}px</span>
+                      <span className="min-w-8 text-center text-[11px] font-bold">
+                        {fontSize}px
+                      </span>
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           increaseFontSize();
                         }}
-                        className="hover:bg-accent hover:text-accent-foreground text-foreground flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border border-border bg-transparent text-[10px] font-bold transition-all focus:outline-none"
+                        className="hover:bg-accent hover:text-accent-foreground text-foreground border-border text-xxs flex h-5.5 w-5.5 cursor-pointer items-center justify-center rounded-sm border bg-transparent font-bold transition-all focus:outline-none"
                         title="Increase Font Size"
                       >
                         A+
@@ -185,7 +194,7 @@ function Navbar() {
               align="end"
               className="border-border/80 bg-popover text-popover-foreground w-52 border p-1 shadow-md"
             >
-              {NAV_MENUS.map((menu) => (
+              {menus.map((menu) => (
                 <DropdownMenuSub key={menu.key}>
                   <DropdownMenuSubTrigger className="hover:bg-muted cursor-pointer px-2.5 py-1.5 text-xs font-semibold">
                     {t(menu.key)}

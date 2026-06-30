@@ -72,7 +72,7 @@ export const QualificationWindow: React.FC = () => {
         {...form.register('qualification')}
       />
       {form.formState.errors.qualification && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.qualification.message}
         </span>
       )}
@@ -92,6 +92,8 @@ export const QualificationWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Qualification"
+      isEdit={editingId !== null}
     />
   );
 };

@@ -86,9 +86,7 @@ export const StateWindow: React.FC = () => {
           {...form.register('state')}
         />
         {form.formState.errors.state && (
-          <span className="text-destructive text-[10px]">
-            {form.formState.errors.state.message}
-          </span>
+          <span className="text-destructive text-xxs">{form.formState.errors.state.message}</span>
         )}
       </div>
 
@@ -107,7 +105,7 @@ export const StateWindow: React.FC = () => {
           ))}
         </select>
         {form.formState.errors.fk_ctry_id && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.fk_ctry_id.message}
           </span>
         )}
@@ -121,7 +119,7 @@ export const StateWindow: React.FC = () => {
           {...form.register('state_code')}
         />
         {form.formState.errors.state_code && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.state_code.message}
           </span>
         )}
@@ -143,6 +141,8 @@ export const StateWindow: React.FC = () => {
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
       className="h-[350px]"
+      formName="State"
+      isEdit={editingId !== null}
     />
   );
 };

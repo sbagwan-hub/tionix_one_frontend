@@ -72,7 +72,7 @@ export const DepartmentWindow: React.FC = () => {
         {...form.register('department')}
       />
       {form.formState.errors.department && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.department.message}
         </span>
       )}
@@ -92,6 +92,8 @@ export const DepartmentWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Department"
+      isEdit={editingId !== null}
     />
   );
 };

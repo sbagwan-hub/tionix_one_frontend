@@ -155,7 +155,7 @@ export default function HrmsGeofencingView() {
             <div>
               <Label
                 htmlFor="site-name"
-                className="text-muted-foreground mb-1 block text-[10px] font-bold tracking-wider uppercase"
+                className="text-muted-foreground text-xxs mb-1 block font-bold tracking-wider uppercase"
               >
                 Site Name
               </Label>
@@ -172,7 +172,7 @@ export default function HrmsGeofencingView() {
               <div>
                 <Label
                   htmlFor="latitude"
-                  className="text-muted-foreground mb-1 block text-[10px] font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xxs mb-1 block font-bold tracking-wider uppercase"
                 >
                   Latitude
                 </Label>
@@ -188,7 +188,7 @@ export default function HrmsGeofencingView() {
               <div>
                 <Label
                   htmlFor="longitude"
-                  className="text-muted-foreground mb-1 block text-[10px] font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xxs mb-1 block font-bold tracking-wider uppercase"
                 >
                   Longitude
                 </Label>
@@ -207,7 +207,7 @@ export default function HrmsGeofencingView() {
               <div className="mb-1.5 flex items-center justify-between">
                 <Label
                   htmlFor="radius"
-                  className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase"
+                  className="text-muted-foreground text-xxs font-bold tracking-wider uppercase"
                 >
                   Radius (Meters)
                 </Label>
@@ -283,7 +283,7 @@ export default function HrmsGeofencingView() {
               <span>Click anywhere to position the new center</span>
             </div>
 
-            <div className="flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold tracking-wider text-emerald-600 uppercase dark:border-emerald-900/40 dark:bg-emerald-950/30">
+            <div className="text-xxs flex items-center gap-1.5 rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 font-bold tracking-wider text-emerald-600 uppercase dark:border-emerald-900/40 dark:bg-emerald-950/30">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
               Live Editor
             </div>

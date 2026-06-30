@@ -1,14 +1,5 @@
 import { MenuItem } from '@/types/common';
-import {
-  BarChart3,
-  Users,
-  Building2,
-  UserCheck,
-  ShoppingCart,
-  Package,
-  FileText,
-  Settings,
-} from 'lucide-react';
+import { BarChart3, Users, ShoppingCart, Package, FileText, Settings } from 'lucide-react';
 
 export const menuItems: MenuItem[] = [
   {

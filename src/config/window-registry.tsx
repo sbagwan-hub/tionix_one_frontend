@@ -32,6 +32,9 @@ import { ReligionWindow } from '@/modules/master-salary/components/ReligionWindo
 import { ScheduleTypeWindow } from '@/modules/master-salary/components/ScheduleTypeWindow';
 import { NatureOfWorkWindow } from '@/modules/master-salary/components/NatureOfWorkWindow';
 import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSectionWindow';
+import { ShiftTimingWindow } from '@/modules/master-salary/components/ShiftTimingWindow';
+import { DebitCardWindow } from '@/modules/debit-card/components/DebitCardWindow';
+import { ChequeBookWindow } from '@/modules/cheque-book/components/ChequeBookWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -148,6 +151,14 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     className: 'absolute top-40 left-48 w-full max-w-2xl',
     component: SalItSectionWindow,
   },
+  'salary-shift-timing': {
+    id: 'salary-shift-timing',
+    title: 'Shift Timings',
+    icon: <Settings className="h-4 w-4 text-sky-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-5xl h-[560px]',
+    component: ShiftTimingWindow,
+  },
   'contacts-mode-of-contact': {
     id: 'contacts-mode-of-contact',
     title: 'Modes of Contact',
@@ -171,5 +182,21 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-60 left-88 w-full max-w-2xl',
     component: RegionWindow,
+  },
+  'accounts-debit-card': {
+    id: 'accounts-debit-card',
+    title: 'Debit Card Setup',
+    icon: <Settings className="h-4 w-4 text-cyan-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-2xl',
+    component: DebitCardWindow,
+  },
+  'accounts-cheque-book': {
+    id: 'accounts-cheque-book',
+    title: 'Cheque Book Setup',
+    icon: <Settings className="h-4 w-4 text-emerald-500" />,
+    isMinimizable: true,
+    className: 'absolute top-24 left-16 w-full max-w-2xl',
+    component: ChequeBookWindow,
   },
 };

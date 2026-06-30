@@ -107,7 +107,7 @@ export function AccountGroupsList({
                     <td className="text-muted-foreground p-3">{rec.parent_name || '—'}</td>
                     <td className="p-3 text-center">
                       <span
-                        className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold ${
+                        className={`text-xxs inline-block rounded px-2 py-0.5 font-bold ${
                           rec.dc === 'DR' || rec.dc === 'D'
                             ? 'border border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300'
                             : 'border border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800 dark:bg-rose-950 dark:text-rose-300'
@@ -118,7 +118,7 @@ export function AccountGroupsList({
                     </td>
                     <td className="p-3">
                       <span
-                        className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        className={`text-xxs inline-block rounded-full px-2 py-0.5 font-semibold ${
                           rec.last_status === 'Added'
                             ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
                             : 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300'

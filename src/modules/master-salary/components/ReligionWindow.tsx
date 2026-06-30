@@ -28,7 +28,11 @@ export const ReligionWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update religion.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update religion.';
             toast.error(msg);
           },
         },
@@ -40,7 +44,11 @@ export const ReligionWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create religion.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create religion.';
           toast.error(msg);
         },
       });
@@ -71,7 +79,11 @@ export const ReligionWindow: React.FC = () => {
         toast.success('Religion deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete religion.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete religion.';
         toast.error(msg);
       },
     });
@@ -91,9 +103,7 @@ export const ReligionWindow: React.FC = () => {
         {...form.register('religion')}
       />
       {form.formState.errors.religion && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.religion.message}
-        </span>
+        <span className="text-destructive text-xxs">{form.formState.errors.religion.message}</span>
       )}
     </form>
   );
@@ -111,6 +121,8 @@ export const ReligionWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Religion"
+      isEdit={editingId !== null}
     />
   );
 };

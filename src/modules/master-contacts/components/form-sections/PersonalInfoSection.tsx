@@ -45,7 +45,7 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
   }, [individuals, formData.pk_ind_id]);
   return (
     <div className="border-border/80 bg-background/50 space-y-4 rounded-sm border p-4">
-      <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+      <Label className="text-muted-foreground text-xxs block font-semibold tracking-wider uppercase">
         Personal Information
       </Label>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

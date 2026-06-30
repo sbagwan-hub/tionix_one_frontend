@@ -96,7 +96,7 @@ export default function Toolbar({
               {title}
             </span>
             {showPagination && (
-              <span className="text-muted-foreground bg-muted border-border/40 rounded border px-1 py-0.5 font-mono text-[10px]">
+              <span className="text-muted-foreground bg-muted border-border/40 text-xxs rounded border px-1 py-0.5 font-mono">
                 {currentRecord}/{totalRecords}
               </span>
             )}

@@ -68,9 +68,7 @@ export const CategoryWindow: React.FC = () => {
         {...form.register('category')}
       />
       {form.formState.errors.category && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.category.message}
-        </span>
+        <span className="text-destructive text-xxs">{form.formState.errors.category.message}</span>
       )}
     </form>
   );
@@ -88,6 +86,8 @@ export const CategoryWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Product(s)\\Category"
+      isEdit={editingId !== null}
     />
   );
 };

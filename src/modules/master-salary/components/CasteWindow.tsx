@@ -28,7 +28,11 @@ export const CasteWindow: React.FC = () => {
             resetForm();
           },
           onError: (error: any) => {
-            const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to update caste.';
+            const msg =
+              error.response?.data?.message ||
+              error.response?.data?.error?.details ||
+              error.message ||
+              'Failed to update caste.';
             toast.error(msg);
           },
         },
@@ -40,7 +44,11 @@ export const CasteWindow: React.FC = () => {
           resetForm();
         },
         onError: (error: any) => {
-          const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to create caste.';
+          const msg =
+            error.response?.data?.message ||
+            error.response?.data?.error?.details ||
+            error.message ||
+            'Failed to create caste.';
           toast.error(msg);
         },
       });
@@ -71,7 +79,11 @@ export const CasteWindow: React.FC = () => {
         toast.success('Caste deleted successfully.');
       },
       onError: (error: any) => {
-        const msg = error.response?.data?.message || error.response?.data?.error?.details || error.message || 'Failed to delete caste.';
+        const msg =
+          error.response?.data?.message ||
+          error.response?.data?.error?.details ||
+          error.message ||
+          'Failed to delete caste.';
         toast.error(msg);
       },
     });
@@ -91,9 +103,7 @@ export const CasteWindow: React.FC = () => {
         {...form.register('caste')}
       />
       {form.formState.errors.caste && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.caste.message}
-        </span>
+        <span className="text-destructive text-xxs">{form.formState.errors.caste.message}</span>
       )}
     </form>
   );
@@ -111,6 +121,8 @@ export const CasteWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Castes/Sub-Castes"
+      isEdit={editingId !== null}
     />
   );
 };

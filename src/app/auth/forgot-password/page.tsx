@@ -148,8 +148,8 @@ export default function ForgotPasswordPage() {
                 <CheckCircle2 className="h-4 w-4 shrink-0 animate-bounce" />
                 <span className="font-semibold">{t.resetLinkSent}</span>
               </div>
-              <p className="text-[10px] leading-relaxed opacity-90">{t.resetLinkSentText}</p>
-              <p className="text-[10px] leading-relaxed opacity-90">{t.checkEmail}</p>
+              <p className="text-xxs leading-relaxed opacity-90">{t.resetLinkSentText}</p>
+              <p className="text-xxs leading-relaxed opacity-90">{t.checkEmail}</p>
             </div>
           )}
 
@@ -159,7 +159,7 @@ export default function ForgotPasswordPage() {
               <FormInput
                 id="email"
                 label={
-                  <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                  <span className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase">
                     {t.emailAddress}
                   </span>
                 }

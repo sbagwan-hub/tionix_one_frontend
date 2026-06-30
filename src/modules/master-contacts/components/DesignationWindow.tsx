@@ -76,7 +76,7 @@ export const DesignationWindow: React.FC = () => {
           {...form.register('designation')}
         />
         {form.formState.errors.designation && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.designation.message}
           </span>
         )}
@@ -110,6 +110,8 @@ export const DesignationWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="Designation"
+      isEdit={editingId !== null}
     />
   );
 };

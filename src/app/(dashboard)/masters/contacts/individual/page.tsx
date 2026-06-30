@@ -16,7 +16,6 @@ import {
   Download,
   HelpCircle as Help,
   LogOut,
-  Eye,
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
 import { DeleteDialog } from '@/components/common/delete-dialog';
@@ -62,6 +61,7 @@ export default function IndividualContactsPage() {
   const { list: orgList } = useMasterContacts('organizationsDropdown');
   const { list: gendersList } = useMasterContacts('genders');
   const { list: maritalStatusesList } = useMasterContacts('maritalStatuses');
+  const { list: categoriesList } = useMasterContacts('categories');
 
   const titles = titlesList.data || [];
   const qualifications = qualList.data || [];
@@ -73,6 +73,7 @@ export default function IndividualContactsPage() {
   const organizations = orgList.data || [];
   const genders = gendersList.data || [];
   const maritalStatuses = maritalStatusesList.data || [];
+  const categories = categoriesList.data || [];
 
   const [formData, setFormData] = React.useState<IndividualDto>({
     pk_ind_id: undefined,
@@ -82,7 +83,7 @@ export default function IndividualContactsPage() {
     middle_name: '',
     surname: '',
     dob: null,
-    photo: null,
+    photo_url: null,
     fk_qual_id: null,
     gender: 'male',
     marital_status: 'single',
@@ -99,6 +100,9 @@ export default function IndividualContactsPage() {
     fk_state_id: null,
     fk_ctry_id: null,
     postfix: '',
+    categoryIds: [],
+    contacts: [],
+    documents: [],
   });
   const handleSelectIndividual = (ind: IndividualRecord) => {
     if (selectedInd && selectedInd.pk_ind_id === ind.pk_ind_id) {
@@ -125,7 +129,7 @@ export default function IndividualContactsPage() {
       middle_name: '',
       surname: '',
       dob: null,
-      photo: null,
+      photo_url: null,
       fk_qual_id: null,
       gender: 'male',
       marital_status: 'single',
@@ -142,6 +146,9 @@ export default function IndividualContactsPage() {
       fk_state_id: null,
       fk_ctry_id: null,
       postfix: '',
+      categoryIds: [],
+      contacts: [],
+      documents: [],
     });
     setIsEditMode(false);
     setIsAdding(false);
@@ -156,7 +163,7 @@ export default function IndividualContactsPage() {
       middle_name: '',
       surname: '',
       dob: null,
-      photo: null,
+      photo_url: null,
       fk_qual_id: null,
       gender: 'male',
       marital_status: 'single',
@@ -173,20 +180,13 @@ export default function IndividualContactsPage() {
       fk_state_id: null,
       fk_ctry_id: null,
       postfix: '',
+      categoryIds: [],
+      contacts: [],
+      documents: [],
     });
     setIsAdding(true);
     setIsEditMode(false);
     setSelectedInd(null);
-    setActiveTab('individual');
-  };
-
-  const handleView = () => {
-    if (!selectedInd) {
-      toast.error('Please select an individual record first.');
-      return;
-    }
-    setIsEditMode(false);
-    setIsAdding(false);
     setActiveTab('individual');
   };
 
@@ -281,13 +281,6 @@ export default function IndividualContactsPage() {
       variant: 'primary',
       onClick: handleAdd,
       disabled: isAdding || isEditMode,
-    },
-    {
-      icon: Eye,
-      label: 'View',
-      variant: 'secondary',
-      onClick: handleView,
-      disabled: !selectedInd || isAdding || isEditMode,
     },
     {
       icon: Edit,
@@ -393,6 +386,7 @@ export default function IndividualContactsPage() {
               genders={genders}
               maritalStatuses={maritalStatuses}
               individuals={individuals}
+              categories={categories}
               disabled={!isAdding && !isEditMode}
             />
           </TabsContent>
@@ -406,6 +400,13 @@ export default function IndividualContactsPage() {
               pageSize={pageSize}
               selectedIndividual={selectedInd}
               onSelectIndividual={handleSelectIndividual}
+              onDoubleClickIndividual={(ind) => {
+                setSelectedInd(ind);
+                setFormData(ind);
+                setIsEditMode(false);
+                setIsAdding(false);
+                setActiveTab('individual');
+              }}
               search={search}
               onSearchChange={setSearch}
               isLoading={indList.isLoading}

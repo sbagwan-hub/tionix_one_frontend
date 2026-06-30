@@ -8,6 +8,7 @@ import { AddressSection } from './form-sections/AddressSection';
 import { CategoriesSection } from './form-sections/CategoriesSection';
 import { PhotoSection } from './form-sections/PhotoSection';
 import { ContactDetailsSection } from './form-sections/ContactDetailsSection';
+import { DocumentsSection } from './form-sections/DocumentsSection';
 
 interface IndividualFormProps {
   formData: IndividualDto;
@@ -23,6 +24,7 @@ interface IndividualFormProps {
   genders: any[];
   maritalStatuses: any[];
   individuals: any[];
+  categories: any[];
   disabled?: boolean;
   isRtl?: boolean;
 }
@@ -41,26 +43,16 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
   genders,
   maritalStatuses,
   individuals,
+  categories,
   disabled = false,
   isRtl = false,
 }) => {
-  // Checkbox list categories
-  const categories = [
-    'Friend',
-    'Business',
-    'Associate',
-    'Relative',
-    'Account',
-    'Advertise',
-    'Aluminium',
-    'Bank',
-  ];
-  const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
-
-  const toggleCategory = (cat: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
-    );
+  const toggleCategory = (catId: number) => {
+    const current = formData.categoryIds || [];
+    const updated = current.includes(catId)
+      ? current.filter((id) => id !== catId)
+      : [...current, catId];
+    onInputChange('categoryIds', updated);
   };
 
   return (
@@ -102,12 +94,30 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({
       <div className="space-y-4">
         <CategoriesSection
           categories={categories}
-          selectedCategories={selectedCategories}
+          selectedCategories={formData.categoryIds || []}
           toggleCategory={toggleCategory}
           disabled={disabled}
         />
-        <PhotoSection photo={formData.photo} onInputChange={onInputChange} disabled={disabled} />
-        <ContactDetailsSection disabled={disabled} />
+        <PhotoSection
+          photo={formData.photo_url}
+          onInputChange={onInputChange}
+          disabled={disabled}
+          fieldName="photo_url"
+        />
+        <ContactDetailsSection
+          contacts={formData.contacts || []}
+          onInputChange={onInputChange}
+          disabled={disabled}
+          defaultDepartment={
+            departments.find((d: any) => d.pk_dep_id === formData.fk_dep_id)?.department || ''
+          }
+        />
+        <DocumentsSection
+          documents={formData.documents || []}
+          onInputChange={onInputChange}
+          disabled={disabled}
+          folderName="individual-docs"
+        />
       </div>
     </div>
   );

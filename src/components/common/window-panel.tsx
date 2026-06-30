@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/common/form-input';
 import Toolbar from '@/components/shared/toolbar';
+import { useFormPermission } from '@/hooks/use-form-permission';
 
 // ─────────────────────────────────────────────────────────
 // Types
@@ -52,6 +53,16 @@ export interface WindowPanelProps {
   onCancelTab1?: () => void;
   /** Disable the save button explicitly */
   isSaveDisabled?: boolean;
+  /** Control permission to Add */
+  canAdd?: boolean;
+  /** Control permission to Edit */
+  canEdit?: boolean;
+  /** Control permission to Delete */
+  canDelete?: boolean;
+  /** Indicate if the form is currently in edit mode */
+  isEdit?: boolean;
+  /** Database Form Name to resolve permissions automatically */
+  formName?: string;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -142,6 +153,11 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
       isSaving,
       onCancelTab1,
       isSaveDisabled,
+      canAdd = true,
+      canEdit = true,
+      canDelete = true,
+      isEdit = false,
+      formName,
     },
     ref,
   ) => {
@@ -192,6 +208,13 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
       }
     };
 
+    const permissions = useFormPermission(formName || '');
+
+    // Resolve permission states: use formName queries if provided, otherwise fallback to props
+    const resolvedCanAdd = formName ? permissions.add : canAdd;
+    const resolvedCanEdit = formName ? permissions.edit : canEdit;
+    const resolvedCanDelete = formName ? permissions.delete : canDelete;
+
     // The toolbar array structure matches your configuration, changing context per active tab
     const toolbarActions: any[] =
       activeTab === 'title'
@@ -202,7 +225,11 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
               type: formId ? 'submit' : 'button',
               form: formId,
               onClick: formId ? undefined : handleSave,
-              disabled: isSaving || isSaveDisabled || (!formId && !internalValue.trim()),
+              disabled:
+                isSaving ||
+                isSaveDisabled ||
+                (!formId && !internalValue.trim()) ||
+                (isEdit ? !resolvedCanEdit : !resolvedCanAdd),
               variant: 'primary',
             },
             {
@@ -217,20 +244,21 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
               label: 'Add',
               icon: Plus,
               onClick: handleTab2AddClick,
+              disabled: !resolvedCanAdd,
               variant: 'outline',
             },
             {
               label: 'Edit',
               icon: Pencil,
               onClick: handleTab2EditClick,
-              disabled: !selectedItemId,
+              disabled: !selectedItemId || !resolvedCanEdit,
               variant: 'outline',
             },
             {
               label: 'Delete',
               icon: Trash2,
               onClick: handleTab2DeleteClick,
-              disabled: !selectedItemId,
+              disabled: !selectedItemId || !resolvedCanDelete,
               variant: 'danger',
             },
             {
@@ -259,11 +287,11 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
         >
           {/* Modernized Inline-Segmented Sub-Header Navigation */}
           <div className="border-border/30 bg-muted/15 border-b p-1">
-            <div className="relative w-[40%]">
+            <div className="relative w-fit min-w-[40%]">
               <TabsList className="border-border/10 relative flex h-auto w-full list-none rounded-sm border bg-slate-100 p-1 select-none dark:bg-zinc-900/60">
                 <TabsTrigger
                   value="title"
-                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-0 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
+                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-4 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
                 >
                   <FileText className="h-3.5 w-3.5 shrink-0 opacity-70" />
                   <span>{titleTabLabel}</span>
@@ -271,7 +299,7 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
 
                 <TabsTrigger
                   value="list"
-                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-0 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
+                  className="z-30 flex h-6 flex-auto cursor-pointer items-center justify-center gap-2 rounded-sm border-0 bg-inherit px-4 py-1.5 text-center text-xs font-medium text-slate-600 transition-all ease-in-out outline-none select-none data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-slate-900 dark:text-zinc-400 dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-zinc-100"
                 >
                   <List className="h-3.5 w-3.5 shrink-0 opacity-70" />
                   <span>{listTabLabel}</span>
@@ -329,7 +357,7 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
             ) : (
               <div className="flex flex-col">
                 {/* Table Column Visual Anchor Header */}
-                <div className="bg-muted/40 border-border/40 text-muted-foreground/90 flex h-8 items-center justify-between border-b px-4 text-[10px] font-bold tracking-wider uppercase">
+                <div className="bg-muted/40 border-border/40 text-muted-foreground/90 text-xxs flex h-8 items-center justify-between border-b px-4 font-bold tracking-wider uppercase">
                   <span>Configuration Record Identifier</span>
                   <span className="text-right">Action Target</span>
                 </div>

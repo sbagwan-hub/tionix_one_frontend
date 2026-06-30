@@ -341,7 +341,7 @@ export function AccountGroupsScreen() {
       {/* Tabs list toggle */}
       <div className="my-2 flex border-b">
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
+          className={`mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             activeTab === 'group'
               ? 'border-primary text-primary bg-muted/30 font-bold'
               : 'text-foreground hover:text-foreground border-transparent'
@@ -351,7 +351,7 @@ export function AccountGroupsScreen() {
           Hierarchy Detail
         </button>
         <button
-          className={`-mb-[2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
+          className={`mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all ${
             activeTab === 'list'
               ? 'border-primary text-primary bg-muted/30 font-bold'
               : 'text-foreground hover:text-foreground border-transparent'
@@ -367,7 +367,7 @@ export function AccountGroupsScreen() {
 
       {/* Content Container */}
       {activeTab === 'group' ? (
-        <div className="bg-card grid min-h-0 flex-1 grid-cols-1 divide-y overflow-y-auto rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
+        <div className="bg-card grid h-[calc(100vh-140px)] grid-cols-1 divide-y overflow-y-auto rounded-md border md:grid-cols-12 md:divide-x md:divide-y-0 md:overflow-hidden">
           {/* Form Component */}
           <AccountGroupForm
             groupName={groupName}

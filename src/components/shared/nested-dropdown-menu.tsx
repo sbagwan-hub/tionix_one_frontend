@@ -103,7 +103,7 @@ export function RenderMenuItems({ items }: { items: MenuItem[] }) {
               <span>{displayLabel}</span>
             </div>
             {item.shortcut && (
-              <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium tracking-wider select-none">
+              <kbd className="bg-muted text-muted-foreground text-xxs pointer-events-none ml-auto inline-flex h-4 items-center gap-1 rounded px-1.5 font-mono font-medium tracking-wider select-none">
                 {item.shortcut}
               </kbd>
             )}

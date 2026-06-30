@@ -91,9 +91,7 @@ export const CityWindow: React.FC = () => {
             {...form.register('city')}
           />
           {form.formState.errors.city && (
-            <span className="text-destructive text-[10px]">
-              {form.formState.errors.city.message}
-            </span>
+            <span className="text-destructive text-xxs">{form.formState.errors.city.message}</span>
           )}
         </div>
       </div>
@@ -114,7 +112,7 @@ export const CityWindow: React.FC = () => {
             ))}
           </select>
           {form.formState.errors.fk_ctry_id && (
-            <span className="text-destructive text-[10px]">
+            <span className="text-destructive text-xxs">
               {form.formState.errors.fk_ctry_id.message}
             </span>
           )}
@@ -134,7 +132,7 @@ export const CityWindow: React.FC = () => {
             ))}
           </select>
           {form.formState.errors.fk_state_id && (
-            <span className="text-destructive text-[10px]">
+            <span className="text-destructive text-xxs">
               {form.formState.errors.fk_state_id.message}
             </span>
           )}
@@ -147,7 +145,7 @@ export const CityWindow: React.FC = () => {
             {...form.register('std_code')}
           />
           {form.formState.errors.std_code && (
-            <span className="text-destructive text-[10px]">
+            <span className="text-destructive text-xxs">
               {form.formState.errors.std_code.message}
             </span>
           )}
@@ -169,6 +167,8 @@ export const CityWindow: React.FC = () => {
       isSaving={create.isPending || update.isPending}
       onCancelTab1={resetForm}
       isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+      formName="City"
+      isEdit={editingId !== null}
     />
   );
 };
