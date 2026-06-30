@@ -86,7 +86,7 @@ export const DebitCardList: React.FC<DebitCardListProps> = ({
                   <td className="p-2.5 pl-4 font-semibold">
                     {rec.bank_account_name || 'Bank Account'}
                   </td>
-                  <td className="p-2.5 font-mono">{rec.card_no}</td>
+                  <td className="p-2.5 font-mono">{rec.debit_card_no}</td>
                   <td className="p-2.5">{rec.holder_name}</td>
                   <td className="p-2.5 pr-4 font-mono">{rec.expiry_date?.split('T')[0]}</td>
                 </tr>

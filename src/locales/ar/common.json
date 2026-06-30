@@ -27,6 +27,7 @@
   "account": "الحساب (Account)",
   "bankAccount": "حساب البنك (Bank Account)",
   "debitCard": "بطاقة الخصم (Debit Card)",
+  "creditCard": "بطاقة الائتمان (Credit Card)",
   "chequeBook": "دفتر الشيكات (Cheque Book)",
   "openingBalanceSplitUp": "تفصيل الرصيد الافتتاحي (Opening Balance Split Up)",
   "paymentPurpose": "غرض الدفع (Payment Purpose)",

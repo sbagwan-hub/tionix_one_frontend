@@ -27,6 +27,7 @@
   "account": "Account",
   "bankAccount": "Bank Account",
   "debitCard": "Debit Card",
+  "creditCard": "Credit Card",
   "chequeBook": "Cheque Book",
   "openingBalanceSplitUp": "Opening Balance Split Up",
   "paymentPurpose": "Payment Purpose",

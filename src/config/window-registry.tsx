@@ -35,6 +35,7 @@ import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSect
 import { ShiftTimingWindow } from '@/modules/master-salary/components/ShiftTimingWindow';
 import { DebitCardWindow } from '@/modules/debit-card/components/DebitCardWindow';
 import { ChequeBookWindow } from '@/modules/cheque-book/components/ChequeBookWindow';
+import { CreditCardWindow } from '@/modules/credit-card/components/CreditCardWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
   'contacts-title': {
@@ -198,5 +199,13 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     isMinimizable: true,
     className: 'absolute top-24 left-16 w-full max-w-2xl',
     component: ChequeBookWindow,
+  },
+  'accounts-credit-card': {
+    id: 'accounts-credit-card',
+    title: 'Credit Card Setup',
+    icon: <Settings className="h-4 w-4 text-rose-500" />,
+    isMinimizable: true,
+    className: 'absolute top-24 left-16 w-full max-w-4xl h-[560px]',
+    component: CreditCardWindow,
   },
 };

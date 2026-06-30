@@ -127,6 +127,11 @@ export const NAV_MENUS: NavMenu[] = [
             action: () => useWindowStore.getState().openWindow('accounts-debit-card'),
           },
           {
+            key: 'creditCard',
+            icon: 'CreditCard',
+            action: () => useWindowStore.getState().openWindow('accounts-credit-card'),
+          },
+          {
             key: 'chequeBook',
             icon: 'BookOpen',
             action: () => useWindowStore.getState().openWindow('accounts-cheque-book'),

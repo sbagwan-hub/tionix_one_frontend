@@ -27,6 +27,7 @@
   "account": "खाता (Account)",
   "bankAccount": "बैंक खाता (Bank Account)",
   "debitCard": "डेबिट कार्ड (Debit Card)",
+  "creditCard": "क्रेडिट कार्ड (Credit Card)",
   "chequeBook": "चेक बुक (Cheque Book)",
   "openingBalanceSplitUp": "प्रारंभिक शेष विभाजन (Opening Balance Split Up)",
   "paymentPurpose": "भुगतान का उद्देश्य (Payment Purpose)",
