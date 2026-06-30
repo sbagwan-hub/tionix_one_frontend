@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { ArrowLeft, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import HrmsGeofencingView from '@/components/hrms/hrms-geofencing-view';
-import { hrmsControlRadiusClassName, hrmsPageClassName } from '@/components/hrms/hrms-styles';
+import HrmsGeofencingView from '@/modules/hrms/components/hrms-geofencing-view';
+import { hrmsControlRadiusClassName, hrmsPageClassName } from '@/modules/hrms/components/hrms-styles';
 
 export default function HrmsGeofencingPage() {
   return (

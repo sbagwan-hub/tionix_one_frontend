@@ -11,7 +11,7 @@ import {
   HrmsToolbar,
   hrmsControlRadiusClassName,
   hrmsPageClassName,
-} from '@/components/hrms';
+} from '@/modules/hrms/components';
 import {
   buildHrmsActionToolbar,
   defaultHrmsEmployeeFilters,

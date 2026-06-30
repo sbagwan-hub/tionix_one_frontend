@@ -29,7 +29,7 @@ import {
   CheckCircle2,
   BookOpen,
 } from 'lucide-react';
-import { hrmsRadiusClassName } from '@/components/hrms/hrms-styles';
+import { hrmsRadiusClassName } from '@/modules/hrms/components/hrms-styles';
 import { clonePageVaryPathWithNewSearchParams } from 'next/dist/client/components/segment-cache/vary-path';
 
 // Fallback translations matching i18next languages in the app (en, ar, hi)
@@ -283,9 +283,8 @@ export default function LoginPage() {
                 type="button"
                 tabIndex={-1}
                 onClick={() => setShowPassword(!showPassword)}
-                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${
-                  isRtl ? 'left-3' : 'right-3'
-                }`}
+                className={`text-muted-foreground hover:text-foreground absolute z-20 cursor-pointer transition-colors ${isRtl ? 'left-3' : 'right-3'
+                  }`}
                 style={{
                   top: errors.password ? 'calc(50% - 9px)' : '50%',
                   transform: 'translateY(-10%)',
@@ -317,9 +316,8 @@ export default function LoginPage() {
                 >
                   <SelectTrigger
                     id="book"
-                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${
-                      isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
-                    } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
+                    className={`bg-background/50 focus:bg-background h-9 w-full cursor-pointer rounded-sm text-xs transition-all ${isRtl ? 'pr-9 pl-8' : 'pr-8 pl-9'
+                      } ${errors.book ? 'border-destructive ring-destructive/20' : ''}`}
                   >
                     <SelectValue
                       placeholder={isLoadingBooks ? 'Loading books...' : t.bookPlaceholder}

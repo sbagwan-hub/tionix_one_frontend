@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { HrmsStatusBadge } from '@/components/hrms/hrms-stat-cards';
+import { HrmsStatusBadge } from '@/modules/hrms/components/hrms-stat-cards';
 import {
   hrmsButtonClassName,
   hrmsCardClassName,
@@ -23,7 +23,7 @@ import {
   hrmsPageClassName,
   hrmsControlRadiusClassName,
   hrmsNestedCardClassName,
-} from '@/components/hrms/hrms-styles';
+} from '@/modules/hrms/components/hrms-styles';
 import { leaveRequests as initialLeaveRequests } from '@/constants/hrms-dashboard.constants';
 
 type LeaveRequest = {
