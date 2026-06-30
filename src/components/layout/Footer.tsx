@@ -17,7 +17,7 @@ function Footer() {
   const { date, time } = useCurrentDateTime();
 
   return (
-    <footer className="border-border bg-card text-muted-foreground flex h-7 items-center justify-between border-t px-3 text-[10px] font-medium shadow-inner select-none">
+    <footer className="border-border bg-card text-muted-foreground text-xxs flex h-7 items-center justify-between border-t px-3 font-medium shadow-inner select-none">
       {/* System details */}
       <div className="flex items-center gap-3.5 truncate">
         <div className="flex items-center gap-1.5 truncate" title="Unit">

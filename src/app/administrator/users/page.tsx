@@ -348,18 +348,18 @@ export default function AdministratorUsersPage() {
             {activeTab === 'user' && (
               <div className="flex items-center gap-1.5 text-xs font-medium">
                 {isAdding && (
-                  <span className="bg-primary/10 text-primary border-primary/20 animate-pulse rounded-full border px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">
+                  <span className="bg-primary/10 text-primary border-primary/20 text-xxs animate-pulse rounded-full border px-2.5 py-0.5 font-mono tracking-wider uppercase">
                     Adding New User
                   </span>
                 )}
                 {isEditMode && selectedUser && (
-                  <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2.5 py-0.5 font-mono text-[10px] tracking-wider text-yellow-500 uppercase">
+                  <span className="text-xxs rounded-full border border-yellow-500/20 bg-yellow-500/10 px-2.5 py-0.5 font-mono tracking-wider text-yellow-500 uppercase">
                     Editing User:{' '}
                     <span className="text-foreground font-semibold">{selectedUser.username}</span>
                   </span>
                 )}
                 {!isAdding && !isEditMode && (
-                  <span className="bg-muted text-muted-foreground border-border/50 rounded-full border px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">
+                  <span className="bg-muted text-muted-foreground border-border/50 text-xxs rounded-full border px-2.5 py-0.5 font-mono tracking-wider uppercase">
                     Viewing Form
                   </span>
                 )}

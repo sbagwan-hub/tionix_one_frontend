@@ -72,7 +72,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
   return (
     <div className="border-border/80 bg-background/50 flex h-auto flex-col space-y-2.5 rounded-sm border p-3.5">
       <div className="flex items-center justify-between">
-        <span className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+        <span className="text-muted-foreground text-xxs block font-semibold tracking-wider uppercase">
           Documents Produced / Uploads
         </span>
         <Button
@@ -129,7 +129,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
                       <Eye className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="px-2 py-1 text-[10px]">
+                  <TooltipContent className="text-xxs px-2 py-1">
                     View: {d.file_path}
                   </TooltipContent>
                 </Tooltip>
@@ -164,7 +164,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
                       )}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent className="px-2 py-1 text-[10px]">
+                  <TooltipContent className="text-xxs px-2 py-1">
                     {d.file_path ? 'Replace File' : 'Upload File'}
                   </TooltipContent>
                 </Tooltip>
@@ -195,7 +195,7 @@ export const DocumentsSection: React.FC<DocumentsSectionProps> = ({
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent className="px-2 py-1 text-[10px]">Delete Row</TooltipContent>
+                <TooltipContent className="text-xxs px-2 py-1">Delete Row</TooltipContent>
               </Tooltip>
             </div>
           ))

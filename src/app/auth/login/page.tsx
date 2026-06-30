@@ -233,7 +233,7 @@ export default function LoginPage() {
             <FormInput
               id="username"
               label={
-                <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                <span className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase">
                   {t.usernameOrEmail}
                 </span>
               }
@@ -255,7 +255,7 @@ export default function LoginPage() {
                 id="password"
                 label={
                   <div className="flex w-full items-center justify-between">
-                    <span className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
+                    <span className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase">
                       {t.password}
                     </span>
                     <button
@@ -299,7 +299,7 @@ export default function LoginPage() {
             <div className="flex flex-col gap-1.5">
               <Label
                 htmlFor="book"
-                className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase"
+                className="text-muted-foreground text-xxs font-semibold tracking-wider uppercase"
               >
                 {t.book}
               </Label>
@@ -344,7 +344,7 @@ export default function LoginPage() {
                 </Select>
               </div>
               {errors.book && (
-                <span className="text-destructive text-[10px] font-medium">{errors.book}</span>
+                <span className="text-destructive text-xxs font-medium">{errors.book}</span>
               )}
             </div>
 

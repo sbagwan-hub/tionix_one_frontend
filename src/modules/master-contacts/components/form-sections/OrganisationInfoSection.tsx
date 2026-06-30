@@ -45,7 +45,7 @@ export const OrganisationInfoSection: React.FC<OrganisationInfoSectionProps> = (
 
   return (
     <div className="border-border/80 bg-background/50 space-y-4 rounded-sm border p-4">
-      <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider uppercase">
+      <Label className="text-muted-foreground text-xxs block font-semibold tracking-wider uppercase">
         Organisation Profile
       </Label>
 
@@ -80,7 +80,7 @@ export const OrganisationInfoSection: React.FC<OrganisationInfoSectionProps> = (
           </Label>
           <div className="border-border/80 bg-background/60 h-[150px] space-y-2 overflow-y-auto rounded-sm border p-2.5">
             {categories.length === 0 ? (
-              <p className="text-muted-foreground text-[10px] italic">No categories loaded</p>
+              <p className="text-muted-foreground text-xxs italic">No categories loaded</p>
             ) : (
               categories.map((cat) => (
                 <label

@@ -62,7 +62,7 @@ export const ContactPersonsSection: React.FC<ContactPersonsSectionProps> = ({
   return (
     <div className="border-border/80 bg-background/50 space-y-3 rounded-sm border p-4">
       <div className="flex items-center justify-between gap-4">
-        <Label className="text-muted-foreground block text-[10px] font-semibold tracking-wider whitespace-nowrap uppercase">
+        <Label className="text-muted-foreground text-xxs block font-semibold tracking-wider whitespace-nowrap uppercase">
           Contact Person(s) ({contactPersons.length})
         </Label>
         <div className="relative w-48">
@@ -134,7 +134,7 @@ export const ContactPersonsSection: React.FC<ContactPersonsSectionProps> = ({
         </table>
       </div>
       {!formData.pk_cont_id && (
-        <p className="text-[10px] font-medium text-amber-500">
+        <p className="text-xxs font-medium text-amber-500">
           * Please save the organisation first to enable contact person association.
         </p>
       )}

@@ -72,7 +72,7 @@ export const RelationshipWindow: React.FC = () => {
         {...form.register('relationship')}
       />
       {form.formState.errors.relationship && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.relationship.message}
         </span>
       )}

@@ -103,7 +103,7 @@ export const SkintoneWindow: React.FC = () => {
         {...form.register('colour')}
       />
       {form.formState.errors.colour && (
-        <span className="text-destructive text-[10px]">{form.formState.errors.colour.message}</span>
+        <span className="text-destructive text-xxs">{form.formState.errors.colour.message}</span>
       )}
     </form>
   );

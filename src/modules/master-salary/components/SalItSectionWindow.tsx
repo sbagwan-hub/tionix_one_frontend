@@ -129,7 +129,7 @@ export const SalItSectionWindow: React.FC = () => {
         {...form.register('it_section')}
       />
       {form.formState.errors.it_section && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.it_section.message}
         </span>
       )}
@@ -141,15 +141,13 @@ export const SalItSectionWindow: React.FC = () => {
         {...form.register('deduction')}
       />
       {form.formState.errors.deduction && (
-        <span className="text-destructive text-[10px]">
-          {form.formState.errors.deduction.message}
-        </span>
+        <span className="text-destructive text-xxs">{form.formState.errors.deduction.message}</span>
       )}
 
       <div className="flex flex-col gap-1.5">
         <Label
           htmlFor="additraction-input"
-          className="text-muted-foreground text-[10px] font-semibold uppercase"
+          className="text-muted-foreground text-xxs font-semibold uppercase"
         >
           Addition / Subtraction *
         </Label>
@@ -174,7 +172,7 @@ export const SalItSectionWindow: React.FC = () => {
           )}
         />
         {form.formState.errors.additraction && (
-          <span className="text-destructive text-[10px]">
+          <span className="text-destructive text-xxs">
             {form.formState.errors.additraction.message}
           </span>
         )}

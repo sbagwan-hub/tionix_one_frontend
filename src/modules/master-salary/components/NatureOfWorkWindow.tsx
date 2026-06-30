@@ -107,7 +107,7 @@ export const NatureOfWorkWindow: React.FC = () => {
         {...form.register('nature_of_work')}
       />
       {form.formState.errors.nature_of_work && (
-        <span className="text-destructive text-[10px]">
+        <span className="text-destructive text-xxs">
           {form.formState.errors.nature_of_work.message}
         </span>
       )}
