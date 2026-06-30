@@ -13,6 +13,7 @@ export function useCreateCreditCard() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: creditCardApi.create,
+    retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['creditCardsList'] });
     },
@@ -24,6 +25,7 @@ export function useUpdateDebitCard() {
   return useMutation({
     mutationFn: ({ id, body }: { id: number | string; body: Partial<CreditCard> }) =>
       creditCardApi.update(id, body),
+    retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['creditCardsList'] });
     },
@@ -34,6 +36,7 @@ export function useDeleteCreditCard() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: creditCardApi.remove,
+    retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['creditCardsList'] });
     },

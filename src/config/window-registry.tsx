@@ -200,12 +200,4 @@ export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
     className: 'absolute top-24 left-16 w-full max-w-2xl',
     component: ChequeBookWindow,
   },
-  'accounts-credit-card': {
-    id: 'accounts-credit-card',
-    title: 'Credit Card Setup',
-    icon: <Settings className="h-4 w-4 text-rose-500" />,
-    isMinimizable: true,
-    className: 'absolute top-24 left-16 w-full max-w-4xl h-[560px]',
-    component: CreditCardWindow,
-  },
 };
