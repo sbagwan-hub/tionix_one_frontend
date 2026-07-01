@@ -24,18 +24,18 @@ export function TransactionAccountsOne({ value, onChange, isEditing }: Transacti
   };
 
   const accountOptions = [
-    'PROFESSION TAX',
-    'PROVIDENT FUND',
-    'ESIC',
-    'TDS ACCOUNT',
-    'SALARY',
-    'ADVANCE',
-    'LOAN',
-    'INTEREST CHARGES',
-    'BONUS',
-    'EXGRATIA',
-    'GRATUITY',
-    'LABOUR WELFARE FUND'
+    { value: 'ACC001', label: 'PROFESSION TAX' },
+    { value: 'ACC002', label: 'PROVIDENT FUND' },
+    { value: 'ACC003', label: 'ESIC' },
+    { value: 'ACC004', label: 'TDS ACCOUNT' },
+    { value: 'ACC005', label: 'SALARY' },
+    { value: 'ACC006', label: 'ADVANCE' },
+    { value: 'ACC007', label: 'LOAN' },
+    { value: 'ACC008', label: 'INTEREST CHARGES' },
+    { value: 'ACC009', label: 'BONUS' },
+    { value: 'ACC010', label: 'EXGRATIA' },
+    { value: 'ACC011', label: 'GRATUITY' },
+    { value: 'ACC012', label: 'LABOUR WELFARE FUND' }
   ];
 
   const renderRow = (
@@ -61,8 +61,8 @@ export function TransactionAccountsOne({ value, onChange, isEditing }: Transacti
             </SelectTrigger>
             <SelectContent className="border-border bg-popover z-[10000]">
               {accountOptions.map((opt) => (
-                <SelectItem key={opt} value={opt}>
-                  {opt}
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
                 </SelectItem>
               ))}
             </SelectContent>

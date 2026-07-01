@@ -69,36 +69,36 @@ const DEFAULT_SALARY_SETTINGS: SalarySettingsData = {
   ptMaleSlabs: [],
   ptFemaleSlabs: [],
 
-  accountPt: 'PROFESSION TAX',
-  accountPfEmployee: 'PROVIDENT FUND',
-  accountPfEmployer: 'PROVIDENT FUND',
-  accountPensionEmployer: 'PROVIDENT FUND',
-  accountDlisEmployer: 'PROVIDENT FUND',
-  accountPfAdmin: 'PROVIDENT FUND',
-  accountDlisAdmin: 'PROVIDENT FUND',
-  accountEsicEmployee: 'ESIC',
-  accountEsicEmployer: 'ESIC',
-  accountTds: 'TDS ACCOUNT',
-  accountNoticeRetentionOffice: 'SALARY',
-  accountNoticeRetentionWorker: 'SALARY',
-  accountNoticeRetentionContractor: 'SALARY',
+  accountPt: 'ACC001',
+  accountPfEmployee: 'ACC002',
+  accountPfEmployer: 'ACC002',
+  accountPensionEmployer: 'ACC002',
+  accountDlisEmployer: 'ACC002',
+  accountPfAdmin: 'ACC002',
+  accountDlisAdmin: 'ACC002',
+  accountEsicEmployee: 'ACC003',
+  accountEsicEmployer: 'ACC003',
+  accountTds: 'ACC004',
+  accountNoticeRetentionOffice: 'ACC005',
+  accountNoticeRetentionWorker: 'ACC005',
+  accountNoticeRetentionContractor: 'ACC005',
 
-  accountSalaryOffice: 'SALARY',
-  accountSalaryWorker: 'SALARY',
-  accountSalaryContractor: 'SALARY',
-  accountAdvanceIssue: 'ADVANCE',
-  accountLoanIssue: 'LOAN',
-  accountAdvanceReturn: 'ADVANCE',
-  accountLoanReturn: 'LOAN',
-  accountInterest: 'INTEREST CHARGES',
-  accountIncentiveOffice: 'SALARY',
-  accountIncentiveWorker: 'SALARY',
-  accountIncentiveContractor: 'SALARY',
-  accountBonus: 'BONUS',
-  accountExgratia: 'EXGRATIA',
-  accountGratuity: 'GRATUITY',
-  accountLwfEmployee: 'LABOUR WELFARE FUND',
-  accountLwfEmployer: 'LABOUR WELFARE FUND'
+  accountSalaryOffice: 'ACC005',
+  accountSalaryWorker: 'ACC005',
+  accountSalaryContractor: 'ACC005',
+  accountAdvanceIssue: 'ACC006',
+  accountLoanIssue: 'ACC007',
+  accountAdvanceReturn: 'ACC006',
+  accountLoanReturn: 'ACC007',
+  accountInterest: 'ACC008',
+  accountIncentiveOffice: 'ACC005',
+  accountIncentiveWorker: 'ACC005',
+  accountIncentiveContractor: 'ACC005',
+  accountBonus: 'ACC009',
+  accountExgratia: 'ACC010',
+  accountGratuity: 'ACC011',
+  accountLwfEmployee: 'ACC012',
+  accountLwfEmployer: 'ACC012'
 };
 
 export const salarySettingsApi = {
@@ -133,7 +133,7 @@ export const salarySettingsApi = {
       acctRes.data.data.forEach((row) => {
         const key = ACCOUNT_SLOT_MAP[row.pk_set_id];
         if (key) {
-          (settings as any)[key] = (row.fk_acct_id || '').trim();
+          (settings as any)[key] = String(row.fk_acct_id || '').trim();
         }
       });
     }
