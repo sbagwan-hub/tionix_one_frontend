@@ -132,13 +132,7 @@ export function useBankAccountForm() {
     }
   }, []);
 
-  useEffect(() => {
-    if (records.length > 0 && mode === 'view') {
-      populate_form(records[cursor]);
-    }
-  }, [cursor, records, mode, populate_form]);
-
-  const handle_add = () => {
+  const clear_form = useCallback(() => {
     set_bank_name('');
     set_account_no('');
     set_rtgs_neft_ifsc('');
@@ -158,6 +152,19 @@ export function useBankAccountForm() {
       { id: '3', name: '', client_id: '' },
       { id: '4', name: '', client_id: '' },
     ]);
+  }, []);
+
+  useEffect(() => {
+    if (selected_id && records.length > 0 && mode === 'view') {
+      const current_rec = records.find((r) => r.pk_ban_id === selected_id);
+      if (current_rec) {
+        populate_form(current_rec);
+      }
+    }
+  }, [records, mode, selected_id, populate_form]);
+
+  const handle_add = () => {
+    clear_form();
     set_mode('add');
     set_active_tab('details');
     setTimeout(() => form_input_ref.current?.focus(), 80);
@@ -178,7 +185,16 @@ export function useBankAccountForm() {
   };
 
   const handle_undo = () => {
-    if (records[cursor]) populate_form(records[cursor]);
+    if (selected_id) {
+      const rec = records.find((r) => r.pk_ban_id === selected_id);
+      if (rec) {
+        populate_form(rec);
+      } else {
+        clear_form();
+      }
+    } else {
+      clear_form();
+    }
     set_mode('view');
   };
 
@@ -236,6 +252,7 @@ export function useBankAccountForm() {
         });
         toast.success(`"${bank_account_name.trim()}" updated.`);
       }
+      clear_form();
       set_mode('view');
     } catch (e: any) {
       toast.error(e.message || 'Failed to save record');
@@ -259,6 +276,7 @@ export function useBankAccountForm() {
     try {
       await delete_mutation.mutateAsync(selected_id);
       toast.success(`"${bank_account_name}" deleted.`);
+      clear_form();
       set_cursor(0);
       set_mode('view');
     } catch (e: any) {
