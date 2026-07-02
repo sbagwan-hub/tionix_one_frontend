@@ -68,8 +68,9 @@ function Navbar() {
 
       {/* Right section: Dropdowns + Utilities */}
       <div className="flex shrink-0 items-center gap-3">
-        {/* Dropdowns (Desktop only) */}
-        <div className="hidden items-center gap-2 md:flex">
+        {/* Context strip (Desktop only) — grouped as one toolbar cluster,
+            neutral fill, single accent reserved for focus/active states */}
+        <div className="border-border/70 bg-muted/40 hidden items-center gap-2 rounded-md border py-1 pr-1 pl-2 md:flex">
           <SelectDropDown
             label={t('language')}
             value={i18n.language}
@@ -94,6 +95,11 @@ function Navbar() {
             ]}
             selectContentClassName="w-24"
           />
+          {/* Financial year is a data/ID value — X-ONE typography calls for
+              the mono data face here (Inter for UI, Plex Mono for data/IDs).
+              NOTE: SelectDropDown's source wasn't in scope for this pass, so
+              apply font-mono to its trigger value internally, or pass a
+              value-class prop through if one exists on that component. */}
           <SelectDropDown
             label={t('financialYear')}
             value="2025/04 - 2026/03"
@@ -102,8 +108,9 @@ function Navbar() {
               { label: '2025/04 - 2026/03', value: '2025/04 - 2026/03' },
               { label: '2024/04 - 2025/03', value: '2024/04 - 2025/03' },
             ]}
-            selectContentClassName="w-40"
+            selectContentClassName="w-40 font-mono"
           />
+
         </div>
 
         {/* Theme Switcher or User Dropdown depending on auth status */}
@@ -135,6 +142,9 @@ function Navbar() {
                     <span className="text-muted-foreground text-xs font-medium">Theme</span>
                     <ThemeSwitcher />
                   </div>
+                  <div className="flex items-center justify-between px-2 py-1.5 md:hidden">
+                    {/* <AccentSwatchPicker withLabel /> */}
+                  </div>
                   <div className="flex items-center justify-between px-2 py-1.5">
                     <span className="text-muted-foreground text-xs font-medium">Font Size</span>
                     <div className="flex items-center gap-1.5">
@@ -149,7 +159,7 @@ function Navbar() {
                       >
                         A-
                       </button>
-                      <span className="min-w-8 text-center text-[11px] font-bold">
+                      <span className="min-w-8 text-center font-mono text-[11px] font-bold">
                         {fontSize}px
                       </span>
                       <button

@@ -61,8 +61,8 @@ export function RenderMenuItems({ items }: { items: MenuItem[] }) {
             <DropdownMenuSub key={item.key ?? idx}>
               <DropdownMenuSubTrigger
                 className={cn(
-                  'text-foreground flex cursor-default items-center rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none',
-                  'focus:bg-muted focus:text-foreground data-[state=open]:bg-muted data-[state=open]:text-foreground',
+                  'text-foreground flex cursor-default items-center rounded-sm px-2.5 py-1.5 text-[12px] font-medium transition-colors outline-none',
+                  'focus:bg-secondary focus:text-secondary-foreground data-[state=open]:bg-secondary data-[state=open]:text-secondary-foreground',
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -92,8 +92,8 @@ export function RenderMenuItems({ items }: { items: MenuItem[] }) {
             key={item.key ?? idx}
             onClick={() => handleClick(item)}
             className={cn(
-              'text-foreground flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-xs font-medium transition-colors outline-none',
-              'focus:bg-muted focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
+              'text-foreground flex cursor-pointer items-center justify-between rounded-sm px-2.5 py-1.5 text-sm font-medium transition-colors outline-none',
+              'focus:bg-secondary focus:text-secondary-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-40',
             )}
           >
             <div className="flex items-center gap-2">
@@ -119,10 +119,10 @@ export function NavbarMenu({ label, items }: NavbarMenuProps) {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         className={cn(
-          'text-foreground inline-flex h-8 items-center justify-center rounded-md bg-transparent px-3 text-xs font-medium transition-colors outline-none',
-          'hover:bg-muted/60 hover:text-foreground',
-          'data-[state=open]:bg-muted data-[state=open]:text-foreground',
-          'focus:bg-muted/60 focus:text-foreground cursor-pointer',
+          'text-foreground inline-flex h-8 items-center justify-center rounded-md bg-transparent px-3 text-sm font-medium transition-colors outline-none',
+          'hover:bg-secondary hover:text-secondary-foreground',
+          'data-[state=open]:bg-secondary data-[state=open]:text-secondary-foreground',
+          'focus:bg-secondary focus:text-secondary-foreground cursor-pointer',
         )}
       >
         {label}
