@@ -5,13 +5,7 @@ import { Info, Eye, PlusCircle, Settings2, FolderOpen, User } from 'lucide-react
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormInput } from '@/components/common/form-input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import FormSelect from '@/components/common/form-select';
 import { AcctGroup } from '../../account-groups/types';
 import { BankAccount, HolderDetail } from '../types';
 
@@ -137,24 +131,25 @@ export function BankAccountForm({
         {/* Row 1: Bank Name & Account No. */}
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Bank Name {is_editing && <span className="text-destructive">*</span>}
-            </Label>
             {is_editing ? (
-              <Select value={bank_name || undefined} onValueChange={set_bank_name}>
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
-                  <SelectValue placeholder="Select Bank" />
-                </SelectTrigger>
-                <SelectContent position="popper" sideOffset={4}>
-                  {organizations.map((org) => (
-                    <SelectItem key={org.pk_cont_id} value={org.contact_name} className="text-xs">
-                      {org.contact_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormSelect
+                label={
+                  <span>Bank Name {is_editing && <span className="text-destructive">*</span>}</span>
+                }
+                value={bank_name || undefined}
+                onValueChange={set_bank_name}
+                placeholder="Select Bank"
+                className="border-border/85 h-9 w-full text-xs"
+                options={organizations.map((org) => ({
+                  value: org.contact_name,
+                  label: org.contact_name,
+                }))}
+              />
             ) : (
-              <Input value={bank_name} disabled className="h-9 text-xs" />
+              <>
+                <Label className="text-foreground/80 text-xs font-semibold">Bank Name</Label>
+                <Input value={bank_name} disabled className="h-9 text-xs" />
+              </>
             )}
           </div>
 
@@ -187,24 +182,27 @@ export function BankAccountForm({
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Account Type {is_editing && <span className="text-destructive">*</span>}
-            </Label>
             {is_editing ? (
-              <Select value={account_type || undefined} onValueChange={set_account_type}>
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
-                  <SelectValue placeholder="Select Account Type" />
-                </SelectTrigger>
-                <SelectContent className="border-border bg-popover z-10000">
-                  {accountTypeOptions.map((t) => (
-                    <SelectItem key={t} value={t} className="text-xs">
-                      {t}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormSelect
+                label={
+                  <span>
+                    Account Type {is_editing && <span className="text-destructive">*</span>}
+                  </span>
+                }
+                value={account_type || undefined}
+                onValueChange={set_account_type}
+                placeholder="Select Account Type"
+                className="border-border/85 h-9 w-full text-xs"
+                options={accountTypeOptions.map((t) => ({
+                  value: t,
+                  label: t,
+                }))}
+              />
             ) : (
-              <Input value={account_type} disabled className="h-9 text-xs" />
+              <>
+                <Label className="text-foreground/80 text-xs font-semibold">Account Type</Label>
+                <Input value={account_type} disabled className="h-9 text-xs" />
+              </>
             )}
           </div>
         </div>
@@ -312,25 +310,16 @@ export function BankAccountForm({
 
                 <div className="col-span-6">
                   {is_editing ? (
-                    <Select
+                    <FormSelect
                       value={holder.name || undefined}
                       onValueChange={(val) => handleHolderChange(idx, 'name', val)}
-                    >
-                      <SelectTrigger className="bg-background h-8.5 w-full text-xs">
-                        <SelectValue placeholder="Select Holder Name" />
-                      </SelectTrigger>
-                      <SelectContent position="popper" sideOffset={4}>
-                        {individuals.map((ind) => (
-                          <SelectItem
-                            key={ind.pk_cont_id}
-                            value={ind.contact_name}
-                            className="text-xs"
-                          >
-                            {ind.contact_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      placeholder="Select Holder Name"
+                      className="h-8.5 w-full text-xs"
+                      options={individuals.map((ind) => ({
+                        value: ind.contact_name,
+                        label: ind.contact_name,
+                      }))}
+                    />
                   ) : (
                     <Input value={holder.name} disabled className="h-8.5 text-xs" />
                   )}

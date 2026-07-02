@@ -120,17 +120,6 @@ export function useAssetForm() {
     }
   }, [activeDetail, selected_id, mode, populate_form]);
 
-  // Initial population of form if records exist
-  useEffect(() => {
-    if (records.length > 0 && !selected_id && mode === 'view') {
-      const first = records[0];
-      if (first) {
-        set_selected_id(first.pk_ast_id);
-        set_cursor(0);
-      }
-    }
-  }, [records, selected_id, mode]);
-
   const handle_add = () => {
     clear_form();
     set_mode('add');

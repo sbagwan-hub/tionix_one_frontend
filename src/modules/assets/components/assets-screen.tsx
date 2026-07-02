@@ -153,7 +153,7 @@ export function AssetsScreen() {
                           }`}
                         >
                           <span>{rec.asset_code}</span>
-                          <span className="text-muted-foreground max-w-[120px] truncate font-sans text-[10px]">
+                          <span className="text-muted-foreground text-xxs max-w-[120px] truncate font-sans">
                             {rec.description}
                           </span>
                         </button>

@@ -61,12 +61,12 @@ export const FormSelect = React.forwardRef<HTMLButtonElement, FormSelectProps>(
 
         {/* Select Wrapper */}
         <div className="relative w-full">
-          <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+          <Select value={value ?? ''} onValueChange={onValueChange} disabled={disabled}>
             <SelectTrigger
               ref={ref}
               id={triggerId}
               className={cn(
-                'border-border/80 focus:ring-primary focus:border-primary bg-background/50 h-9 w-full rounded-lg text-xs font-medium transition-all focus:ring-1 focus:outline-none',
+                'border-border/80 focus:ring-primary focus:border-primary bg-background/50 h-9 w-full rounded-lg text-xs font-medium transition-all focus:ring-1 focus:outline-none data-[size=default]:h-9',
                 error &&
                   'border-destructive focus:border-destructive focus:ring-destructive/30 bg-destructive/5 dark:bg-destructive/10',
                 className,
