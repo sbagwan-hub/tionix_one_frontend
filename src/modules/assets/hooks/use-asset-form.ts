@@ -328,7 +328,7 @@ export function useAssetForm() {
 
   const utility_actions = [
     {
-      label: 'Refresh',
+      title: 'Refresh',
       icon: RotateCw,
       onClick: () => {
         refetch_list();
@@ -337,19 +337,19 @@ export function useAssetForm() {
       variant: 'icon' as const,
     },
     {
-      label: 'Print',
+      title: 'Print',
       icon: Printer,
       onClick: () => toast.info('Print feature not implemented yet.'),
       variant: 'icon' as const,
     },
     {
-      label: 'Export',
+      title: 'Export',
       icon: FileSpreadsheet,
       onClick: () => toast.info('Export feature not implemented yet.'),
       variant: 'icon' as const,
     },
     {
-      label: 'Help',
+      title: 'Help',
       icon: HelpCircle,
       onClick: () => toast.info('ERP Asset module help documentation.'),
       variant: 'icon' as const,

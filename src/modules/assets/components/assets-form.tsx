@@ -1,19 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { Eye, PlusCircle, Settings2, Plus, Trash2, Calendar, FileText } from 'lucide-react';
+import { Eye, PlusCircle, Settings2, Calendar, FileText } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FormInput } from '@/components/common/form-input';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Asset, AssetPartItem, AccountLookup, ProductLookup } from '../types';
+import { AssetsPartsTable } from './AssetsPartsTable';
+import { Chip } from '@/components/common/chip';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import FormSelect from '@/components/common/form-select';
 
 interface AssetsFormProps {
   asset_code: string;
@@ -119,36 +115,16 @@ export function AssetsForm({
           Asset Information
         </span>
 
-        <div
-          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium shadow-2xs transition-all duration-300 ${
-            !is_editing
-              ? 'border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400'
-              : mode === 'add'
-                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                : 'border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400'
-          }`}
-        >
-          {!is_editing ? (
-            <>
-              <Eye className="h-3 w-3" />
-              <span>Read-Only Mode</span>
-            </>
-          ) : mode === 'add' ? (
-            <>
-              <PlusCircle className="h-3 w-3 animate-pulse" />
-              <span>Add Mode</span>
-            </>
-          ) : (
-            <>
-              <Settings2 className="h-3 w-3" />
-              <span>Edit Mode</span>
-            </>
-          )}
-        </div>
+        {!is_editing ? (
+          <Chip label="Read-Only Mode" variant="neutral" icon={Eye} />
+        ) : mode === 'add' ? (
+          <Chip label="Add Mode" variant="primary" icon={PlusCircle} pulse />
+        ) : (
+          <Chip label="Edit Mode" variant="primary" icon={Settings2} pulse />
+        )}
       </div>
 
       <div className="space-y-4 pr-1 pb-16">
-        {/* Row 1: Asset Code & Status */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <FormInput
@@ -160,36 +136,37 @@ export function AssetsForm({
               onChange={(e) => set_asset_code(e.target.value)}
               disabled={!is_editing || mode === 'edit'}
               placeholder="Enter Asset Code"
-              className="h-9 text-xs font-mono"
+              className="h-9 font-mono text-xs"
             />
           </div>
 
           <div className="space-y-1.5">
             <Label className="text-foreground/80 text-xs font-semibold">Status</Label>
-            <div className="flex h-9 items-center gap-4 text-xs">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="status"
-                  checked={status === true}
-                  onChange={() => set_status(true)}
-                  disabled={!is_editing}
-                  className="accent-primary"
-                />
-                <span>Active</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="status"
-                  checked={status === false}
-                  onChange={() => set_status(false)}
-                  disabled={!is_editing}
-                  className="accent-primary"
-                />
-                <span>Inactive</span>
-              </label>
-            </div>
+            <RadioGroup
+              value={status ? 'active' : 'inactive'}
+              onValueChange={(val) => set_status(val === 'active')}
+              disabled={!is_editing}
+              className="flex h-9 items-center gap-4 text-xs"
+            >
+              <div className="flex items-center gap-1.5">
+                <RadioGroupItem value="active" id="status-active" />
+                <Label
+                  htmlFor="status-active"
+                  className="text-foreground/80 cursor-pointer text-xs font-normal"
+                >
+                  Active
+                </Label>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <RadioGroupItem value="inactive" id="status-inactive" />
+                <Label
+                  htmlFor="status-inactive"
+                  className="text-foreground/80 cursor-pointer text-xs font-normal"
+                >
+                  Inactive
+                </Label>
+              </div>
+            </RadioGroup>
           </div>
         </div>
 
@@ -198,7 +175,9 @@ export function AssetsForm({
           <div className="space-y-1.5">
             <FormInput
               label={
-                <span>Asset Description {is_editing && <span className="text-destructive">*</span>}</span>
+                <span>
+                  Asset Description {is_editing && <span className="text-destructive">*</span>}
+                </span>
               }
               value={description}
               onChange={(e) => set_description(e.target.value)}
@@ -209,31 +188,31 @@ export function AssetsForm({
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Asset Account {is_editing && <span className="text-destructive">*</span>}
-            </Label>
             {is_editing ? (
-              <Select
+              <FormSelect
+                label={
+                  <span>
+                    Asset Account {is_editing && <span className="text-destructive">*</span>}
+                  </span>
+                }
                 value={fk_acct_id ? String(fk_acct_id) : undefined}
                 onValueChange={(val) => set_fk_acct_id(parseInt(val, 10))}
-              >
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
-                  <SelectValue placeholder="Select Account" />
-                </SelectTrigger>
-                <SelectContent position="popper" sideOffset={4} className="max-h-60 overflow-y-auto">
-                  {accounts.map((acct) => (
-                    <SelectItem key={acct.pk_acct_id} value={String(acct.pk_acct_id)} className="text-xs">
-                      {acct.account} ({acct.acct_code})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <Input
-                value={accounts.find((a) => a.pk_acct_id === fk_acct_id)?.account || ''}
-                disabled
-                className="h-9 text-xs"
+                placeholder="Select Account"
+                className="border-border/85 h-9 w-full text-xs"
+                options={accounts.map((acct) => ({
+                  value: String(acct.pk_acct_id),
+                  label: `${acct.account} (${acct.acct_code})`,
+                }))}
               />
+            ) : (
+              <>
+                <Label className="text-foreground/80 text-xs font-semibold">Asset Account</Label>
+                <Input
+                  value={accounts.find((a) => a.pk_acct_id === fk_acct_id)?.account || ''}
+                  disabled
+                  className="h-9 text-xs"
+                />
+              </>
             )}
           </div>
         </div>
@@ -241,60 +220,60 @@ export function AssetsForm({
         {/* Row 3: Product Selection (Main Asset Product) */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Product Code {is_editing && <span className="text-destructive">*</span>}
-            </Label>
             {is_editing ? (
-              <Select
+              <FormSelect
+                label={
+                  <span>
+                    Product Code {is_editing && <span className="text-destructive">*</span>}
+                  </span>
+                }
                 value={fk_prod_id ? String(fk_prod_id) : undefined}
                 onValueChange={handleProductChange}
-              >
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs font-mono">
-                  <SelectValue placeholder="Select Product Code" />
-                </SelectTrigger>
-                <SelectContent position="popper" sideOffset={4} className="max-h-60 overflow-y-auto">
-                  {products.map((prod) => (
-                    <SelectItem key={prod.pk_prod_id} value={String(prod.pk_prod_id)} className="text-xs font-mono">
-                      {prod.prod_code}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <Input
-                value={products.find((p) => p.pk_prod_id === fk_prod_id)?.prod_code || ''}
-                disabled
-                className="h-9 text-xs font-mono"
+                placeholder="Select Product Code"
+                className="border-border/85 h-9 w-full font-mono text-xs"
+                options={products.map((prod) => ({
+                  value: String(prod.pk_prod_id),
+                  label: prod.prod_code,
+                }))}
               />
+            ) : (
+              <>
+                <Label className="text-foreground/80 text-xs font-semibold">Product Code</Label>
+                <Input
+                  value={products.find((p) => p.pk_prod_id === fk_prod_id)?.prod_code || ''}
+                  disabled
+                  className="h-9 font-mono text-xs"
+                />
+              </>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">
-              Product Name {is_editing && <span className="text-destructive">*</span>}
-            </Label>
             {is_editing ? (
-              <Select
+              <FormSelect
+                label={
+                  <span>
+                    Product Name {is_editing && <span className="text-destructive">*</span>}
+                  </span>
+                }
                 value={fk_prod_id ? String(fk_prod_id) : undefined}
                 onValueChange={handleProductChange}
-              >
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
-                  <SelectValue placeholder="Select Product Name" />
-                </SelectTrigger>
-                <SelectContent position="popper" sideOffset={4} className="max-h-60 overflow-y-auto">
-                  {products.map((prod) => (
-                    <SelectItem key={prod.pk_prod_id} value={String(prod.pk_prod_id)} className="text-xs">
-                      {prod.prod_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <Input
-                value={products.find((p) => p.pk_prod_id === fk_prod_id)?.prod_name || ''}
-                disabled
-                className="h-9 text-xs"
+                placeholder="Select Product Name"
+                className="border-border/85 h-9 w-full text-xs"
+                options={products.map((prod) => ({
+                  value: String(prod.pk_prod_id),
+                  label: prod.prod_name,
+                }))}
               />
+            ) : (
+              <>
+                <Label className="text-foreground/80 text-xs font-semibold">Product Name</Label>
+                <Input
+                  value={products.find((p) => p.pk_prod_id === fk_prod_id)?.prod_name || ''}
+                  disabled
+                  className="h-9 text-xs"
+                />
+              </>
             )}
           </div>
         </div>
@@ -309,37 +288,38 @@ export function AssetsForm({
                 value={exp_date}
                 onChange={(e) => set_exp_date(e.target.value)}
                 disabled={!is_editing}
-                className="h-9 text-xs pr-8"
+                className="h-9 pr-8 text-xs"
               />
-              <Calendar className="absolute top-2.5 right-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Calendar className="text-muted-foreground pointer-events-none absolute top-2.5 right-2.5 h-4 w-4" />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-foreground/80 text-xs font-semibold">Condition</Label>
             {is_editing ? (
-              <Select value={condition} onValueChange={set_condition}>
-                <SelectTrigger className="border-border/85 bg-background/50 h-9 w-full text-xs">
-                  <SelectValue placeholder="Select Condition" />
-                </SelectTrigger>
-                <SelectContent position="popper" sideOffset={4}>
-                  {conditionOptions.map((opt) => (
-                    <SelectItem key={opt} value={opt} className="text-xs">
-                      {opt}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormSelect
+                label="Condition"
+                value={condition}
+                onValueChange={set_condition}
+                placeholder="Select Condition"
+                className="border-border/85 h-9 w-full text-xs"
+                options={conditionOptions.map((opt) => ({
+                  value: opt,
+                  label: opt,
+                }))}
+              />
             ) : (
-              <Input value={condition} disabled className="h-9 text-xs" />
+              <>
+                <Label className="text-foreground/80 text-xs font-semibold">Condition</Label>
+                <Input value={condition} disabled className="h-9 text-xs" />
+              </>
             )}
           </div>
         </div>
 
         {/* Additional Asset Codes (only in Add Mode) */}
         {is_editing && mode === 'add' && (
-          <div className="space-y-1.5 bg-muted/30 border rounded-lg p-3">
-            <div className="flex items-center gap-1.5 text-xxs font-bold text-muted-foreground uppercase">
+          <div className="bg-muted/30 space-y-1.5 rounded-lg border p-3">
+            <div className="text-xxs text-muted-foreground flex items-center gap-1.5 font-bold uppercase">
               <FileText className="h-3.5 w-3.5" />
               <span>Bulk Create Clones (Optional)</span>
             </div>
@@ -348,144 +328,24 @@ export function AssetsForm({
               value={additional_asset_codes_str}
               onChange={(e) => set_additional_asset_codes_str(e.target.value)}
               placeholder="Comma-separated codes (e.g. AST002, AST003)"
-              className="h-9 text-xs font-mono"
+              className="h-9 font-mono text-xs"
             />
-            <p className="text-[10px] text-muted-foreground leading-normal">
-              Enter extra codes separated by commas to duplicate this asset definition and all its parts in one click.
+            <p className="text-muted-foreground text-xxs leading-normal">
+              Enter extra codes separated by commas to duplicate this asset definition and all its
+              parts in one click.
             </p>
           </div>
         )}
 
         {/* Parts / Component Table */}
-        <div className="space-y-2 border rounded-xl p-4 bg-card/45 shadow-3xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-foreground">Parts / Components list</span>
-            {is_editing && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleAddPart}
-                className="h-7 gap-1 text-[11px] font-semibold border-primary/30 hover:border-primary text-primary bg-primary/5"
-              >
-                <Plus className="h-3 w-3" /> Add Part
-              </Button>
-            )}
-          </div>
-
-          <div className="overflow-x-auto min-w-full rounded-lg border bg-background/50">
-            <table className="min-w-full divide-y text-xs">
-              <thead className="bg-muted/40 font-semibold text-muted-foreground">
-                <tr>
-                  <th className="px-3 py-2 text-left w-48">Product Code</th>
-                  <th className="px-3 py-2 text-left">Part Name</th>
-                  <th className="px-3 py-2 text-left">Description</th>
-                  <th className="px-3 py-2 text-left w-24">Quantity</th>
-                  <th className="px-3 py-2 text-left w-20">Unit</th>
-                  {is_editing && <th className="px-3 py-2 text-center w-12">Action</th>}
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {parts.length === 0 ? (
-                  <tr>
-                    <td colSpan={is_editing ? 6 : 5} className="px-3 py-6 text-center text-muted-foreground">
-                      No parts or components defined. Click "Add Part" to add one.
-                    </td>
-                  </tr>
-                ) : (
-                  parts.map((part, index) => {
-                    const selectedProd = products.find((p) => p.pk_prod_id === part.fk_prod_id);
-                    return (
-                      <tr key={index} className="hover:bg-muted/20">
-                        {/* Product Code */}
-                        <td className="p-1.5">
-                          {is_editing ? (
-                            <Select
-                              value={String(part.fk_prod_id)}
-                              onValueChange={(val) =>
-                                handlePartChange(index, 'fk_prod_id', parseInt(val, 10))
-                              }
-                            >
-                              <SelectTrigger className="h-8 text-xs font-mono">
-                                <SelectValue placeholder="Select Part" />
-                              </SelectTrigger>
-                              <SelectContent className="max-h-48 overflow-y-auto">
-                                {products.map((p) => (
-                                  <SelectItem key={p.pk_prod_id} value={String(p.pk_prod_id)} className="text-xs font-mono">
-                                    {p.prod_code}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          ) : (
-                            <span className="font-mono px-1.5">{selectedProd?.prod_code || ''}</span>
-                          )}
-                        </td>
-
-                        {/* Part Name (read-only based on code selection) */}
-                        <td className="p-1.5 px-3">
-                          <span className="font-medium text-foreground/80">
-                            {selectedProd?.prod_name || ''}
-                          </span>
-                        </td>
-
-                        {/* Description */}
-                        <td className="p-1.5">
-                          {is_editing ? (
-                            <Input
-                              value={part.description}
-                              onChange={(e) => handlePartChange(index, 'description', e.target.value)}
-                              placeholder="Enter Description"
-                              className="h-8 text-xs"
-                            />
-                          ) : (
-                            <span className="px-1.5">{part.description}</span>
-                          )}
-                        </td>
-
-                        {/* Quantity */}
-                        <td className="p-1.5">
-                          {is_editing ? (
-                            <Input
-                              type="number"
-                              min={0.01}
-                              step={0.01}
-                              value={part.quantity}
-                              onChange={(e) =>
-                                handlePartChange(index, 'quantity', parseFloat(e.target.value) || 0)
-                              }
-                              className="h-8 text-xs font-mono"
-                            />
-                          ) : (
-                            <span className="font-mono px-1.5">{part.quantity}</span>
-                          )}
-                        </td>
-
-                        {/* Unit (read-only from selected product) */}
-                        <td className="p-1.5 px-3 text-muted-foreground font-mono">
-                          {selectedProd?.unit || ''}
-                        </td>
-
-                        {/* Action */}
-                        {is_editing && (
-                          <td className="p-1.5 text-center">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleRemovePart(index)}
-                              className="h-7 w-7 text-destructive hover:bg-destructive/10"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </td>
-                        )}
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <AssetsPartsTable
+          is_editing={is_editing}
+          parts={parts}
+          products={products}
+          handleAddPart={handleAddPart}
+          handleRemovePart={handleRemovePart}
+          handlePartChange={handlePartChange}
+        />
       </div>
     </div>
   );

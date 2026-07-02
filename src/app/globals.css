@@ -473,3 +473,9 @@
     @apply font-sans;
   }
 }
+
+[data-radix-portal],
+[data-radix-portal] > *,
+[data-slot='select-content'] {
+  z-index: 10000 !important;
+}

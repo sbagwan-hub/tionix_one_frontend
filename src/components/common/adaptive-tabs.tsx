@@ -32,23 +32,14 @@ const AdaptiveTabs = React.forwardRef<HTMLDivElement, AdaptiveTabsProps>(
 
         {/* Core Tabs Control Node */}
         <Tabs value={value} onValueChange={onValueChange} className="w-full" {...props}>
-          <TabsList
-            className="border-border/80 bg-muted/40 grid h-8 w-full items-center rounded-md border p-0.5 shadow-none"
-            style={{
-              gridTemplateColumns:
-                totalOptions > 6
-                  ? 'repeat(auto-fit, minmax(0, 1fr))'
-                  : `repeat(${totalOptions || 1}, minmax(0, 1fr))`,
-            }}
-          >
+          <TabsList className="flex border-b border-border/80 bg-transparent h-auto p-0 w-full justify-start rounded-none">
             {options.map((option) => (
               <TabsTrigger
                 key={option.value}
                 value={option.value}
                 className={cn(
-                  'h-full w-full cursor-pointer truncate rounded-sm px-1 text-xs font-medium tracking-tight shadow-none transition-all',
-                  'flex items-center justify-center text-center', // Explicit layout centering alignment flags
-                  'data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:border-border/60 data-[state=active]:border data-[state=active]:shadow-none',
+                  'mb-[-2px] border-b-2 px-4 py-2 text-xs font-semibold transition-all cursor-pointer rounded-none border-transparent text-foreground hover:text-foreground bg-transparent shadow-none h-auto flex items-center justify-center after:hidden',
+                  'data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-muted/30 data-[state=active]:font-bold data-[state=active]:shadow-none data-[state=active]:border-b-2',
                 )}
               >
                 {option.label}
