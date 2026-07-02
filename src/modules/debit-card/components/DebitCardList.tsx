@@ -79,14 +79,13 @@ export const DebitCardList: React.FC<DebitCardListProps> = ({
                 <tr
                   key={rec.pk_deb_id}
                   onClick={() => handle_select_record(rec, (page - 1) * page_size + idx)}
-                  className={`hover:bg-primary/5 cursor-pointer transition-colors ${
-                    selected_id === rec.pk_deb_id ? 'bg-primary/10 text-primary font-medium' : ''
-                  }`}
+                  className={`hover:bg-primary/5 cursor-pointer transition-colors ${selected_id === rec.pk_deb_id ? 'bg-primary/10 text-primary font-medium' : ''
+                    }`}
                 >
                   <td className="p-2.5 pl-4 font-semibold">
                     {rec.bank_account_name || 'Bank Account'}
                   </td>
-                  <td className="p-2.5 font-mono">{rec.card_no}</td>
+                  <td className="p-2.5 font-mono">{rec.debit_card_no}</td>
                   <td className="p-2.5">{rec.holder_name}</td>
                   <td className="p-2.5 pr-4 font-mono">{rec.expiry_date?.split('T')[0]}</td>
                 </tr>

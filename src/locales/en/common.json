@@ -51,6 +51,7 @@
   "theme": "Theme",
   "preferences": "Preferences",
   "attendanceRules": "Attendance Rules",
+  "attendanceMachines": "Attendance Machines",
   "salarySettings": "Salary Settings",
   "calculator": "Calculator",
   "importExport": "Import / Export",
