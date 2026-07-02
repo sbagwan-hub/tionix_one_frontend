@@ -121,6 +121,7 @@ export const NAV_MENUS: NavMenu[] = [
           { key: 'group', href: '/masters/accounts/account-groups', icon: 'Folder' },
           { key: 'account', href: '/masters/accounts/accounts', icon: 'FileText' },
           { key: 'bankAccount', href: '/masters/accounts/bank-accounts', icon: 'Briefcase' },
+          { key: 'asset', href: '/masters/accounts/assets', icon: 'Briefcase' },
           {
             key: 'debitCard',
             icon: 'CreditCard',

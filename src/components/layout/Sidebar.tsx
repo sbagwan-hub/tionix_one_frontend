@@ -241,6 +241,12 @@ export function Sidebar() {
               href: '/masters/accounts/bank-accounts',
             },
             {
+              key: 'asset',
+              label: 'Assets',
+              icon: Briefcase,
+              href: '/masters/accounts/assets',
+            },
+            {
               key: 'debitCard',
               label: 'Debit Cards',
               icon: CreditCard,
