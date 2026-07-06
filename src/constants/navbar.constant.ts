@@ -213,7 +213,11 @@ export const NAV_MENUS: NavMenu[] = [
     items: [
       { key: 'preferences', href: '/preferences', icon: 'Settings2' },
       { key: 'attendanceRules', href: '/settings/attendance-rules', icon: 'Calendar' },
-      { key: 'attendanceMachines', href: '/settings/attendance-machine', icon: 'Cpu' },
+      {
+        key: 'attendanceMachines',
+        icon: 'Cpu',
+        action: () => useWindowStore.getState().openWindow('settings-attendance-machine'),
+      },
       { key: 'salarySettings', href: '/settings/salary-settings', icon: 'Coins' },
       { key: 'theme', href: '/theme', icon: 'Palette' },
     ],

@@ -63,6 +63,8 @@ export interface WindowPanelProps {
   isEdit?: boolean;
   /** Database Form Name to resolve permissions automatically */
   formName?: string;
+  /** Callback when an item is double-clicked in the List tab */
+  onDoubleClick?: (item: WindowPanelItem) => void;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -74,19 +76,21 @@ interface ListItemRowProps {
   isSelected: boolean;
   isEven: boolean;
   onClick: () => void;
+  onDoubleClick?: () => void;
 }
 
-function ListItemRow({ item, isSelected, isEven, onClick }: ListItemRowProps) {
+function ListItemRow({ item, isSelected, isEven, onClick, onDoubleClick }: ListItemRowProps) {
   return (
     <div
       onClick={onClick}
+      onDoubleClick={onDoubleClick}
       className={cn(
         'group border-border/20 flex h-9 cursor-pointer items-center justify-between gap-2 border-b px-3 transition-all duration-200',
         !isSelected && isEven && 'bg-muted/5',
         !isSelected && !isEven && 'bg-transparent',
         'hover:bg-muted/20 hover:pl-5',
         isSelected &&
-          'border-b-primary/20 bg-primary/5 dark:bg-primary/10 text-primary border-l-primary border-l-2 pl-5 font-medium',
+        'border-b-primary/20 bg-primary/5 dark:bg-primary/10 text-primary border-l-primary border-l-2 pl-5 font-medium',
       )}
     >
       <div className="flex min-w-0 items-center gap-2.5">
@@ -158,6 +162,7 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
       canDelete = true,
       isEdit = false,
       formName,
+      onDoubleClick,
     },
     ref,
   ) => {
@@ -219,56 +224,56 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
     const toolbarActions: any[] =
       activeTab === 'title'
         ? [
-            {
-              label: isSaving ? 'Saving...' : 'Add',
-              icon: Save,
-              type: formId ? 'submit' : 'button',
-              form: formId,
-              onClick: formId ? undefined : handleSave,
-              disabled:
-                isSaving ||
-                isSaveDisabled ||
-                (!formId && !internalValue.trim()) ||
-                (isEdit ? !resolvedCanEdit : !resolvedCanAdd),
-              variant: 'primary',
-            },
-            {
-              label: 'Cancel',
-              icon: X,
-              onClick: handleTab1CancelClick,
-              variant: 'outline',
-            },
-          ]
+          {
+            label: isSaving ? 'Saving...' : 'Add',
+            icon: Save,
+            type: formId ? 'submit' : 'button',
+            form: formId,
+            onClick: formId ? undefined : handleSave,
+            disabled:
+              isSaving ||
+              isSaveDisabled ||
+              (!formId && !internalValue.trim()) ||
+              (isEdit ? !resolvedCanEdit : !resolvedCanAdd),
+            variant: 'primary',
+          },
+          {
+            label: 'Cancel',
+            icon: X,
+            onClick: handleTab1CancelClick,
+            variant: 'outline',
+          },
+        ]
         : [
-            {
-              label: 'Add',
-              icon: Plus,
-              onClick: handleTab2AddClick,
-              disabled: !resolvedCanAdd,
-              variant: 'outline',
-            },
-            {
-              label: 'Edit',
-              icon: Pencil,
-              onClick: handleTab2EditClick,
-              disabled: !selectedItemId || !resolvedCanEdit,
-              variant: 'outline',
-            },
-            {
-              label: 'Delete',
-              icon: Trash2,
-              onClick: handleTab2DeleteClick,
-              disabled: !selectedItemId || !resolvedCanDelete,
-              variant: 'danger',
-            },
-            {
-              label: 'Cancel',
-              icon: X,
-              onClick: () => setSelectedItemId(null),
-              disabled: !selectedItemId,
-              variant: 'outline',
-            },
-          ];
+          {
+            label: 'Add',
+            icon: Plus,
+            onClick: handleTab2AddClick,
+            disabled: !resolvedCanAdd,
+            variant: 'outline',
+          },
+          {
+            label: 'Edit',
+            icon: Pencil,
+            onClick: handleTab2EditClick,
+            disabled: !selectedItemId || !resolvedCanEdit,
+            variant: 'outline',
+          },
+          {
+            label: 'Delete',
+            icon: Trash2,
+            onClick: handleTab2DeleteClick,
+            disabled: !selectedItemId || !resolvedCanDelete,
+            variant: 'danger',
+          },
+          {
+            label: 'Cancel',
+            icon: X,
+            onClick: () => setSelectedItemId(null),
+            disabled: !selectedItemId,
+            variant: 'outline',
+          },
+        ];
 
     return (
       <div ref={ref} className={cn('flex h-[300px] flex-col gap-1', className)}>
@@ -371,6 +376,16 @@ export const WindowPanel = React.forwardRef<HTMLDivElement, WindowPanelProps>(
                       isSelected={selectedItemId === item.id}
                       isEven={index % 2 === 0}
                       onClick={() => setSelectedItemId(item.id)}
+                      onDoubleClick={() => {
+                        setSelectedItemId(item.id);
+                        if (onDoubleClick) {
+                          onDoubleClick(item);
+                          setActiveTab('title');
+                        } else if (onEdit) {
+                          onEdit(item);
+                          setActiveTab('title');
+                        }
+                      }}
                     />
                   ))}
                 </div>

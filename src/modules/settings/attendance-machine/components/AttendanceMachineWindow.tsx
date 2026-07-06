@@ -28,6 +28,7 @@ import { attendanceMachineSchema, AttendanceMachineDto } from '../types';
 
 export const AttendanceMachineWindow: React.FC = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [isViewOnly, setIsViewOnly] = useState(false);
   const [is_confirm_open, set_is_confirm_open] = useState(false);
   const [pending_delete_id, set_pending_delete_id] = useState<number | null>(null);
 
@@ -51,9 +52,11 @@ export const AttendanceMachineWindow: React.FC = () => {
   });
 
   const in_out = form.watch('in_out');
+  const is_sys_defined = form.watch('sys_defined');
 
   const resetForm = () => {
     setEditingId(null);
+    setIsViewOnly(false);
     form.reset({
       code: '',
       ip: '',
@@ -86,6 +89,22 @@ export const AttendanceMachineWindow: React.FC = () => {
       return;
     }
     setEditingId(rec.pk_sb_id);
+    setIsViewOnly(false);
+    form.reset({
+      pk_sb_id: rec.pk_sb_id,
+      code: rec.code,
+      ip: rec.ip,
+      port: rec.port,
+      in_out: rec.in_out,
+      sys_defined: rec.sys_defined,
+    });
+  };
+
+  const handleDoubleClick = (item: WindowPanelItem) => {
+    const rec = records.find((r) => String(r.pk_sb_id) === item.id);
+    if (!rec || !rec.pk_sb_id) return;
+    setEditingId(rec.pk_sb_id);
+    setIsViewOnly(true);
     form.reset({
       pk_sb_id: rec.pk_sb_id,
       code: rec.code,
@@ -140,6 +159,7 @@ export const AttendanceMachineWindow: React.FC = () => {
             placeholder="Enter Machine Code"
             {...form.register('code')}
             className="h-9 text-xs"
+            disabled={isViewOnly || is_sys_defined}
           />
           {form.formState.errors.code && (
             <p className="text-destructive text-xxs mt-1">
@@ -160,6 +180,7 @@ export const AttendanceMachineWindow: React.FC = () => {
             placeholder="Enter IP Address"
             {...form.register('ip')}
             className="h-9 text-xs"
+            disabled={isViewOnly || is_sys_defined}
           />
           {form.formState.errors.ip && (
             <p className="text-destructive text-xxs mt-1">
@@ -181,6 +202,7 @@ export const AttendanceMachineWindow: React.FC = () => {
             placeholder="Enter UDP Port (e.g. 4370)"
             {...form.register('port')}
             className="h-9 text-xs"
+            disabled={isViewOnly || is_sys_defined}
           />
           {form.formState.errors.port && (
             <p className="text-destructive text-xxs mt-1">
@@ -197,6 +219,7 @@ export const AttendanceMachineWindow: React.FC = () => {
         </Label>
         <div className="col-span-9">
           <Select
+            disabled={isViewOnly || is_sys_defined}
             value={in_out || ''}
             onValueChange={(val) => form.setValue('in_out', val, { shouldDirty: true })}
           >
@@ -229,13 +252,14 @@ export const AttendanceMachineWindow: React.FC = () => {
         onAdd={resetForm}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onDoubleClick={handleDoubleClick}
         formContent={formContent}
         formId="attendance-machine-form"
         isSaving={create_mutation.isPending || update_mutation.isPending}
         onCancelTab1={resetForm}
-        isSaveDisabled={!form.formState.isDirty || !form.formState.isValid}
+        isSaveDisabled={!form.formState.isDirty || !form.formState.isValid || isViewOnly || is_sys_defined}
         formName="Biometric Attendance Machines"
-        isEdit={is_editing}
+        isEdit={is_editing && !isViewOnly}
         className="h-85"
       />
 

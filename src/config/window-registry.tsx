@@ -35,8 +35,17 @@ import { SalItSectionWindow } from '@/modules/master-salary/components/SalItSect
 import { ShiftTimingWindow } from '@/modules/master-salary/components/ShiftTimingWindow';
 import { DebitCardWindow } from '@/modules/debit-card/components/DebitCardWindow';
 import { ChequeBookWindow } from '@/modules/cheque-book/components/ChequeBookWindow';
+import { AttendanceMachineWindow } from '@/modules/settings/attendance-machine/components/AttendanceMachineWindow';
 
 export const WINDOW_REGISTRY: Record<string, RegisteredWindow> = {
+  'settings-attendance-machine': {
+    id: 'settings-attendance-machine',
+    title: 'Biometric Attendance Machines',
+    icon: <Settings className="h-4 w-4 text-sky-500" />,
+    isMinimizable: true,
+    className: 'absolute top-20 left-12 w-full max-w-2xl',
+    component: AttendanceMachineWindow,
+  },
   'contacts-title': {
     id: 'contacts-title',
     title: 'Titles',
