@@ -13,9 +13,11 @@ import {
   Printer,
   FileSpreadsheet,
   HelpCircle,
+  ShieldAlert,
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
 import { DeleteDialog } from '@/components/common/delete-dialog';
+import { useFormPermission } from '@/hooks/use-form-permission';
 import { AccountGroupsTree } from '@/modules/account-groups/components/account-groups-tree';
 import { extractAxiosErrorMessage } from '@/lib/axios';
 
@@ -34,6 +36,7 @@ import { CreditCardList } from './CreditCardList';
 type Mode = 'view' | 'add' | 'edit';
 
 export const CreditCardWindow: React.FC = () => {
+  const permissions = useFormPermission('Credit Card');
   const [mode, set_mode] = useState<Mode>('view');
   const [active_tab, set_active_tab] = useState<'details' | 'list'>('details');
   const [selected_id, set_selected_id] = useState<number | null>(null);
@@ -284,21 +287,23 @@ export const CreditCardWindow: React.FC = () => {
       icon: mode === 'edit' ? Save : Plus,
       variant: 'primary',
       onClick: mode === 'view' ? handle_add : handle_save,
-      disabled: loading,
+      disabled:
+        loading ||
+        (mode === 'view' ? !permissions.add : (mode === 'add' ? !permissions.add : !permissions.edit)),
     },
     {
       label: 'Edit',
       icon: Edit,
       variant: 'secondary',
       onClick: handle_edit,
-      disabled: is_editing || !selected_id || is_sys_defined || loading,
+      disabled: is_editing || !selected_id || is_sys_defined || loading || !permissions.edit,
     },
     {
       label: 'Delete',
       icon: Trash2,
       variant: 'danger',
       onClick: handle_delete,
-      disabled: is_editing || !selected_id || is_sys_defined || loading,
+      disabled: is_editing || !selected_id || is_sys_defined || loading || !permissions.delete,
     },
     {
       label: 'Cancel',
@@ -327,6 +332,20 @@ export const CreditCardWindow: React.FC = () => {
       },
     },
   ] as const;
+
+  if (!permissions.view && !permissions.isLoading) {
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center bg-card rounded-lg border shadow-xs">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400 mb-4 animate-pulse">
+          <ShieldAlert className="h-8 w-8" />
+        </div>
+        <h3 className="text-lg font-bold text-foreground mb-2">Access Denied</h3>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          You do not have permission to view this module. Please contact your system administrator to request access.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background text-foreground flex h-full flex-col overflow-hidden font-sans">

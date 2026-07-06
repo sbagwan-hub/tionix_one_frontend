@@ -13,8 +13,10 @@ import {
   Printer,
   FileSpreadsheet,
   HelpCircle,
+  ShieldAlert,
 } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
+import { useFormPermission } from '@/hooks/use-form-permission';
 import { AcctGroup, TreeNode } from '../types';
 import { AccountGroupForm } from './account-group-form';
 import { AccountGroupsTree } from './account-groups-tree';
@@ -32,6 +34,7 @@ import {
 type Mode = 'view' | 'add' | 'edit';
 
 export function AccountGroupsScreen() {
+  const permissions = useFormPermission('Account Group');
   const [mode, setMode] = useState<Mode>('view');
   const [activeTab, setActiveTab] = useState<'group' | 'list'>('group');
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -274,21 +277,22 @@ export function AccountGroupsScreen() {
       disabled:
         loading ||
         (mode === 'view' && getSelectedNodeDepth() >= 4) ||
-        (mode !== 'view' && groupName.trim().length <= 2),
+        (mode !== 'view' && groupName.trim().length <= 2) ||
+        (mode === 'view' ? !permissions.add : (mode === 'add' ? !permissions.add : !permissions.edit)),
     },
     {
       label: 'Edit',
       icon: Edit,
       variant: 'secondary',
       onClick: handleEdit,
-      disabled: isEditing || !selectedId || isSysDefined || loading,
+      disabled: isEditing || !selectedId || isSysDefined || loading || !permissions.edit,
     },
     {
       label: 'Delete',
       icon: Trash2,
       variant: 'danger',
       onClick: handleDelete,
-      disabled: isEditing || !selectedId || isSysDefined || loading,
+      disabled: isEditing || !selectedId || isSysDefined || loading || !permissions.delete,
     },
     {
       label: 'Cancel',
@@ -333,6 +337,20 @@ export function AccountGroupsScreen() {
   };
 
   // ────────────────────────────────────────────────────────────────────────────
+
+  if (!permissions.view && !permissions.isLoading) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] w-full flex-col items-center justify-center p-8 text-center bg-card rounded-lg border shadow-xs">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400 mb-4 animate-pulse">
+          <ShieldAlert className="h-8 w-8" />
+        </div>
+        <h3 className="text-lg font-bold text-foreground mb-2">Access Denied</h3>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          You do not have permission to view this module. Please contact your system administrator to request access.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background text-foreground flex h-full flex-col p-4 font-sans">

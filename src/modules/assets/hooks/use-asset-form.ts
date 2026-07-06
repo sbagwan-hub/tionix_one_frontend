@@ -15,6 +15,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { Asset, AssetPartItem, AccountLookup, ProductLookup } from '../types';
+import { useFormPermission } from '@/hooks/use-form-permission';
 import {
   useAssetsList,
   useAssetDetail,
@@ -28,6 +29,7 @@ import {
 type Mode = 'view' | 'add' | 'edit';
 
 export function useAssetForm() {
+  const permissions = useFormPermission('Asset');
   const [mode, set_mode] = useState<Mode>('view');
   const [active_tab, set_active_tab] = useState<'details' | 'list'>('details');
   const [selected_id, set_selected_id] = useState<number | string | null>(null);
@@ -297,21 +299,23 @@ export function useAssetForm() {
       icon: mode === 'add' || mode === 'edit' ? Save : Plus,
       onClick: mode === 'add' || mode === 'edit' ? handle_save : handle_add,
       variant: 'primary' as const,
-      disabled: loading,
+      disabled:
+        loading ||
+        (mode === 'view' ? !permissions.add : (mode === 'add' ? !permissions.add : !permissions.edit)),
     },
     {
       label: mode === 'add' || mode === 'edit' ? 'Cancel' : 'Edit',
       icon: mode === 'add' || mode === 'edit' ? Undo2 : Edit,
       onClick: mode === 'add' || mode === 'edit' ? handle_cancel : handle_edit,
       variant: 'secondary' as const,
-      disabled: loading || (mode === 'view' && !selected_id) || is_sys_defined,
+      disabled: loading || (mode === 'view' && (!selected_id || !permissions.edit)) || is_sys_defined,
     },
     {
       label: 'Delete',
       icon: Trash2,
       onClick: handle_delete,
       variant: 'danger' as const,
-      disabled: loading || mode === 'add' || !selected_id || is_sys_defined,
+      disabled: loading || mode === 'add' || !selected_id || is_sys_defined || !permissions.delete,
     },
   ];
 
@@ -392,5 +396,6 @@ export function useAssetForm() {
     handle_prior,
     handle_next,
     handle_last,
+    permissions,
   };
 }

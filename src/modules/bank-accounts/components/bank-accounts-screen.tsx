@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { ShieldAlert } from 'lucide-react';
 import Toolbar from '@/components/shared/toolbar';
 import { BankAccountForm } from './bank-account-form';
 import { BankAccountsList } from './bank-accounts-list';
@@ -62,7 +63,22 @@ export function BankAccountsScreen() {
     handle_select_record,
     handle_double_click_record,
     handle_confirm_delete,
+    permissions,
   } = useBankAccountForm();
+
+  if (!permissions.view && !permissions.isLoading) {
+    return (
+      <div className="flex h-[calc(100vh-64px)] w-full flex-col items-center justify-center p-8 text-center bg-card rounded-lg border shadow-xs">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400 mb-4 animate-pulse">
+          <ShieldAlert className="h-8 w-8" />
+        </div>
+        <h3 className="text-lg font-bold text-foreground mb-2">Access Denied</h3>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          You do not have permission to view this module. Please contact your system administrator to request access.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background text-foreground flex h-full flex-col overflow-hidden p-2 font-sans">

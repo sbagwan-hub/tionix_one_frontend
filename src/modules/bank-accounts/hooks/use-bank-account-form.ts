@@ -15,6 +15,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { BankAccount, HolderDetail } from '../types';
+import { useFormPermission } from '@/hooks/use-form-permission';
 import { TreeNode, AcctGroup } from '../../account-groups/types';
 import {
   useBankAccountsList,
@@ -29,6 +30,7 @@ import { useAccountGroupsTree } from '../../account-groups/hooks/use-account-gro
 type Mode = 'view' | 'add' | 'edit';
 
 export function useBankAccountForm() {
+  const permissions = useFormPermission('Bank Account');
   const [mode, set_mode] = useState<Mode>('view');
   const [active_tab, set_active_tab] = useState<'details' | 'list'>('details');
   const [selected_id, set_selected_id] = useState<number | string | null>(null);
@@ -431,21 +433,23 @@ export function useBankAccountForm() {
       icon: mode === 'edit' ? Save : Plus,
       variant: 'primary',
       onClick: mode === 'view' ? handle_add : handle_save,
-      disabled: loading,
+      disabled:
+        loading ||
+        (mode === 'view' ? !permissions.add : (mode === 'add' ? !permissions.add : !permissions.edit)),
     },
     {
       label: 'Edit',
       icon: Edit,
       variant: 'secondary',
       onClick: handle_edit,
-      disabled: is_editing || !selected_id || is_sys_defined || loading,
+      disabled: is_editing || !selected_id || is_sys_defined || loading || !permissions.edit,
     },
     {
       label: 'Delete',
       icon: Trash2,
       variant: 'danger',
       onClick: handle_delete,
-      disabled: is_editing || !selected_id || is_sys_defined || loading,
+      disabled: is_editing || !selected_id || is_sys_defined || loading || !permissions.delete,
     },
     {
       label: 'Cancel',
@@ -529,5 +533,6 @@ export function useBankAccountForm() {
     handle_select_record,
     handle_double_click_record,
     handle_confirm_delete,
+    permissions,
   };
 }
