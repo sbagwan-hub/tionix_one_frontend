@@ -127,6 +127,10 @@ To support a variety of viewports (desktops, tablets, and mobile devices):
 
 - **Regression Prevention**: Never alter or delete existing properties, component props, styling themes, state variables, or function signatures unless explicitly required. Ensure all modifications remain fully backward-compatible to avoid breaking existing working functionality in other parts of the application.
 
+### I. DRY (Don't Repeat Yourself) Principle
+
+- **Avoid Duplication in Layouts and Hooks**: Do not duplicate API selection constants, request schemas, form field mappings, or UI blocks across pages and components. Consolidate shared component layouts, custom hooks, validations, or utility helpers into reusable hooks or shared components to prevent duplication.
+
 ---
 
 ## 4. Codebase Analysis & Recommendations for Improvement
