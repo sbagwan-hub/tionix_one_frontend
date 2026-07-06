@@ -247,6 +247,12 @@ export function Sidebar() {
               href: '/masters/accounts/assets',
             },
             {
+              key: 'oldAsset',
+              label: 'Old Assets',
+              icon: Briefcase,
+              href: '/masters/accounts/old-assets',
+            },
+            {
               key: 'debitCard',
               label: 'Debit Cards',
               icon: CreditCard,

@@ -122,6 +122,7 @@ export const NAV_MENUS: NavMenu[] = [
           { key: 'account', href: '/masters/accounts/accounts', icon: 'FileText' },
           { key: 'bankAccount', href: '/masters/accounts/bank-accounts', icon: 'Briefcase' },
           { key: 'asset', href: '/masters/accounts/assets', icon: 'Briefcase' },
+          { key: 'oldAsset', href: '/masters/accounts/old-assets', icon: 'Briefcase' },
           {
             key: 'debitCard',
             icon: 'CreditCard',
