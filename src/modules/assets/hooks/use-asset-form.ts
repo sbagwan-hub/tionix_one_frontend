@@ -171,6 +171,26 @@ export function useAssetForm() {
       return;
     }
 
+    // Validate that the main asset product does not also appear as a part, and parts are unique
+    const mainProductInParts = parts.find((p) => p.fk_prod_id === fk_prod_id);
+    if (mainProductInParts) {
+      toast.error(
+        `The main asset product (${mainProductInParts.prod_code || 'selected product'}) cannot also appear as a part.`,
+      );
+      return;
+    }
+
+    const seenParts = new Set<number>();
+    for (const p of parts) {
+      if (seenParts.has(p.fk_prod_id)) {
+        toast.error(
+          `Part product ${p.prod_code || 'selected'} appears more than once in the parts list.`,
+        );
+        return;
+      }
+      seenParts.add(p.fk_prod_id);
+    }
+
     const additional_asset_codes = additional_asset_codes_str
       ? additional_asset_codes_str
           .split(',')
@@ -301,14 +321,19 @@ export function useAssetForm() {
       variant: 'primary' as const,
       disabled:
         loading ||
-        (mode === 'view' ? !permissions.add : (mode === 'add' ? !permissions.add : !permissions.edit)),
+        (mode === 'view'
+          ? !permissions.add
+          : mode === 'add'
+            ? !permissions.add
+            : !permissions.edit),
     },
     {
       label: mode === 'add' || mode === 'edit' ? 'Cancel' : 'Edit',
       icon: mode === 'add' || mode === 'edit' ? Undo2 : Edit,
       onClick: mode === 'add' || mode === 'edit' ? handle_cancel : handle_edit,
       variant: 'secondary' as const,
-      disabled: loading || (mode === 'view' && (!selected_id || !permissions.edit)) || is_sys_defined,
+      disabled:
+        loading || (mode === 'view' && (!selected_id || !permissions.edit)) || is_sys_defined,
     },
     {
       label: 'Delete',
