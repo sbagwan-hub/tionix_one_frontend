@@ -91,20 +91,6 @@ export function OldAssetsScreen() {
     permissions,
   } = useOldAssetForm();
 
-  if (!permissions.view && !permissions.isLoading) {
-    return (
-      <div className="flex h-[calc(100vh-64px)] w-full flex-col items-center justify-center p-8 text-center bg-card rounded-lg border shadow-xs mt-2">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/30 dark:text-red-400 mb-4 animate-pulse">
-          <ShieldAlert className="h-8 w-8" />
-        </div>
-        <h3 className="text-lg font-bold text-foreground mb-2">Access Denied</h3>
-        <p className="text-sm text-muted-foreground max-w-sm">
-          You do not have permission to view this module. Please contact your system administrator to request access.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="mt-2 flex h-[calc(100vh-64px)] w-full flex-col overflow-hidden">
       <Toolbar title="Old Asset Master" actions={crud_actions} utilities={utility_actions} />
@@ -149,7 +135,7 @@ export function OldAssetsScreen() {
           </div>
 
           <TabsContent value="details" className="m-0 flex-1 overflow-hidden p-0">
-            <div className="bg-card flex h-full w-full rounded-md overflow-hidden">
+            <div className="bg-card flex h-full w-full overflow-hidden rounded-md">
               <OldAssetsForm
                 asset_code={asset_code}
                 set_asset_code={set_asset_code}

@@ -128,7 +128,9 @@ export function useOldAssetForm() {
     set_fk_brd_id(rec.fk_brd_id);
     set_cat_no(rec.cat_no || '');
     set_exp_date(rec.exp_date || '');
-    set_cur_value(rec.cur_value !== null && rec.cur_value !== undefined ? Number(rec.cur_value) : '');
+    set_cur_value(
+      rec.cur_value !== null && rec.cur_value !== undefined ? Number(rec.cur_value) : '',
+    );
     set_usage(rec.usage || '');
     set_condition(rec.condition || 'Good');
     set_c_location(rec.c_location || '');
@@ -196,8 +198,12 @@ export function useOldAssetForm() {
   const handle_cancel = () => {
     set_mode('view');
     if (selected_id) {
-      const active = records.find((r) => r.pk_ast_id === selected_id);
-      if (active) populate_form(active);
+      if (activeDetail) {
+        populate_form(activeDetail);
+      } else {
+        const active = records.find((r) => r.pk_ast_id === selected_id);
+        if (active) populate_form(active);
+      }
     } else {
       clear_form();
     }
@@ -364,33 +370,47 @@ export function useOldAssetForm() {
 
   const handle_double_click_record = (rec: OldAsset, index: number) => {
     set_selected_id(rec.pk_ast_id);
+    set_mode('view');
     set_cursor(index);
     set_active_tab('details');
   };
 
+  const is_editing = mode !== 'view';
+
   const crud_actions = [
     {
-      label: mode === 'add' || mode === 'edit' ? 'Save' : 'Add New',
-      icon: mode === 'add' || mode === 'edit' ? Save : Plus,
-      onClick: mode === 'add' || mode === 'edit' ? handle_save : handle_add,
+      label: mode === 'edit' ? 'Save' : 'Add',
+      icon: mode === 'edit' ? Save : Plus,
       variant: 'primary' as const,
+      onClick: mode === 'view' ? handle_add : handle_save,
       disabled:
         loading ||
-        (mode === 'view' ? !permissions.add : (mode === 'add' ? !permissions.add : !permissions.edit)),
+        (mode === 'view'
+          ? !permissions.add
+          : mode === 'add'
+            ? !permissions.add
+            : !permissions.edit),
     },
     {
-      label: mode === 'add' || mode === 'edit' ? 'Cancel' : 'Edit',
-      icon: mode === 'add' || mode === 'edit' ? Undo2 : Edit,
-      onClick: mode === 'add' || mode === 'edit' ? handle_cancel : handle_edit,
+      label: 'Edit',
+      icon: Edit,
       variant: 'secondary' as const,
-      disabled: loading || (mode === 'view' && (!selected_id || !permissions.edit)),
+      onClick: handle_edit,
+      disabled: is_editing || !selected_id || loading || !permissions.edit,
     },
     {
       label: 'Delete',
       icon: Trash2,
-      onClick: handle_delete,
       variant: 'danger' as const,
-      disabled: loading || mode === 'add' || !selected_id || !permissions.delete,
+      onClick: handle_delete,
+      disabled: is_editing || !selected_id || loading || !permissions.delete,
+    },
+    {
+      label: 'Cancel',
+      icon: Undo2,
+      variant: 'outline' as const,
+      onClick: handle_cancel,
+      disabled: !is_editing || loading,
     },
   ];
 
