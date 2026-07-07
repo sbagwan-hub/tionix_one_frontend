@@ -29,7 +29,7 @@ export function GlobalWindows() {
     );
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[100] overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-100 overflow-hidden">
       <div className="pointer-events-none relative h-full w-full">
         {openWindowList.map(({ id, config }) => {
           const ChildContent = config.component;
