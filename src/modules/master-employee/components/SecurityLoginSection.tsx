@@ -39,6 +39,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             className="h-9 rounded-sm text-sm"
             disabled={disabled}
             maxLength={15}
+            autoComplete="off"
           />
           <FormInput
             label="Password *"
@@ -49,6 +50,7 @@ export const SecurityLoginSection: React.FC<SectionProps> = ({
             disabled={disabled}
             showPasswordToggle
             maxLength={100}
+            autoComplete="new-password"
           />
         </div>
 
