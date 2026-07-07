@@ -146,5 +146,7 @@
   "answerPlaceholder": "إجابتك",
   "employeePlaceholder": "اسم الموظف المرتبط",
   "emailPlaceholder": "user@example.com",
-  "mobilePlaceholder": "+1 (555) 000-0000"
+  "mobilePlaceholder": "+1 (555) 000-0000",
+  "asset": "الأصول (Asset)",
+  "oldAsset": "الأصول القديمة (Old Asset)"
 }

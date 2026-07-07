@@ -146,5 +146,7 @@
   "answerPlaceholder": "आपका उत्तर",
   "employeePlaceholder": "लिंक किए गए कर्मचारी का नाम",
   "emailPlaceholder": "user@example.com",
-  "mobilePlaceholder": "+1 (555) 000-0000"
+  "mobilePlaceholder": "+1 (555) 000-0000",
+  "asset": "संपत्ति (Asset)",
+  "oldAsset": "पुरानी संपत्ति (Old Asset)"
 }

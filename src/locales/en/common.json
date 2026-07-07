@@ -152,5 +152,7 @@
   "answerPlaceholder": "Your answer",
   "employeePlaceholder": "Linked employee name",
   "emailPlaceholder": "user@example.com",
-  "mobilePlaceholder": "+1 (555) 000-0000"
+  "mobilePlaceholder": "+1 (555) 000-0000",
+  "asset": "Asset",
+  "oldAsset": "Old Asset"
 }
